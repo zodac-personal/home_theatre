@@ -9,3 +9,6 @@ storage/radarr/*
 # Sonarr storage (minus config)
 storage/sonarr/*
 !storage/sonarr/config.xml
+
+# Jackett storage
+storage/jackett/Jackett/log.txt

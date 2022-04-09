@@ -2,5 +2,10 @@
 *.iml
 .idea/
 
-# Config files
-storage/
+# Radarr storage (minus config)
+storage/radarr/*
+!storage/radarr/config.xml
+
+# Sonarr storage (minus config)
+storage/sonarr/*
+!storage/sonarr/config.xml

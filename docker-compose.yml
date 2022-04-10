@@ -31,6 +31,22 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
 
+  bazarr:
+    image: linuxserver/bazarr:1.0.3
+    container_name: bazarr
+    hostname: bazarr
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+    volumes:
+      - ~/git/home_theatre/storage/bazarr:/config
+      - /b/Movies:/movies
+      - /a/TV:/tv
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
+
   jackett:
     image: linuxserver/jackett:0.20.790
     container_name: jackett

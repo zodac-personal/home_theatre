@@ -14,6 +14,11 @@ storage/sonarr/*
 storage/jackett/Jackett/log.txt
 storage/jackett/Jackett/updater.txt
 
+# Bazarr storage
+storage/bazarr/config/throttled_providers.dat
+storage/bazarr/log/*
+storage/bazarr/db/*
+
 # Transmission storage
 storage/transmission/resume/*
 storage/transmission/torrents/*

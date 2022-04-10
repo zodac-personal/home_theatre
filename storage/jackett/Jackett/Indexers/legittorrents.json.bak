@@ -3,39 +3,40 @@
     "id": "sitelink",
     "type": "inputstring",
     "name": "Site Link",
-    "value": "https://kickass.ws/"
+    "value": "http://www.legittorrents.info/"
   },
   {
     "id": "cookieheader",
     "type": "hiddendata",
     "name": "CookieHeader",
-    "value": "__cf_bm=J4CKTKeSpVX1OGjs_6Tq65JLunJQ5PufxPjJ9.dHKOw-1649580530-0-AShh5FEDmui6fiLty2jF1V/wtOkEYnAoV+EWyW/JOKtoM77+sLY3wHjJKX3mIXVsVB/IoKI4m9xx67Yhw4urHUA="
+    "value": "xbtit=rpe7oalisfhd361uk1k2s7qs13"
   },
   {
     "id": "lasterror",
     "type": "hiddendata",
     "name": "LastError",
-    "value": null
+    "value": "Exception (legittorrents): Connection refused: Connection refused (www.legittorrents.info:80)"
   },
   {
     "id": "sortrequestedfromsite",
     "type": "inputselect",
     "name": "Sort requested from site",
-    "value": "time_add",
+    "value": "3",
     "options": {
-      "time_add": "created",
-      "seeders": "seeders",
-      "size": "size"
+      "3": "created",
+      "5": "seeders",
+      "4": "size",
+      "2": "title"
     }
   },
   {
     "id": "orderrequestedfromsite",
     "type": "inputselect",
     "name": "Order requested from site",
-    "value": "desc",
+    "value": "2",
     "options": {
-      "desc": "desc",
-      "asc": "asc"
+      "2": "desc",
+      "1": "asc"
     }
   },
   {

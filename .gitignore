@@ -10,14 +10,25 @@ storage/radarr/*
 storage/sonarr/*
 !storage/sonarr/config.xml
 
-# Jackett storage
-storage/jackett/Jackett/log.txt
-storage/jackett/Jackett/updater.txt
-
 # Bazarr storage
 storage/bazarr/config/throttled_providers.dat
 storage/bazarr/log/*
 storage/bazarr/db/*
+
+# Readarr storage
+storage/readarr/readarr.*
+storage/readarr/logs/*
+storage/readarr/logs.db
+storage/readarr/asp/*
+
+# Jackett storage
+storage/jackett/Jackett/log.txt
+storage/jackett/Jackett/updater.txt
+
+# Calibre storage
+storage/calibre/.local/*
+storage/calibre/.x*
+storage/calibre/.cache
 
 # Transmission storage
 storage/transmission/resume/*

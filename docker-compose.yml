@@ -31,6 +31,39 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
 
+  readarr:
+    image: linuxserver/readarr:0.1.0-develop
+    container_name: readarr
+    hostname: readarr
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+    volumes:
+      - ~/git/home_theatre/storage/readarr:/config
+      - /b/Books:/books
+      - /e/Downloads:/downloads
+    ports:
+      - "8787:8787"
+    restart: unless-stopped
+
+  calibre:
+    image: linuxserver/calibre:5.40.0
+    container_name: calibre
+    hostname: calibre
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+      - PASSWORD=shroot
+      - CLI_ARGS="–auth-mode=basic"
+    volumes:
+      - ~/git/home_theatre/storage/calibre:/config
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    restart: unless-stopped
+
   bazarr:
     image: linuxserver/bazarr:1.0.3
     container_name: bazarr

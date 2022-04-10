@@ -44,3 +44,32 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Pacific/Auckland
+
+  transmission:
+    image: linuxserver/transmission:version-3.00-r5
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+      - USER=root  #optional
+      - PASS=shroot #optional
+    volumes:
+      - ~/git/home_theatre/storage/transmission:/config
+      - /e/Downloads:/downloads
+      - /e/TorrentFiles:/watch
+    ports:
+      - "9091:9091"
+      - "5555:51413"
+      - "5555:51413/udp"
+    restart: unless-stopped
+
+  flaresolverr:
+    image: flaresolverr/flaresolverr:v2.2.2
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Pacific/Auckland
+    ports:
+      - "8191:8191"
+    restart: unless-stopped

@@ -12,3 +12,9 @@ storage/sonarr/*
 
 # Jackett storage
 storage/jackett/Jackett/log.txt
+storage/jackett/Jackett/updater.txt
+
+# Transmission storage
+storage/transmission/resume/*
+storage/transmission/torrents/*
+storage/transmission/stats.json

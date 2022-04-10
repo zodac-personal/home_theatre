@@ -119,7 +119,7 @@
   "grid view visible": false,
   "hidpi": "on",
   "library_usage_stats": {
-    "/config/Calibre Library": 4
+    "/config/Calibre Library": 6
   },
   "preferences dialog geometry": {
     "__class__": "bytearray",

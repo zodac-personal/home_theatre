@@ -14,10 +14,12 @@ storage/sonarr/*
 storage/bazarr/config/throttled_providers.dat
 storage/bazarr/log/*
 storage/bazarr/db/*
+storage/bazarr/cache
 
 # Readarr storage
 storage/readarr/readarr.*
 storage/readarr/logs/*
+storage/readarr/cache.db
 storage/readarr/logs.db
 storage/readarr/asp/*
 
@@ -29,6 +31,7 @@ storage/jackett/Jackett/updater.txt
 storage/calibre/.local/*
 storage/calibre/.x*
 storage/calibre/.cache
+storage/calibre/.config/pulse
 
 # Transmission storage
 storage/transmission/resume/*

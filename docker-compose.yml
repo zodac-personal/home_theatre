@@ -1,4 +1,18 @@
 services:
+  heimdall:
+    image: linuxserver/heimdall:2.4.10
+    container_name: heimdall
+    hostname: heimdall
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+    volumes:
+      - ~/git/home_theatre/storage/heimdall:/config
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
   radarr:
     image: linuxserver/radarr:4.0.5
     container_name: radarr

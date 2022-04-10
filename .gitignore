@@ -22,6 +22,7 @@ storage/readarr/logs/*
 storage/readarr/cache.db
 storage/readarr/logs.db
 storage/readarr/asp/*
+storage/readarr/MediaCover
 
 # Jackett storage
 storage/jackett/Jackett/log.txt

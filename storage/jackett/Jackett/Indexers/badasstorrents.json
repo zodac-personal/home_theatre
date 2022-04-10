@@ -3,13 +3,13 @@
     "id": "sitelink",
     "type": "inputstring",
     "name": "Site Link",
-    "value": "https://kickass.ws/"
+    "value": "https://badasstorrents.com/"
   },
   {
     "id": "cookieheader",
     "type": "hiddendata",
     "name": "CookieHeader",
-    "value": "__cf_bm=PKLO8z27mee1O0hXtDxWafp18sAG4lRtiE5DwU8_6hQ-1649625131-0-AWBNx8jpvtpClpH/NqeMeRNDZXMHNf4Ijw/vv92EkFPjkC1NdyDNeK8lI46Oz8L/9EiJEFGFkanSTWvQoQ+bAmE="
+    "value": null
   },
   {
     "id": "lasterror",
@@ -18,14 +18,35 @@
     "value": null
   },
   {
+    "id": "downloadlink",
+    "type": "inputselect",
+    "name": "Download link",
+    "value": "magnet:?xt=",
+    "options": {
+      "/download/": ".torrent",
+      "magnet:?xt=": "magnet"
+    }
+  },
+  {
+    "id": "downloadlink(fallback)",
+    "type": "inputselect",
+    "name": "Download link (fallback)",
+    "value": "/download/",
+    "options": {
+      "/download/": ".torrent",
+      "magnet:?xt=": "magnet"
+    }
+  },
+  {
     "id": "sortrequestedfromsite",
     "type": "inputselect",
     "name": "Sort requested from site",
-    "value": "time_add",
+    "value": "date",
     "options": {
-      "time_add": "created",
-      "seeders": "seeders",
-      "size": "size"
+      "date": "created",
+      "seeds": "seeders",
+      "size": "size",
+      "title": "title"
     }
   },
   {

@@ -11,34 +11,45 @@ storage/sonarr/*
 !storage/sonarr/config.xml
 
 # Bazarr storage
-storage/bazarr/config/throttled_providers.dat
-storage/bazarr/log/*
-storage/bazarr/db/*
 storage/bazarr/cache
+storage/bazarr/config/throttled_providers.dat
+storage/bazarr/db/*
+storage/bazarr/log/*
 
 # Readarr storage
-storage/readarr/readarr.*
-storage/readarr/logs/*
-storage/readarr/cache.db
-storage/readarr/logs.db
 storage/readarr/asp/*
+storage/readarr/cache.db
+storage/readarr/logs/*
+storage/readarr/logs.db
 storage/readarr/MediaCover
+storage/readarr/readarr.*
 
 # Jackett storage
 storage/jackett/Jackett/log.txt
 storage/jackett/Jackett/updater.txt
 
 # Calibre storage
-storage/calibre/.local/*
-storage/calibre/.x*
 storage/calibre/.cache
 storage/calibre/.config/pulse
 storage/calibre/.dbus/session-bus/
+storage/calibre/.local/*
+storage/calibre/.x*
 
 # Transmission storage
 storage/transmission/resume/*
-storage/transmission/torrents/*
 storage/transmission/stats.json
+storage/transmission/torrents/*
 
 # Heimdall storage
 storage/heimdall/log/
+
+# Emby storage
+storage/emby/cache/
+storage/emby/logs/
+storage/emby/metadata/
+
+# Plex storage
+storage/plex/Library/Application Support/Plex Media Server/Cache/
+storage/plex/Library/Application Support/Plex Media Server/Logs/
+storage/plex/Library/Application Support/Plex Media Server/Media/localhost/
+storage/plex/Library/Application Support/Plex Media Server/Metadata/

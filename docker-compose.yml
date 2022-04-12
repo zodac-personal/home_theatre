@@ -115,8 +115,8 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Pacific/Auckland
-      - USER=root  #optional
-      - PASS=shroot #optional
+      - USER=root
+      - PASS=shroot
     volumes:
       - ~/git/home_theatre/storage/transmission:/config
       - /e/Downloads:/downloads
@@ -135,4 +135,36 @@ services:
       - TZ=Pacific/Auckland
     ports:
       - "8191:8191"
+    restart: unless-stopped
+
+  emby:
+    image: linuxserver/emby:4.6.7
+    container_name: emby
+    hostname: emby
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+    volumes:
+      - ~/git/home_theatre/storage/emby:/config
+      - /b/Movies:/data/movies
+      - /a/TV:/data/tvshows
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+
+  plex:
+    image: linuxserver/plex:1.25.9
+    container_name: plex
+    hostname: plex
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Pacific/Auckland
+    volumes:
+      - ~/git/home_theatre/storage/plex:/config
+      - /b/Movies:/movies
+      - /a/TV:/tv
+    ports:
+      - "31400:32400"
     restart: unless-stopped

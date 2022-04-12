@@ -18,7 +18,7 @@ storage/bazarr/log/*
 
 # Readarr storage
 storage/readarr/asp/*
-storage/readarr/cache.db
+storage/readarr/cache.db*
 storage/readarr/logs/*
 storage/readarr/logs.db*
 storage/readarr/MediaCover
@@ -48,9 +48,18 @@ storage/emby/cache/
 storage/emby/logs/
 storage/emby/metadata/
 storage/emby/data/ScheduledTasks/
+storage/emby/data/activitylog.db
+storage/emby/data/activitylog.db-shm
+storage/emby/data/activitylog.db-wal
+storage/emby/data/authentication.db-shm
+storage/emby/data/authentication.db-wal
+storage/emby/data/displaypreferences.db-shm
+storage/emby/data/displaypreferences.db-wal
 storage/emby/data/library.db
 storage/emby/data/library.db-shm
 storage/emby/data/library.db-wal
+storage/emby/data/users.db-shm
+storage/emby/data/users.db-wal
 
 # Plex storage
 storage/plex/Library/Application Support/Plex Media Server/Cache/

@@ -22,12 +22,14 @@
   <EnableAudioResume>false</EnableAudioResume>
   <AutomaticRefreshIntervalDays>0</AutomaticRefreshIntervalDays>
   <PreferredMetadataLanguage>en</PreferredMetadataLanguage>
-  <PreferredImageLanguage />
+  <PreferredImageLanguage>en</PreferredImageLanguage>
   <ContentType>tvshows</ContentType>
   <MetadataCountryCode>IE</MetadataCountryCode>
   <SeasonZeroDisplayName>Specials</SeasonZeroDisplayName>
   <Name>TV shows</Name>
-  <MetadataSavers />
+  <MetadataSavers>
+    <string>Nfo</string>
+  </MetadataSavers>
   <DisabledLocalMetadataReaders />
   <LocalMetadataReaderOrder>
     <string>Nfo</string>
@@ -119,7 +121,7 @@
     </TypeOptions>
   </TypeOptions>
   <CollapseSingleItemFolders>true</CollapseSingleItemFolders>
-  <EnableAdultMetadata>false</EnableAdultMetadata>
+  <EnableAdultMetadata>true</EnableAdultMetadata>
   <ImportCollections>false</ImportCollections>
   <MinCollectionItems>2</MinCollectionItems>
   <MinResumePct>5</MinResumePct>

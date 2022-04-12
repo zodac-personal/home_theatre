@@ -25,8 +25,8 @@ storage/readarr/MediaCover
 storage/readarr/readarr.*
 
 # Jackett storage
-storage/jackett/Jackett/log.txt
-storage/jackett/Jackett/updater.txt
+storage/jackett/Jackett/log.txt*
+storage/jackett/Jackett/updater.txt*
 
 # Calibre storage
 storage/calibre/.cache
@@ -58,8 +58,7 @@ storage/emby/data/displaypreferences.db-wal
 storage/emby/data/library.db
 storage/emby/data/library.db-shm
 storage/emby/data/library.db-wal
-storage/emby/data/users.db-shm
-storage/emby/data/users.db-wal
+
 
 # Plex storage
 storage/plex/Library/Application Support/Plex Media Server/Cache/

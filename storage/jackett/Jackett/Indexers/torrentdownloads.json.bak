@@ -3,13 +3,13 @@
     "id": "sitelink",
     "type": "inputstring",
     "name": "Site Link",
-    "value": "https://1337x.to/"
+    "value": "https://www.torrentdownloads.info/"
   },
   {
     "id": "cookieheader",
     "type": "hiddendata",
     "name": "CookieHeader",
-    "value": "__cf_bm=wna0Qh8Bqh.LdEyGcRalboOEbtsKl4yFPtEkDeY9hCw-1649667676-0-AVlTHjtiD3JVG9Ed9pzE6vohpW4vswwWmwFR50VZZGoILSJrb+zGDmUjO9HZJfDIQF5EYP924OzfZdeAulBwzxX+MzkgGO45otUM8vashpMoQMLWBNB0sosGTIalWS0Uwg=="
+    "value": "PHPSESSID=cufqf59i3ss1vj14idmur9ri92"
   },
   {
     "id": "lasterror",
@@ -21,7 +21,7 @@
     "id": "downloadlink",
     "type": "inputselect",
     "name": "Download link",
-    "value": "http://itorrents.org/",
+    "value": "magnet:",
     "options": {
       "http://itorrents.org/": "iTorrents.org",
       "magnet:": "magnet"
@@ -31,31 +31,10 @@
     "id": "downloadlink(fallback)",
     "type": "inputselect",
     "name": "Download link (fallback)",
-    "value": "magnet:",
+    "value": "http://itorrents.org/",
     "options": {
       "http://itorrents.org/": "iTorrents.org",
       "magnet:": "magnet"
-    }
-  },
-  {
-    "id": "sortrequestedfromsite",
-    "type": "inputselect",
-    "name": "Sort requested from site",
-    "value": "time",
-    "options": {
-      "time": "created",
-      "seeders": "seeders",
-      "size": "size"
-    }
-  },
-  {
-    "id": "orderrequestedfromsite",
-    "type": "inputselect",
-    "name": "Order requested from site",
-    "value": "desc",
-    "options": {
-      "desc": "desc",
-      "asc": "asc"
     }
   },
   {

@@ -27,6 +27,7 @@ storage/readarr/readarr.*
 # Jackett storage
 storage/jackett/Jackett/log.txt*
 storage/jackett/Jackett/updater.txt*
+storage/jackett/Jackett/Indexers/*.json.bak
 
 # Calibre storage
 storage/calibre/.cache
@@ -59,12 +60,12 @@ storage/emby/data/library.db
 storage/emby/data/library.db-shm
 storage/emby/data/library.db-wal
 
-
 # Plex storage
 storage/plex/Library/Application Support/Plex Media Server/Cache/
 storage/plex/Library/Application Support/Plex Media Server/Logs/
 storage/plex/Library/Application Support/Plex Media Server/Media/localhost/
 storage/plex/Library/Application Support/Plex Media Server/Metadata/
+storage/plex/Library/Application Support/Plex Media Server/plexmediaserver.pid
 storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db
 storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db-shm
 storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db-wal

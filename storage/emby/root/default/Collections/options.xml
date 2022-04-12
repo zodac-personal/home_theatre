@@ -17,10 +17,19 @@
   <EnableEmbeddedTitles>false</EnableEmbeddedTitles>
   <EnableAudioResume>false</EnableAudioResume>
   <AutomaticRefreshIntervalDays>0</AutomaticRefreshIntervalDays>
+  <PreferredMetadataLanguage />
+  <PreferredImageLanguage />
   <ContentType>boxsets</ContentType>
+  <MetadataCountryCode />
   <SeasonZeroDisplayName>Specials</SeasonZeroDisplayName>
   <Name>Collections</Name>
+  <MetadataSavers>
+    <string>Nfo</string>
+  </MetadataSavers>
   <DisabledLocalMetadataReaders />
+  <LocalMetadataReaderOrder>
+    <string>Nfo</string>
+  </LocalMetadataReaderOrder>
   <DisabledSubtitleFetchers />
   <SubtitleFetcherOrder />
   <SkipSubtitlesIfEmbeddedSubtitlesPresent>false</SkipSubtitlesIfEmbeddedSubtitlesPresent>
@@ -29,7 +38,28 @@
   <RequirePerfectSubtitleMatch>true</RequirePerfectSubtitleMatch>
   <SaveSubtitlesWithMedia>true</SaveSubtitlesWithMedia>
   <ForcedSubtitlesOnly>false</ForcedSubtitlesOnly>
-  <TypeOptions />
+  <TypeOptions>
+    <TypeOptions>
+      <Type>BoxSet</Type>
+      <MetadataFetchers>
+        <string>TheMovieDb</string>
+      </MetadataFetchers>
+      <MetadataFetcherOrder>
+        <string>TheMovieDb</string>
+      </MetadataFetcherOrder>
+      <ImageFetchers>
+        <string>TheMovieDb</string>
+        <string>Dynamic Image Provider</string>
+        <string>FanArt</string>
+      </ImageFetchers>
+      <ImageFetcherOrder>
+        <string>TheMovieDb</string>
+        <string>Dynamic Image Provider</string>
+        <string>FanArt</string>
+      </ImageFetcherOrder>
+      <ImageOptions />
+    </TypeOptions>
+  </TypeOptions>
   <CollapseSingleItemFolders>true</CollapseSingleItemFolders>
   <EnableAdultMetadata>false</EnableAdultMetadata>
   <ImportCollections>false</ImportCollections>

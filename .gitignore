@@ -20,7 +20,7 @@ storage/bazarr/log/*
 storage/readarr/asp/*
 storage/readarr/cache.db
 storage/readarr/logs/*
-storage/readarr/logs.db
+storage/readarr/logs.db*
 storage/readarr/MediaCover
 storage/readarr/readarr.*
 

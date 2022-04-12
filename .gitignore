@@ -47,6 +47,7 @@ storage/heimdall/log/
 storage/emby/cache/
 storage/emby/logs/
 storage/emby/metadata/
+storage/emby/data/ScheduledTasks/
 
 # Plex storage
 storage/plex/Library/Application Support/Plex Media Server/Cache/

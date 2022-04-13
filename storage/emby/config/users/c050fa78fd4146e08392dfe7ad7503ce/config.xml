@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <UserConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <AudioLanguagePreference>en</AudioLanguagePreference>
-  <PlayDefaultAudioTrack>true</PlayDefaultAudioTrack>
+  <PlayDefaultAudioTrack>false</PlayDefaultAudioTrack>
   <SubtitleLanguagePreference>en</SubtitleLanguagePreference>
   <DisplayMissingEpisodes>false</DisplayMissingEpisodes>
   <SubtitleMode>Always</SubtitleMode>

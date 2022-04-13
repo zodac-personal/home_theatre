@@ -49,7 +49,10 @@
   <IsRemoteIPFilterBlacklist>false</IsRemoteIPFilterBlacklist>
   <ImageExtractionTimeoutMs>0</ImageExtractionTimeoutMs>
   <PathSubstitutions />
-  <UninstalledPlugins />
+  <UninstalledPlugins>
+    <string>OpenSubtitles.dll</string>
+    <string>Emby.Webhooks.dll</string>
+  </UninstalledPlugins>
   <CollapseVideoFolders>true</CollapseVideoFolders>
   <EnableOriginalTrackTitles>false</EnableOriginalTrackTitles>
   <VacuumDatabaseOnStartup>false</VacuumDatabaseOnStartup>

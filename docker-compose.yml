@@ -8,7 +8,7 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
     volumes:
-      - ~/git/home_theatre/storage/heimdall:/config
+      - /e/home_theatre/storage/heimdall:/config
     ports:
       - "80:80"
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
     ports:
       - "7878:7878"
     volumes:
-      - ~/git/home_theatre/storage/radarr:/config
+      - /e/home_theatre/storage/radarr:/config
       - /e/Downloads:/downloads
       - /b/Movies:/movies
     environment:
@@ -37,7 +37,7 @@ services:
     ports:
       - "8989:8989"
     volumes:
-      - ~/git/home_theatre/storage/sonarr:/config
+      - /e/home_theatre/storage/sonarr:/config
       - /e/Downloads:/downloads
       - /a/TV:/tv
     environment:
@@ -54,7 +54,7 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
     volumes:
-      - ~/git/home_theatre/storage/readarr:/config
+      - /e/home_theatre/storage/readarr:/config
       - /b/Books:/books
       - /e/Downloads:/downloads
     ports:
@@ -72,7 +72,7 @@ services:
       - PASSWORD=shroot
       - CLI_ARGS="–auth-mode=basic"
     volumes:
-      - ~/git/home_theatre/storage/calibre:/config
+      - /e/home_theatre/storage/calibre:/config
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -87,7 +87,7 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
     volumes:
-      - ~/git/home_theatre/storage/bazarr:/config
+      - /e/home_theatre/storage/bazarr:/config
       - /b/Movies:/movies
       - /a/TV:/tv
     ports:
@@ -102,7 +102,7 @@ services:
     ports:
       - "9117:9117"
     volumes:
-      - ~/git/home_theatre/storage/jackett:/config
+      - /e/home_theatre/storage/jackett:/config
     environment:
       - PUID=1000
       - PGID=150
@@ -118,7 +118,7 @@ services:
       - USER=root
       - PASS=shroot
     volumes:
-      - ~/git/home_theatre/storage/transmission:/config
+      - /e/home_theatre/storage/transmission:/config
       - /e/Downloads:/downloads
       - /e/TorrentFiles:/watch
     ports:
@@ -146,9 +146,9 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
     volumes:
-      - ~/git/home_theatre/storage/emby:/config
+      - /e/home_theatre/storage/emby:/config
       - /b/Movies:/data/movies
-      - /a/TV:/data/tvshows
+      - /a/TV:/data/shows
     ports:
       - "8096:8096"
     restart: unless-stopped
@@ -162,7 +162,7 @@ services:
       - PGID=150
       - TZ=Pacific/Auckland
     volumes:
-      - ~/git/home_theatre/storage/plex:/config
+      - /e/home_theatre/storage/plex:/config
       - /b/Movies:/movies
       - /a/TV:/tv
     ports:

@@ -166,5 +166,5 @@ services:
       - /b/Movies:/movies
       - /a/TV:/tv
     ports:
-      - "31400:32400"
+      - "32400:32400"
     restart: unless-stopped

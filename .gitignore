@@ -5,10 +5,12 @@
 # Radarr storage (minus config)
 storage/radarr/*
 !storage/radarr/config.xml
+!storage/radarr/radarr.db
 
 # Sonarr storage (minus config)
 storage/sonarr/*
 !storage/sonarr/config.xml
+!storage/sonarr/sonarr.db
 
 # Bazarr storage
 storage/bazarr/cache

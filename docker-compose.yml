@@ -4,9 +4,9 @@ services:
     container_name: heimdall
     hostname: heimdall
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "80:80"
     restart: unless-stopped
@@ -18,9 +18,9 @@ services:
     container_name: radarr
     hostname: radarr
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -34,9 +34,9 @@ services:
     container_name: sonarr
     hostname: sonarr
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -50,9 +50,9 @@ services:
     container_name: readarr
     hostname: readarr
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "8787:8787"
     restart: unless-stopped
@@ -66,12 +66,12 @@ services:
     container_name: calibre
     hostname: calibre
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
-      - USERNAME: "abc" # Pre-defined
-      - PASSWORD: "${PASSWORD}"
-      - CLI_ARGS: "–auth-mode=basic"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      USERNAME: "abc" # Pre-defined
+      PASSWORD: "${ADMIN_PASSWORD}"
+      CLI_ARGS: "–auth-mode=basic"
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -84,9 +84,9 @@ services:
     container_name: bazarr
     hostname: bazarr
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "6767:6767"
     restart: unless-stopped
@@ -100,9 +100,9 @@ services:
     container_name: jackett
     hostname: jackett
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "9117:9117"
     restart: unless-stopped
@@ -113,11 +113,11 @@ services:
     image: linuxserver/transmission:version-3.00-r5
     container_name: transmission
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
-      - USER: "${USERNAME}"
-      - PASS: "${PASSWORD}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      USER: "${ADMIN_USERNAME}"
+      PASS: "${ADMIN_PASSWORD}"
     ports:
       - "9091:9091"
       - "5555:51413"
@@ -132,8 +132,8 @@ services:
     image: flaresolverr/flaresolverr:v2.2.2
     container_name: flaresolverr
     environment:
-      - LOG_LEVEL: info
-      - TZ: "${TIMEZONE}"
+      LOG_LEVEL: info
+      TZ: "${TIMEZONE}"
     ports:
       - "8191:8191"
     restart: unless-stopped
@@ -143,9 +143,9 @@ services:
     container_name: emby
     hostname: emby
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "8096:8096"
     restart: unless-stopped
@@ -159,13 +159,13 @@ services:
     container_name: plex
     hostname: plex
     environment:
-      - PUID: "${PUID}"
-      - PGID: "${PGID}"
-      - TZ: "${TIMEZONE}"
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     ports:
       - "32400:32400"
     restart: unless-stopped
     volumes:
       - "${STORAGE_DIRECTORY}/plex:/config"
       - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV_DIRECTORY}:/tv"
+      - "${TV_DIRECTORY}:/tv

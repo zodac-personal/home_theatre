@@ -2,6 +2,9 @@
 *.iml
 .idea/
 
+# Project files
+.env
+
 # Radarr storage (minus config)
 storage/radarr/*
 !storage/radarr/config.xml
@@ -14,6 +17,7 @@ storage/sonarr/*
 
 # Bazarr storage
 storage/bazarr/cache
+storage/bazarr/config/releases.txt
 storage/bazarr/config/throttled_providers.dat
 storage/bazarr/db/*
 storage/bazarr/log/*
@@ -68,6 +72,4 @@ storage/plex/Library/Application Support/Plex Media Server/Logs/
 storage/plex/Library/Application Support/Plex Media Server/Media/localhost/
 storage/plex/Library/Application Support/Plex Media Server/Metadata/
 storage/plex/Library/Application Support/Plex Media Server/plexmediaserver.pid
-storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db
-storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db-shm
-storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db-wal
+storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.*

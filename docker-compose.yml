@@ -4,135 +4,136 @@ services:
     container_name: heimdall
     hostname: heimdall
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-    volumes:
-      - /e/home_theatre/storage/heimdall:/config
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "80:80"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/heimdall:/config"
 
   radarr:
     image: linuxserver/radarr:4.0.5
     container_name: radarr
     hostname: radarr
-    restart: unless-stopped
+    environment:
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "7878:7878"
+    restart: unless-stopped
     volumes:
-      - /e/home_theatre/storage/radarr:/config
-      - /e/Downloads:/downloads
-      - /b/Movies:/movies
-    environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
+      - "${STORAGE_DIRECTORY}/radarr:/config"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${MOVIE_DIRECTORY}:/movies"
 
   sonarr:
     image: linuxserver/sonarr:3.0.7
     container_name: sonarr
     hostname: sonarr
-    restart: unless-stopped
+    environment:
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "8989:8989"
+    restart: unless-stopped
     volumes:
-      - /e/home_theatre/storage/sonarr:/config
-      - /e/Downloads:/downloads
-      - /a/TV:/tv
-    environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
+      - "${STORAGE_DIRECTORY}/sonarr:/config"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${TV_DIRECTORY}:/tv"
 
   readarr:
     image: linuxserver/readarr:0.1.0-develop
     container_name: readarr
     hostname: readarr
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-    volumes:
-      - /e/home_theatre/storage/readarr:/config
-      - /b/Books:/books
-      - /e/Downloads:/downloads
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "8787:8787"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/readarr:/config"
+      - "${BOOKS_DIRECTORY}:/books"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
 
   calibre:
     image: linuxserver/calibre:5.40.0
     container_name: calibre
     hostname: calibre
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-      - PASSWORD=shroot
-      - CLI_ARGS="–auth-mode=basic"
-    volumes:
-      - /e/home_theatre/storage/calibre:/config
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
+      - USERNAME: "abc" # Pre-defined
+      - PASSWORD: "${PASSWORD}"
+      - CLI_ARGS: "–auth-mode=basic"
     ports:
       - "8080:8080"
       - "8081:8081"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/calibre:/config"
 
   bazarr:
     image: linuxserver/bazarr:1.0.3
     container_name: bazarr
     hostname: bazarr
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-    volumes:
-      - /e/home_theatre/storage/bazarr:/config
-      - /b/Movies:/movies
-      - /a/TV:/tv
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "6767:6767"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/bazarr:/config"
+      - "${MOVIE_DIRECTORY}:/movies"
+      - "${TV_DIRECTORY}:/tv"
 
   jackett:
     image: linuxserver/jackett:0.20.790
     container_name: jackett
     hostname: jackett
-    restart: unless-stopped
+    environment:
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "9117:9117"
+    restart: unless-stopped
     volumes:
-      - /e/home_theatre/storage/jackett:/config
-    environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
+      - "${STORAGE_DIRECTORY}/jackett:/config"
 
   transmission:
     image: linuxserver/transmission:version-3.00-r5
     container_name: transmission
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-      - USER=root
-      - PASS=shroot
-    volumes:
-      - /e/home_theatre/storage/transmission:/config
-      - /e/Downloads:/downloads
-      - /e/TorrentFiles:/watch
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
+      - USER: "${USERNAME}"
+      - PASS: "${PASSWORD}"
     ports:
       - "9091:9091"
       - "5555:51413"
       - "5555:51413/udp"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/transmission:/config"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${WATCH_DIRECTORY_FOR_TORRENT_FILES}:/watch"
 
   flaresolverr:
     image: flaresolverr/flaresolverr:v2.2.2
     container_name: flaresolverr
     environment:
-      - LOG_LEVEL=info
-      - TZ=Pacific/Auckland
+      - LOG_LEVEL: info
+      - TZ: "${TIMEZONE}"
     ports:
       - "8191:8191"
     restart: unless-stopped
@@ -142,29 +143,29 @@ services:
     container_name: emby
     hostname: emby
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-    volumes:
-      - /e/home_theatre/storage/emby:/config
-      - /b/Movies:/data/movies
-      - /a/TV:/data/shows
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "8096:8096"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/emby:/config"
+      - "${MOVIE_DIRECTORY}:/data/movies"
+      - "${TV_DIRECTORY}:/data/shows"
 
   plex:
     image: linuxserver/plex:1.25.9
     container_name: plex
     hostname: plex
     environment:
-      - PUID=1000
-      - PGID=150
-      - TZ=Pacific/Auckland
-    volumes:
-      - /e/home_theatre/storage/plex:/config
-      - /b/Movies:/movies
-      - /a/TV:/tv
+      - PUID: "${PUID}"
+      - PGID: "${PGID}"
+      - TZ: "${TIMEZONE}"
     ports:
       - "32400:32400"
     restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/plex:/config"
+      - "${MOVIE_DIRECTORY}:/movies"
+      - "${TV_DIRECTORY}:/tv"

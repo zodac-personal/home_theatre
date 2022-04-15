@@ -6,7 +6,7 @@
   <UrlBase></UrlBase>
   <BindAddress>*</BindAddress>
   <ApiKey>cdbfcd9d0b574f5d85915cb675cb7eb2</ApiKey>
-  <AuthenticationMethod>None</AuthenticationMethod>
+  <AuthenticationMethod>Basic</AuthenticationMethod>
   <UpdateMechanism>Docker</UpdateMechanism>
   <LaunchBrowser>True</LaunchBrowser>
   <Branch>main</Branch>

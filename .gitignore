@@ -20,11 +20,6 @@ storage/readarr/*
 # Prowlarr storage
 storage/prowlarr/*
 
-# Jackett storage
-storage/jackett/Jackett/log.txt*
-storage/jackett/Jackett/updater.txt*
-storage/jackett/Jackett/Indexers/*.json.bak
-
 # Calibre storage
 storage/calibre/.cache
 storage/calibre/.config/pulse

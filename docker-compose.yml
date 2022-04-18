@@ -112,7 +112,7 @@ services:
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV_DIRECTORY}:/tv"
       # Persistent volumes
-      - "bazarr_backups:/config/backups"
+      - "bazarr_backups:/config/backup"
 
   # Indexer (Torrents + Usenet)
   prowlarr:

@@ -5,30 +5,20 @@
 # Project files
 .env
 
-# Radarr storage (minus config)
+# Radarr storage
 storage/radarr/*
-!storage/radarr/config.xml
-!storage/radarr/radarr.db
 
-# Sonarr storage (minus config)
+# Sonarr storage
 storage/sonarr/*
-!storage/sonarr/config.xml
-!storage/sonarr/sonarr.db
 
 # Bazarr storage
-storage/bazarr/cache
-storage/bazarr/config/releases.txt
-storage/bazarr/config/throttled_providers.dat
-storage/bazarr/db/*
-storage/bazarr/log/*
+storage/bazarr/*
 
 # Readarr storage
-storage/readarr/asp/*
-storage/readarr/cache.db*
-storage/readarr/logs/*
-storage/readarr/logs.db*
-storage/readarr/MediaCover
-storage/readarr/readarr.*
+storage/readarr/*
+
+# Prowlarr storage
+storage/prowlarr/*
 
 # Jackett storage
 storage/jackett/Jackett/log.txt*

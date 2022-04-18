@@ -45,7 +45,7 @@
     "rpc-enabled": true,
     "rpc-host-whitelist": "",
     "rpc-host-whitelist-enabled": false,
-    "rpc-password": "{50b44f61c7e034046bbac6995c20dce30ec7281aLjTkjoij",
+    "rpc-password": "{647e34fe72ca743ec375d7e86ff41bb3776a9b45eVNqT9D0",
     "rpc-port": 9091,
     "rpc-url": "/transmission/",
     "rpc-username": "zodac",

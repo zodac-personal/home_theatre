@@ -1,4 +1,6 @@
 services:
+
+  # Dashboard
   heimdall:
     image: linuxserver/heimdall:2.4.10
     container_name: heimdall
@@ -13,6 +15,7 @@ services:
     volumes:
       - "${STORAGE_DIRECTORY}/heimdall:/config"
 
+  # Movie searcher
   radarr:
     image: linuxserver/radarr:4.0.5
     container_name: radarr
@@ -25,10 +28,14 @@ services:
       - "7878:7878"
     restart: unless-stopped
     volumes:
+      # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/radarr:/config"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MOVIE_DIRECTORY}:/movies"
+      # Persistent volumes
+      - "radarr_backups:/config/Backups"
 
+  # TV show searcher
   sonarr:
     image: linuxserver/sonarr:3.0.7
     container_name: sonarr
@@ -41,10 +48,14 @@ services:
       - "8989:8989"
     restart: unless-stopped
     volumes:
+      # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/sonarr:/config"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${TV_DIRECTORY}:/tv"
+      # Persistent volumes
+      - "sonarr_backups:/config/Backups"
 
+  # Book searcher
   readarr:
     image: linuxserver/readarr:0.1.0-develop
     container_name: readarr
@@ -57,10 +68,14 @@ services:
       - "8787:8787"
     restart: unless-stopped
     volumes:
+      # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/readarr:/config"
       - "${BOOKS_DIRECTORY}:/books"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - "readarr_backups:/config/Backups"
 
+  # eBook management
   calibre:
     image: linuxserver/calibre:5.40.0
     container_name: calibre
@@ -79,6 +94,7 @@ services:
     volumes:
       - "${STORAGE_DIRECTORY}/calibre:/config"
 
+  # Subtitle downloader
   bazarr:
     image: linuxserver/bazarr:1.0.3
     container_name: bazarr
@@ -91,24 +107,32 @@ services:
       - "6767:6767"
     restart: unless-stopped
     volumes:
+      # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/bazarr:/config"
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV_DIRECTORY}:/tv"
+      # Persistent volumes
+      - "bazarr_backups:/config/backups"
 
-  jackett:
-    image: linuxserver/jackett:0.20.790
-    container_name: jackett
-    hostname: jackett
+  # Indexer (Torrents + Usenet)
+  prowlarr:
+    image: linuxserver/prowlarr:0.3.0-nightly
+    container_name: prowlarr
+    hostname: prowlarr
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
     ports:
-      - "9117:9117"
+      - "9696:9696"
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/jackett:/config"
+      # Volume mounts from host system
+      - "${STORAGE_DIRECTORY}/prowlarr:/config"
+      # Persistent volumes
+      - "prowlarr_backups:/config/Backups"
 
+  # Torrent downloader
   transmission:
     image: linuxserver/transmission:version-3.00-r5
     container_name: transmission
@@ -168,4 +192,11 @@ services:
     volumes:
       - "${STORAGE_DIRECTORY}/plex:/config"
       - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV_DIRECTORY}:/tv
+      - "${TV_DIRECTORY}:/tv"
+
+volumes:
+  radarr_backups: {}
+  sonarr_backups: {}
+  bazarr_backups: {}
+  readarr_backups: {}
+  prowlarr_backups: {}

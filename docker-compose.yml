@@ -76,23 +76,23 @@ services:
       - "readarr_backups:/config/Backups"
 
   # eBook management
-  calibre:
-    image: linuxserver/calibre:5.40.0
-    container_name: calibre
-    hostname: calibre
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-      USERNAME: "abc" # Pre-defined
-      PASSWORD: "${ADMIN_PASSWORD}"
-      CLI_ARGS: "–auth-mode=basic"
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-    restart: unless-stopped
-    volumes:
-      - "${STORAGE_DIRECTORY}/calibre:/config"
+#  calibre:
+#    image: linuxserver/calibre:5.40.0
+#    container_name: calibre
+#    hostname: calibre
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#      USERNAME: "abc" # Pre-defined
+#      PASSWORD: "${ADMIN_PASSWORD}"
+#      CLI_ARGS: "–auth-mode=basic"
+#    ports:
+#      - "8080:8080"
+#      - "8081:8081"
+#    restart: unless-stopped
+#    volumes:
+#      - "${STORAGE_DIRECTORY}/calibre:/config"
 
   # Subtitle downloader
   bazarr:
@@ -134,7 +134,12 @@ services:
 
   # Torrent downloader
   transmission:
-    image: linuxserver/transmission:version-3.00-r5
+    build:
+      context: .
+      dockerfile: docker/transmission/Dockerfile
+      args:
+        # Docker image versions
+        TRANSMISSION_VERSION: "version-3.00-r5"
     container_name: transmission
     environment:
       PUID: "${PUID}"
@@ -162,37 +167,37 @@ services:
       - "8191:8191"
     restart: unless-stopped
 
-  emby:
-    image: linuxserver/emby:4.6.7
-    container_name: emby
-    hostname: emby
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    ports:
-      - "8096:8096"
-    restart: unless-stopped
-    volumes:
-      - "${STORAGE_DIRECTORY}/emby:/config"
-      - "${MOVIE_DIRECTORY}:/data/movies"
-      - "${TV_DIRECTORY}:/data/shows"
-
-  plex:
-    image: linuxserver/plex:1.25.9
-    container_name: plex
-    hostname: plex
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    ports:
-      - "32400:32400"
-    restart: unless-stopped
-    volumes:
-      - "${STORAGE_DIRECTORY}/plex:/config"
-      - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV_DIRECTORY}:/tv"
+#  emby:
+#    image: linuxserver/emby:4.6.7
+#    container_name: emby
+#    hostname: emby
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    ports:
+#      - "8096:8096"
+#    restart: unless-stopped
+#    volumes:
+#      - "${STORAGE_DIRECTORY}/emby:/config"
+#      - "${MOVIE_DIRECTORY}:/data/movies"
+#      - "${TV_DIRECTORY}:/data/shows"
+#
+#  plex:
+#    image: linuxserver/plex:1.25.9
+#    container_name: plex
+#    hostname: plex
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    ports:
+#      - "32400:32400"
+#    restart: unless-stopped
+#    volumes:
+#      - "${STORAGE_DIRECTORY}/plex:/config"
+#      - "${MOVIE_DIRECTORY}:/movies"
+#      - "${TV_DIRECTORY}:/tv"
 
 volumes:
   radarr_backups: {}

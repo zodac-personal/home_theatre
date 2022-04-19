@@ -157,15 +157,32 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${WATCH_DIRECTORY_FOR_TORRENT_FILES}:/watch"
 
+  # Cloudflare rate-limiter solver
   flaresolverr:
     image: flaresolverr/flaresolverr:v2.2.2
     container_name: flaresolverr
+    hostname: flaresolverr
     environment:
       LOG_LEVEL: info
       TZ: "${TIMEZONE}"
     ports:
       - "8191:8191"
     restart: unless-stopped
+
+#  # "Emby user"-connected frontend to request new content
+#  ombi:
+#    image: linuxserver/ombi:4.16.12
+#    container_name: ombi
+#    hostname: ombi
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    ports:
+#      - "3579:3579"
+#    restart: unless-stopped
+#    volumes:
+#      - "${STORAGE_DIRECTORY}/ombi:/config"
 
 #  emby:
 #    image: linuxserver/emby:4.6.7

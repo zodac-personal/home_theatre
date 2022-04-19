@@ -37,6 +37,10 @@ storage/transmission/torrents/*
 # Heimdall storage
 storage/heimdall/log/
 
+# Ombi storage
+storage/ombi/.aspnet/
+storage/ombi/Logs/
+
 # Emby storage
 storage/emby/cache/
 storage/emby/logs/

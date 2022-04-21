@@ -183,7 +183,8 @@ services:
 #    restart: unless-stopped
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/ombi:/config"
-
+#
+#  # Main family media server
 #  emby:
 #    image: linuxserver/emby:4.6.7
 #    container_name: emby
@@ -200,6 +201,7 @@ services:
 #      - "${MOVIE_DIRECTORY}:/data/movies"
 #      - "${TV_DIRECTORY}:/data/shows"
 #
+#  # Home media server for PS5
 #  plex:
 #    image: linuxserver/plex:1.25.9
 #    container_name: plex

@@ -216,13 +216,21 @@ services:
     restart: unless-stopped
     volumes:
       - "${STORAGE_DIRECTORY}/ombi:/config"
-#
+
 #  # Main family media server
 #  emby:
 #    image: linuxserver/emby:4.6.7
+#    build:
+#      context: .
+#      dockerfile: docker/emby/Dockerfile
+#      args:
+#        # Docker image versions
+#        EMBY_VERSION: "4.6.7"
 #    container_name: emby
 #    hostname: emby
 #    environment:
+#      DISCORD_ONLINE_WEBHOOK_URL: "https://discord.com/api/webhooks/968107386697056316/jTljfXTYxP0QvOcZcZiQOenNksZTAFIOSzfqHKBQecQQHG943kdYLMYJFx1YvEM0kI3i"
+#      DISCORD_OFFLINE_WEBHOOK_URL: "https://discord.com/api/webhooks/968109603541876816/wPDIeLC1e1gVl5UvzYJhaOKjZ6V5QeeQxybAlba5IBxgsr1Np3FwdVPGZbP_TNlMFlY2"
 #      PUID: "${PUID}"
 #      PGID: "${PGID}"
 #      TZ: "${TIMEZONE}"

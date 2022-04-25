@@ -5,6 +5,17 @@ services:
     image: linuxserver/heimdall:2.4.10
     container_name: heimdall
     hostname: heimdall
+    depends_on:
+      - radarr
+      - sonarr
+#      - readarr
+#      - emby
+#      - plex
+      - transmission
+      - prowlarr
+#      - calibre
+      - bazarr
+      - ombi
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -20,6 +31,8 @@ services:
     image: linuxserver/radarr:4.0.5
     container_name: radarr
     hostname: radarr
+    depends_on:
+      - transmission
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -40,6 +53,8 @@ services:
     image: linuxserver/sonarr:3.0.7
     container_name: sonarr
     hostname: sonarr
+    depends_on:
+      - transmission
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -51,31 +66,35 @@ services:
       # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/sonarr:/config"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
-      - "${TV_DIRECTORY}:/tv"
+      - "${TV1_DIRECTORY}:/tv1"
+      - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
       - "sonarr_backups:/config/Backups"
 
-  # Book searcher
-  readarr:
-    image: linuxserver/readarr:0.1.0-develop
-    container_name: readarr
-    hostname: readarr
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    ports:
-      - "8787:8787"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${STORAGE_DIRECTORY}/readarr:/config"
-      - "${BOOKS_DIRECTORY}:/books"
-      - "${DOWNLOADS_DIRECTORY}:/downloads"
-      # Persistent volumes
-      - "readarr_backups:/config/Backups"
-
-  # eBook management
+#  # Book searcher
+#  readarr:
+#    image: linuxserver/readarr:0.1.0-develop
+#    container_name: readarr
+#    hostname: readarr
+#    depends_on:
+##      - calibre
+#      - transmission
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    ports:
+#      - "8787:8787"
+#    restart: unless-stopped
+#    volumes:
+#      # Volume mounts from host system
+#      - "${STORAGE_DIRECTORY}/readarr:/config"
+#      - "${BOOKS_DIRECTORY}:/books"
+#      - "${DOWNLOADS_DIRECTORY}:/downloads"
+#      # Persistent volumes
+#      - "readarr_backups:/config/Backups"
+#
+#  # eBook management
 #  calibre:
 #    image: linuxserver/calibre:5.40.0
 #    container_name: calibre
@@ -99,6 +118,9 @@ services:
     image: linuxserver/bazarr:1.0.3
     container_name: bazarr
     hostname: bazarr
+    depends_on:
+      - radarr
+      - sonarr
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -110,7 +132,8 @@ services:
       # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/bazarr:/config"
       - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV_DIRECTORY}:/tv"
+      - "${TV1_DIRECTORY}:/tv1"
+      - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
       - "bazarr_backups:/config/backup"
 
@@ -119,6 +142,11 @@ services:
     image: linuxserver/prowlarr:0.3.0-nightly
     container_name: prowlarr
     hostname: prowlarr
+    depends_on:
+      - flaresolverr
+      - radarr
+#      - readarr
+      - sonarr
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -169,20 +197,25 @@ services:
       - "8191:8191"
     restart: unless-stopped
 
-#  # "Emby user"-connected frontend to request new content
-#  ombi:
-#    image: linuxserver/ombi:4.16.12
-#    container_name: ombi
-#    hostname: ombi
-#    environment:
-#      PUID: "${PUID}"
-#      PGID: "${PGID}"
-#      TZ: "${TIMEZONE}"
-#    ports:
-#      - "3579:3579"
-#    restart: unless-stopped
-#    volumes:
-#      - "${STORAGE_DIRECTORY}/ombi:/config"
+  # "Emby user"-connected frontend to request new content
+  ombi:
+    image: linuxserver/ombi:4.16.12
+    container_name: ombi
+    hostname: ombi
+    depends_on:
+#      - emby
+      - radarr
+#      - readarr
+      - sonarr
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    ports:
+      - "3579:3579"
+    restart: unless-stopped
+    volumes:
+      - "${STORAGE_DIRECTORY}/ombi:/config"
 #
 #  # Main family media server
 #  emby:
@@ -199,7 +232,8 @@ services:
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/emby:/config"
 #      - "${MOVIE_DIRECTORY}:/data/movies"
-#      - "${TV_DIRECTORY}:/data/shows"
+#      - "${TV1_DIRECTORY}:/data/tv1"
+#      - "${TV2_DIRECTORY}:/data/tv2"
 #
 #  # Home media server for PS5
 #  plex:
@@ -216,7 +250,8 @@ services:
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/plex:/config"
 #      - "${MOVIE_DIRECTORY}:/movies"
-#      - "${TV_DIRECTORY}:/tv"
+#      - "${TV1_DIRECTORY}:/tv1"
+#      - "${TV2_DIRECTORY}:/tv2"
 
 volumes:
   radarr_backups: {}

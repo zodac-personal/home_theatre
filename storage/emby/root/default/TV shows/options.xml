@@ -8,7 +8,10 @@
   <DownloadImagesInAdvance>false</DownloadImagesInAdvance>
   <PathInfos>
     <MediaPathInfo>
-      <Path>/data/tvshows</Path>
+      <Path>/data/tv1</Path>
+    </MediaPathInfo>
+    <MediaPathInfo>
+      <Path>/data/tv2</Path>
     </MediaPathInfo>
   </PathInfos>
   <IgnoreHiddenFiles>false</IgnoreHiddenFiles>
@@ -34,12 +37,8 @@
   <LocalMetadataReaderOrder>
     <string>Nfo</string>
   </LocalMetadataReaderOrder>
-  <DisabledSubtitleFetchers>
-    <string>Open Subtitles</string>
-  </DisabledSubtitleFetchers>
-  <SubtitleFetcherOrder>
-    <string>Open Subtitles</string>
-  </SubtitleFetcherOrder>
+  <DisabledSubtitleFetchers />
+  <SubtitleFetcherOrder />
   <SkipSubtitlesIfEmbeddedSubtitlesPresent>false</SkipSubtitlesIfEmbeddedSubtitlesPresent>
   <SkipSubtitlesIfAudioTrackMatches>false</SkipSubtitlesIfAudioTrackMatches>
   <SubtitleDownloadLanguages />

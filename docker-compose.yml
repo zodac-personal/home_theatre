@@ -1,3 +1,6 @@
+networks:
+  home:
+
 services:
 
   # Dashboard
@@ -22,6 +25,8 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "80:80"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       - "${STORAGE_DIRECTORY}/heimdall:/config"
@@ -39,6 +44,8 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "7878:7878"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -61,6 +68,8 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "8989:8989"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -85,6 +94,8 @@ services:
 #      TZ: "${TIMEZONE}"
 #    ports:
 #      - "8787:8787"
+#    networks:
+#      - home
 #    restart: unless-stopped
 #    volumes:
 #      # Volume mounts from host system
@@ -109,6 +120,8 @@ services:
 #    ports:
 #      - "8080:8080"
 #      - "8081:8081"
+#    networks:
+#      - home
 #    restart: unless-stopped
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/calibre:/config"
@@ -127,6 +140,8 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "6767:6767"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -153,6 +168,8 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "9696:9696"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -179,6 +196,8 @@ services:
       - "9091:9091"
       - "5555:51413"
       - "5555:51413/udp"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       - "${STORAGE_DIRECTORY}/transmission:/config"
@@ -195,31 +214,46 @@ services:
       TZ: "${TIMEZONE}"
     ports:
       - "8191:8191"
+    networks:
+      - home
     restart: unless-stopped
 
   # "Emby user"-connected frontend to request new content
   ombi:
+#    # Configuration for mariadb
+#    build:
+#      context: .
+#      dockerfile: docker/ombi/Dockerfile
+#      args:
+#        # Docker image versions
+#        OMBI_VERSION: "4.16.12"
+#        # Build arguments
+#        DB_NAME: "${DB_NAME}"
+#        DB_USERNAME: "${DB_USERNAME}"
+#        DB_PASSWORD: "${DB_PASSWORD}"
     image: linuxserver/ombi:4.16.12
     container_name: ombi
     hostname: ombi
     depends_on:
 #      - emby
-      - radarr
-#      - readarr
+#      - radarr
+      - readarr
       - sonarr
+#      - mariadb
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
     ports:
       - "3579:3579"
+    networks:
+      - home
     restart: unless-stopped
     volumes:
       - "${STORAGE_DIRECTORY}/ombi:/config"
 
 #  # Main family media server
 #  emby:
-#    image: linuxserver/emby:4.6.7
 #    build:
 #      context: .
 #      dockerfile: docker/emby/Dockerfile
@@ -229,13 +263,15 @@ services:
 #    container_name: emby
 #    hostname: emby
 #    environment:
-#      DISCORD_ONLINE_WEBHOOK_URL: "https://discord.com/api/webhooks/968107386697056316/jTljfXTYxP0QvOcZcZiQOenNksZTAFIOSzfqHKBQecQQHG943kdYLMYJFx1YvEM0kI3i"
-#      DISCORD_OFFLINE_WEBHOOK_URL: "https://discord.com/api/webhooks/968109603541876816/wPDIeLC1e1gVl5UvzYJhaOKjZ6V5QeeQxybAlba5IBxgsr1Np3FwdVPGZbP_TNlMFlY2"
+#      DISCORD_ONLINE_WEBHOOK_URL: "${DISCORD_ONLINE_WEBHOOK_URL}"
+#      DISCORD_OFFLINE_WEBHOOK_URL: "${DISCORD_OFFLINE_WEBHOOK_URL}"
 #      PUID: "${PUID}"
 #      PGID: "${PGID}"
 #      TZ: "${TIMEZONE}"
 #    ports:
 #      - "8096:8096"
+#    networks:
+#      - home
 #    restart: unless-stopped
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/emby:/config"
@@ -254,12 +290,40 @@ services:
 #      TZ: "${TIMEZONE}"
 #    ports:
 #      - "32400:32400"
+#    networks:
+#      - home
 #    restart: unless-stopped
 #    volumes:
 #      - "${STORAGE_DIRECTORY}/plex:/config"
 #      - "${MOVIE_DIRECTORY}:/movies"
 #      - "${TV1_DIRECTORY}:/tv1"
 #      - "${TV2_DIRECTORY}:/tv2"
+
+# Unused for now, may be needed for Ombi in future, maybe Piwigo
+#  mariadb:
+#    build:
+#      context: .
+#      dockerfile: docker/mariadb/Dockerfile
+#      args:
+#        # Docker image versions
+#        MARIADB_VERSION: "10.5.15-alpine"
+#    container_name: mariadb
+#    hostname: mariadb
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#      MYSQL_ROOT_PASSWORD: "${ADMIN_PASSWORD}"
+#      MYSQL_DATABASE: "${DB_NAME}"
+#      MYSQL_USER: "${DB_USERNAME}"
+#      MYSQL_PASSWORD: "${DB_PASSWORD}"
+#    ports:
+#      - "3306:3306"
+#    networks:
+#      - home
+#    restart: unless-stopped
+#    volumes:
+#      - "${STORAGE_DIRECTORY}/mariadb:/config"
 
 volumes:
   radarr_backups: {}

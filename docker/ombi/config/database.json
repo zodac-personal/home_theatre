@@ -1,0 +1,14 @@
+{
+  "OmbiDatabase": {
+    "Type":"MySQL",
+    "ConnectionString":"Server=mariadb;Port=3306;Database=%DB_NAME%;User=%DB_USERNAME%;Password=%DB_PASSWORD%"
+  },
+  "SettingsDatabase": {
+    "Type":"sqlite",
+    "ConnectionString":"Data Source=/config/OmbiSettings.db"
+  },
+  "ExternalDatabase": {
+    "Type":"sqlite",
+    "ConnectionString":"Data Source=/config/OmbiExternal.db"
+  }
+}

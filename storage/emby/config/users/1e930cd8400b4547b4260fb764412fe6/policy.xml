@@ -2,7 +2,7 @@
 <UserPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <IsAdministrator>false</IsAdministrator>
   <IsHidden>false</IsHidden>
-  <IsHiddenRemotely>true</IsHiddenRemotely>
+  <IsHiddenRemotely>false</IsHiddenRemotely>
   <IsHiddenFromUnusedDevices>false</IsHiddenFromUnusedDevices>
   <IsDisabled>false</IsDisabled>
   <MaxParentalRating xsi:nil="true" />

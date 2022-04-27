@@ -53,7 +53,7 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MOVIE_DIRECTORY}:/movies"
       # Persistent volumes
-      - "radarr_backups:/config/Backups"
+      - radarr_backups:/config/Backups
 
   # TV show searcher
   sonarr:
@@ -78,7 +78,7 @@ services:
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
-      - "sonarr_backups:/config/Backups"
+      - sonarr_backups:/config/Backups
 
 #  # Book searcher
 #  readarr:
@@ -103,7 +103,7 @@ services:
 #      - "${BOOKS_DIRECTORY}:/books"
 #      - "${DOWNLOADS_DIRECTORY}:/downloads"
 #      # Persistent volumes
-#      - "readarr_backups:/config/Backups"
+#      - readarr_backups:/config/Backups
 #
 #  # eBook management
 #  calibre:
@@ -150,7 +150,7 @@ services:
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
-      - "bazarr_backups:/config/backup"
+      - bazarr_backups:/config/backup
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -175,7 +175,7 @@ services:
       # Volume mounts from host system
       - "${STORAGE_DIRECTORY}/prowlarr:/config"
       # Persistent volumes
-      - "prowlarr_backups:/config/Backups"
+      - prowlarr_backups:/config/Backups
 
   # Torrent downloader
   transmission:
@@ -274,14 +274,22 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/emby:/config"
+      # Volume mounts from host system
       - "${MOVIE_DIRECTORY}:/data/movies"
       - "${TV1_DIRECTORY}:/data/tv1"
       - "${TV2_DIRECTORY}:/data/tv2"
+      # Persistent volumes
+      - emby_backups:/backups
+      - emby_content:/config
 
   # Home media server for PS5
   plex:
-    image: linuxserver/plex:1.25.9
+    build:
+      context: .
+      dockerfile: docker/plex/Dockerfile
+      args:
+        # Docker image versions
+        PLEX_VERSION: "1.25.9"
     container_name: plex
     hostname: plex
     environment:
@@ -299,7 +307,8 @@ services:
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
-      - "plex_content:/config"
+      - plex_backups:/backups
+      - plex_content:/config
 
 # Unused for now, may be needed for Ombi in the future, maybe Piwigo
 #  mariadb:
@@ -328,11 +337,15 @@ services:
 #      - "${STORAGE_DIRECTORY}/mariadb:/config"
 
 volumes:
-  # Backups
-  radarr_backups: {}
-  sonarr_backups: {}
+  # Media Server Backups
+  emby_backups: {}
+  plex_backups: {}
+  # *.arr Backups
   bazarr_backups: {}
-  readarr_backups: {}
   prowlarr_backups: {}
+  radarr_backups: {}
+  readarr_backups: {}
+  sonarr_backups: {}
   # Content
+  emby_content: {}
   plex_content: {}

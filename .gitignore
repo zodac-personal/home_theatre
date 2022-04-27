@@ -56,11 +56,3 @@ storage/emby/data/displaypreferences.db-wal
 storage/emby/data/library.db
 storage/emby/data/library.db-shm
 storage/emby/data/library.db-wal
-
-# Plex storage
-storage/plex/Library/Application Support/Plex Media Server/Cache/
-storage/plex/Library/Application Support/Plex Media Server/Logs/
-storage/plex/Library/Application Support/Plex Media Server/Media/localhost/
-storage/plex/Library/Application Support/Plex Media Server/Metadata/
-storage/plex/Library/Application Support/Plex Media Server/plexmediaserver.pid
-storage/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.*

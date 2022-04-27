@@ -294,10 +294,12 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/plex:/config"
+      # Volume mounts from host system
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
+      # Persistent volumes
+      - "plex_content:/config"
 
 # Unused for now, may be needed for Ombi in the future, maybe Piwigo
 #  mariadb:
@@ -326,8 +328,11 @@ services:
 #      - "${STORAGE_DIRECTORY}/mariadb:/config"
 
 volumes:
+  # Backups
   radarr_backups: {}
   sonarr_backups: {}
   bazarr_backups: {}
   readarr_backups: {}
   prowlarr_backups: {}
+  # Content
+  plex_content: {}

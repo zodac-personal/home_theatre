@@ -11,12 +11,12 @@ services:
     depends_on:
       - radarr
       - sonarr
-#      - readarr
+      - readarr
       - emby
       - plex
       - transmission
       - prowlarr
-#      - calibre
+      - calibre
       - bazarr
       - ombi
     environment:
@@ -29,7 +29,8 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/heimdall:/config"
+      # Persistent volumes
+      - heimdall_content:/config
 
   # Movie searcher
   radarr:
@@ -49,11 +50,11 @@ services:
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${STORAGE_DIRECTORY}/radarr:/config"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MOVIE_DIRECTORY}:/movies"
       # Persistent volumes
       - radarr_backups:/config/Backups
+      - radarr_content:/config
 
   # TV show searcher
   sonarr:
@@ -73,58 +74,61 @@ services:
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${STORAGE_DIRECTORY}/sonarr:/config"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
       - sonarr_backups:/config/Backups
+      - sonarr_content:/config
 
-#  # Book searcher
-#  readarr:
-#    image: linuxserver/readarr:0.1.0-develop
-#    container_name: readarr
-#    hostname: readarr
-#    depends_on:
-##      - calibre
-#      - transmission
-#    environment:
-#      PUID: "${PUID}"
-#      PGID: "${PGID}"
-#      TZ: "${TIMEZONE}"
-#    ports:
-#      - "8787:8787"
-#    networks:
-#      - home
-#    restart: unless-stopped
-#    volumes:
-#      # Volume mounts from host system
-#      - "${STORAGE_DIRECTORY}/readarr:/config"
-#      - "${BOOKS_DIRECTORY}:/books"
-#      - "${DOWNLOADS_DIRECTORY}:/downloads"
-#      # Persistent volumes
-#      - readarr_backups:/config/Backups
-#
-#  # eBook management
-#  calibre:
-#    image: linuxserver/calibre:5.40.0
-#    container_name: calibre
-#    hostname: calibre
-#    environment:
-#      PUID: "${PUID}"
-#      PGID: "${PGID}"
-#      TZ: "${TIMEZONE}"
-#      USERNAME: "abc" # Pre-defined
-#      PASSWORD: "${ADMIN_PASSWORD}"
-#      CLI_ARGS: "–auth-mode=basic"
-#    ports:
-#      - "8080:8080"
-#      - "8081:8081"
-#    networks:
-#      - home
-#    restart: unless-stopped
-#    volumes:
-#      - "${STORAGE_DIRECTORY}/calibre:/config"
+  # Book searcher
+  readarr:
+    image: linuxserver/readarr:0.1.0-develop
+    container_name: readarr
+    hostname: readarr
+    depends_on:
+      - calibre
+      - transmission
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    ports:
+      - "8787:8787"
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${BOOKS_DIRECTORY}:/books"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - readarr_backups:/config/Backups
+      - readarr_content:/config
+
+  # eBook management
+  calibre:
+    image: linuxserver/calibre:5.40.0
+    container_name: calibre
+    hostname: calibre
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      GUAC_USER: "${ADMIN_USERNAME}"
+      GUAC_PASS : "${ADMIN_PASSWORD}"
+      CLI_ARGS: "–auth-mode=basic"
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${BOOKS_DIRECTORY}:/books"
+      # Persistent volumes
+      - calibre_content:/config"
 
   # Subtitle downloader
   bazarr:
@@ -145,12 +149,12 @@ services:
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${STORAGE_DIRECTORY}/bazarr:/config"
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
       # Persistent volumes
       - bazarr_backups:/config/backup
+      - bazarr_content:/config
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -160,7 +164,7 @@ services:
     depends_on:
       - flaresolverr
       - radarr
-#      - readarr
+      - readarr
       - sonarr
     environment:
       PUID: "${PUID}"
@@ -172,10 +176,9 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      # Volume mounts from host system
-      - "${STORAGE_DIRECTORY}/prowlarr:/config"
       # Persistent volumes
       - prowlarr_backups:/config/Backups
+      - prowlarr_content:/config
 
   # Torrent downloader
   transmission:
@@ -200,9 +203,11 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/transmission:/config"
+      # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${WATCH_DIRECTORY_FOR_TORRENT_FILES}:/watch"
+      # Persistent volumes
+      - transmission_content:/config
 
   # Cloudflare rate-limiter solver
   flaresolverr:
@@ -237,7 +242,7 @@ services:
     depends_on:
       - emby
       - radarr
-#      - readarr
+      - readarr
       - sonarr
 #      - mariadb
     environment:
@@ -250,7 +255,8 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - "${STORAGE_DIRECTORY}/ombi:/config"
+      # Persistent volumes
+      - ombi_content:/config
 
   # Main family media server
   emby:
@@ -334,7 +340,7 @@ services:
 #      - home
 #    restart: unless-stopped
 #    volumes:
-#      - "${STORAGE_DIRECTORY}/mariadb:/config"
+#      - mariadb_content:/config
 
 volumes:
   # Media Server Backups
@@ -346,6 +352,16 @@ volumes:
   radarr_backups: {}
   readarr_backups: {}
   sonarr_backups: {}
-  # Content
+  # Media Server Content
   emby_content: {}
   plex_content: {}
+  # *.arr Content
+  bazarr_content: {}
+  calibre_content: {}
+  heimdall_content: {}
+  ombi_content: {}
+  prowlarr_content: {}
+  radarr_content: {}
+  readarr_content: {}
+  sonarr_content: {}
+  transmission_content: {}

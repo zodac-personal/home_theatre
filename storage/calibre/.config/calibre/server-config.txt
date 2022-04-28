@@ -1,5 +1,0 @@
-# Password based authentication to access the server
-# Normally, the server is unrestricted, allowing anyone to access it. You can restrict access to predefined users with this option.
-auth True
-# The port on which to listen for connections
-port 8081

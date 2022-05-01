@@ -5,7 +5,12 @@ services:
 
   # Dashboard
   heimdall:
-    image: linuxserver/heimdall:2.4.10
+    build:
+      context: .
+      dockerfile: docker/heimdall/Dockerfile
+      args:
+        # Docker image versions
+        HEIMDALL_VERSION: "2.4.10"
     container_name: heimdall
     hostname: heimdall
     depends_on:
@@ -20,9 +25,10 @@ services:
       - bazarr
       - ombi
     environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
+      PUID: "${PUID_ALT}"
+      PGID: "${PGID_ALT}"
       TZ: "${TIMEZONE}"
+      DASHBOARD_TITLE: "${DASHBOARD_TITLE}"
     ports:
       - "80:80"
     networks:
@@ -118,6 +124,7 @@ services:
       GUAC_USER: "${ADMIN_USERNAME}"
       GUAC_PASS : "${ADMIN_PASSWORD}"
       CLI_ARGS: "–auth-mode=basic"
+      HOME: "/config"
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -129,6 +136,25 @@ services:
       - "${BOOKS_DIRECTORY}:/books"
       # Persistent volumes
       - calibre_content:/config"
+
+  calibre-web:
+    image: linuxserver/calibre-web
+    container_name: calibre-web
+    hostname: calibre-web
+    depends_on:
+      - calibre
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${BOOKS_DIRECTORY}:/books"
+      # Persistent volumes
+      - calibre-web_content:/config
 
   # Subtitle downloader
   bazarr:
@@ -358,6 +384,7 @@ volumes:
   # *.arr Content
   bazarr_content: {}
   calibre_content: {}
+  calibre-web_content: {}
   heimdall_content: {}
   ombi_content: {}
   prowlarr_content: {}

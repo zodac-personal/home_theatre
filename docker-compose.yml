@@ -17,9 +17,7 @@ services:
       - bazarr
       - calibre
       - calibre-web
-      - emby
       - ombi
-      - plex
       - prowlarr
       - radarr
       - readarr
@@ -28,7 +26,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
+          cpus: "0.5"
           memory: "512M"
     environment:
       PUID: "${PUID_ALT}"
@@ -54,7 +52,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.75"
+          cpus: "1"
           memory: "1024M"
     environment:
       PUID: "${PUID}"
@@ -83,7 +81,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
+          cpus: "2"
           memory: "2048M"
     environment:
       PUID: "${PUID}"
@@ -130,6 +128,7 @@ services:
       - "${BOOKS_DIRECTORY}:/books"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       # Persistent volumes
+      - calibre_content:/calibre_config
       - readarr_backups:/config/Backups
       - readarr_content:/config
 
@@ -171,7 +170,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.15"
+          cpus: "0.25"
           memory: "256M"
     environment:
       PUID: "${PUID}"
@@ -231,7 +230,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.5"
+          cpus: "1"
           memory: "512M"
     environment:
       PUID: "${PUID}"
@@ -259,7 +258,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
+          cpus: "1"
           memory: "256M"
     environment:
       PUID: "${PUID}"
@@ -289,8 +288,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.05"
-          memory: "64M"
+          cpus: "0.025"
+          memory: "128M"
     environment:
       LOG_LEVEL: info
       TZ: "${TIMEZONE}"
@@ -317,7 +316,6 @@ services:
     container_name: ombi
     hostname: ombi
     depends_on:
-      - emby
       - radarr
       - readarr
       - sonarr
@@ -325,7 +323,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
+          cpus: "1"
           memory: "512M"
     environment:
       PUID: "${PUID}"
@@ -340,74 +338,74 @@ services:
       # Persistent volumes
       - ombi_content:/config
 
-  # Main family media server
-  emby:
-    build:
-      context: .
-      dockerfile: docker/emby/Dockerfile
-      args:
-        # Docker image versions
-        EMBY_VERSION: "4.6.7"
-    container_name: emby
-    hostname: emby
-    deploy:
-      resources:
-        limits:
-          cpus: "1.5"
-          memory: "2048M"
-    environment:
-      DISCORD_ONLINE_WEBHOOK_URL: "${DISCORD_ONLINE_WEBHOOK_URL}"
-      DISCORD_OFFLINE_WEBHOOK_URL: "${DISCORD_OFFLINE_WEBHOOK_URL}"
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "8096:8096"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${MOVIE_DIRECTORY}:/data/movies"
-      - "${MUSIC_DIRECTORY}:/data/music"
-      - "${TV1_DIRECTORY}:/data/tv1"
-      - "${TV2_DIRECTORY}:/data/tv2"
-      # Persistent volumes
-      - emby_backups:/backups
-      - emby_content:/config
-
-  # Home media server for PS5
-  plex:
-    build:
-      context: .
-      dockerfile: docker/plex/Dockerfile
-      args:
-        # Docker image versions
-        PLEX_VERSION: "1.25.9"
-    container_name: plex
-    hostname: plex
-    deploy:
-      resources:
-        limits:
-          cpus: "1.5"
-          memory: "2048M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "32400:32400"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV1_DIRECTORY}:/tv1"
-      - "${TV2_DIRECTORY}:/tv2"
-      # Persistent volumes
-      - plex_backups:/backups
-      - plex_content:/config
+#  # Main family media server
+#  emby:
+#    build:
+#      context: .
+#      dockerfile: docker/emby/Dockerfile
+#      args:
+#        # Docker image versions
+#        EMBY_VERSION: "4.6.7"
+#    container_name: emby
+#    hostname: emby
+#    deploy:
+#      resources:
+#        limits:
+#          # cpus: "8" No CPU limit
+#          memory: "1024M"
+#    environment:
+#      DISCORD_ONLINE_WEBHOOK_URL: "${DISCORD_ONLINE_WEBHOOK_URL}"
+#      DISCORD_OFFLINE_WEBHOOK_URL: "${DISCORD_OFFLINE_WEBHOOK_URL}"
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    networks:
+#      - home
+#    ports:
+#      - "8096:8096"
+#    restart: unless-stopped
+#    volumes:
+#      # Volume mounts from host system
+#      - "${MOVIE_DIRECTORY}:/data/movies"
+#      - "${MUSIC_DIRECTORY}:/data/music"
+#      - "${TV1_DIRECTORY}:/data/tv1"
+#      - "${TV2_DIRECTORY}:/data/tv2"
+#      # Persistent volumes
+#      - emby_backups:/backups
+#      - emby_content:/config
+#
+#  # Home media server for PS5
+#  plex:
+#    build:
+#      context: .
+#      dockerfile: docker/plex/Dockerfile
+#      args:
+#        # Docker image versions
+#        PLEX_VERSION: "1.25.9"
+#    container_name: plex
+#    hostname: plex
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "4"
+#          memory: "2048M"
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    networks:
+#      - home
+#    ports:
+#      - "32400:32400"
+#    restart: unless-stopped
+#    volumes:
+#      # Volume mounts from host system
+#      - "${MOVIE_DIRECTORY}:/movies"
+#      - "${TV1_DIRECTORY}:/tv1"
+#      - "${TV2_DIRECTORY}:/tv2"
+#      # Persistent volumes
+#      - plex_backups:/backups
+#      - plex_content:/config
 
 # Unused for now, may be needed for Ombi in the future, maybe Piwigo
 #  mariadb:
@@ -441,18 +439,12 @@ services:
 #      - mariadb_content:/config
 
 volumes:
-  # Media Server Backups
-  emby_backups: {}
-  plex_backups: {}
   # *.arr Backups
   bazarr_backups: {}
   prowlarr_backups: {}
   radarr_backups: {}
   readarr_backups: {}
   sonarr_backups: {}
-  # Media Server Content
-  emby_content: {}
-  plex_content: {}
   # *.arr Content
   bazarr_content: {}
   calibre_content: {}

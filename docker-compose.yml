@@ -20,7 +20,6 @@ services:
       - ombi
       - prowlarr
       - radarr
-      - readarr
       - sonarr
       - transmission
     deploy:
@@ -102,35 +101,35 @@ services:
       - sonarr_content:/config
 
   # Book searcher
-  readarr:
-    image: linuxserver/readarr:0.1.0-develop
-    container_name: readarr
-    hostname: readarr
-    depends_on:
-      - calibre
-      - transmission
-    deploy:
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: "512M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "8787:8787"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${BOOKS_DIRECTORY}:/books"
-      - "${DOWNLOADS_DIRECTORY}:/downloads"
-      # Persistent volumes
-      - calibre_content:/calibre_config
-      - readarr_backups:/config/Backups
-      - readarr_content:/config
+#  readarr:
+#    image: linuxserver/readarr:0.1.0-develop
+#    container_name: readarr
+#    hostname: readarr
+#    depends_on:
+#      - calibre
+#      - transmission
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.1"
+#          memory: "512M"
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#    networks:
+#      - home
+#    ports:
+#      - "8787:8787"
+#    restart: unless-stopped
+#    volumes:
+#      # Volume mounts from host system
+#      - "${BOOKS_DIRECTORY}:/books"
+#      - "${DOWNLOADS_DIRECTORY}:/downloads"
+#      # Persistent volumes
+#      - calibre_content:/calibre_config
+#      - readarr_backups:/config/Backups
+#      - readarr_content:/config
 
   # eBook management
   calibre:
@@ -143,9 +142,10 @@ services:
           cpus: "0.5"
           memory: "1024M"
     environment:
-      CLI_ARGS: "–auth-mode=basic"
-      GUAC_USER: "${ADMIN_USERNAME}"
+      GUAC_USER: "abc" # Hardcoded value
       GUAC_PASS : "${ADMIN_PASSWORD}"
+      USERNAME: "abc" # Hardcoded value
+      PASSWORD: "${ADMIN_PASSWORD}"
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
@@ -225,7 +225,6 @@ services:
     depends_on:
       - flaresolverr
       - radarr
-      - readarr
       - sonarr
     deploy:
       resources:
@@ -317,7 +316,6 @@ services:
     hostname: ombi
     depends_on:
       - radarr
-      - readarr
       - sonarr
 #      - mariadb
     deploy:
@@ -443,7 +441,6 @@ volumes:
   bazarr_backups: {}
   prowlarr_backups: {}
   radarr_backups: {}
-  readarr_backups: {}
   sonarr_backups: {}
   # *.arr Content
   bazarr_content: {}
@@ -453,6 +450,5 @@ volumes:
   ombi_content: {}
   prowlarr_content: {}
   radarr_content: {}
-  readarr_content: {}
   sonarr_content: {}
   transmission_content: {}

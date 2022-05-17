@@ -4,15 +4,10 @@ networks:
 services:
 
   # Dashboard
-  heimdall:
-    build:
-      context: .
-      dockerfile: docker/heimdall/Dockerfile
-      args:
-        # Docker image versions
-        HEIMDALL_VERSION: "2.4.10"
-    container_name: heimdall
-    hostname: heimdall
+  organizr:
+    image: organizr/organizr
+    container_name: organizr
+    hostname: organizr
     depends_on:
       - bazarr
       - calibre
@@ -31,15 +26,12 @@ services:
       PUID: "${PUID_ALT}"
       PGID: "${PGID_ALT}"
       TZ: "${TIMEZONE}"
-      DASHBOARD_TITLE: "${DASHBOARD_TITLE}"
-    networks:
-      - home
     ports:
       - "80:80"
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - heimdall_content:/config
+      - organizr_content:/config
 
   # Movie searcher
   radarr:
@@ -446,8 +438,8 @@ volumes:
   bazarr_content: {}
   calibre_content: {}
   calibre-web_content: {}
-  heimdall_content: {}
   ombi_content: {}
+  organizr_content: {}
   prowlarr_content: {}
   radarr_content: {}
   sonarr_content: {}

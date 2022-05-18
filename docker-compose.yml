@@ -125,7 +125,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:5.40.0
+    image: linuxserver/calibre
     container_name: calibre
     hostname: calibre
     deploy:
@@ -148,15 +148,16 @@ services:
       - "8081:8081"
     restart: unless-stopped
     volumes:
-      # Volume mounts from host system
-      - "${BOOKS_DIRECTORY}:/books"
       # Persistent volumes
       - calibre_content:/config
+      - "calibre_library_1:/${BOOK_LIBRARY_1}"
+      - "calibre_library_2:/${BOOK_LIBRARY_2}"
 
-  calibre-web:
+  # Default credentials: admin/admin123
+  calibre-web-1:
     image: linuxserver/calibre-web
-    container_name: calibre-web
-    hostname: calibre-web
+    container_name: calibre-web-1
+    hostname: calibre-web-1
     depends_on:
       - calibre
     deploy:
@@ -175,8 +176,34 @@ services:
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - calibre_content:/calibre_config
-      - calibre-web_content:/config
+      - "calibre_library_1:/${BOOK_LIBRARY_1}"
+      - calibre-web-1_content:/config
+
+  # Default credentials: admin/admin123
+  calibre-web-2:
+    image: linuxserver/calibre-web
+    container_name: calibre-web-2
+    hostname: calibre-web-2
+    depends_on:
+      - calibre
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    networks:
+      - home
+    ports:
+      - "8084:8083"
+    restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - "calibre_library_2:/${BOOK_LIBRARY_2}"
+      - calibre-web-2_content:/config
 
   # Subtitle downloader
   bazarr:
@@ -437,10 +464,14 @@ volumes:
   # *.arr Content
   bazarr_content: {}
   calibre_content: {}
-  calibre-web_content: {}
+  calibre-web-1_content: {}
+  calibre-web-2_content: {}
   ombi_content: {}
   organizr_content: {}
   prowlarr_content: {}
   radarr_content: {}
   sonarr_content: {}
   transmission_content: {}
+  # Calibre libraries for multiple users
+  calibre_library_1: {}
+  calibre_library_2: {}

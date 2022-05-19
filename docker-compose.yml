@@ -148,6 +148,8 @@ services:
       - "8081:8081"
     restart: unless-stopped
     volumes:
+      # Volume mounts from host system
+      - "${BOOK_COVERS_DIRECTORY}:/covers"
       # Persistent volumes
       - calibre_content:/config
       - "calibre_library_1:/${BOOK_LIBRARY_1}"
@@ -207,7 +209,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.0.3
+    image: linuxserver/bazarr
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -238,7 +240,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:0.3.0-nightly
+    image: linuxserver/prowlarr:nightly
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -300,7 +302,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v2.2.2
+    image: flaresolverr/flaresolverr
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -330,7 +332,7 @@ services:
 #        DB_NAME: "${DB_NAME}"
 #        DB_USERNAME: "${DB_USERNAME}"
 #        DB_PASSWORD: "${DB_PASSWORD}"
-    image: linuxserver/ombi:4.16.12
+    image: linuxserver/ombi
     container_name: ombi
     hostname: ombi
     depends_on:

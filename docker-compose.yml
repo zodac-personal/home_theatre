@@ -145,7 +145,7 @@ services:
       - home
     ports:
       - "8080:8080"
-      - "8081:8081"
+      - "8099:8081"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -427,61 +427,61 @@ services:
 #      - plex_content:/config
 
   # Unused for now, may be needed for Ombi in the future, maybe Piwigo
-  mariadb:
-    build:
-      context: .
-      dockerfile: docker/mariadb/Dockerfile
-      args:
-        # Docker image versions
-        MARIADB_VERSION: "10.5.15-alpine"
-    container_name: mariadb
-    hostname: mariadb
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "2048M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-      MYSQL_ROOT_PASSWORD: "${ADMIN_PASSWORD}"
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-    networks:
-      - home
-    ports:
-      - "3306:3306"
-    restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - mariadb_content:/config
-
-  piwigo:
-    image: linuxserver/piwigo:12.2.0
-    container_name: piwigo
-    hostname: piwigo
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "2048M"
-    environment:
-      PUID: "${PUID_ALT}"
-      PGID: "${PGID_ALT}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "90:80"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${PHOTOS_DIRECTORY}:/photos"
-      # Persistent volumes
-      - piwigo_config:/config
-      - piwigo_content:/gallery
+#  mariadb:
+#    build:
+#      context: .
+#      dockerfile: docker/mariadb/Dockerfile
+#      args:
+#        # Docker image versions
+#        MARIADB_VERSION: "10.5.15-alpine"
+#    container_name: mariadb
+#    hostname: mariadb
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "1"
+#          memory: "2048M"
+#    environment:
+#      PUID: "${PUID}"
+#      PGID: "${PGID}"
+#      TZ: "${TIMEZONE}"
+#      MYSQL_ROOT_PASSWORD: "${ADMIN_PASSWORD}"
+#      MYSQL_DATABASE: "${DB_NAME}"
+#      MYSQL_USER: "${DB_USERNAME}"
+#      MYSQL_PASSWORD: "${DB_PASSWORD}"
+#    networks:
+#      - home
+#    ports:
+#      - "3306:3306"
+#    restart: unless-stopped
+#    volumes:
+#      # Persistent volumes
+#      - mariadb_content:/config
+#
+#  piwigo:
+#    image: linuxserver/piwigo:12.2.0
+#    container_name: piwigo
+#    hostname: piwigo
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "1"
+#          memory: "2048M"
+#    environment:
+#      PUID: "${PUID_ALT}"
+#      PGID: "${PGID_ALT}"
+#      TZ: "${TIMEZONE}"
+#    networks:
+#      - home
+#    ports:
+#      - "90:80"
+#    restart: unless-stopped
+#    volumes:
+#      # Volume mounts from host system
+#      - "${PHOTOS_DIRECTORY}:/photos"
+#      # Persistent volumes
+#      - piwigo_config:/config
+#      - piwigo_content:/gallery
 
 volumes:
   # *.arr Backups

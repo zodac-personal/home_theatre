@@ -11,7 +11,8 @@ services:
     depends_on:
       - bazarr
       - calibre
-      - calibre-web
+      - calibre-web-1
+      - calibre-web-2
       - ombi
       - prowlarr
       - radarr
@@ -88,6 +89,7 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
+      - "${TV3_DIRECTORY}:/tv3"
       # Persistent volumes
       - sonarr_backups:/config/Backups
       - sonarr_content:/config
@@ -234,6 +236,7 @@ services:
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
+      - "${TV3_DIRECTORY}:/tv3"
       # Persistent volumes
       - bazarr_backups:/config/backup
       - bazarr_content:/config
@@ -389,6 +392,7 @@ services:
 #      - "${MUSIC_DIRECTORY}:/data/music"
 #      - "${TV1_DIRECTORY}:/data/tv1"
 #      - "${TV2_DIRECTORY}:/data/tv2"
+#      - "${TV3_DIRECTORY}:/data/tv3"
 #      # Persistent volumes
 #      - emby_backups:/backups
 #      - emby_content:/config
@@ -422,6 +426,7 @@ services:
 #      - "${MOVIE_DIRECTORY}:/movies"
 #      - "${TV1_DIRECTORY}:/tv1"
 #      - "${TV2_DIRECTORY}:/tv2"
+#      - "${TV3_DIRECTORY}:/tv3"
 #      # Persistent volumes
 #      - plex_backups:/backups
 #      - plex_content:/config

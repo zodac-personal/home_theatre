@@ -4,39 +4,3 @@
 
 # Project files
 .env
-
-# Radarr storage
-storage/radarr/*
-
-# Sonarr storage
-storage/sonarr/*
-
-# Bazarr storage
-storage/bazarr/*
-
-# Readarr storage
-storage/readarr/*
-
-# Prowlarr storage
-storage/prowlarr/*
-
-# Calibre storage
-storage/calibre/.cache
-storage/calibre/.config/pulse
-storage/calibre/.dbus/session-bus/
-storage/calibre/.local/*
-storage/calibre/.x*
-storage/calibre/Calibre Library/
-!storage/calibre/Calibre Library/metadata.db
-
-# Transmission storage
-storage/transmission/resume/*
-storage/transmission/stats.json
-storage/transmission/torrents/*
-
-# Heimdall storage
-storage/heimdall/log/
-
-# Ombi storage
-storage/ombi/.aspnet/
-storage/ombi/Logs/

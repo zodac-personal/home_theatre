@@ -27,6 +27,8 @@ services:
       PUID: "${PUID_ALT}"
       PGID: "${PGID_ALT}"
       TZ: "${TIMEZONE}"
+    networks:
+      - home
     ports:
       - "80:80"
     restart: unless-stopped
@@ -36,7 +38,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.0.5
+    image: linuxserver/radarr:4.1.0
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -65,7 +67,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:3.0.7
+    image: linuxserver/sonarr:3.0.8
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -274,9 +276,6 @@ services:
     build:
       context: .
       dockerfile: docker/transmission/Dockerfile
-      args:
-        # Docker image versions
-        TRANSMISSION_VERSION: "version-3.00-r5"
     container_name: transmission
     deploy:
       resources:
@@ -311,8 +310,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.025"
-          memory: "128M"
+          cpus: "1"
+          memory: "1024M"
     environment:
       LOG_LEVEL: info
       TZ: "${TIMEZONE}"

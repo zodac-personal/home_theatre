@@ -96,6 +96,33 @@ services:
       - sonarr_backups:/config/Backups
       - sonarr_content:/config
 
+  # Music Player
+  airsonic:
+    image: linuxserver/airsonic-advanced
+    container_name: airsonic
+    hostname: airsonic
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    networks:
+      - home
+    ports:
+      - "4040:4040"
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${MUSIC_DIRECTORY}:/music"
+      - "${PLAYLIST_DIRECTORY}:/playlists"
+      - "${PODCAST_DIRECTORY}:/podcasts"
+      # Persistent volumes
+      - airsonic_content:/config
+
   # Book searcher
 #  readarr:
 #    image: linuxserver/readarr:0.1.0-develop
@@ -494,6 +521,7 @@ volumes:
   radarr_backups: {}
   sonarr_backups: {}
   # *.arr Content
+  airsonic_content: {}
   bazarr_content: {}
   calibre_content: {}
   calibre-web-1_content: {}

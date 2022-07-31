@@ -4,3 +4,11 @@
 
 # Project files
 .env
+
+# Test files
+.env2
+docker-compose-test.yml
+
+# Transmission files
+docker/transmission/storage/dht.dat
+docker/transmission/storage/stats.json

@@ -10,5 +10,7 @@
 docker-compose-test.yml
 
 # Transmission files
+docker/transmission/storage/resume/
+docker/transmission/storage/torrents/
 docker/transmission/storage/dht.dat
 docker/transmission/storage/stats.json

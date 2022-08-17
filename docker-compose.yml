@@ -13,6 +13,7 @@ services:
       - calibre
       - calibre-web-1
       - calibre-web-2
+      - lidarr
       - ombi
       - prowlarr
       - radarr
@@ -38,7 +39,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.1.0
+    image: linuxserver/radarr
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -67,7 +68,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:3.0.8
+    image: linuxserver/sonarr
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -96,6 +97,35 @@ services:
       - sonarr_backups:/config/Backups
       - sonarr_content:/config
 
+  # Music searcher
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    hostname: lidarr
+    depends_on:
+      - transmission
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    networks:
+      - home
+    ports:
+      - "8686:8686"
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${MUSIC_DIRECTORY}:/music"
+      # Persistent volumes
+      - lidarr_backups:/config/Backups
+      - lidarr_content:/config
+
   # Music Player
   airsonic:
     image: linuxserver/airsonic-advanced
@@ -119,8 +149,9 @@ services:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music"
       - "${PLAYLIST_DIRECTORY}:/playlists"
-      - "${PODCAST_DIRECTORY}:/podcasts"
+      # - "${PODCAST_DIRECTORY}:/podcasts"
       # Persistent volumes
+      - airsonic_backups:/config/backups
       - airsonic_content:/config
 
   # Book searcher
@@ -516,7 +547,9 @@ services:
 
 volumes:
   # *.arr Backups
+  airsonic_backups: {}
   bazarr_backups: {}
+  lidarr_backups: {}
   prowlarr_backups: {}
   radarr_backups: {}
   sonarr_backups: {}
@@ -526,6 +559,7 @@ volumes:
   calibre_content: {}
   calibre-web-1_content: {}
   calibre-web-2_content: {}
+  lidarr_content: {}
   mariadb_content: {}
   ombi_content: {}
   organizr_content: {}

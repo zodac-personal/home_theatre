@@ -9,12 +9,12 @@ services:
     container_name: organizr
     hostname: organizr
     depends_on:
+      - airsonic
       - bazarr
       - calibre
       - calibre-web-1
       - calibre-web-2
       - lidarr
-      - ombi
       - prowlarr
       - radarr
       - sonarr
@@ -360,6 +360,32 @@ services:
       # Cannot user a docker volume for config, as it will be overwritten by the transmission daemon
       - "${PROJECT_DIRECTORY}/docker/transmission/storage:/config"
 
+  # Discord bot for requests
+  doplarr:
+    image: linuxserver/doplarr
+    container_name: doplarr
+    hostname: doplarr
+    depends_on:
+      - radarr
+      - sonarr
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Integration configuration
+      RADARR__URL: "http://radarr:7878"
+      SONARR__URL: "http://sonarr:8989"
+      RADARR__API: "${RADARR_API_KEY}"
+      SONARR__API: "${SONARR_API_KEY}"
+      # Discord configuration
+      DISCORD__TOKEN: "${DISCORD_BOT_TOKEN}"
+      DISCORD__MAX_RESULTS: 5
+    networks:
+      - home
+    restart: unless-stopped
+
   # Cloudflare rate-limiter solver
   flaresolverr:
     image: flaresolverr/flaresolverr
@@ -378,44 +404,6 @@ services:
     ports:
       - "8191:8191"
     restart: unless-stopped
-
-  # "Emby user"-connected frontend to request new content
-  ombi:
-#    # Configuration for mariadb
-#    build:
-#      context: .
-#      dockerfile: docker/ombi/Dockerfile
-#      args:
-#        # Docker image versions
-#        OMBI_VERSION: "4.16.12"
-#        # Build arguments
-#        DB_NAME: "${DB_NAME}"
-#        DB_USERNAME: "${DB_USERNAME}"
-#        DB_PASSWORD: "${DB_PASSWORD}"
-    image: linuxserver/ombi
-    container_name: ombi
-    hostname: ombi
-    depends_on:
-      - radarr
-      - sonarr
-#      - mariadb
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "512M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "3579:3579"
-    restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - ombi_content:/config
 
 #  # Main family media server
 #  emby:
@@ -561,7 +549,6 @@ volumes:
   calibre-web-2_content: {}
   lidarr_content: {}
   mariadb_content: {}
-  ombi_content: {}
   organizr_content: {}
   piwigo_config: {}
   piwigo_content: {}

@@ -208,7 +208,7 @@ services:
       - home
     ports:
       - "8080:8080"
-      - "8099:8081"
+      - "8081:8081"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system

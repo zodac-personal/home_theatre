@@ -3,41 +3,6 @@ networks:
 
 services:
 
-  # Dashboard
-  organizr:
-    image: organizr/organizr
-    container_name: organizr
-    hostname: organizr
-    depends_on:
-      - airsonic
-      - bazarr
-      - calibre
-      - calibre-web-1
-      - calibre-web-2
-      - lidarr
-      - piwigo
-      - prowlarr
-      - radarr
-      - sonarr
-      - transmission
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "512M"
-    environment:
-      PUID: "${PUID_ALT}"
-      PGID: "${PGID_ALT}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - organizr_content:/config
-
   # Movie searcher
   radarr:
     image: linuxserver/radarr
@@ -278,8 +243,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.1"
-          memory: "256M"
+          cpus: "0.25"
+          memory: "512M"
     depends_on:
       - radarr
       - sonarr
@@ -339,8 +304,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "256M"
+          cpus: "2"
+          memory: "512M"
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -389,7 +354,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr
+    image: ghcr.io/aeonlucid/flaresolverr:v3.0.0
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -546,7 +511,6 @@ volumes:
   calibre-web-2_content: { }
   lidarr_content: { }
   mariadb_content: { }
-  organizr_content: { }
   piwigo_config: { }
   piwigo_content: { }
   prowlarr_content: { }

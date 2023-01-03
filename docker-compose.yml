@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr
+    image: linuxserver/radarr:latest
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -34,7 +34,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr
+    image: linuxserver/sonarr:latest
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -65,7 +65,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr
+    image: linuxserver/lidarr:latest
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -94,7 +94,7 @@ services:
 
   # Music Player
   airsonic:
-    image: linuxserver/airsonic-advanced
+    image: linuxserver/airsonic-advanced:latest
     container_name: airsonic
     hostname: airsonic
     deploy:
@@ -153,7 +153,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre
+    image: linuxserver/calibre:latest
     container_name: calibre
     hostname: calibre
     deploy:
@@ -185,7 +185,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-1:
-    image: linuxserver/calibre-web
+    image: linuxserver/calibre-web:latest
     container_name: calibre-web-1
     hostname: calibre-web-1
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-2:
-    image: linuxserver/calibre-web
+    image: linuxserver/calibre-web:latest
     container_name: calibre-web-2
     hostname: calibre-web-2
     depends_on:
@@ -237,7 +237,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr
+    image: linuxserver/bazarr:latest
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -269,7 +269,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly
+    image: linuxserver/prowlarr:latest
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -301,6 +301,7 @@ services:
       context: .
       dockerfile: docker/transmission/Dockerfile
     container_name: transmission
+    hostname: transmission
     deploy:
       resources:
         limits:
@@ -328,7 +329,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr
+    image: linuxserver/doplarr:latest
     container_name: doplarr
     hostname: doplarr
     depends_on:
@@ -354,7 +355,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: ghcr.io/aeonlucid/flaresolverr:v3.0.0
+    image: ghcr.io/aeonlucid/flaresolverr:latest
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -371,130 +372,6 @@ services:
       - "8191:8191"
     restart: unless-stopped
 
-  #  # Main family media server
-  #  emby:
-  #    build:
-  #      context: .
-  #      dockerfile: docker/emby/Dockerfile
-  #      args:
-  #        # Docker image versions
-  #        EMBY_VERSION: "4.6.7"
-  #    container_name: emby
-  #    hostname: emby
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          # cpus: "8" No CPU limit
-  #          memory: "1024M"
-  #    environment:
-  #      DISCORD_ONLINE_WEBHOOK_URL: "${DISCORD_ONLINE_WEBHOOK_URL}"
-  #      DISCORD_OFFLINE_WEBHOOK_URL: "${DISCORD_OFFLINE_WEBHOOK_URL}"
-  #      PUID: "${PUID}"
-  #      PGID: "${PGID}"
-  #      TZ: "${TIMEZONE}"
-  #    networks:
-  #      - home
-  #    ports:
-  #      - "8096:8096"
-  #    restart: unless-stopped
-  #    volumes:
-  #      # Volume mounts from host system
-  #      - "${MOVIE_DIRECTORY}:/data/movies"
-  #      - "${MUSIC_DIRECTORY}:/data/music"
-  #      - "${TV1_DIRECTORY}:/data/tv1"
-  #      - "${TV2_DIRECTORY}:/data/tv2"
-  #      - "${TV3_DIRECTORY}:/data/tv3"
-  #      # Persistent volumes
-  #      - emby_backups:/backups
-  #      - emby_content:/config
-  #
-  #  # Home media server for PS5
-  #  plex:
-  #    build:
-  #      context: .
-  #      dockerfile: docker/plex/Dockerfile
-  #      args:
-  #        # Docker image versions
-  #        PLEX_VERSION: "1.25.9"
-  #    container_name: plex
-  #    hostname: plex
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          cpus: "4"
-  #          memory: "2048M"
-  #    environment:
-  #      PUID: "${PUID}"
-  #      PGID: "${PGID}"
-  #      TZ: "${TIMEZONE}"
-  #    networks:
-  #      - home
-  #    ports:
-  #      - "32400:32400"
-  #    restart: unless-stopped
-  #    volumes:
-  #      # Volume mounts from host system
-  #      - "${MOVIE_DIRECTORY}:/movies"
-  #      - "${TV1_DIRECTORY}:/tv1"
-  #      - "${TV2_DIRECTORY}:/tv2"
-  #      - "${TV3_DIRECTORY}:/tv3"
-  #      # Persistent volumes
-  #      - plex_backups:/backups
-  #      - plex_content:/config
-
-  mariadb:
-    image: linuxserver/mariadb:alpine
-    container_name: mariadb
-    hostname: mariadb
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "2048M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-      MYSQL_ROOT_PASSWORD: "${ADMIN_PASSWORD}"
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-    networks:
-      - home
-    ports:
-      - "3306:3306"
-    restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - mariadb_content:/config
-
-  piwigo:
-    image: linuxserver/piwigo:13.3.0
-    container_name: piwigo
-    hostname: piwigo
-    depends_on:
-      - mariadb
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "2048M"
-    environment:
-      PUID: "${PUID_ALT}"
-      PGID: "${PGID_ALT}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "90:80"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${PHOTOS_DIRECTORY}:/photos"
-      # Persistent volumes
-      - piwigo_config:/config
-      - piwigo_content:/gallery
-
 volumes:
   # *.arr Backups
   airsonic_backups: { }
@@ -510,9 +387,6 @@ volumes:
   calibre-web-1_content: { }
   calibre-web-2_content: { }
   lidarr_content: { }
-  mariadb_content: { }
-  piwigo_config: { }
-  piwigo_content: { }
   prowlarr_content: { }
   radarr_content: { }
   sonarr_content: { }

@@ -115,14 +115,14 @@ services:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music"
       - "${PLAYLIST_DIRECTORY}:/playlists"
-      # - "${PODCAST_DIRECTORY}:/podcasts"
+      - "${PODCAST_DIRECTORY}:/podcasts"
       # Persistent volumes
       - airsonic_backups:/config/backups
       - airsonic_content:/config
 
   # Book searcher
   #  readarr:
-  #    image: linuxserver/readarr:0.1.0-develop
+  #    image: linuxserver/readarr:0.1.1-develop
   #    container_name: readarr
   #    hostname: readarr
   #    depends_on:
@@ -235,6 +235,54 @@ services:
       - "calibre_library_2:/${BOOK_LIBRARY_2}"
       - calibre-web-2_content:/config
 
+  # Downloaded archive extracter
+  unpackerr:
+    image: golift/unpackerr
+    container_name: unpackerr
+    hostname: unpackerr
+    depends_on:
+      - lidarr
+      - radarr
+      - sonarr
+      # - readarr
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "512M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      # Sonarr Config
+      UN_SONARR_0_URL: "http://sonarr:8989"
+      UN_SONARR_0_API_KEY: "${SONARR_API_KEY}"
+      UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
+      UN_SONARR_0_PROTOCOLS: "torrent,usenet"
+      # Radarr Config
+      UN_RADARR_0_URL: "http://radarr:7878"
+      UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
+      UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
+      UN_RADARR_0_PROTOCOLS: "torrent,usenet"
+      # # Lidarr Config
+      UN_LIDARR_0_URL: "http://lidarr:8686"
+      UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY}"
+      UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
+      UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
+      # # Readarr Config
+      # UN_READARR_0_URL: "http://readarr:8787"
+      # UN_READARR_0_API_KEY:
+      # UN_READARR_0_PATHS_0:" /downloads/complete/readarr"
+      # UN_READARR_0_PROTOCOLS: "torrent,usenet"
+    networks:
+      - home
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "${PUID}:${PGID}"
+    volumes:
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+
   # Subtitle downloader
   bazarr:
     image: linuxserver/bazarr:latest
@@ -274,6 +322,7 @@ services:
     hostname: prowlarr
     depends_on:
       - flaresolverr
+      - lidarr
       - radarr
       - sonarr
     deploy:
@@ -333,6 +382,7 @@ services:
     container_name: doplarr
     hostname: doplarr
     depends_on:
+      - lidarr
       - radarr
       - sonarr
     deploy:

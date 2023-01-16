@@ -346,9 +346,7 @@ services:
 
   # Torrent downloader
   transmission:
-    build:
-      context: .
-      dockerfile: docker/transmission/Dockerfile
+    image: linuxserver/transmission:latest
     container_name: transmission
     hostname: transmission
     deploy:
@@ -373,8 +371,8 @@ services:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${WATCH_DIRECTORY_FOR_TORRENT_FILES}:/watch"
-      # Cannot user a docker volume for config, as it will be overwritten by the transmission daemon
-      - "${PROJECT_DIRECTORY}/docker/transmission/storage:/config"
+      # Persistent volumes
+      - transmission_content:/config
 
   # Discord bot for requests
   doplarr:
@@ -440,6 +438,7 @@ volumes:
   prowlarr_content: { }
   radarr_content: { }
   sonarr_content: { }
+  transmission_content: { }
   # Calibre libraries for multiple users
   calibre_library_1: { }
   calibre_library_2: { }

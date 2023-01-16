@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:latest
+    image: linuxserver/radarr:4.3.2-develop
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -34,7 +34,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:latest
+    image: linuxserver/sonarr:4.0.0-develop
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -65,7 +65,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:latest
+    image: linuxserver/lidarr:1.1.1-develop
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -94,7 +94,7 @@ services:
 
   # Music Player
   airsonic:
-    image: linuxserver/airsonic-advanced:latest
+    image: linuxserver/airsonic-advanced:11.0.0
     container_name: airsonic
     hostname: airsonic
     deploy:
@@ -153,7 +153,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:latest
+    image: linuxserver/calibre:6.11.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -185,7 +185,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-1:
-    image: linuxserver/calibre-web:latest
+    image: linuxserver/calibre-web:0.6.19
     container_name: calibre-web-1
     hostname: calibre-web-1
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-2:
-    image: linuxserver/calibre-web:latest
+    image: linuxserver/calibre-web:0.6.19
     container_name: calibre-web-2
     hostname: calibre-web-2
     depends_on:
@@ -237,7 +237,7 @@ services:
 
   # Downloaded archive extracter
   unpackerr:
-    image: golift/unpackerr
+    image: golift/unpackerr:0.11.1
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
@@ -285,7 +285,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:latest
+    image: linuxserver/bazarr:1.1.4
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -317,7 +317,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:latest
+    image: linuxserver/prowlarr:1.0.1
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -346,7 +346,7 @@ services:
 
   # Torrent downloader
   transmission:
-    image: linuxserver/transmission:latest
+    image: linuxserver/transmission:3.00-r8-ls148
     container_name: transmission
     hostname: transmission
     deploy:
@@ -376,7 +376,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr:latest
+    image: linuxserver/doplarr:3.6.2
     container_name: doplarr
     hostname: doplarr
     depends_on:

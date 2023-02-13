@@ -346,7 +346,7 @@ services:
 
   # Torrent downloader
   transmission:
-    image: linuxserver/transmission:3.00-r8-ls148
+    image: linuxserver/transmission:4.0.0-r5-ls154
     container_name: transmission
     hostname: transmission
     deploy:

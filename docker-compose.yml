@@ -163,9 +163,9 @@ services:
           memory: "1024M"
     environment:
       GUAC_USER: "abc" # Hardcoded value
-      GUAC_PASS : "${ADMIN_PASSWORD}"
+      GUAC_PASS : "${CALIBRE_PASSWORD}"
       USERNAME: "abc" # Hardcoded value
-      PASSWORD: "${ADMIN_PASSWORD}"
+      PASSWORD: "${CALIBRE_PASSWORD}"
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
@@ -346,7 +346,7 @@ services:
 
   # Torrent downloader
   transmission:
-    image: linuxserver/transmission:4.0.0-r5-ls154
+    image: linuxserver/transmission:4.0.1
     container_name: transmission
     hostname: transmission
     deploy:
@@ -359,7 +359,7 @@ services:
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
       USER: "${ADMIN_USERNAME}"
-      PASS: "${ADMIN_PASSWORD}"
+      PASS: "${TRANSMISSION_PASSWORD}"
     networks:
       - home
     ports:

@@ -6,6 +6,6 @@
 .env
 
 # Test files
-.env2
+.env.test
 docker-compose-test.yml
 docker/test/

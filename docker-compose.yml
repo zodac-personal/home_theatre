@@ -22,7 +22,7 @@ services:
     networks:
       - home
     ports:
-      - "7878:7878"
+      - "4000:3000"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -51,7 +51,7 @@ services:
     networks:
       - home
     ports:
-      - "8989:8989"
+      - "4001:3001"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -82,7 +82,7 @@ services:
     networks:
       - home
     ports:
-      - "8686:8686"
+      - "4002:3002"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -109,7 +109,7 @@ services:
     networks:
       - home
     ports:
-      - "4040:4040"
+      - "4003:4040"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -140,7 +140,7 @@ services:
   #    networks:
   #      - home
   #    ports:
-  #      - "8787:8787"
+  #      - "4004:8787"
   #    restart: unless-stopped
   #    volumes:
   #      # Volume mounts from host system
@@ -172,8 +172,8 @@ services:
     networks:
       - home
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "4005:8080"
+      - "4006:8081"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -202,7 +202,7 @@ services:
     networks:
       - home
     ports:
-      - "8083:8083"
+      - "4007:8083"
     restart: unless-stopped
     volumes:
       # Persistent volumes
@@ -228,7 +228,7 @@ services:
     networks:
       - home
     ports:
-      - "8084:8083"
+      - "4008:8083"
     restart: unless-stopped
     volumes:
       # Persistent volumes
@@ -255,17 +255,17 @@ services:
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
       # Sonarr Config
-      UN_SONARR_0_URL: "http://sonarr:8989"
+      UN_SONARR_0_URL: "http://sonarr:3001"
       UN_SONARR_0_API_KEY: "${SONARR_API_KEY}"
       UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       # Radarr Config
-      UN_RADARR_0_URL: "http://radarr:7878"
+      UN_RADARR_0_URL: "http://radarr:3000"
       UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
       UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
       UN_RADARR_0_PROTOCOLS: "torrent,usenet"
       # # Lidarr Config
-      UN_LIDARR_0_URL: "http://lidarr:8686"
+      UN_LIDARR_0_URL: "http://lidarr:3002"
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
       UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
@@ -303,7 +303,7 @@ services:
     networks:
       - home
     ports:
-      - "6767:6767"
+      - "4009:3009"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -337,7 +337,7 @@ services:
     networks:
       - home
     ports:
-      - "9696:9696"
+      - "4010:3010"
     restart: unless-stopped
     volumes:
       # Persistent volumes
@@ -363,7 +363,7 @@ services:
     networks:
       - home
     ports:
-      - "9091:9091"
+      - "4011:9091"
       - "5555:51413"
       - "5555:51413/udp"
     restart: unless-stopped

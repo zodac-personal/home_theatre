@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.3.2-develop
+    image: linuxserver/radarr:4.3.2
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -153,7 +153,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.11.0
+    image: linuxserver/calibre:6.13.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -317,7 +317,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.0.1
+    image: linuxserver/prowlarr:1.2.2
     container_name: prowlarr
     hostname: prowlarr
     depends_on:

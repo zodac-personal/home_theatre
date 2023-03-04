@@ -9,7 +9,7 @@ services:
     container_name: radarr
     hostname: radarr
     depends_on:
-      - transmission
+      - qbittorrent
     deploy:
       resources:
         limits:
@@ -38,7 +38,7 @@ services:
     container_name: sonarr
     hostname: sonarr
     depends_on:
-      - transmission
+      - qbittorrent
     deploy:
       resources:
         limits:
@@ -69,7 +69,7 @@ services:
     container_name: lidarr
     hostname: lidarr
     depends_on:
-      - transmission
+      - qbittorrent
     deploy:
       resources:
         limits:
@@ -122,12 +122,12 @@ services:
 
   # Book searcher
   #  readarr:
-  #    image: linuxserver/readarr:0.1.1-develop
+  #    image: linuxserver/readarr:0.1.4-develop
   #    container_name: readarr
   #    hostname: readarr
   #    depends_on:
   #      - calibre
-  #      - transmission
+  #      - qbittorrent
   #    deploy:
   #      resources:
   #        limits:
@@ -337,14 +337,14 @@ services:
     networks:
       - home
     ports:
-      - "4010:3010"
+      - "9696:9696"
     restart: unless-stopped
     volumes:
       # Persistent volumes
       - prowlarr_backups:/config/Backups
       - prowlarr_content:/config
 
-  # Torrent downloader
+  ### DEPRECATED: WILL BE REMOVED
   transmission:
     image: linuxserver/transmission:4.0.1
     container_name: transmission
@@ -362,17 +362,35 @@ services:
       PASS: "${TRANSMISSION_PASSWORD}"
     networks:
       - home
-    ports:
-      - "4011:9091"
-      - "5555:51413"
-      - "5555:51413/udp"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
-      - "${WATCH_DIRECTORY_FOR_TORRENT_FILES}:/watch"
       # Persistent volumes
       - transmission_content:/config
+
+  # Torrent downloader
+  qbittorrent:
+    image: linuxserver/qbittorrent:4.5.2-libtorrentv1
+    container_name: qbittorrent
+    hostname: qbittorrent
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      WEBUI_PORT: "9000"
+    networks:
+      - home
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+      - "9001:9001/udp"
+    restart: unless-stopped
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - qbittorrent_content:/config
 
   # Discord bot for requests
   doplarr:
@@ -390,8 +408,8 @@ services:
           memory: "512M"
     environment:
       # Integration configuration
-      RADARR__URL: "http://radarr:7878"
-      SONARR__URL: "http://sonarr:8989"
+      RADARR__URL: "http://radarr:3000"
+      SONARR__URL: "http://sonarr:3001"
       RADARR__API: "${RADARR_API_KEY}"
       SONARR__API: "${SONARR_API_KEY}"
       # Discord configuration
@@ -400,6 +418,9 @@ services:
     networks:
       - home
     restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - doplarr_content:/config
 
   # Cloudflare rate-limiter solver
   flaresolverr:
@@ -421,24 +442,26 @@ services:
     restart: unless-stopped
 
 volumes:
-  # *.arr Backups
+  # Backups
   airsonic_backups: { }
   bazarr_backups: { }
   lidarr_backups: { }
   prowlarr_backups: { }
   radarr_backups: { }
   sonarr_backups: { }
-  # *.arr Content
+  # Content
   airsonic_content: { }
   bazarr_content: { }
   calibre_content: { }
   calibre-web-1_content: { }
   calibre-web-2_content: { }
+  doplarr_content: { }
   lidarr_content: { }
   prowlarr_content: { }
   radarr_content: { }
   sonarr_content: { }
   transmission_content: { }
+  qbittorrent_content: { }
   # Calibre libraries for multiple users
   calibre_library_1: { }
   calibre_library_2: { }

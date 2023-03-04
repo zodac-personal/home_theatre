@@ -9,3 +9,6 @@
 .env.test
 docker-compose-test.yml
 docker/test/
+
+# Container content
+storage/

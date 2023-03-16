@@ -496,6 +496,24 @@ services:
       - tandoor_ui:/static:ro
       - tandoor_media:/media:ro
 
+  # Inventory management
+  homebox:
+    image: ghcr.io/hay-kot/homebox:v0.8.2
+    container_name: homebox
+    hostname: homebox
+    environment:
+      HBOX_LOG_LEVEL: "info"
+      HBOX_LOG_FORMAT: "text"
+      HBOX_WEB_MAX_UPLOAD_SIZE: "10"
+      HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+    networks:
+      - home
+    ports:
+      - "4011:7745"
+    restart: unless-stopped
+    volumes:
+      - homebox_content:/data/
+
   # Database
   postgres:
     image: postgres:15.2-alpine
@@ -527,16 +545,17 @@ volumes:
   calibre-web-1_content: { }
   calibre-web-2_content: { }
   doplarr_content: { }
+  homebox_content: { }
   lidarr_content: { }
+  postgres_content: { }
   prowlarr_content: { }
   radarr_content: { }
   sonarr_content: { }
-  transmission_content: { }
-  qbittorrent_content: { }
-  postgres_content: { }
   tandoor_content: { }
   tandoor_ui: { }
   tandoor_media: { }
+  transmission_content: { }
+  qbittorrent_content: { }
   # Calibre libraries for multiple users
   calibre_library_1: { }
   calibre_library_2: { }

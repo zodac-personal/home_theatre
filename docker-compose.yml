@@ -344,33 +344,6 @@ services:
       - prowlarr_backups:/config/Backups
       - prowlarr_content:/config
 
-  ### DEPRECATED: WILL BE REMOVED
-  transmission:
-    image: linuxserver/transmission:4.0.1
-    container_name: transmission
-    hostname: transmission
-    deploy:
-      resources:
-        limits:
-          cpus: "2"
-          memory: "512M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-      USER: "${ADMIN_USERNAME}"
-      PASS: "${TRANSMISSION_PASSWORD}"
-    networks:
-      - home
-    ports:
-      - "9091:9091"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${DOWNLOADS_DIRECTORY}:/downloads"
-      # Persistent volumes
-      - transmission_content:/config
-
   # Torrent downloader
   qbittorrent:
     image: linuxserver/qbittorrent:4.5.2-libtorrentv1
@@ -482,7 +455,7 @@ services:
     networks:
       - home
     ports:
-      - "${TANDOOR_PORT}:80"
+      - "4010:80"
     restart: unless-stopped
     volumes:
       - tandoor_content:/etc/nginx/conf.d:ro
@@ -547,7 +520,6 @@ volumes:
   tandoor_content: { }
   tandoor_ui: { }
   tandoor_media: { }
-  transmission_content: { }
   qbittorrent_content: { }
   # Calibre libraries for multiple users
   calibre_library_1: { }

@@ -443,17 +443,11 @@ services:
       - "8191:8191"
     restart: unless-stopped
 
-  # Recipe manager
-  tandoor:
-    build:
-      context: .
-      dockerfile: docker/tandoor/Dockerfile
-      args:
-        TANDOOR_VERSION: "1.4.8"
-        TANDOOR_HOSTNAME: "tandoor"
-        TANDOOR_PORT: "${TANDOOR_PORT}"
-    container_name: tandoor
-    hostname: tandoor
+  # Recipe manager (Tandoor, but container cannot be renamed)
+  web_recipes:
+    image: vabene1111/recipes:1.4.8
+    container_name: web_recipes
+    hostname: web_recipes
     depends_on:
       - postgres
     environment:
@@ -467,7 +461,6 @@ services:
       POSTGRES_DB: "${DB_NAME}"
       DEBUG: "0"
       SQL_DEBUG: "0"
-      CSRF_TRUSTED_ORIGINS: "${TANDOOR_EXTERNAL_URL},http://127.0.0.1:${TANDOOR_PORT}" # Comma-separated
     networks:
       - home
     restart: unless-stopped
@@ -482,7 +475,7 @@ services:
     container_name: tandoor_ui
     hostname: tandoor_ui
     depends_on:
-      - tandoor
+      - web_recipes
     environment:
       TIMEZONE: "${TIMEZONE}"
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"

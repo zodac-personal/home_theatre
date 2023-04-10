@@ -93,32 +93,30 @@ services:
       - lidarr_content:/config
 
   # Music Player
-  airsonic:
-    image: linuxserver/airsonic-advanced:11.0.0
-    container_name: airsonic
-    hostname: airsonic
+  navidrome:
+    image: deluan/navidrome:0.49.3
+    container_name: navidrome
+    hostname: navidrome
     deploy:
       resources:
         limits:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
+      ND_SCANSCHEDULE: "1h"
+      ND_LOGLEVEL: "info"
+      ND_BASEURL: ""
+      ND_COVERARTPRIORITY: "album.*"
     networks:
       - home
     ports:
-      - "4003:4040"
+      - "4003:4533"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${MUSIC_DIRECTORY}:/music"
-      - "${PLAYLIST_DIRECTORY}:/playlists"
-      - "${PODCAST_DIRECTORY}:/podcasts"
+      - "${MUSIC_DIRECTORY}:/music:ro"
       # Persistent volumes
-      - airsonic_backups:/config/backups
-      - airsonic_content:/config
+      - navidrome_content:/data
 
   # Book searcher
   #  readarr:
@@ -464,7 +462,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/hay-kot/homebox:v0.8.2
+    image: ghcr.io/hay-kot/homebox:v0.9.1
     container_name: homebox
     hostname: homebox
     environment:
@@ -498,14 +496,12 @@ services:
 
 volumes:
   # Backups
-  airsonic_backups: { }
   bazarr_backups: { }
   lidarr_backups: { }
   prowlarr_backups: { }
   radarr_backups: { }
   sonarr_backups: { }
   # Content
-  airsonic_content: { }
   bazarr_content: { }
   calibre_content: { }
   calibre-web-1_content: { }
@@ -513,6 +509,7 @@ volumes:
   doplarr_content: { }
   homebox_content: { }
   lidarr_content: { }
+  navidrome_content: { }
   postgres_content: { }
   prowlarr_content: { }
   radarr_content: { }

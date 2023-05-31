@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.4.4
+    image: linuxserver/radarr:4.5.2
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -66,7 +66,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:1.1.4-develop
+    image: linuxserver/lidarr:1.1.4
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -125,7 +125,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:0.1.4-develop
+    image: linuxserver/readarr:0.1.6-develop
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -156,7 +156,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.17.0
+    image: linuxserver/calibre:6.19.1
     container_name: calibre
     hostname: calibre
     deploy:
@@ -422,7 +422,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.4.9
+    image: vabene1111/recipes:1.4.12
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
@@ -448,7 +448,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
-    image: nginx:1.23.4-alpine
+    image: nginx:1.25.0-alpine
     container_name: tandoor_ui
     hostname: tandoor_ui
     depends_on:
@@ -468,7 +468,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/hay-kot/homebox:v0.9.1
+    image: ghcr.io/hay-kot/homebox:v0.9.2
     container_name: homebox
     hostname: homebox
     environment:
@@ -486,7 +486,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15.2-alpine
+    image: postgres:15.3-alpine
     container_name: postgres
     hostname: postgres
     environment:

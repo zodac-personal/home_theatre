@@ -29,8 +29,7 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MOVIE_DIRECTORY}:/movies"
       # Persistent volumes
-      - radarr_backups:/config/Backups
-      - radarr_content:/config
+      - ./storage/radarr/:/config
 
   # TV show searcher
   sonarr:
@@ -61,8 +60,7 @@ services:
       - "${TV3_DIRECTORY}:/tv3"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
-      - sonarr_backups:/config/Backups
-      - sonarr_content:/config
+      - ./storage/sonarr/:/config
 
   # Music searcher
   lidarr:
@@ -90,8 +88,7 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MUSIC_DIRECTORY}:/music"
       # Persistent volumes
-      - lidarr_backups:/config/Backups
-      - lidarr_content:/config
+      - ./storage/lidarr/:/config
 
   # Music Player
   navidrome:
@@ -121,7 +118,7 @@ services:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music:ro"
       # Persistent volumes
-      - navidrome_content:/data
+      - ./storage/navidrome/:/data
 
   # Book searcher
   readarr:
@@ -150,9 +147,7 @@ services:
       - "${BOOKS_DIRECTORY}:/books"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       # Persistent volumes
-      - calibre_content:/calibre_config
-      - readarr_backups:/config/Backups
-      - readarr_content:/config
+      - ./storage/readarr/:/config
 
   # eBook management
   calibre:
@@ -182,7 +177,7 @@ services:
       # Volume mounts from host system
       - "${BOOK_COVERS_DIRECTORY}:/covers"
       # Persistent volumes
-      - calibre_content:/config
+      - ./storage/calibre/:/config
       - "calibre_library_1:/${BOOK_LIBRARY_1}"
       - "calibre_library_2:/${BOOK_LIBRARY_2}"
 
@@ -210,7 +205,7 @@ services:
     volumes:
       # Persistent volumes
       - "calibre_library_1:/${BOOK_LIBRARY_1}"
-      - calibre-web-1_content:/config
+      - ./storage/calibre-web-1/:/config
 
   # Default credentials: admin/admin123
   calibre-web-2:
@@ -236,7 +231,7 @@ services:
     volumes:
       # Persistent volumes
       - "calibre_library_2:/${BOOK_LIBRARY_2}"
-      - calibre-web-2_content:/config
+      - ./storage/calibre-web-2/:/config
 
   # Downloaded archive extracter
   unpackerr:
@@ -316,8 +311,7 @@ services:
       - "${TV3_DIRECTORY}:/tv3"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
-      - bazarr_backups:/config/backup
-      - bazarr_content:/config
+      - ./storage/bazarr/:/config
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -328,6 +322,7 @@ services:
       - flaresolverr
       - lidarr
       - radarr
+      - readarr
       - sonarr
     deploy:
       resources:
@@ -345,8 +340,7 @@ services:
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - prowlarr_backups:/config/Backups
-      - prowlarr_content:/config
+      - ./storage/prowlarr/:/config
 
   # Torrent downloader
   qbittorrent:
@@ -369,7 +363,7 @@ services:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       # Persistent volumes
-      - qbittorrent_content:/config
+      - ./storage/qbittorrent/:/config
 
   # Discord bot for requests
   doplarr:
@@ -377,7 +371,6 @@ services:
     container_name: doplarr
     hostname: doplarr
     depends_on:
-      - lidarr
       - radarr
       - sonarr
     deploy:
@@ -397,9 +390,6 @@ services:
     networks:
       - home
     restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - doplarr_content:/config
 
   # Cloudflare rate-limiter solver
   flaresolverr:
@@ -442,9 +432,9 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - tandoor_content:/opt/recipes/nginx/conf.d
-      - tandoor_media:/opt/recipes/mediafiles
-      - tandoor_ui:/opt/recipes/staticfiles
+      - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
+      - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
+      - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
@@ -462,9 +452,9 @@ services:
       - "4010:80"
     restart: unless-stopped
     volumes:
-      - tandoor_content:/etc/nginx/conf.d:ro
-      - tandoor_ui:/static:ro
-      - tandoor_media:/media:ro
+      - ./storage/tandoor/nginx/conf.d/:/etc/nginx/conf.d:ro
+      - ./storage/tandoor/mediafiles/:/media:ro
+      - ./storage/tandoor/staticfiles/:/static:ro
 
   # Inventory management
   homebox:
@@ -482,7 +472,7 @@ services:
       - "4011:7745"
     restart: unless-stopped
     volumes:
-      - homebox_content:/data/
+      - ./storage/homebox:/data/
 
   # Database
   postgres:
@@ -498,34 +488,9 @@ services:
       - home
     restart: unless-stopped
     volumes:
-      - postgres_content:/var/lib/postgresql/data
+      - ./storage/postgres/:/var/lib/postgresql/data
 
 volumes:
-  # Backups
-  bazarr_backups: { }
-  lidarr_backups: { }
-  prowlarr_backups: { }
-  radarr_backups: { }
-  readarr_backups: { }
-  sonarr_backups: { }
-  # Content
-  bazarr_content: { }
-  calibre_content: { }
-  calibre-web-1_content: { }
-  calibre-web-2_content: { }
-  doplarr_content: { }
-  homebox_content: { }
-  lidarr_content: { }
-  navidrome_content: { }
-  postgres_content: { }
-  prowlarr_content: { }
-  radarr_content: { }
-  readarr_content: { }
-  sonarr_content: { }
-  tandoor_content: { }
-  tandoor_ui: { }
-  tandoor_media: { }
-  qbittorrent_content: { }
   # Calibre libraries for multiple users
   calibre_library_1: { }
   calibre_library_2: { }

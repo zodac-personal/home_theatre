@@ -344,7 +344,14 @@ services:
 
   # Torrent downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:4.5.2-libtorrentv1
+    build:
+      context: .
+      dockerfile: docker/qbittorrent/Dockerfile
+      args:
+        # Docker image versions
+        QBITTORRENT_VERSION: "4.5.2"
+        # Build arguments
+        VUETORRENT_VERSION: "1.5.10"
     container_name: qbittorrent
     hostname: qbittorrent
     environment:

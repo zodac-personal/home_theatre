@@ -122,11 +122,10 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:0.1.6-develop
+    image: linuxserver/readarr:0.1.7-develop
     container_name: readarr
     hostname: readarr
     depends_on:
-      - calibre
       - qbittorrent
     deploy:
       resources:
@@ -315,7 +314,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.4.1
+    image: linuxserver/prowlarr:1.5.2
     container_name: prowlarr
     hostname: prowlarr
     depends_on:

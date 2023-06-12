@@ -283,7 +283,12 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.2.1
+    build:
+      context: .
+      dockerfile: docker/bazarr/Dockerfile
+      args:
+        # Docker image versions
+        BAZARR_VERSION: "1.2.1"
     container_name: bazarr
     hostname: bazarr
     deploy:

@@ -299,6 +299,7 @@ services:
     depends_on:
       - radarr
       - sonarr
+      - whisper
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -317,6 +318,20 @@ services:
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
       - ./storage/bazarr/:/config
+
+  # Automated Speech Recognition tool for subtitles
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:v1.1.1
+    container_name: whisper
+    hostname: whisper
+    environment:
+      ASR_MODEL: base
+      ASR_ENGINE: openai_whisper # Try 'faster_whisper' some day
+    networks:
+      - home
+    ports:
+      - "4012:9000"
+    restart: unless-stopped
 
   # Indexer (Torrents + Usenet)
   prowlarr:

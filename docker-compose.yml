@@ -109,7 +109,7 @@ services:
       ND_LASTFM_APIKEY: "${LASTFM_API_KEY}"
       ND_LASTFM_SECRET: "${LASTFM_SECRET}"
       ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID}"
-      ND_SPOTIFY_SECRET: "${SPOTIFY_SECRET}"
+      ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET}"
     networks:
       - home
     ports:
@@ -161,7 +161,7 @@ services:
           memory: "1024M"
     environment:
       GUAC_USER: "abc" # Hardcoded value
-      GUAC_PASS : "${CALIBRE_PASSWORD}"
+      GUAC_PASS: "${CALIBRE_PASSWORD}"
       USERNAME: "abc" # Hardcoded value
       PASSWORD: "${CALIBRE_PASSWORD}"
       PUID: "${PUID}"
@@ -326,12 +326,38 @@ services:
     hostname: whisper
     environment:
       ASR_MODEL: base
-      ASR_ENGINE: openai_whisper # Try 'faster_whisper' some day
+      ASR_ENGINE: faster_whisper
     networks:
       - home
     ports:
       - "4012:9000"
     restart: unless-stopped
+
+  # Video Game ROM Manager
+  romm:
+    build:
+      context: .
+      dockerfile: docker/romm/Dockerfile
+      args:
+        # Docker image versions
+        ROMM_VERSION: "1.8.4"
+    container_name: romm
+    hostname: romm
+    environment:
+      CLIENT_ID: "${TWITCH_CLIENT_ID}"
+      CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
+      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
+    networks:
+      - home
+    ports:
+      - "4013:80"
+    restart: "unless-stopped"
+    volumes:
+      # Volume mounts from host system
+      - "${ROMS_DIRECTORY}:/romm/library:ro"
+      # Persistent volumes
+      - ./storage/romm/database/:/romm/database
+      - ./storage/romm/resources/:/romm/resources
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -499,7 +525,7 @@ services:
       - "4011:7745"
     restart: unless-stopped
     volumes:
-      - ./storage/homebox:/data/
+      - ./storage/homebox/:/data/
 
   # Database
   postgres:

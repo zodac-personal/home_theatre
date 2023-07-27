@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.5.2
+    image: linuxserver/radarr:4.6.4
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -64,7 +64,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:1.1.4
+    image: linuxserver/lidarr:1.2.6
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -123,7 +123,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:0.1.7-develop
+    image: linuxserver/readarr:0.2.4-develop
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -151,7 +151,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.19.1
+    image: linuxserver/calibre:6.23.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -288,7 +288,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "1.2.1"
+        BAZARR_VERSION: "1.2.4"
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -361,7 +361,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.5.2
+    image: linuxserver/prowlarr:1.7.4
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -395,9 +395,9 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.5.2"
+        QBITTORRENT_VERSION: "4.5.4"
         # Build arguments
-        VUETORRENT_VERSION: "1.5.10"
+        VUETORRENT_VERSION: "1.6.1"
     container_name: qbittorrent
     hostname: qbittorrent
     environment:
@@ -465,7 +465,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.4.12
+    image: vabene1111/recipes:1.5.4
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
@@ -491,7 +491,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
-    image: nginx:1.25.0-alpine
+    image: nginx:1.25.1-alpine
     container_name: tandoor_ui
     hostname: tandoor_ui
     depends_on:

@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:4.6.4
+    image: linuxserver/radarr:4.7.5
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -123,7 +123,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:0.2.4-develop
+    image: linuxserver/readarr:0.3.1-develop
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -140,7 +140,7 @@ services:
     networks:
       - home
     ports:
-      - "4004:8787"
+      - "4004:3004"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -151,7 +151,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.23.0
+    image: linuxserver/calibre:6.24.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -235,7 +235,7 @@ services:
 
   # Downloaded archive extracter
   unpackerr:
-    image: golift/unpackerr:0.11.2
+    image: golift/unpackerr:0.12.0
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
@@ -262,16 +262,16 @@ services:
       UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
       UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
       UN_RADARR_0_PROTOCOLS: "torrent,usenet"
-      # # Lidarr Config
+      # Lidarr Config
       UN_LIDARR_0_URL: "http://lidarr:3002"
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
       UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
-      # # Readarr Config
-      # UN_READARR_0_URL: "http://readarr:8787"
-      # UN_READARR_0_API_KEY:
-      # UN_READARR_0_PATHS_0:" /downloads/complete/readarr"
-      # UN_READARR_0_PROTOCOLS: "torrent,usenet"
+      # Readarr Config
+      UN_READARR_0_URL: "http://readarr:3004"
+      UN_READARR_0_API_KEY: "${READARR_API_KEY}"
+      UN_READARR_0_PATHS_0: "/downloads/complete/readarr"
+      UN_READARR_0_PROTOCOLS: "torrent,usenet"
     networks:
       - home
     restart: unless-stopped
@@ -280,6 +280,7 @@ services:
     user: "${PUID}:${PGID}"
     volumes:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - ./storage/unpackerr/:/config
 
   # Subtitle downloader
   bazarr:
@@ -340,7 +341,7 @@ services:
       dockerfile: docker/romm/Dockerfile
       args:
         # Docker image versions
-        ROMM_VERSION: "1.8.4"
+        ROMM_VERSION: "1.10"
     container_name: romm
     hostname: romm
     environment:
@@ -354,7 +355,7 @@ services:
     restart: "unless-stopped"
     volumes:
       # Volume mounts from host system
-      - "${ROMS_DIRECTORY}:/romm/library:ro"
+      - "${ROMS_DIRECTORY}:/romm/library/roms:ro"
       # Persistent volumes
       - ./storage/romm/database/:/romm/database
       - ./storage/romm/resources/:/romm/resources
@@ -374,7 +375,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "512M"
+          memory: "1024M" # High memory resourcing to allow stats page to load
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -397,7 +398,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.5.4"
         # Build arguments
-        VUETORRENT_VERSION: "1.6.1"
+        VUETORRENT_VERSION: "1.7.0"
     container_name: qbittorrent
     hostname: qbittorrent
     environment:
@@ -411,6 +412,9 @@ services:
       - "9000:9000"
       - "9001:9001"
       - "9001:9001/udp"
+      # Additional ports to help connect to trackers/improve traffic
+      - "6881-6889:6881-6889"
+      - "6969:6969"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -465,7 +469,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.5.4
+    image: vabene1111/recipes:1.5.5
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
@@ -491,7 +495,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
-    image: nginx:1.25.1-alpine
+    image: nginx:1.25.2-alpine
     container_name: tandoor_ui
     hostname: tandoor_ui
     depends_on:
@@ -529,7 +533,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15.3-alpine
+    image: postgres:15.4-alpine
     container_name: postgres
     hostname: postgres
     environment:

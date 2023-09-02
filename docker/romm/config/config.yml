@@ -25,3 +25,5 @@ system:
     PSP: 'psp'
     Switch: 'switch'
     Wii: 'wii'
+    XBox360: 'xbox360'
+    XBox: 'xbox'

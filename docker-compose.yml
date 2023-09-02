@@ -64,7 +64,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:1.2.6
+    image: linuxserver/lidarr:1.3.5
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -123,7 +123,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:0.3.1-develop
+    image: linuxserver/readarr:0.3.3-develop
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -151,7 +151,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.24.0
+    image: linuxserver/calibre:6.25.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -398,7 +398,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.5.4"
         # Build arguments
-        VUETORRENT_VERSION: "1.7.0"
+        VUETORRENT_VERSION: "1.7.3"
     container_name: qbittorrent
     hostname: qbittorrent
     environment:
@@ -450,7 +450,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: ghcr.io/aeonlucid/flaresolverr:latest
+    image: ghcr.io/aeonlucid/flaresolverr:v3.3.2-hotfix
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -469,7 +469,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.5.5
+    image: vabene1111/recipes:1.5.6
     container_name: web_recipes
     hostname: web_recipes
     depends_on:

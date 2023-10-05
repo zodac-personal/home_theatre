@@ -1,0 +1,85 @@
+# Configuration specific to Sonarr
+sonarr:
+  series:
+    base_url: !env_var SONARR_URL
+    api_key: !env_var SONARR_API_KEY
+
+    quality_definition:
+      type: series
+
+    # Custom formats from the guide to sync to Sonarr v4
+    # Use `recyclarr list release-profiles` for values you can put here.
+    # https://trash-guides.info/Sonarr/sonarr-collection-of-custom-formats/
+    custom_formats:
+      # Audio definitions
+      - trash_ids:
+          - 204c8c3e7315bb0ea81332774fa888d6 # 7.1 Surround
+        quality_profiles:
+          - name: "1080p+"
+          - name: "1080p"
+          - name: "1080p, else 720p"
+          - name: "1080p, else Any"
+          - name: "720p, else 1080p"
+          - name: "Any"
+          - name: "SD, else 720p"
+      - trash_ids:
+          - 3fbafa924f361e66fbc6187af82dfa85 # 5.1 Surround
+          - 834e534f103938853ffced4203b53e72 # 2.0 Stereo
+        quality_profiles:
+          - name: "1080p"
+          - name: "1080p, else 720p"
+          - name: "1080p, else Any"
+          - name: "720p, else 1080p"
+          - name: "Any"
+          - name: "SD, else 720p"
+      - trash_ids:
+          - bd6dd5e043aa27ff4696a08d011c7d96 # 1.0 Mono
+        quality_profiles:
+          - name: "720p, else 1080p"
+          - name: "Any"
+          - name: "SD, else 720p"
+
+      # Streaming services
+      - trash_ids:
+          - d660701077794679fd59e8bdf4ce3a29 # Amazon
+          - f67c9ca88f463a48346062e8ad07713f # Apple TV
+          - 89358767a60cc28783cdc3d0be9388a4 # Disney+
+          - a880d6abc21e7c16884f3ae393f84179 # HBO Max
+          - d34870697c9db575f17700212167be23 # Netflix
+        quality_profiles:
+          - name: "1080p+"
+          - name: "1080p"
+          - name: "1080p, else 720p"
+          - name: "1080p, else Any"
+          - name: "720p, else 1080p"
+          - name: "Any"
+          - name: "SD, else 720p"
+
+      # Unwanted content
+      - trash_ids:
+          - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
+          - 9c11cd3f07101cdba90a2d81cf0e56b4 # Low Quality
+          - 47435ece6b99a0b477caf360e79ba0bb # x265 for 1080p/720p content
+          - fbcb31d8dabd2a319072b84fc0b7249c # Extras/Bonus
+        quality_profiles:
+          - name: "1080p+"
+          - name: "1080p"
+          - name: "1080p, else 720p"
+          - name: "1080p, else Any"
+          - name: "720p, else 1080p"
+          - name: "Any"
+          - name: "SD, else 720p"
+
+
+# Configuration specific to Radarr.
+# Only updating the quality definitions for expected file sizes, not worried about custom formats.
+radarr:
+  movies:
+    base_url: !env_var RADARR_URL
+    api_key: !env_var RADARR_API_KEY
+
+    quality_definition:
+      type: movie
+      preferred_ratio: 0.5
+
+    delete_old_custom_formats: true

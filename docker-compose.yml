@@ -79,6 +79,7 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+      CRON_SCHEDULE: "@daily"
       # Sonarr Config
       SONARR_URL: "http://sonarr:3001"
       SONARR_API_KEY: "${SONARR_API_KEY}"

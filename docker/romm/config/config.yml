@@ -23,6 +23,7 @@ system:
     PS2: 'ps2'
     PS3: 'ps3'
     PSP: 'psp'
+    PSVita: 'psvita'
     Switch: 'switch'
     Wii: 'wii'
     XBox360: 'xbox360'

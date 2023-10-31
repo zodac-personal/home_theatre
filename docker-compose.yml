@@ -5,7 +5,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:5.0.3
+    image: linuxserver/radarr:version-5.0.3.8127
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -33,7 +33,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.0.697
+    image: linuxserver/sonarr:develop-version-4.0.0.710
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -64,7 +64,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:6.0.1 # https://github.com/recyclarr/recyclarr/pkgs/container/recyclarr
+    image: ghcr.io/recyclarr/recyclarr:6.0.2 # https://github.com/recyclarr/recyclarr/pkgs/container/recyclarr
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -95,7 +95,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:1.4.5
+    image: linuxserver/lidarr:version-1.4.5.3639
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -154,7 +154,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:develop-version-0.3.6.2232
+    image: linuxserver/readarr:develop-version-0.3.8.2267
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -182,7 +182,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.28.1
+    image: linuxserver/calibre:6.29.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -214,7 +214,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-1:
-    image: linuxserver/calibre-web:0.6.20
+    image: linuxserver/calibre-web:0.6.21
     container_name: calibre-web-1
     hostname: calibre-web-1
     depends_on:
@@ -240,7 +240,7 @@ services:
 
   # Default credentials: admin/admin123
   calibre-web-2:
-    image: linuxserver/calibre-web:0.6.20
+    image: linuxserver/calibre-web:0.6.21
     container_name: calibre-web-2
     hostname: calibre-web-2
     depends_on:
@@ -320,7 +320,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "1.3.0" # https://registry.hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "1.3.1" # https://registry.hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -367,33 +367,54 @@ services:
 
   # Video Game ROM Manager
   romm:
-    build:
-      context: .
-      dockerfile: docker/romm/Dockerfile
-      args:
-        # Docker image versions
-        ROMM_VERSION: "1.10" # https://registry.hub.docker.com/r/zurdi15/romm/tags
+    image: zurdi15/romm:2.0.1
     container_name: romm
     hostname: romm
     environment:
-      CLIENT_ID: "${TWITCH_CLIENT_ID}"
-      CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
+      # Database config
+      ROMM_DB_DRIVER: "sqlite"
+      # External systems config
+      IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID}"
+      IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
+      # Authentication config
+      ROMM_AUTH_ENABLED: "true"
+      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY}"
+      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME}"
+      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD}"
+      ENABLE_EXPERIMENTAL_REDIS: "true"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
     networks:
       - home
     ports:
-      - "4013:80"
+      - "4013:8080"
     restart: "unless-stopped"
     volumes:
       # Volume mounts from host system
       - "${ROMS_DIRECTORY}:/romm/library/roms:ro"
+      - "./docker/romm/config/config.yml:/romm/config.yml"
       # Persistent volumes
       - ./storage/romm/database/:/romm/database
       - ./storage/romm/resources/:/romm/resources
+      - ./storage/romm/logs:/romm/logs
+
+  # Redis cache for Romm
+  redis:
+    image: redis:7.2.2-alpine
+    container_name: redis
+    hostname: redis
+    networks:
+      - home
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - ./storage/redis/:/data
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.8.6
+    image: linuxserver/prowlarr:version-1.9.4.4039
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -427,7 +448,7 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.5.5" # https://registry.hub.docker.com/r/linuxserver/qbittorrent/tags
+        QBITTORRENT_VERSION: "4.6.0" # https://registry.hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
         VUETORRENT_VERSION: "1.8.0" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
@@ -523,7 +544,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
-    image: nginx:1.25.2-alpine
+    image: nginx:1.25.3-alpine
     container_name: tandoor_ui
     hostname: tandoor_ui
     depends_on:

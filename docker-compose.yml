@@ -3,9 +3,42 @@ networks:
 
 services:
 
+  # Homepage
+  homarr:
+    image: ghcr.io/ajnart/homarr:0.14.1
+    container_name: homarr
+    hostname: homarr
+    depends_on:
+      - lidarr
+      - qbittorrent
+      - radarr
+      - readarr
+      - sonarr
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
+    networks:
+      - home
+    ports:
+      - "4100:7575"
+    restart: unless-stopped
+    volumes:
+      # Docker socket mount from host system
+      - "//var/run/docker.sock:/var/run/docker.sock"
+      # Persistent volumes
+      - ./storage/homarr/configs:/app/data/configs
+      - ./storage/homarr/data:/data
+      - ./storage/homarr/icons:/app/public/icons
+
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:version-5.0.3.8127
+    image: linuxserver/radarr:version-5.1.3.8246
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -33,7 +66,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.0.710
+    image: linuxserver/sonarr:develop-version-4.0.0.720
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -154,7 +187,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:develop-version-0.3.8.2267
+    image: linuxserver/readarr:develop-version-0.3.10.2287
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -353,7 +386,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.2.0
+    image: onerahmet/openai-whisper-asr-webservice:v1.2.3
     container_name: whisper
     hostname: whisper
     environment:
@@ -367,7 +400,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: zurdi15/romm:2.0.1
+    image: zurdi15/romm:2.1.0
     container_name: romm
     hostname: romm
     environment:
@@ -401,7 +434,7 @@ services:
 
   # Redis cache for Romm
   redis:
-    image: redis:7.2.2-alpine
+    image: redis:7.2.3-alpine
     container_name: redis
     hostname: redis
     networks:
@@ -450,7 +483,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.6.0" # https://registry.hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "1.8.0" # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.1.1" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     environment:
@@ -582,7 +615,7 @@ services:
 
   # Database
   postgres:
-    image: postgres:15.4-alpine
+    image: postgres:15.5-alpine
     container_name: postgres
     hostname: postgres
     environment:

@@ -1,14 +1,13 @@
 exclude:
-  # Exclude roms or parts of roms to be scanned
+  # Exclude ROMs (or parts of ROMs) from a scan
   roms:
-    ## Single file games section
     single_file:
       extensions:
         - 'sav'
         - 'jpg'
         - 'jpeg'
 
-# Asociate different platform names to your current file system platform names
+# Associate different platform names to your current file system platform names
 system:
   platforms:
     # [your custom platform folder name]: [RomM platform name]

@@ -1,3 +1,7 @@
+# Architecture Diagram
+
+![Architecture Diagram](./doc/home_theatre.png)
+
 # Backups
 
 ## Creating Backups

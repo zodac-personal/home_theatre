@@ -5,7 +5,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.14.2
+    image: ghcr.io/ajnart/homarr:0.14.3 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     depends_on:
@@ -36,7 +36,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:version-5.1.3.8246
+    image: linuxserver/radarr:version-5.2.6.8376
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -64,7 +64,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.0.720
+    image: linuxserver/sonarr:develop-version-4.0.0.747
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -126,7 +126,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:version-1.4.5.3639
+    image: linuxserver/lidarr:version-2.0.7.3849
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -154,7 +154,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.50.1
+    image: deluan/navidrome:0.50.2
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -185,7 +185,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:develop-version-0.3.10.2287
+    image: linuxserver/readarr:develop-version-0.3.14.2348
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -213,7 +213,7 @@ services:
 
   # eBook management
   calibre:
-    image: linuxserver/calibre:6.29.0
+    image: linuxserver/calibre:7.2.0
     container_name: calibre
     hostname: calibre
     deploy:
@@ -384,7 +384,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.2.3
+    image: onerahmet/openai-whisper-asr-webservice:v1.2.4
     container_name: whisper
     hostname: whisper
     environment:
@@ -398,7 +398,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: zurdi15/romm:2.1.0
+    image: zurdi15/romm:2.2.0
     container_name: romm
     hostname: romm
     environment:
@@ -445,7 +445,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:version-1.9.4.4039
+    image: linuxserver/prowlarr:version-1.11.4.4173
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -479,9 +479,9 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.6.0" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+        QBITTORRENT_VERSION: "4.6.2" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.1.1" # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.4.0" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     environment:
@@ -549,7 +549,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.5.6
+    image: vabene1111/recipes:1.5.10
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
@@ -618,8 +618,8 @@ services:
       dockerfile: docker/dozzle/Dockerfile
       args:
         # Docker image versions
-        DEBIAN_VERSION: "12.1" # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v5.4.5" # https://hub.docker.com/r/amir20/dozzle/tags
+        DEBIAN_VERSION: "12.4" # https://hub.docker.com/_/debian/tags
+        DOZZLE_VERSION: "v6.0.0" # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
         ADMIN_USERNAME: "${ADMIN_USERNAME}"

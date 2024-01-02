@@ -611,6 +611,29 @@ services:
     volumes:
       - ./storage/homebox/:/data/
 
+  # Daily journal
+  dailytxt:
+    image: phitux/dailytxt:1.0.13
+    container_name: dailytxt
+    hostname: dailytxt
+    environment:
+      USER_UID: "${PUID}"
+      USER_GID: "${PGID}"
+      TZ: "${TIMEZONE}"
+      PORT: "8765"
+      SECRET_KEY: "${DAILYTXT_SECRET_KEY}"
+      ALLOW_REGISTRATION: "false"
+      DATA_INDENT: "2"
+      JWT_EXP_DAYS: "60"
+      ENABLE_UPDATE_CHECK: "false"
+    networks:
+      - home
+    ports:
+      - "4015:8765"
+    restart: unless-stopped
+    volumes:
+      - ./storage/dailytxt/:/app/data/
+
   # Log aggregator
   dozzle:
     build:

@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
     volumes:
       # Docker socket mount from host system
-      - "//var/run/docker.sock:/var/run/docker.sock"
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
       # Persistent volumes
       - ./storage/homarr/configs:/app/data/configs
       - ./storage/homarr/data:/data
@@ -398,7 +398,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: zurdi15/romm:2.2.0
+    image: zurdi15/romm:2.2.1
     container_name: romm
     hostname: romm
     environment:
@@ -658,7 +658,7 @@ services:
     restart: unless-stopped
     volumes:
       # Docker socket mount from host system
-      - "//var/run/docker.sock:/var/run/docker.sock"
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
   # Database
   postgres:

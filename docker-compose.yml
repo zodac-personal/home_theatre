@@ -88,7 +88,6 @@ services:
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
-      - "${TV3_DIRECTORY}:/tv3"
       - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
@@ -378,7 +377,6 @@ services:
       - "${MOVIE_DIRECTORY}:/movies"
       - "${TV1_DIRECTORY}:/tv1"
       - "${TV2_DIRECTORY}:/tv2"
-      - "${TV3_DIRECTORY}:/tv3"
       - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes

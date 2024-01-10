@@ -10,7 +10,7 @@ exclude:
 # Associate different platform names to your current file system platform names
 system:
   platforms:
-    # [your custom platform folder name]: [RomM platform name]
+    # [folder name in your 'ROMs' director on your machine]: [RomM platform name]
     3DS: '3ds'
     DS: 'nds'
     GameBoy: 'gb'

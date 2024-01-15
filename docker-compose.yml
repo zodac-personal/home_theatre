@@ -387,6 +387,11 @@ services:
     image: onerahmet/openai-whisper-asr-webservice:v1.2.4
     container_name: whisper
     hostname: whisper
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "2048M"
     environment:
       ASR_MODEL: "small.en"
       ASR_ENGINE: "faster_whisper"
@@ -401,6 +406,11 @@ services:
     image: zurdi15/romm:2.3.1
     container_name: romm
     hostname: romm
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       # Database config
       ROMM_DB_DRIVER: "sqlite"
@@ -435,6 +445,11 @@ services:
     image: redis:7.2.3-alpine
     container_name: romm_users_cache
     hostname: romm-users-cache
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
     networks:
       - home
     ports:
@@ -487,6 +502,11 @@ services:
         VUETORRENT_VERSION: "2.4.0" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "2048M"
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -539,7 +559,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
+          cpus: "0.5"
           memory: "1024M"
     environment:
       LOG_LEVEL: info
@@ -557,6 +577,11 @@ services:
     hostname: web_recipes
     depends_on:
       - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       TZ: "${TIMEZONE}"
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"
@@ -583,6 +608,11 @@ services:
     hostname: tandoor-ui
     depends_on:
       - web_recipes
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       TIMEZONE: "${TIMEZONE}"
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"
@@ -601,6 +631,11 @@ services:
     image: ghcr.io/hay-kot/homebox:v0.10.3 # https://github.com/hay-kot/homebox/pkgs/container/homebox
     container_name: homebox
     hostname: homebox
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     environment:
       HBOX_LOG_LEVEL: "info"
       HBOX_LOG_FORMAT: "text"
@@ -619,6 +654,11 @@ services:
     image: phitux/dailytxt:1.0.13
     container_name: dailytxt
     hostname: dailytxt
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
     environment:
       USER_UID: "${PUID}"
       USER_GID: "${PGID}"
@@ -652,6 +692,11 @@ services:
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD}"
     container_name: dozzle
     hostname: dozzle
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256"
     environment:
       DOZZLE_AUTH_PROVIDER: "simple"
     networks:
@@ -668,6 +713,11 @@ services:
     image: postgres:15.5-alpine
     container_name: postgres
     hostname: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       TIMEZONE: "${TIMEZONE}"
       POSTGRES_USER: "${DB_USER}"

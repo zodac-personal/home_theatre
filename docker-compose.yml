@@ -50,6 +50,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -78,6 +84,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:3001/ping | grep -q 'OK' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -117,6 +129,12 @@ services:
       # Radarr Config
       RADARR_URL: "http://radarr:3000"
       RADARR_API_KEY: "${RADARR_API_KEY}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "recyclarr -v || exit 1"
+      timeout: 20s
     networks:
       - home
     restart: unless-stopped
@@ -140,6 +158,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:3002/ping | grep -q 'OK' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -199,6 +223,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:3004/ping | grep -q 'OK' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -367,6 +397,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --insecure --fail --output /dev/null 'http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -426,6 +462,12 @@ services:
       ENABLE_EXPERIMENTAL_REDIS: "true"
       REDIS_HOST: "romm-users-cache"
       REDIS_PORT: "6379"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:8080/api/heartbeat | grep -q 'VERSION' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -450,6 +492,12 @@ services:
         limits:
           cpus: "0.5"
           memory: "256M"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "redis-cli ping || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -481,6 +529,12 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:9696/ping | grep -q 'OK' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -512,6 +566,12 @@ services:
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
       WEBUI_PORT: "9000"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:9000/api/v2/app/version || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -564,6 +624,12 @@ services:
     environment:
       LOG_LEVEL: info
       TZ: "${TIMEZONE}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:8191/ | grep -q 'FlareSolverr is ready' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -616,6 +682,12 @@ services:
     environment:
       TIMEZONE: "${TIMEZONE}"
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -641,6 +713,12 @@ services:
       HBOX_LOG_FORMAT: "text"
       HBOX_WEB_MAX_UPLOAD_SIZE: "10"
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "wget -q --no-verbose --tries=1 --output-document - http://localhost:7745/api/v1/status | grep -q '\"health\":true' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -669,6 +747,12 @@ services:
       DATA_INDENT: "2"
       JWT_EXP_DAYS: "60"
       ENABLE_UPDATE_CHECK: "false"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "wget -q --no-verbose --tries=1 -O - http://localhost:8765 | grep -q 'DailyTxT' || exit 1"
+      timeout: 20s
     networks:
       - home
     ports:
@@ -696,7 +780,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "256"
+          memory: "256M"
     environment:
       DOZZLE_AUTH_PROVIDER: "simple"
     networks:
@@ -723,6 +807,12 @@ services:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "pg_isready -d db_prod || exit 1"
+      timeout: 20s
     networks:
       - home
     restart: unless-stopped

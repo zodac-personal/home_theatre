@@ -5,4 +5,4 @@ RUN mkdir --parents /usr/local/apache2/conf/sites/ && \
     mkdir --parents /var/www/html
 
 COPY ./docker/apache/config/httpd.conf /usr/local/apache2/conf/httpd.conf
-COPY ./docker/apache/sites/*.conf /usr/local/apache2/conf/sites
+COPY ./docker/apache/sites/ /usr/local/apache2/conf/sites/

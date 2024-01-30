@@ -17,15 +17,15 @@ services:
     ports:
       - "80:80"
 
-  monitor:
+  minitor-go:
     build: 
       context: .
       dockerfile: docker/minitor-go/Dockerfile
       args:
         # Docker image version
         MINITOR_VERSION: "1.4.1" # https://hub.docker.com/r/iamthefij/minitor-go/tags
-    container_name: monitor
-    hostname: monitor
+    container_name: minitor-go
+    hostname: minitor-go
     environment:
       DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL}
       DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL}

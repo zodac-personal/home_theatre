@@ -1,0 +1,34 @@
+networks:
+  home_pi:
+
+services:
+
+  apache:
+    build: 
+      context: .
+      dockerfile: docker/apache/Dockerfile
+      args:
+        # Docker image version
+        APACHE_VERSION: "2.4.58" # https://hub.docker.com/_/httpd
+    container_name: apache
+    hostname: apache
+    networks:
+      - home_pi
+    ports:
+      - "80:80"
+
+  monitor:
+    build: 
+      context: .
+      dockerfile: docker/minitor-go/Dockerfile
+      args:
+        # Docker image version
+        MINITOR_VERSION: "1.4.1" # https://hub.docker.com/r/iamthefij/minitor-go/tags
+    container_name: monitor
+    hostname: monitor
+    environment:
+      DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL}
+      DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL}
+    networks:
+      - home_pi
+    restart: unless-stopped

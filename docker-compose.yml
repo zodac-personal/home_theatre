@@ -246,6 +246,11 @@ services:
     image: jvmilazz0/kavita:nightly-0.7.14.3
     container_name: kavita
     hostname: kavita
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "4096M"
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"

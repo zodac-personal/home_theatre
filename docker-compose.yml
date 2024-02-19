@@ -5,7 +5,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.14.3 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.0 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     depends_on:
@@ -36,7 +36,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:version-5.2.6.8376
+    image: linuxserver/radarr:nightly-version-5.4.0.8613
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -70,7 +70,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.0.747
+    image: linuxserver/sonarr:version-4.0.1.929
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -144,7 +144,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:version-2.0.7.3849
+    image: linuxserver/lidarr:nightly-version-2.2.0.4045
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -178,7 +178,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.50.2
+    image: deluan/navidrome:0.51.1
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -209,7 +209,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:develop-version-0.3.14.2348
+    image: linuxserver/readarr:nightly-version-0.3.19.2437
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -242,99 +242,33 @@ services:
       - ./storage/readarr/:/config
 
   # eBook management
-  calibre:
-    image: linuxserver/calibre:7.2.0
-    container_name: calibre
-    hostname: calibre
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "1024M"
+  kavita:
+    image: jvmilazz0/kavita:nightly-0.7.14.3
+    container_name: kavita
+    hostname: kavita
     environment:
-      GUAC_USER: "abc" # Hardcoded value
-      GUAC_PASS: "${CALIBRE_PASSWORD}"
-      USERNAME: "abc" # Hardcoded value
-      PASSWORD: "${CALIBRE_PASSWORD}"
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "4005:8080"
-      - "4006:8081"
-    restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${BOOK_COVERS_DIRECTORY}:/covers"
+      - "${BOOKS_DIRECTORY}:/books"
       # Persistent volumes
-      - ./storage/calibre/:/config
-      - "calibre_library_1:/${BOOK_LIBRARY_1}"
-      - "calibre_library_2:/${BOOK_LIBRARY_2}"
-
-  # Default credentials: admin/admin123
-  calibre-web-1:
-    image: linuxserver/calibre-web:0.6.21
-    container_name: calibre-web-1
-    hostname: calibre-web-1
-    depends_on:
-      - calibre
-    deploy:
-      resources:
-        limits:
-          cpus: "0.25"
-          memory: "256M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
+      - ./storage/kavita/:/kavita/config
     ports:
-      - "4007:8083"
+      - "4005:5000"
     restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - "calibre_library_1:/${BOOK_LIBRARY_1}"
-      - ./storage/calibre-web-1/:/config
-
-  # Default credentials: admin/admin123
-  calibre-web-2:
-    image: linuxserver/calibre-web:0.6.21
-    container_name: calibre-web-2
-    hostname: calibre-web-2
-    depends_on:
-      - calibre
-    deploy:
-      resources:
-        limits:
-          cpus: "0.25"
-          memory: "256M"
-    environment:
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
-    networks:
-      - home
-    ports:
-      - "4008:8083"
-    restart: unless-stopped
-    volumes:
-      # Persistent volumes
-      - "calibre_library_2:/${BOOK_LIBRARY_2}"
-      - ./storage/calibre-web-2/:/config
 
   # Downloaded archive extracter
   unpackerr:
-    image: golift/unpackerr:0.12.0
+    image: golift/unpackerr:0.13.1
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
       - lidarr
       - radarr
       - sonarr
-      # - readarr
+      - readarr
     deploy:
       resources:
         limits:
@@ -371,7 +305,9 @@ services:
       - no-new-privileges:true
     user: "${PUID}:${PGID}"
     volumes:
+      # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
       - ./storage/unpackerr/:/config
 
   # Subtitle downloader
@@ -381,7 +317,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "1.3.1" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "1.4.1" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -420,7 +356,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.2.4
+    image: onerahmet/openai-whisper-asr-webservice:v1.3.0
     container_name: whisper
     hostname: whisper
     deploy:
@@ -504,14 +440,12 @@ services:
       - "6379:6379"
     restart: unless-stopped
     volumes:
-      # Volume mounts from host system
-      - "./docker/romm/config/redis_sysctl.conf:/etc/sysctl.conf"
       # Persistent volumes
-      - ./storage/redis/:/data
+      - ./storage/romm_users_cache/:/data
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:version-1.11.4.4173
+    image: linuxserver/prowlarr:nightly-version-1.14.1.4289
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -551,9 +485,9 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.6.2" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+        QBITTORRENT_VERSION: "4.6.3" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.4.0" # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.7.0" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -576,8 +510,6 @@ services:
       - home
     ports:
       - "9000-9002:9000-9002"
-      # Additional ports to help connect to trackers/improve traffic
-      - "6881-6969:6881-6969"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
@@ -587,7 +519,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr:3.6.2
+    image: linuxserver/doplarr:3.6.3
     container_name: doplarr
     hostname: doplarr
     depends_on:
@@ -638,7 +570,7 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.5.10
+    image: vabene1111/recipes:1.5.13
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
@@ -669,7 +601,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor_ui:
-    image: nginx:1.25.3-alpine
+    image: nginx:1.25.4-alpine
     container_name: tandoor_ui
     hostname: tandoor-ui
     depends_on:
@@ -768,8 +700,8 @@ services:
       dockerfile: docker/dozzle/Dockerfile
       args:
         # Docker image versions
-        DEBIAN_VERSION: "12.4" # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.0.0" # https://hub.docker.com/r/amir20/dozzle/tags
+        DEBIAN_VERSION: "12.5" # https://hub.docker.com/_/debian/tags
+        DOZZLE_VERSION: "v6.2.4" # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
         ADMIN_USERNAME: "${ADMIN_USERNAME}"
@@ -818,8 +750,3 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage/postgres/:/var/lib/postgresql/data
-
-volumes:
-  # Calibre libraries for multiple users
-  calibre_library_1: { }
-  calibre_library_2: { }

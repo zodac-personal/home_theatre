@@ -187,6 +187,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
       ND_SCANSCHEDULE: "@every 24h"
       ND_LOGLEVEL: "info"
       ND_COVERARTPRIORITY: "album.*, embedded, external"

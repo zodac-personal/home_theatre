@@ -12,23 +12,39 @@ services:
         APACHE_VERSION: "2.4.58" # https://hub.docker.com/_/httpd
     container_name: apache
     hostname: apache
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     networks:
       - home_pi
     ports:
       - "80:80"
+    restart: always
 
-  minitor-go:
-    build: 
-      context: .
-      dockerfile: docker/minitor-go/Dockerfile
-      args:
-        # Docker image version
-        MINITOR_VERSION: "1.4.1" # https://hub.docker.com/r/iamthefij/minitor-go/tags
-    container_name: minitor-go
-    hostname: minitor-go
+  uptime_kuma:
+    image: louislam/uptime-kuma:1.23.11-alpine
+    container_name: uptime_kuma
+    hostname: uptime-kuma
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
-      DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_ONLINE_WEBHOOK_URL}
-      DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL: ${DISCORD_MEDIA_SERVER_OFFLINE_WEBHOOK_URL}
+      PUID: "${PUID}"
+      PGID: "${PGID}"
+      TZ: "${TIMEZONE}"
     networks:
       - home_pi
+    ports:
+      - "3001:3001"
     restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - ./storage/uptime_kuma/:/app/data

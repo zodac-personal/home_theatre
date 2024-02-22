@@ -252,8 +252,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "4096M"
+          cpus: "0.5"
+          memory: "2048M"
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -501,8 +501,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "2048M"
+          cpus: "1.5"
+          memory: "4096M"
     environment:
       PUID: "${PUID}"
       PGID: "${PGID}"
@@ -617,7 +617,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
+          cpus: "0.5"
           memory: "1024M"
     environment:
       TIMEZONE: "${TIMEZONE}"

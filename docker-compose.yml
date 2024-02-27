@@ -36,7 +36,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.4.0.8613
+    image: linuxserver/radarr:nightly-version-5.4.0.8636
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -70,7 +70,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:version-4.0.1.929
+    image: linuxserver/sonarr:version-4.0.2.1183
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -325,7 +325,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "1.4.1" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "1.4.3-development" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -428,7 +428,7 @@ services:
 
   # Redis cache for RomM users
   romm_users_cache:
-    image: redis:7.2.3-alpine
+    image: redis:7.2.4-alpine
     container_name: romm_users_cache
     hostname: romm-users-cache
     deploy:
@@ -453,7 +453,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.14.1.4289
+    image: linuxserver/prowlarr:nightly-version-1.14.1.4305
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -495,7 +495,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.6.3" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.7.0" # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.7.1" # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -709,7 +709,7 @@ services:
       args:
         # Docker image versions
         DEBIAN_VERSION: "12.5" # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.2.4" # https://hub.docker.com/r/amir20/dozzle/tags
+        DOZZLE_VERSION: "v6.2.5" # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
         ADMIN_USERNAME: "${ADMIN_USERNAME}"

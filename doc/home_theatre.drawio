@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-02-29T01:24:06.934Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="_sZJ-wxvv_ePokc10s9L" version="23.1.8" type="device">
+<mxfile host="app.diagrams.net" modified="2024-04-09T13:45:56.612Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="wJx62bZn4nIFtymlwJy1" version="24.2.1" type="device">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="989" dy="514" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -50,7 +50,7 @@
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=30;" parent="1" vertex="1">
           <mxGeometry x="360" y="840" width="440" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="0rjydeuM3OXjqDoLz8A_-5" value="&lt;a href=&quot;https://github.com/zurdi15/romm&quot;&gt;RomM&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Games&lt;/i&gt;&lt;/sub&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="0rjydeuM3OXjqDoLz8A_-5" value="&lt;a href=&quot;https://github.com/zurdi15/romm&quot;&gt;RomM&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Game Manager&lt;/i&gt;&lt;/sub&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="320" y="400" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="nFLrENYFJLQG_o7xyKyQ-4" value="&lt;u&gt;&lt;b&gt;Streaming Services&lt;/b&gt;&lt;/u&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -90,7 +90,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="6X1RMtc413aK-zR1KFE_-31" value="Main PC" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" parent="1" vertex="1">
-          <mxGeometry x="80" y="280" width="100" height="30" as="geometry" />
+          <mxGeometry x="80" y="280" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="6X1RMtc413aK-zR1KFE_-33" value="Media Management" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" parent="1" vertex="1">
           <mxGeometry x="320" y="720" width="130" height="30" as="geometry" />
@@ -161,7 +161,7 @@
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-25" value="&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PostgreSQL&lt;/a&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="500" y="560" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="ByP5D_G1rsHgrG0Wdw6j-14" value="&lt;a href=&quot;https://github.com/redis/redis&quot;&gt;Redis&lt;/a&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="ByP5D_G1rsHgrG0Wdw6j-14" value="&lt;a href=&quot;https://github.com/MariaDB/mariadb-docker&quot;&gt;MariaDB&lt;/a&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="340" y="560" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-34" value="&lt;a href=&quot;https://github.com/imagegenius/docker-immich&quot;&gt;Immich&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Photo/Video Gallery&lt;/i&gt;&lt;/sub&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
@@ -307,11 +307,14 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="HlaznDHf1Y8uNSB78Uza-1" value="&lt;a href=&quot;https://github.com/grafana/grafana&quot;&gt;Grafana&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Observability &amp;amp; Graphs&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="HlaznDHf1Y8uNSB78Uza-1" value="&lt;a href=&quot;https://github.com/grafana/grafana&quot;&gt;Grafana&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Observability &amp;amp; Graphs&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="880" y="560" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="HlaznDHf1Y8uNSB78Uza-2" value="&lt;a href=&quot;https://github.com/prometheus/prometheus&quot;&gt;Prometheus&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Monitoring &amp;amp; Metrics&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="HlaznDHf1Y8uNSB78Uza-2" value="&lt;a href=&quot;https://github.com/prometheus/prometheus&quot;&gt;Prometheus&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Monitoring &amp;amp; Metrics&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="880" y="600" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Fif5-x-M6B1vJOmEHzV4-1" value="&lt;a href=&quot;https://github.com/redis/redis&quot;&gt;redis&lt;/a&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="400" width="30" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -9,7 +9,9 @@ services:
       dockerfile: docker/apache/Dockerfile
       args:
         # Docker image version
-        APACHE_VERSION: "2.4.58" # https://hub.docker.com/_/httpd
+        APACHE_VERSION: "2.4.59" # https://hub.docker.com/_/httpd
+        # Build arguments
+        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
     container_name: apache
     hostname: apache
     deploy:

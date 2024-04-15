@@ -5,13 +5,16 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.0 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.2 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     depends_on:
       - qbittorrent
+      - lidarr
       - radarr
+      - readarr
       - sonarr
+      - tandoor-ui
     deploy:
       resources:
         limits:
@@ -36,7 +39,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.4.0.8636
+    image: linuxserver/radarr:nightly-version-5.5.0.8726
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -70,7 +73,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:version-4.0.2.1183
+    image: linuxserver/sonarr:version-4.0.4.1491
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -144,7 +147,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.2.0.4045
+    image: linuxserver/lidarr:nightly-version-2.2.5.4139
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -212,7 +215,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:nightly-version-0.3.19.2437
+    image: linuxserver/readarr:nightly-version-0.3.23.2506
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -246,7 +249,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.7.14.3
+    image: jvmilazz0/kavita:nightly-0.7.14.10
     container_name: kavita
     hostname: kavita
     deploy:
@@ -258,14 +261,17 @@ services:
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+    networks:
+      - home
+    ports:
+      - "4005:5000"
+    restart: unless-stopped
     volumes:
       # Volume mounts from host system
       - "${BOOKS_DIRECTORY}:/books"
       # Persistent volumes
       - ./storage/kavita/:/kavita/config
-    ports:
-      - "4005:5000"
-    restart: unless-stopped
+
 
   # Downloaded archive extracter
   unpackerr:
@@ -375,17 +381,23 @@ services:
     environment:
       ASR_MODEL: "small.en"
       ASR_ENGINE: "faster_whisper"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "curl --silent --fail http://localhost:9000/ || exit 1"
+      timeout: 20s
     networks:
       - home
-    ports:
-      - "4012:9000"
     restart: unless-stopped
 
   # Video Game ROM Manager
   romm:
-    image: zurdi15/romm:2.3.1
+    image: rommapp/romm:3.1.0-rc.2
     container_name: romm
     hostname: romm
+    depends_on:
+      - romm-db
     deploy:
       resources:
         limits:
@@ -393,19 +405,24 @@ services:
           memory: "1024M"
     environment:
       # Database config
-      ROMM_DB_DRIVER: "sqlite"
+      ROMM_DB_DRIVER: "mariadb"
+      DB_HOST: "romm-db"
+      DB_PORT: "${ROMM_DB_PORT}"
+      DB_NAME: "${ROMM_DB_NAME}"
+      # Do not quote the following two, or leave a comment afterward, can cause issues on Windows, for some reason
+      DB_PASSWD: ${ROMM_DB_PASSWORD}
+      DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD}
+      DB_USER: "${ROMM_DB_USER}"
       # External systems config
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID}"
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
+      MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY}"
       # Authentication config
-      ROMM_AUTH_ENABLED: "true"
+      DISABLE_CSRF_PROTECTION: "true"
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY}"
       ROMM_AUTH_USERNAME: "${ADMIN_USERNAME}"
       ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD}"
-      ENABLE_EXPERIMENTAL_REDIS: "true"
-      REDIS_HOST: "romm-users-cache"
-      REDIS_PORT: "6379"
     healthcheck:
       interval: 5m
       retries: 3
@@ -415,45 +432,50 @@ services:
     networks:
       - home
     ports:
-      - "4013:8080"
-    restart: "unless-stopped"
+      - "4006:8080"
+    restart: unless-stopped
     volumes:
       # Volume mounts from host system
       - "${ROMS_DIRECTORY}:/romm/library/roms:ro"
-      - "./docker/romm/config/config.yml:/romm/config.yml"
+      - "${ROM_SAVES_DIRECTORY}:/romm/assets"
+      - "./docker/romm/config/:/romm/config"
       # Persistent volumes
-      - ./storage/romm/database/:/romm/database
-      - ./storage/romm/resources/:/romm/resources
-      - ./storage/romm/logs:/romm/logs
+      - ./storage/romm/resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+      - ./storage/romm/redis:/redis-data # Cached data for background tasks
 
-  # Redis cache for RomM users
-  romm_users_cache:
-    image: redis:7.2.4-alpine
-    container_name: romm_users_cache
-    hostname: romm-users-cache
+  # Database for RomM
+  romm-db:
+    image: mariadb:11.3.2
+    container_name: romm-db
+    hostname: romm-db
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: "256M"
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      MYSQL_TCP_PORT: "${ROMM_DB_PORT}"
+      MYSQL_DATABASE: "${ROMM_DB_NAME}"
+      MYSQL_PASSWORD: "${ROMM_DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${ROMM_DB_ROOT_PASSWORD}"
+      MYSQL_USER: "${ROMM_DB_USER}"
+    expose:
+      - "${ROMM_DB_PORT}"
     healthcheck:
       interval: 5m
       retries: 3
       start_period: 2m
-      test: "redis-cli ping || exit 1"
+      test: "healthcheck.sh --su-mysql --connect --innodb_initialized || exit 1"
       timeout: 20s
     networks:
       - home
-    ports:
-      - "6379:6379"
     restart: unless-stopped
     volumes:
-      # Persistent volumes
-      - ./storage/romm_users_cache/:/data
+      - romm-db_data:/var/lib/mysql
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.14.1.4305
+    image: linuxserver/prowlarr:nightly-version-1.16.1.4420
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -493,9 +515,9 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.6.3" # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+        QBITTORRENT_VERSION: "4.6.4"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.7.1" # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.7.3"   # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -547,6 +569,12 @@ services:
       # Discord configuration
       DISCORD__TOKEN: "${DISCORD_BOT_TOKEN}"
       DISCORD__MAX_RESULTS: 5
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "ps -ef | grep -v grep | grep -q doplarr.jar || exit 1"
+      timeout: 20s
     networks:
       - home
     restart: unless-stopped
@@ -578,11 +606,11 @@ services:
 
   # Recipe manager (Tandoor, but container cannot be renamed)
   web_recipes:
-    image: vabene1111/recipes:1.5.13
+    image: vabene1111/recipes:1.5.17
     container_name: web_recipes
     hostname: web_recipes
     depends_on:
-      - postgres
+      - tandoor-db
     deploy:
       resources:
         limits:
@@ -592,13 +620,19 @@ services:
       TZ: "${TIMEZONE}"
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"
       DB_ENGINE: "django.db.backends.postgresql"
-      POSTGRES_HOST: "postgres"
-      POSTGRES_PORT: "5432"
-      POSTGRES_USER: "${DB_USER}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_HOST: "tandoor-db"
+      POSTGRES_PORT: "${TANDOOR_DB_PORT}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
+      POSTGRES_USER: "${TANDOOR_DB_USER}"
       DEBUG: "0"
       SQL_DEBUG: "0"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "wget -q --spider http://localhost:8080/api 2>&1 | grep -q '404\\|403' || exit 1"
+      timeout: 20s
     networks:
       - home
     restart: unless-stopped
@@ -608,9 +642,9 @@ services:
       - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles
 
   # Recipe manager reverse-proxy/UI
-  tandoor_ui:
+  tandoor-ui:
     image: nginx:1.25.4-alpine
-    container_name: tandoor_ui
+    container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
       - web_recipes
@@ -637,6 +671,36 @@ services:
       - ./storage/tandoor/nginx/conf.d/:/etc/nginx/conf.d:ro
       - ./storage/tandoor/mediafiles/:/media:ro
       - ./storage/tandoor/staticfiles/:/static:ro
+
+  # Database for Tandoor
+  tandoor-db:
+    image: postgres:15.6-alpine
+    container_name: tandoor-db
+    hostname: tandoor-db
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      TIMEZONE: "${TIMEZONE}"
+      PGPORT: "${TANDOOR_DB_PORT}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
+      POSTGRES_USER: "${TANDOOR_DB_USER}"
+    expose:
+      - "${TANDOOR_DB_PORT}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "pg_isready -d db_prod || exit 1"
+      timeout: 20s
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      - ./storage/tandoor-db/:/var/lib/postgresql/data
 
   # Inventory management
   homebox:
@@ -669,7 +733,7 @@ services:
 
   # Daily journal
   dailytxt:
-    image: phitux/dailytxt:1.0.13
+    image: phitux/dailytxt:1.0.14
     container_name: dailytxt
     hostname: dailytxt
     deploy:
@@ -708,8 +772,8 @@ services:
       dockerfile: docker/dozzle/Dockerfile
       args:
         # Docker image versions
-        DEBIAN_VERSION: "12.5" # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.2.5" # https://hub.docker.com/r/amir20/dozzle/tags
+        DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
+        DOZZLE_VERSION: "v6.4.6"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
         ADMIN_USERNAME: "${ADMIN_USERNAME}"
@@ -732,29 +796,7 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
-  # Database
-  postgres:
-    image: postgres:15.5-alpine
-    container_name: postgres
-    hostname: postgres
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1024M"
-    environment:
-      TIMEZONE: "${TIMEZONE}"
-      POSTGRES_USER: "${DB_USER}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-      POSTGRES_DB: "${DB_NAME}"
-    healthcheck:
-      interval: 5m
-      retries: 3
-      start_period: 2m
-      test: "pg_isready -d db_prod || exit 1"
-      timeout: 20s
-    networks:
-      - home
-    restart: unless-stopped
-    volumes:
-      - ./storage/postgres/:/var/lib/postgresql/data
+volumes:
+  # Volume required for romm-db, due to issues when using a Windows mount (NFS issues?)
+  romm-db_data:
+    name: romm-db_data

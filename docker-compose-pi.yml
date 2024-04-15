@@ -20,14 +20,15 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     networks:
       - home_pi
     ports:
       - "80:80"
-    restart: always
+    restart: unless-stopped
 
   uptime_kuma:
     image: louislam/uptime-kuma:1.23.11-alpine
@@ -39,8 +40,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     networks:
       - home_pi

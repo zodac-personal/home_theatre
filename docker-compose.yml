@@ -21,8 +21,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     networks:
       - home
@@ -50,8 +51,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -84,8 +86,9 @@ services:
           cpus: "2"
           memory: "2048M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -122,16 +125,18 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Base config
       PUID: "${PUID}"
       PGID: "${PGID}"
       TZ: "${TIMEZONE}"
+      # Scheduling config
       CRON_SCHEDULE: "@daily"
-      # Sonarr Config
-      SONARR_URL: "http://sonarr:3001"
-      SONARR_API_KEY: "${SONARR_API_KEY}"
       # Radarr Config
-      RADARR_URL: "http://radarr:3000"
       RADARR_API_KEY: "${RADARR_API_KEY}"
+      RADARR_URL: "http://radarr:3000"
+      # Sonarr Config
+      SONARR_API_KEY: "${SONARR_API_KEY}"
+      SONARR_URL: "http://sonarr:3001"
     healthcheck:
       interval: 5m
       retries: 3
@@ -158,8 +163,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -190,18 +196,22 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
-      ND_SCANSCHEDULE: "@every 24h"
-      ND_LOGLEVEL: "info"
-      ND_COVERARTPRIORITY: "album.*, embedded, external"
-      ND_ARTISTARTPRIORITY: "artist.*, external"
-      # External integrations
+      # External services config
       ND_LASTFM_APIKEY: "${LASTFM_API_KEY}"
       ND_LASTFM_SECRET: "${LASTFM_SECRET}"
       ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID}"
       ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET}"
+      # Scheduling config
+      ND_SCANSCHEDULE: "@every 24h"
+      # Metadata config
+      ND_ARTISTARTPRIORITY: "artist.*, external"
+      ND_COVERARTPRIORITY: "album.*, embedded, external"
+      # Logging config
+      ND_LOGLEVEL: "info"
     networks:
       - home
     ports:
@@ -226,8 +236,9 @@ services:
           cpus: "1"
           memory: "512M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -258,8 +269,9 @@ services:
           cpus: "0.5"
           memory: "2048M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     networks:
       - home
@@ -271,7 +283,6 @@ services:
       - "${BOOKS_DIRECTORY}:/books"
       # Persistent volumes
       - ./storage/kavita/:/kavita/config
-
 
   # Downloaded archive extracter
   unpackerr:
@@ -289,29 +300,30 @@ services:
           cpus: "2"
           memory: "512M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
-      # Sonarr Config
-      UN_SONARR_0_URL: "http://sonarr:3001"
-      UN_SONARR_0_API_KEY: "${SONARR_API_KEY}"
-      UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
-      UN_SONARR_0_PROTOCOLS: "torrent,usenet"
-      # Radarr Config
-      UN_RADARR_0_URL: "http://radarr:3000"
-      UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
-      UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
-      UN_RADARR_0_PROTOCOLS: "torrent,usenet"
-      # Lidarr Config
-      UN_LIDARR_0_URL: "http://lidarr:3002"
+      # Lidarr config
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
       UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
-      # Readarr Config
-      UN_READARR_0_URL: "http://readarr:3004"
+      UN_LIDARR_0_URL: "http://lidarr:3002"
+      # Radarr config
+      UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
+      UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
+      UN_RADARR_0_PROTOCOLS: "torrent,usenet"
+      UN_RADARR_0_URL: "http://radarr:3000"
+      # Readarr config
       UN_READARR_0_API_KEY: "${READARR_API_KEY}"
       UN_READARR_0_PATHS_0: "/downloads/complete/readarr"
       UN_READARR_0_PROTOCOLS: "torrent,usenet"
+      UN_READARR_0_URL: "http://readarr:3004"
+      # Sonarr config
+      UN_SONARR_0_API_KEY: "${SONARR_API_KEY}"
+      UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
+      UN_SONARR_0_PROTOCOLS: "torrent,usenet"
+      UN_SONARR_0_URL: "http://sonarr:3001"
     networks:
       - home
     restart: unless-stopped
@@ -344,8 +356,9 @@ services:
       - sonarr
       - whisper
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -379,6 +392,7 @@ services:
           cpus: "1"
           memory: "2048M"
     environment:
+      # Model config
       ASR_MODEL: "small.en"
       ASR_ENGINE: "faster_whisper"
     healthcheck:
@@ -404,11 +418,16 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Authentication config
+      DISABLE_CSRF_PROTECTION: "true"
+      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY}"
+      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD}"
+      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME}"
       # Database config
       ROMM_DB_DRIVER: "mariadb"
       DB_HOST: "romm-db"
-      DB_PORT: "${ROMM_DB_PORT}"
       DB_NAME: "${ROMM_DB_NAME}"
+      DB_PORT: "${ROMM_DB_PORT}"
       # Do not quote the following two, or leave a comment afterward, can cause issues on Windows, for some reason
       DB_PASSWD: ${ROMM_DB_PASSWORD}
       DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD}
@@ -416,13 +435,8 @@ services:
       # External systems config
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID}"
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
-      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
       MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY}"
-      # Authentication config
-      DISABLE_CSRF_PROTECTION: "true"
-      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY}"
-      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME}"
-      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD}"
+      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -454,6 +468,7 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Database config
       MYSQL_TCP_PORT: "${ROMM_DB_PORT}"
       MYSQL_DATABASE: "${ROMM_DB_NAME}"
       MYSQL_PASSWORD: "${ROMM_DB_PASSWORD}"
@@ -490,8 +505,9 @@ services:
           cpus: "1"
           memory: "1024M" # High memory resourcing to allow stats page to load
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
     healthcheck:
       interval: 5m
@@ -526,9 +542,11 @@ services:
           cpus: "1.5"
           memory: "4096M"
     environment:
-      PUID: "${PUID}"
+      # Base config
       PGID: "${PGID}"
+      PUID: "${PUID}"
       TZ: "${TIMEZONE}"
+      # UI config
       WEBUI_PORT: "9000"
     healthcheck:
       interval: 5m
@@ -567,8 +585,8 @@ services:
       RADARR__API: "${RADARR_API_KEY}"
       SONARR__API: "${SONARR_API_KEY}"
       # Discord configuration
+      DISCORD__MAX_RESULTS: "5"
       DISCORD__TOKEN: "${DISCORD_BOT_TOKEN}"
-      DISCORD__MAX_RESULTS: 5
     healthcheck:
       interval: 5m
       retries: 3
@@ -590,8 +608,10 @@ services:
           cpus: "0.5"
           memory: "1024M"
     environment:
-      LOG_LEVEL: info
+      # Base config
       TZ: "${TIMEZONE}"
+      # Logging config
+      LOG_LEVEL: "info"
     healthcheck:
       interval: 5m
       retries: 3
@@ -617,16 +637,20 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Base config
       TZ: "${TIMEZONE}"
-      SECRET_KEY: "${TANDOOR_SECRET_KEY}"
+      # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"
       POSTGRES_PORT: "${TANDOOR_DB_PORT}"
       POSTGRES_DB: "${TANDOOR_DB_NAME}"
       POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
       POSTGRES_USER: "${TANDOOR_DB_USER}"
+      # Logging config
       DEBUG: "0"
       SQL_DEBUG: "0"
+      # Secrets config
+      SECRET_KEY: "${TANDOOR_SECRET_KEY}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -654,7 +678,9 @@ services:
           cpus: "0.5"
           memory: "1024M"
     environment:
+      # Base config
       TIMEZONE: "${TIMEZONE}"
+      # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY}"
     healthcheck:
       interval: 5m
@@ -683,7 +709,9 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Base config
       TIMEZONE: "${TIMEZONE}"
+      # Database config
       PGPORT: "${TANDOOR_DB_PORT}"
       POSTGRES_DB: "${TANDOOR_DB_NAME}"
       POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
@@ -713,10 +741,12 @@ services:
           cpus: "0.5"
           memory: "512M"
     environment:
-      HBOX_LOG_LEVEL: "info"
+      # Logging config
       HBOX_LOG_FORMAT: "text"
-      HBOX_WEB_MAX_UPLOAD_SIZE: "10"
+      HBOX_LOG_LEVEL: "info"
+      # UI config
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+      HBOX_WEB_MAX_UPLOAD_SIZE: "10"
     healthcheck:
       interval: 5m
       retries: 3
@@ -742,15 +772,18 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
-      USER_UID: "${PUID}"
+      # Base config
       USER_GID: "${PGID}"
+      USER_UID: "${PUID}"
       TZ: "${TIMEZONE}"
-      PORT: "8765"
+      # Secrets config
       SECRET_KEY: "${DAILYTXT_SECRET_KEY}"
+      # UI config
       ALLOW_REGISTRATION: "false"
       DATA_INDENT: "2"
-      JWT_EXP_DAYS: "60"
       ENABLE_UPDATE_CHECK: "false"
+      JWT_EXP_DAYS: "60"
+      PORT: "8765"
     healthcheck:
       interval: 5m
       retries: 3
@@ -776,8 +809,8 @@ services:
         DOZZLE_VERSION: "v6.4.6"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
-        ADMIN_USERNAME: "${ADMIN_USERNAME}"
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD}"
+        ADMIN_USERNAME: "${ADMIN_USERNAME}"
     container_name: dozzle
     hostname: dozzle
     deploy:
@@ -786,6 +819,7 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
+      # Authentication config
       DOZZLE_AUTH_PROVIDER: "simple"
     networks:
       - home

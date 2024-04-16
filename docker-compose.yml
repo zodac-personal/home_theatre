@@ -428,7 +428,7 @@ services:
       DB_HOST: "romm-db"
       DB_NAME: "${ROMM_DB_NAME?[romm] Database name missing}"
       DB_PORT: "${ROMM_DB_PORT?[romm] Database port missing}"
-      # Do not quote the following two, or leave a comment afterward, can cause issues on Windows, for some reason
+      # Do not quote the following two, or leave a comment afterward, can cause issues, for some reason (I think the quotes are passed in)
       DB_PASSWD: ${ROMM_DB_PASSWORD?[romm] Database password missing}
       DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD?[romm] Database root password missing}
       DB_USER: "${ROMM_DB_USER?[romm] Database user missing}"

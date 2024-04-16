@@ -22,9 +22,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     networks:
       - home
     ports:
@@ -52,9 +52,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -87,9 +87,9 @@ services:
           memory: "2048M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -126,9 +126,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PUID: "${PUID}"
-      PGID: "${PGID}"
-      TZ: "${TIMEZONE}"
+      PUID: "${PUID?User ID missing}"
+      PGID: "${PGID?Group ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # Scheduling config
       CRON_SCHEDULE: "@daily"
       # Radarr Config
@@ -164,9 +164,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -197,14 +197,14 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # External services config
-      ND_LASTFM_APIKEY: "${LASTFM_API_KEY}"
-      ND_LASTFM_SECRET: "${LASTFM_SECRET}"
-      ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID}"
-      ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET}"
+      ND_LASTFM_APIKEY: "${LASTFM_API_KEY?[navidrome] LastFM API key missing}"
+      ND_LASTFM_SECRET: "${LASTFM_SECRET?[navidrome] LastFM secret missing}"
+      ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID?[navidrome] Spotify Client ID missing}"
+      ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET?[navidrome] Spotify Client secret missing}"
       # Scheduling config
       ND_SCANSCHEDULE: "@every 24h"
       # Metadata config
@@ -237,9 +237,9 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -270,9 +270,9 @@ services:
           memory: "2048M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     networks:
       - home
     ports:
@@ -301,26 +301,26 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # Lidarr config
-      UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY}"
+      UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY?[unpackerr] Lidarr API key missing}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
       UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
       UN_LIDARR_0_URL: "http://lidarr:3002"
       # Radarr config
-      UN_RADARR_0_API_KEY: "${RADARR_API_KEY}"
+      UN_RADARR_0_API_KEY: "${RADARR_API_KEY?[unpackerr] Radarr API key missing}"
       UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
       UN_RADARR_0_PROTOCOLS: "torrent,usenet"
       UN_RADARR_0_URL: "http://radarr:3000"
       # Readarr config
-      UN_READARR_0_API_KEY: "${READARR_API_KEY}"
+      UN_READARR_0_API_KEY: "${READARR_API_KEY?[unpackerr] Readarr API key missing}"
       UN_READARR_0_PATHS_0: "/downloads/complete/readarr"
       UN_READARR_0_PROTOCOLS: "torrent,usenet"
       UN_READARR_0_URL: "http://readarr:3004"
       # Sonarr config
-      UN_SONARR_0_API_KEY: "${SONARR_API_KEY}"
+      UN_SONARR_0_API_KEY: "${SONARR_API_KEY?[unpackerr] Sonarr API key missing}"
       UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       UN_SONARR_0_URL: "http://sonarr:3001"
@@ -357,9 +357,9 @@ services:
       - whisper
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -420,23 +420,23 @@ services:
     environment:
       # Authentication config
       DISABLE_CSRF_PROTECTION: "true"
-      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY}"
-      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD}"
-      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME}"
+      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY?[romm] Authentication secret key missing}"
+      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD?[romm] Admin password missing}"
+      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME?[romm] Admin username missing}"
       # Database config
       ROMM_DB_DRIVER: "mariadb"
       DB_HOST: "romm-db"
-      DB_NAME: "${ROMM_DB_NAME}"
-      DB_PORT: "${ROMM_DB_PORT}"
+      DB_NAME: "${ROMM_DB_NAME?[romm] Database name missing}"
+      DB_PORT: "${ROMM_DB_PORT?[romm] Database port missing}"
       # Do not quote the following two, or leave a comment afterward, can cause issues on Windows, for some reason
-      DB_PASSWD: ${ROMM_DB_PASSWORD}
-      DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD}
-      DB_USER: "${ROMM_DB_USER}"
+      DB_PASSWD: ${ROMM_DB_PASSWORD?[romm] Database password missing}
+      DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD?[romm] Database root password missing}
+      DB_USER: "${ROMM_DB_USER?[romm] Database user missing}"
       # External systems config
-      IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID}"
-      IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET}"
-      MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY}"
-      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY}"
+      IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID?[romm] Twitch client ID missing}"
+      IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET?[romm] Twitch client secret missing}"
+      MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY?[romm] MobyGames API key missing}"
+      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY?[romm] SteamGridDB API key missing}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -469,11 +469,11 @@ services:
           memory: "1024M"
     environment:
       # Database config
-      MYSQL_TCP_PORT: "${ROMM_DB_PORT}"
-      MYSQL_DATABASE: "${ROMM_DB_NAME}"
-      MYSQL_PASSWORD: "${ROMM_DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${ROMM_DB_ROOT_PASSWORD}"
-      MYSQL_USER: "${ROMM_DB_USER}"
+      MYSQL_TCP_PORT: "${ROMM_DB_PORT?[romm-db] Database port missing}"
+      MYSQL_DATABASE: "${ROMM_DB_NAME?[romm-db] Database name missing}"
+      MYSQL_PASSWORD: "${ROMM_DB_PASSWORD?[romm-db] Database password missing}"
+      MYSQL_ROOT_PASSWORD: "${ROMM_DB_ROOT_PASSWORD?[romm-db] Database root password missing}"
+      MYSQL_USER: "${ROMM_DB_USER?[romm-db] Database user missing}"
     expose:
       - "${ROMM_DB_PORT}"
     healthcheck:
@@ -506,9 +506,9 @@ services:
           memory: "1024M" # High memory resourcing to allow stats page to load
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -543,9 +543,9 @@ services:
           memory: "4096M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # UI config
       WEBUI_PORT: "9000"
     healthcheck:
@@ -582,11 +582,11 @@ services:
       # Integration configuration
       RADARR__URL: "http://radarr:3000"
       SONARR__URL: "http://sonarr:3001"
-      RADARR__API: "${RADARR_API_KEY}"
-      SONARR__API: "${SONARR_API_KEY}"
+      RADARR__API: "${RADARR_API_KEY?[doplarr] Radarr API key missing}"
+      SONARR__API: "${SONARR_API_KEY?[doplarr] Sonarr API key missing}"
       # Discord configuration
       DISCORD__MAX_RESULTS: "5"
-      DISCORD__TOKEN: "${DISCORD_BOT_TOKEN}"
+      DISCORD__TOKEN: "${DISCORD_BOT_TOKEN?[doplarr] Discord bot token missing}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -609,7 +609,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TZ: "${TIMEZONE}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # Logging config
       LOG_LEVEL: "info"
     healthcheck:
@@ -638,19 +638,19 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TZ: "${TIMEZONE}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"
-      POSTGRES_PORT: "${TANDOOR_DB_PORT}"
-      POSTGRES_DB: "${TANDOOR_DB_NAME}"
-      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
-      POSTGRES_USER: "${TANDOOR_DB_USER}"
+      POSTGRES_PORT: "${TANDOOR_DB_PORT?[web_recipes] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME?[web_recipes] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD?[web_recipes] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER?[web_recipes] Database user missing}"
       # Logging config
       DEBUG: "0"
       SQL_DEBUG: "0"
       # Secrets config
-      SECRET_KEY: "${TANDOOR_SECRET_KEY}"
+      SECRET_KEY: "${TANDOOR_SECRET_KEY?[web_recipes] Tandoor secret key missing}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -679,9 +679,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE}"
+      TIMEZONE: "${TIMEZONE?Timezone not set}"
       # Secrets config
-      SECRET_KEY: "${TANDOOR_SECRET_KEY}"
+      SECRET_KEY: "${TANDOOR_SECRET_KEY?[tandoor-ui] Tandoor secret key missing}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -710,12 +710,12 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE}"
+      TIMEZONE: "${TIMEZONE?Timezone not set}"
       # Database config
-      PGPORT: "${TANDOOR_DB_PORT}"
-      POSTGRES_DB: "${TANDOOR_DB_NAME}"
-      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD}"
-      POSTGRES_USER: "${TANDOOR_DB_USER}"
+      PGPORT: "${TANDOOR_DB_PORT?[tandoor-db] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME?[tandoor-db] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD?[tandoor-db] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER?[tandoor-db] Database user missing}"
     expose:
       - "${TANDOOR_DB_PORT}"
     healthcheck:
@@ -773,11 +773,11 @@ services:
           memory: "256M"
     environment:
       # Base config
-      USER_GID: "${PGID}"
-      USER_UID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      USER_GID: "${PGID?Group ID missing}"
+      USER_UID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
       # Secrets config
-      SECRET_KEY: "${DAILYTXT_SECRET_KEY}"
+      SECRET_KEY: "${DAILYTXT_SECRET_KEY?[dailytxt] Secret key missing}"
       # UI config
       ALLOW_REGISTRATION: "false"
       DATA_INDENT: "2"
@@ -808,9 +808,9 @@ services:
         DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
         DOZZLE_VERSION: "v6.4.6"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
-        ADMIN_PASSWORD: "${DOZZLE_PASSWORD}"
-        ADMIN_USERNAME: "${ADMIN_USERNAME}"
+        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[dozzle] Admin email address not set}"
+        ADMIN_PASSWORD: "${DOZZLE_PASSWORD?[dozzle] Admin password not set}"
+        ADMIN_USERNAME: "${ADMIN_USERNAME?[dozzle] Admin username not set}"
     container_name: dozzle
     hostname: dozzle
     deploy:

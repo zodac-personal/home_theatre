@@ -11,7 +11,7 @@ services:
         # Docker image version
         APACHE_VERSION: "2.4.59" # https://hub.docker.com/_/httpd
         # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS}"
+        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[httpd] Admin email address missing}"
     container_name: apache
     hostname: apache
     deploy:
@@ -41,9 +41,9 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     networks:
       - home_pi
     ports:

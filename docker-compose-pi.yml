@@ -18,7 +18,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
+          memory: "512M"
     environment:
       # Base config
       PGID: "${PGID}"
@@ -37,8 +37,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "1024M"
+          cpus: "2"
+          memory: "512M"
     environment:
       # Base config
       PGID: "${PGID?Group ID missing}"

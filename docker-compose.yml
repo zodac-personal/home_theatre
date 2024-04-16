@@ -260,7 +260,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.7.14.10
+    image: jvmilazz0/kavita:nightly-0.8.0.7
     container_name: kavita
     hostname: kavita
     deploy:
@@ -806,7 +806,7 @@ services:
       args:
         # Docker image versions
         DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.4.6"  # https://hub.docker.com/r/amir20/dozzle/tags
+        DOZZLE_VERSION: "v6.5.0"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[dozzle] Admin email address not set}"
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD?[dozzle] Admin password not set}"

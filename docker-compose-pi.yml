@@ -21,9 +21,9 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID}"
-      PUID: "${PUID}"
-      TZ: "${TIMEZONE}"
+      PGID: "${PGID?Group ID missing}"
+      PUID: "${PUID?User ID missing}"
+      TZ: "${TIMEZONE?Timezone not set}"
     networks:
       - home_pi
     ports:

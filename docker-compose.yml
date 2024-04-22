@@ -40,7 +40,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.5.0.8726
+    image: linuxserver/radarr:nightly-version-5.5.1.8739
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -75,7 +75,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:version-4.0.4.1491
+    image: linuxserver/sonarr:develop-version-4.0.4.1515
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -152,7 +152,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.2.5.4139
+    image: linuxserver/lidarr:nightly-version-2.3.0.4159
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -225,7 +225,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:nightly-version-0.3.23.2506
+    image: linuxserver/readarr:nightly-version-0.3.25.2513
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -260,7 +260,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.0.7
+    image: jvmilazz0/kavita:nightly-0.8.0.8
     container_name: kavita
     hostname: kavita
     deploy:
@@ -343,7 +343,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "1.4.3-development" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "development-version-v1.4.3-beta.23" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -383,7 +383,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.3.0
+    image: onerahmet/openai-whisper-asr-webservice:v1.4.1
     container_name: whisper
     hostname: whisper
     deploy:
@@ -407,7 +407,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.1.0-rc.2
+    image: rommapp/romm:3.1.0
     container_name: romm
     hostname: romm
     depends_on:
@@ -490,7 +490,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.16.1.4420
+    image: linuxserver/prowlarr:nightly-version-1.17.0.4439
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -667,7 +667,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor-ui:
-    image: nginx:1.25.4-alpine
+    image: nginx:1.25.5-alpine
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
@@ -806,7 +806,7 @@ services:
       args:
         # Docker image versions
         DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.5.0"  # https://hub.docker.com/r/amir20/dozzle/tags
+        DOZZLE_VERSION: "v6.5.1"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[dozzle] Admin email address not set}"
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD?[dozzle] Admin password not set}"

@@ -21,9 +21,9 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID?Group ID missing}"
-      PUID: "${PUID?User ID missing}"
-      TZ: "${TIMEZONE?Timezone not set}"
+      PGID: "${PGID:?Group ID missing}"
+      PUID: "${PUID:?User ID missing}"
+      TZ: "${TIMEZONE:?Timezone not set}"
     networks:
       - home_pi
     ports:
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   uptime_kuma:
-    image: louislam/uptime-kuma:1.23.11-alpine
+    image: louislam/uptime-kuma:1.23.12-alpine
     container_name: uptime_kuma
     hostname: uptime-kuma
     deploy:
@@ -41,9 +41,9 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID?Group ID missing}"
-      PUID: "${PUID?User ID missing}"
-      TZ: "${TIMEZONE?Timezone not set}"
+      PGID: "${PGID:?Group ID missing}"
+      PUID: "${PUID:?User ID missing}"
+      TZ: "${TIMEZONE:?Timezone not set}"
     networks:
       - home_pi
     ports:

@@ -3,6 +3,7 @@ networks:
 
 services:
 
+  # Reverse proxy
   apache:
     build: 
       context: .
@@ -30,6 +31,7 @@ services:
       - "80:80"
     restart: unless-stopped
 
+  # Monitoring and alerting
   uptime_kuma:
     image: louislam/uptime-kuma:1.23.12-alpine
     container_name: uptime_kuma
@@ -52,3 +54,121 @@ services:
     volumes:
       # Persistent volumes
       - ./storage/uptime_kuma/:/app/data
+
+  # Identity platform (authentication and SSO)
+  authentik:
+    image: ghcr.io/goauthentik/server:2024.2.3 # https://github.com/goauthentik/authentik/pkgs/container/server
+    container_name: authentik
+    hostname: authentik
+    depends_on:
+      - authentik-cache
+      - authentik-db
+    command: server
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone not set}"
+      # Database/cache config
+      AUTHENTIK_REDIS__HOST: authentik-cache
+      AUTHENTIK_POSTGRESQL__HOST: authentik-db
+      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      # Authentik config
+      AUTHENTIK_BOOTSTRAP_PASSWORD: "admin"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
+    networks:
+      - home_pi
+    ports:
+      - "5000:9000"
+    restart: unless-stopped
+    volumes:
+      - ./storage/authentik/media:/media
+      - ./storage/authentik/certs:/certs
+      - ./storage/authentik/templates:/templates
+
+  # Worker node for Authentik
+  authentik-worker:
+    image: ghcr.io/goauthentik/server:2024.2.3 # https://github.com/goauthentik/authentik/pkgs/container/server
+    container_name: authentik-worker
+    hostname: authentik-worker
+    command: worker
+    depends_on:
+      - authentik
+      - authentik-cache
+      - authentik-db
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone not set}"
+      # Database/cache config
+      AUTHENTIK_REDIS__HOST: authentik-cache
+      AUTHENTIK_POSTGRESQL__HOST: authentik-db
+      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      # Authentik config
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
+    networks:
+      - home_pi
+    restart: unless-stopped
+    user: root # Removing this line prevents the worker from fixing the permissions on the mounted folders
+    volumes:
+      - ./storage/authentik/media:/media
+      - ./storage/authentik/certs:/certs
+      - ./storage/authentik/templates:/templates
+
+  # Cache for Authentik
+  authentik-cache:
+    image: redis:7.2.4-alpine
+    container_name: authentik-cache
+    hostname: authentik-cache
+    command: --save 60 1 --loglevel warning
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "redis-cli ping || exit 1"
+      timeout: 20s
+    networks:
+      - home_pi
+    restart: unless-stopped
+    volumes:
+      - ./storage/authentik-cache/:/data
+
+  # Database for Authentik
+  authentik-db:
+    image: postgres:12.18-alpine
+    container_name: authentik-db
+    hostname: authentik-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone not set}"
+      # Database config
+      PGPORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
+      POSTGRES_DB: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      POSTGRES_PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      POSTGRES_USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+    expose:
+      - "${AUTHENTIK_DB_PORT}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "pg_isready -d db_prod || exit 1"
+      timeout: 20s
+    networks:
+      - home_pi
+    restart: unless-stopped
+    volumes:
+      - ./storage/authentik-db/:/var/lib/postgresql/data

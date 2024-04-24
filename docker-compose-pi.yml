@@ -15,11 +15,6 @@ services:
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[httpd] Admin email address missing}"
     container_name: apache
     hostname: apache
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "512M"
     environment:
       # Base config
       PGID: "${PGID:?Group ID missing}"
@@ -36,11 +31,6 @@ services:
     image: louislam/uptime-kuma:1.23.12-alpine
     container_name: uptime_kuma
     hostname: uptime-kuma
-    deploy:
-      resources:
-        limits:
-          cpus: "2"
-          memory: "512M"
     environment:
       # Base config
       PGID: "${PGID:?Group ID missing}"
@@ -124,11 +114,6 @@ services:
     container_name: authentik-cache
     hostname: authentik-cache
     command: --save 60 1 --loglevel warning
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "256M"
     healthcheck:
       interval: 5m
       retries: 3
@@ -146,11 +131,6 @@ services:
     image: postgres:12.18-alpine
     container_name: authentik-db
     hostname: authentik-db
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "512M"
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone not set}"

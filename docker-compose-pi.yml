@@ -20,6 +20,12 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: "wget -q --spider http://localhost/ 2>&1 || exit 1"
+      timeout: 20s
     networks:
       - home_pi
     ports:

@@ -70,10 +70,10 @@ services:
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
-      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
-      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
-      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik] Database user missing}"
       # Authentik config
       AUTHENTIK_BOOTSTRAP_PASSWORD: "admin"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
@@ -103,12 +103,12 @@ services:
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
-      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
-      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
-      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-worker] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-worker] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-worker] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-worker] Database user missing}"
       # Authentik config
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik-worker] Authentik secret key missing}"
     networks:
       - home_pi
     restart: unless-stopped

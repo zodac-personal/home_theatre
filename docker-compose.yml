@@ -821,6 +821,8 @@ services:
     environment:
       # Authentication config
       DOZZLE_AUTH_PROVIDER: "simple"
+      DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname not set}"
+      DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
     networks:
       - home
     ports:

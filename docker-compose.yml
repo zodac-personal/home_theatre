@@ -40,7 +40,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.5.1.8739
+    image: linuxserver/radarr:nightly-version-5.5.1.8747
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -152,7 +152,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.3.0.4159
+    image: linuxserver/lidarr:nightly-version-2.3.1.4167
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -225,7 +225,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:nightly-version-0.3.25.2513
+    image: linuxserver/readarr:nightly-version-0.3.25.2515
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -260,7 +260,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.0.8
+    image: jvmilazz0/kavita:nightly-0.8.1
     container_name: kavita
     hostname: kavita
     deploy:
@@ -343,7 +343,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "development-version-v1.4.3-beta.23" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "development-version-v1.4.3-beta.26" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -490,7 +490,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.17.0.4439
+    image: linuxserver/prowlarr:nightly-version-1.17.0.4448
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -533,7 +533,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.6.4"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.7.3"   # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.8.0"   # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -599,7 +599,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: ghcr.io/aeonlucid/flaresolverr:v3.3.2-hotfix # https://github.com/aeonlucid/FlareSolverr/pkgs/container/flaresolverr
+    image: flaresolverr/flaresolverr:v3.3.17
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -624,11 +624,11 @@ services:
       - "8191:8191"
     restart: unless-stopped
 
-  # Recipe manager (Tandoor, but container cannot be renamed)
-  web_recipes:
+  # Recipe manager
+  tandoor:
     image: vabene1111/recipes:1.5.17
-    container_name: web_recipes
-    hostname: web_recipes
+    container_name: tandoor
+    hostname: tandoor
     depends_on:
       - tandoor-db
     deploy:
@@ -642,15 +642,15 @@ services:
       # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"
-      POSTGRES_PORT: "${TANDOOR_DB_PORT:?[web_recipes] Database port missing}"
-      POSTGRES_DB: "${TANDOOR_DB_NAME:?[web_recipes] Database name missing}"
-      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[web_recipes] Database password missing}"
-      POSTGRES_USER: "${TANDOOR_DB_USER:?[web_recipes] Database user missing}"
+      POSTGRES_PORT: "${TANDOOR_DB_PORT:?[tandoor] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor] Database user missing}"
       # Logging config
       DEBUG: "0"
       SQL_DEBUG: "0"
       # Secrets config
-      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[web_recipes] Tandoor secret key missing}"
+      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
     healthcheck:
       interval: 5m
       retries: 3
@@ -671,7 +671,7 @@ services:
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
-      - web_recipes
+      - tandoor
     deploy:
       resources:
         limits:

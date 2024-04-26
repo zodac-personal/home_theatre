@@ -200,6 +200,9 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
+      # Auth config
+      ND_REVERSEPROXYUSERHEADER: "X-Authentik-Username"
+      ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
       # External services config
       ND_LASTFM_APIKEY: "${LASTFM_API_KEY:?[navidrome] LastFM API key missing}"
       ND_LASTFM_SECRET: "${LASTFM_SECRET:?[navidrome] LastFM secret missing}"

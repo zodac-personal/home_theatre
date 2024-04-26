@@ -295,8 +295,8 @@ services:
     depends_on:
       - lidarr
       - radarr
-      - sonarr
       - readarr
+      - sonarr
     deploy:
       resources:
         limits:

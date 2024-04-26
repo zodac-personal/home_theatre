@@ -12,7 +12,7 @@ services:
         # Docker image version
         APACHE_VERSION: "2.4.59" # https://hub.docker.com/_/httpd
         # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[httpd] Admin email address missing}"
+        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[apache] Admin email address missing}"
     container_name: apache
     hostname: apache
     environment:

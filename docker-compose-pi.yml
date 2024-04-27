@@ -79,6 +79,7 @@ services:
       - "5000:9000"
     restart: unless-stopped
     volumes:
+      # Logos to be copied to /media/public/application-icons/, but would be overwritten by volumes below, so must be done manually
       - ./storage/authentik/media:/media
       - ./storage/authentik/certs:/certs
       - ./storage/authentik/templates:/templates

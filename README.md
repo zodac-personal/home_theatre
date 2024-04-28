@@ -1,5 +1,3 @@
-<img style="text-align:center" src="./logos/site/banner.png" alt="zodac.me"/>
-
 # Architecture Diagram
 
 ![Architecture Diagram](./doc/home_theatre.png)

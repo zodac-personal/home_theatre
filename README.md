@@ -17,39 +17,39 @@ TODO: Purpose
 ### Docker Compose Extract
 
 ```
-  radarr:
-    image: linuxserver/radarr:nightly-version-5.5.1.8747
-    container_name: radarr
-    hostname: radarr
-    depends_on:
-      - qbittorrent
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1024M"
-    environment:
-      # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
-    healthcheck:
-      interval: 5m
-      retries: 3
-      start_period: 2m
-      test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
-    networks:
-      - home
-    ports:
-      - "4000:3000"
-    restart: unless-stopped
-    volumes:
-      # Volume mounts from host system
-      - "${DOWNLOADS_DIRECTORY}:/downloads"
-      - "${MOVIE_DIRECTORY}:/movies"
-      # Persistent volumes
-      - ./storage/radarr/:/config
+radarr:
+image: linuxserver/radarr:nightly-version-5.5.1.8747
+container_name: radarr
+hostname: radarr
+depends_on:
+  - qbittorrent
+deploy:
+  resources:
+    limits:
+      cpus: "1"
+      memory: "1024M"
+environment:
+  # Base config
+  PGID: "${PGID:?Group ID missing}"
+  PUID: "${PUID:?User ID missing}"
+  TZ: "${TIMEZONE:?Timezone not set}"
+healthcheck:
+  interval: 5m
+  retries: 3
+  start_period: 2m
+  test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
+  timeout: 20s
+networks:
+  - home
+ports:
+  - "4000:3000"
+restart: unless-stopped
+volumes:
+  # Volume mounts from host system
+  - "${DOWNLOADS_DIRECTORY}:/downloads"
+  - "${MOVIE_DIRECTORY}:/movies"
+  # Persistent volumes
+  - ./storage/radarr/:/config
 ```
 
 ### Additional Environment Variables
@@ -110,7 +110,7 @@ Since they are used throughout, we set these values in the `.env` file and pass 
 ### PGID/PUID
 
 **PGID** and **PUID** are used to override the group and user ID of the running container process, for permissions and privileges. Some services use
-the `user`element in [docker-compose](https://docs.docker.com/compose/compose-file/05-services/#user), but the same values should be used. For
+the `user` element in [docker-compose](https://docs.docker.com/compose/compose-file/05-services/#user), but the same values should be used. For
 example, for any given service, the docker-compose definition could be:
 
 ```

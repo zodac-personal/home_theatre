@@ -150,43 +150,148 @@ Access to the services is controlled by an instance of [Apache](https://httpd.ap
 through the Apache web-server and are then forwarded on to the correct internal system. This means we do not need to expose the ports for each service
 publicly, as Apache will be able to forward those requests itself.
 
-We use the following macro as a template for our services:
+## Macro Definition
+
+The following macro is used as a template for most of the services:
 
 ```
 <VirtualHost *:80>
-    # Server owner
     ServerAdmin <email_address>
-
-    # URL that the request is coming from
     ServerName $server_name.<domain_name>.<domain_tld>
     ServerAlias $server_name.<domain_name>.*
 
-    # URL to forward the request to
     ProxyPass / $protocol://$url/
     ProxyPassReverse / $protocol://$url/
 
-    # Enable websockets
     RewriteEngine on
     RewriteCond %{HTTP:Upgrade} websocket [NC]
     RewriteCond %{HTTP:Connection} upgrade [NC]
     RewriteRule ^/?(.*) "ws://$url/$1" [P,L]
 
-    # Pass the original incoming URL to the backend URL
     ProxyPreserveHost on
     ProxyRequests Off
     RemoteIPHeader X-Forwarded-For
 
-    # Timeout and error handling
     TimeOut 20
     ErrorDocument 502 <status_page_url>
     ErrorDocument 503 <status_page_url>
 </VirtualHost>
 ```
 
-Breaking it down, we can describe block as follows:
+Breaking down the macro, we can define each section/line:
+
+### VirtualHost
 
 ```
+<VirtualHost *:80>
+...
+</VirtualHost>
 ```
+
+Definition
+
+### Host Configuration
+
+```
+ServerAdmin <email_address>
+```
+
+Definition
+
+```
+ServerName $server_name.<domain_name>.<domain_tld>
+```
+
+Definition
+
+```
+ServerAlias $server_name.<domain_name>.*
+```
+
+Definition
+
+### URL Proxying
+
+```
+ProxyPass / $protocol://$url/
+```
+
+Definition
+
+```
+ProxyPassReverse / $protocol://$url/
+```
+
+Definition
+
+## Websocket Enabling
+
+```
+RewriteEngine on
+```
+
+Definition
+
+```
+RewriteCond %{HTTP:Upgrade} websocket [NC]
+```
+
+Definition
+
+```
+RewriteCond %{HTTP:Connection} upgrade [NC]
+```
+
+Definition
+
+```
+RewriteRule ^/?(.*) "ws://$url/$1" [P,L]
+```
+
+Definition
+
+### Preserving Originating Host 
+
+```
+ProxyPreserveHost on
+```
+
+Definition
+
+```
+ProxyRequests Off
+```
+
+Definition
+
+```
+RemoteIPHeader X-Forwarded-For
+```
+
+Definition
+
+### Timeouts And Errors
+
+```
+TimeOut 20
+```
+
+Definition
+
+```
+ErrorDocument 502 <status_page_url>
+```
+
+Definition
+
+```
+ErrorDocument 503 <status_page_url>
+```
+
+Definition
+
+
+## Custom Configuration
 
 In addition to the basic configuration, we have extra configuration for (TODO: discuss tandoor, homarr, redirects next)
 
@@ -196,7 +301,7 @@ In addition to the basic configuration, we have extra configuration for (TODO: d
 
 Where possible, we use [Authentik](https://goauthentik.io/) to secure the services.
 
-The following services are integrated with Authentik, and we will discuss their configuration here.
+The following services are integrated with Authentik, and their configuration is below.
 
 TODO:
 

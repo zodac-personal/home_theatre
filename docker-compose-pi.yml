@@ -34,7 +34,7 @@ services:
 
   # Monitoring and alerting
   uptime_kuma:
-    image: louislam/uptime-kuma:1.23.12-alpine
+    image: louislam/uptime-kuma:1.23.13-alpine
     container_name: uptime_kuma
     hostname: uptime-kuma
     environment:

@@ -40,7 +40,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.5.1.8747
+    image: linuxserver/radarr:nightly-version-5.5.2.8766
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -75,7 +75,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.4.1515
+    image: linuxserver/sonarr:develop-version-4.0.4.1572
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -152,7 +152,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.3.1.4167
+    image: linuxserver/lidarr:nightly-version-2.3.2.4178
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -187,7 +187,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.51.1
+    image: deluan/navidrome:0.52.0
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -263,7 +263,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.1
+    image: jvmilazz0/kavita:nightly-0.8.1.1
     container_name: kavita
     hostname: kavita
     deploy:
@@ -346,7 +346,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "development-version-v1.4.3-beta.26" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "development-version-v1.4.3-beta.29" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -493,7 +493,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.17.0.4448
+    image: linuxserver/prowlarr:nightly-version-1.17.1.4483
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -809,7 +809,7 @@ services:
       args:
         # Docker image versions
         DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.5.1"  # https://hub.docker.com/r/amir20/dozzle/tags
+        DOZZLE_VERSION: "v6.5.2"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS:?[dozzle] Admin email address not set}"
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD:?[dozzle] Admin password not set}"

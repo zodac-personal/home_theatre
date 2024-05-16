@@ -53,7 +53,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.4.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.4.2 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -86,7 +86,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.4.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.4.2 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -146,6 +146,10 @@ services:
       POSTGRES_DB: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
       POSTGRES_PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
       POSTGRES_USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      PGPASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      PGUSER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
     expose:
       - "${AUTHENTIK_DB_PORT}"
     healthcheck:

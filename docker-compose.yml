@@ -719,6 +719,10 @@ services:
       POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
       POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
       POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
+      PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
+      PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
     expose:
       - "${TANDOOR_DB_PORT}"
     healthcheck:
@@ -809,7 +813,7 @@ services:
       args:
         # Docker image versions
         DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.5.2"  # https://hub.docker.com/r/amir20/dozzle/tags
+        DOZZLE_VERSION: "v6.6.2"  # https://hub.docker.com/r/amir20/dozzle/tags
         # Build arguments
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS:?[dozzle] Admin email address not set}"
         ADMIN_PASSWORD: "${DOZZLE_PASSWORD:?[dozzle] Admin password not set}"

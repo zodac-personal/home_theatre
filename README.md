@@ -313,6 +313,10 @@ TODO:
 - Bazarr
 - Navidrome
 
+Following have no auth of their own (both disabled explicitly), using Authentik as only config
+- Dozzle
+- Uptime-Kuma
+
 ----
 
 # Backups

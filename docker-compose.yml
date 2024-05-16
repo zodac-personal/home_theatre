@@ -822,8 +822,7 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
-      # Authentication config
-      DOZZLE_AUTH_PROVIDER: "simple"
+      # Hosts config
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname not set}"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
     networks:

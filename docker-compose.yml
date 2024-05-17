@@ -328,9 +328,9 @@ services:
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       UN_SONARR_0_URL: "http://sonarr:3001"
     healthcheck:
-      interval: 1m
+      interval: 5m
       retries: 3
-      start_period: 1m
+      start_period: 2m
       test: ["CMD", "/unpackerr", "-v"]
       timeout: 20s
     networks:

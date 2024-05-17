@@ -327,6 +327,12 @@ services:
       UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       UN_SONARR_0_URL: "http://sonarr:3001"
+    healthcheck:
+      interval: 1m
+      retries: 3
+      start_period: 1m
+      test: ["CMD", "/unpackerr", "-v"]
+      timeout: 20s
     networks:
       - home
     restart: unless-stopped
@@ -599,6 +605,9 @@ services:
     networks:
       - home
     restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - ./storage/doplarr/:/config
 
   # Cloudflare rate-limiter solver
   flaresolverr:

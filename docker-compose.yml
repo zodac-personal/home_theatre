@@ -459,7 +459,7 @@ services:
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${ROMS_DIRECTORY}:/romm/library/roms:ro"
+      - "${ROMS_DIRECTORY}:/romm/library:ro"
       - "${ROM_SAVES_DIRECTORY}:/romm/assets"
       - "./docker/romm/config/:/romm/config"
       # Persistent volumes

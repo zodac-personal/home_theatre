@@ -805,19 +805,9 @@ services:
     volumes:
       - ./storage/dailytxt/:/app/data/
 
-  # Log aggregator
+  # Docker log view
   dozzle:
-    build:
-      context: .
-      dockerfile: docker/dozzle/Dockerfile
-      args:
-        # Docker image versions
-        DEBIAN_VERSION: "12.5"    # https://hub.docker.com/_/debian/tags
-        DOZZLE_VERSION: "v6.6.2"  # https://hub.docker.com/r/amir20/dozzle/tags
-        # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS:?[dozzle] Admin email address not set}"
-        ADMIN_PASSWORD: "${DOZZLE_PASSWORD:?[dozzle] Admin password not set}"
-        ADMIN_USERNAME: "${ADMIN_USERNAME:?[dozzle] Admin username not set}"
+    image: amir20/dozzle:v6.6.2
     container_name: dozzle
     hostname: dozzle
     deploy:
@@ -829,6 +819,12 @@ services:
       # Hosts config
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname not set}"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
+    healthcheck:
+      interval: 5m
+      retries: 3
+      start_period: 2m
+      test: ["CMD", "/dozzle", "healthcheck"]
+      timeout: 20s
     networks:
       - home
     ports:

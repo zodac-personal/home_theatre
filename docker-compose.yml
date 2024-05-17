@@ -805,7 +805,7 @@ services:
     volumes:
       - ./storage/dailytxt/:/app/data/
 
-  # Docker log view
+  # Docker log viewer
   dozzle:
     image: amir20/dozzle:v6.6.2
     container_name: dozzle

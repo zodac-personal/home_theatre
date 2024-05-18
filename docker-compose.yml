@@ -5,7 +5,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.2 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.3 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     depends_on:
@@ -40,7 +40,7 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.5.2.8766
+    image: linuxserver/radarr:nightly-version-5.7.0.8847
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -75,7 +75,7 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.4.1572
+    image: linuxserver/sonarr:develop-version-4.0.4.1668
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -152,7 +152,7 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.3.2.4178
+    image: linuxserver/lidarr:nightly-version-2.4.0.4205
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -187,7 +187,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.52.0
+    image: deluan/navidrome:0.52.5
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -228,7 +228,7 @@ services:
 
   # Book searcher
   readarr:
-    image: linuxserver/readarr:nightly-version-0.3.25.2515
+    image: linuxserver/readarr:develop-version-0.3.26.2526
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -263,7 +263,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.1.1
+    image: jvmilazz0/kavita:nightly-0.8.1.4
     container_name: kavita
     hostname: kavita
     deploy:
@@ -352,7 +352,7 @@ services:
       dockerfile: docker/bazarr/Dockerfile
       args:
         # Docker image versions
-        BAZARR_VERSION: "development-version-v1.4.3-beta.29" # https://hub.docker.com/r/linuxserver/bazarr/tags
+        BAZARR_VERSION: "development-version-v1.4.3-beta.38" # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -499,7 +499,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.17.1.4483
+    image: linuxserver/prowlarr:nightly-version-1.18.0.4513
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -542,7 +542,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.6.4"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.8.0"   # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.8.1"   # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -712,7 +712,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:15.6-alpine
+    image: postgres:15.7-alpine
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -804,7 +804,7 @@ services:
       interval: 5m
       retries: 3
       start_period: 2m
-      test: "wget -q --no-verbose --tries=1 -O - http://localhost:8765 | grep -q 'DailyTxT' || exit 1"
+      test: "wget -q --no-verbose --tries=1 -O - http://127.0.0.1:8765 | grep -q 'DailyTxT' || exit 1"
       timeout: 20s
     networks:
       - home

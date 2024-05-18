@@ -313,8 +313,9 @@ TODO:
 - Bazarr
 - Navidrome
 
-Following have no auth of their own (both disabled explicitly), using Authentik as only config
+Following have no auth of their own (both disabled explicitly), using Authentik as the only auth:
 - Dozzle
+- File Browser
 - Uptime-Kuma
 
 ----

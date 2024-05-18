@@ -843,6 +843,30 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
+  # Documents file browser
+  filebrowser:
+    image: filebrowser/filebrowser:v2.29.0
+    container_name: filebrowser
+    hostname: filebrowser
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      FB_NOAUTH: noauth
+    ports:
+      - "4007:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "${PUID}:${PGID}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOCUMENTS_DIRECTORY}:/srv:ro"
+      # Persistent volumes
+      - ./storage/filebrowser/:/app/data/
+
 volumes:
   # Volume required for romm-db, due to issues when using a Windows mount (NFS issues?)
   romm-db_data:

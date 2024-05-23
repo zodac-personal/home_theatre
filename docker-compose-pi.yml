@@ -21,11 +21,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "wget -q --spider http://localhost/ 2>&1 || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home_pi
     ports:
@@ -57,8 +57,10 @@ services:
     container_name: authentik
     hostname: authentik
     depends_on:
-      - authentik-cache
-      - authentik-db
+      authentik-cache:
+          condition: service_healthy
+      authentik-db:
+          condition: service_healthy
     command: server
     environment:
       # Base config
@@ -91,9 +93,12 @@ services:
     hostname: authentik-worker
     command: worker
     depends_on:
-      - authentik
-      - authentik-cache
-      - authentik-db
+      authentik:
+          condition: service_healthy
+      authentik-cache:
+          condition: service_healthy
+      authentik-db:
+          condition: service_healthy
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone not set}"
@@ -117,16 +122,16 @@ services:
 
   # Cache for Authentik
   authentik-cache:
-    image: redis:7.2.4-alpine
+    image: redis:7.2.5-alpine
     container_name: authentik-cache
     hostname: authentik-cache
     command: --save 60 1 --loglevel warning
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "redis-cli ping || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home_pi
     restart: unless-stopped
@@ -135,7 +140,7 @@ services:
 
   # Database for Authentik
   authentik-db:
-    image: postgres:12.18-alpine
+    image: postgres:12.19-alpine
     container_name: authentik-db
     hostname: authentik-db
     environment:
@@ -153,11 +158,11 @@ services:
     expose:
       - "${AUTHENTIK_DB_PORT}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "pg_isready -d db_prod || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home_pi
     restart: unless-stopped

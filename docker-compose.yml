@@ -9,12 +9,18 @@ services:
     container_name: homarr
     hostname: homarr
     depends_on:
-      - qbittorrent
-      - lidarr
-      - radarr
-      - readarr
-      - sonarr
-      - tandoor-ui
+      qbittorrent:
+          condition: service_healthy
+      lidarr:
+          condition: service_healthy
+      radarr:
+          condition: service_healthy
+      readarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
+      tandoor-ui:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -40,11 +46,12 @@ services:
 
   # Movie searcher
   radarr:
-    image: linuxserver/radarr:nightly-version-5.7.0.8847
+    image: linuxserver/radarr:nightly-version-5.7.0.8851
     container_name: radarr
     hostname: radarr
     depends_on:
-      - qbittorrent
+      qbittorrent:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -56,11 +63,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -75,11 +82,12 @@ services:
 
   # TV show searcher
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.4.1668
+    image: linuxserver/sonarr:develop-version-4.0.4.1695
     container_name: sonarr
     hostname: sonarr
     depends_on:
-      - qbittorrent
+      qbittorrent:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -91,11 +99,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:3001/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -117,8 +125,10 @@ services:
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
-      - radarr
-      - sonarr
+      radarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -138,11 +148,11 @@ services:
       SONARR_API_KEY: "${SONARR_API_KEY}"
       SONARR_URL: "http://sonarr:3001"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "recyclarr -v || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -152,11 +162,12 @@ services:
 
   # Music searcher
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.4.0.4205
+    image: linuxserver/lidarr:nightly-version-2.4.0.4211
     container_name: lidarr
     hostname: lidarr
     depends_on:
-      - qbittorrent
+      qbittorrent:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -168,11 +179,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:3002/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -232,7 +243,8 @@ services:
     container_name: readarr
     hostname: readarr
     depends_on:
-      - qbittorrent
+      qbittorrent:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -244,11 +256,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:3004/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -263,7 +275,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.1.4
+    image: jvmilazz0/kavita:nightly-0.8.1.5
     container_name: kavita
     hostname: kavita
     deploy:
@@ -293,10 +305,14 @@ services:
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
-      - lidarr
-      - radarr
-      - readarr
-      - sonarr
+      lidarr:
+          condition: service_healthy
+      radarr:
+          condition: service_healthy
+      readarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -328,17 +344,17 @@ services:
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       UN_SONARR_0_URL: "http://sonarr:3001"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: ["CMD", "/unpackerr", "-v"]
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    user: "${PUID}:${PGID}"
+    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -361,20 +377,23 @@ services:
           cpus: "1"
           memory: "1024M"
     depends_on:
-      - radarr
-      - sonarr
-      - whisper
+      radarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
+      whisper:
+          condition: service_healthy
     environment:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --insecure --fail --output /dev/null 'http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -405,11 +424,11 @@ services:
       ASR_MODEL: "small.en"
       ASR_ENGINE: "faster_whisper"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:9000/ || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -420,7 +439,8 @@ services:
     container_name: romm
     hostname: romm
     depends_on:
-      - romm-db
+      romm-db:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -447,11 +467,11 @@ services:
       MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:?[romm] MobyGames API key missing}"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:8080/api/heartbeat | grep -q 'VERSION' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -486,11 +506,11 @@ services:
     expose:
       - "${ROMM_DB_PORT}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "healthcheck.sh --su-mysql --connect --innodb_initialized || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -499,15 +519,20 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.18.0.4513
+    image: linuxserver/prowlarr:nightly-version-1.18.0.4522
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
-      - flaresolverr
-      - lidarr
-      - radarr
-      - readarr
-      - sonarr
+      flaresolverr:
+          condition: service_healthy
+      lidarr:
+          condition: service_healthy
+      radarr:
+          condition: service_healthy
+      readarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -519,11 +544,11 @@ services:
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone not set}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:9696/ping | grep -q 'OK' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -558,11 +583,11 @@ services:
       # UI config
       WEBUI_PORT: "9000"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:9000/api/v2/app/version || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -580,8 +605,10 @@ services:
     container_name: doplarr
     hostname: doplarr
     depends_on:
-      - radarr
-      - sonarr
+      radarr:
+          condition: service_healthy
+      sonarr:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -597,11 +624,11 @@ services:
       DISCORD__MAX_RESULTS: "5"
       DISCORD__TOKEN: "${DISCORD_BOT_TOKEN:?[doplarr] Discord bot token missing}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "ps -ef | grep -v grep | grep -q doplarr.jar || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -611,7 +638,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v3.3.17
+    image: flaresolverr/flaresolverr:v3.3.18
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -625,11 +652,11 @@ services:
       # Logging config
       LOG_LEVEL: "info"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost:8191/ | grep -q 'FlareSolverr is ready' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -642,7 +669,8 @@ services:
     container_name: tandoor
     hostname: tandoor
     depends_on:
-      - tandoor-db
+      tandoor-db:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -664,11 +692,11 @@ services:
       # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "wget -q --spider http://localhost:8080/api 2>&1 | grep -q '404\\|403' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -683,7 +711,8 @@ services:
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
-      - tandoor
+      tandoor:
+          condition: service_healthy
     deploy:
       resources:
         limits:
@@ -695,11 +724,11 @@ services:
       # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor-ui] Tandoor secret key missing}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "curl --silent --fail http://localhost || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -735,11 +764,11 @@ services:
     expose:
       - "${TANDOOR_DB_PORT}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "pg_isready -d db_prod || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -764,11 +793,11 @@ services:
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
       HBOX_WEB_MAX_UPLOAD_SIZE: "10"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "wget -q --no-verbose --tries=1 --output-document - http://localhost:7745/api/v1/status | grep -q '\"health\":true' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -801,11 +830,11 @@ services:
       JWT_EXP_DAYS: "60"
       PORT: "8765"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: "wget -q --no-verbose --tries=1 -O - http://127.0.0.1:8765 | grep -q 'DailyTxT' || exit 1"
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -816,7 +845,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v6.6.2
+    image: amir20/dozzle:v6.6.3
     container_name: dozzle
     hostname: dozzle
     deploy:
@@ -829,11 +858,11 @@ services:
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname not set}"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
     healthcheck:
-      interval: 5m
+      interval: 30s
       retries: 3
-      start_period: 2m
+      start_period: 30s
       test: ["CMD", "/dozzle", "healthcheck"]
-      timeout: 20s
+      timeout: 5s
     networks:
       - home
     ports:
@@ -845,7 +874,7 @@ services:
 
   # Documents file browser
   filebrowser:
-    image: filebrowser/filebrowser:v2.29.0
+    image: filebrowser/filebrowser:v2.30.0
     container_name: filebrowser
     hostname: filebrowser
     deploy:
@@ -860,7 +889,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    user: "${PUID}:${PGID}"
+    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOCUMENTS_DIRECTORY}:/srv:ro"

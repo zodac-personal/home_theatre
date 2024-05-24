@@ -18,38 +18,39 @@ TODO: Purpose
 
 ```
 radarr:
-image: linuxserver/radarr:nightly-version-5.5.1.8747
-container_name: radarr
-hostname: radarr
-depends_on:
-  - qbittorrent
-deploy:
-  resources:
-    limits:
-      cpus: "1"
-      memory: "1024M"
-environment:
-  # Base config
-  PGID: "${PGID:?Group ID missing}"
-  PUID: "${PUID:?User ID missing}"
-  TZ: "${TIMEZONE:?Timezone not set}"
-healthcheck:
-  interval: 5m
-  retries: 3
-  start_period: 2m
-  test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
-  timeout: 20s
-networks:
-  - home
-ports:
-  - "4000:3000"
-restart: unless-stopped
-volumes:
-  # Volume mounts from host system
-  - "${DOWNLOADS_DIRECTORY}:/downloads"
-  - "${MOVIE_DIRECTORY}:/movies"
-  # Persistent volumes
-  - ./storage/radarr/:/config
+  image: linuxserver/radarr:nightly-version-5.7.0.8851
+  container_name: radarr
+  hostname: radarr
+  depends_on:
+    qbittorrent:
+        condition: service_healthy
+  deploy:
+    resources:
+      limits:
+        cpus: "1"
+        memory: "1024M"
+  environment:
+    # Base config
+    PGID: "${PGID:?Group ID missing}"
+    PUID: "${PUID:?User ID missing}"
+    TZ: "${TIMEZONE:?Timezone not set}"
+  healthcheck:
+    interval: 30s
+    retries: 3
+    start_period: 30s
+    test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
+    timeout: 5s
+  networks:
+    - home
+  ports:
+    - "4000:3000"
+  restart: unless-stopped
+  volumes:
+    # Volume mounts from host system
+    - "${DOWNLOADS_DIRECTORY}:/downloads"
+    - "${MOVIE_DIRECTORY}:/movies"
+    # Persistent volumes
+    - ./storage/radarr/:/config
 ```
 
 ### Additional Environment Variables
@@ -316,6 +317,7 @@ TODO:
 Following have no auth of their own (both disabled explicitly), using Authentik as the only auth:
 - Dozzle
 - File Browser
+- NetAlertX
 - Uptime-Kuma
 
 ----

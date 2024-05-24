@@ -1,5 +1,7 @@
 networks:
   home_pi:
+    name: home_pi
+    driver: bridge
 
 services:
 
@@ -82,9 +84,9 @@ services:
     restart: unless-stopped
     volumes:
       # Logos to be copied to /media/public/application-icons/, but would be overwritten by volumes below, so must be done manually
-      - ./storage/authentik/media:/media
-      - ./storage/authentik/certs:/certs
-      - ./storage/authentik/templates:/templates
+      - ./storage/authentik/media/:/media
+      - ./storage/authentik/certs/:/certs
+      - ./storage/authentik/templates/:/templates
 
   # Worker node for Authentik
   authentik-worker:
@@ -116,9 +118,9 @@ services:
     restart: unless-stopped
     user: root # Removing this line prevents the worker from fixing the permissions on the mounted folders
     volumes:
-      - ./storage/authentik/media:/media
-      - ./storage/authentik/certs:/certs
-      - ./storage/authentik/templates:/templates
+      - ./storage/authentik/media/:/media
+      - ./storage/authentik/certs/:/certs
+      - ./storage/authentik/templates/:/templates
 
   # Cache for Authentik
   authentik-cache:
@@ -168,3 +170,19 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage/authentik-db/:/var/lib/postgresql/data
+
+  # WiFi/LAN network scanner
+  net-alert:
+    image: jokobsk/netalertx:24.5.9
+    container_name: netalert
+    hostname: netalert
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone not set}"
+      # UI config
+      PORT: "5001"
+    network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
+    restart: unless-stopped
+    volumes:
+      - ./storage/net-alert/config/:/app/config
+      - ./storage/net-alert/db/:/app/db

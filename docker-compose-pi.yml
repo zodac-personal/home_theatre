@@ -80,7 +80,7 @@ services:
     networks:
       - home_pi
     ports:
-      - "5000:9000"
+      - "${AUTHENTIK_UI_PORT:?[authentik] UI port not set}:9000"
     restart: unless-stopped
     volumes:
       # Logos to be copied to /media/public/application-icons/, but would be overwritten by volumes below, so must be done manually
@@ -157,8 +157,6 @@ services:
       PGDATABASE: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
       PGPASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
       PGUSER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
-    expose:
-      - "${AUTHENTIK_DB_PORT}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -172,7 +170,7 @@ services:
       - ./storage/authentik-db/:/var/lib/postgresql/data
 
   # WiFi/LAN network scanner
-  net-alert:
+  netalert:
     image: jokobsk/netalertx:24.5.9
     container_name: netalert
     hostname: netalert
@@ -180,7 +178,9 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone not set}"
       # UI config
-      PORT: "5001"
+      PORT: "${NETALERT_UI_PORT:?[netalert] UI port not set}"
+    expose:
+      - "${NETALERT_UI_PORT:?[netalert] UI port not set}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     restart: unless-stopped
     volumes:

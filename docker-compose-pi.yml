@@ -184,5 +184,5 @@ services:
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     restart: unless-stopped
     volumes:
-      - ./storage/net-alert/config/:/app/config
-      - ./storage/net-alert/db/:/app/db
+      - ./storage/netalert/config/:/app/config
+      - ./storage/netalert/db/:/app/db

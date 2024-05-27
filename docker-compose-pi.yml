@@ -83,7 +83,7 @@ services:
       - "${AUTHENTIK_UI_PORT:?[authentik] UI port missing}:9000"
     restart: unless-stopped
     volumes:
-      # Logos to be copied to /media/public/application-icons/, but would be overwritten by volumes below, so must be done manually
+      # Persistent volumes
       - ./storage/authentik/media/:/media
       - ./storage/authentik/certs/:/certs
       - ./storage/authentik/templates/:/templates
@@ -118,6 +118,7 @@ services:
     restart: unless-stopped
     user: root # Removing this line prevents the worker from fixing the permissions on the mounted folders
     volumes:
+      # Persistent volumes
       - ./storage/authentik/media/:/media
       - ./storage/authentik/certs/:/certs
       - ./storage/authentik/templates/:/templates
@@ -138,6 +139,7 @@ services:
       - home_pi
     restart: unless-stopped
     volumes:
+      # Persistent volumes
       - ./storage/authentik-cache/:/data
 
   # Database for Authentik
@@ -167,6 +169,7 @@ services:
       - home_pi
     restart: unless-stopped
     volumes:
+      # Persistent volumes
       - ./storage/authentik-db/:/var/lib/postgresql/data
 
   # WiFi/LAN network scanner
@@ -194,10 +197,11 @@ services:
       # UI config
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
-    expose:
+    expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
     restart: unless-stopped
     user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/netalert/config/:/app/config
       - ./storage/netalert/db/:/app/db

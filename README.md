@@ -417,6 +417,12 @@ Better backup solutions
 
 # Misc Info
 
+## Authentik
+
+We use our domain [logos](./logos/site) in the container. But because the **/media** directory is also a volume, they can be overridden by the
+container being built. After the initial run, once the container is in a **healthy** state, `docker cp` the logos to the
+**/media/public/application-icons/** directory in the container.
+
 ## Dozzle
 
 In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP. For a RaspberryPi 4, the following needs to be done:
@@ -438,7 +444,8 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
 
 ## NetAlertX
 
-The container will create an updated [app.conf](./docker/netalert/config/app.conf) file and save it in the container at **/app.conf.new**. However, since the container creates a fresh
+The container will create an updated [app.conf](./docker/netalert/config/app.conf) file and save it in the container at **/app.conf.new**. However,
+since the container creates a fresh
 file on initial install, we cannot simply copy it as part of our [Dockerfile](./docker/netalert/Dockerfile). Instead, when you first run the service,
 you must copy it yourself.
 

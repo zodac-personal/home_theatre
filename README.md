@@ -251,7 +251,7 @@ RewriteRule ^/?(.*) "ws://$url/$1" [P,L]
 
 Definition
 
-### Preserving Originating Host 
+### Preserving Originating Host
 
 ```
 ProxyPreserveHost on
@@ -291,7 +291,6 @@ ErrorDocument 503 <status_page_url>
 
 Definition
 
-
 ## Custom Configuration
 
 In addition to the basic configuration, we have extra configuration for (TODO: discuss tandoor, homarr, redirects next)
@@ -315,6 +314,7 @@ TODO:
 - Navidrome
 
 Following have no auth of their own (both disabled explicitly), using Authentik as the only auth:
+
 - Dozzle
 - File Browser
 - NetAlertX
@@ -415,9 +415,11 @@ New/replaced services
 Further auth integrations
 Better backup solutions
 
-# Dozzle
+# Misc Info
 
-In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP. For a RaspberryPi4, the following needs to be done:
+## Dozzle
+
+In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP. For a RaspberryPi 4, the following needs to be done:
 
 - Create a file `/etc/systemd/system/docker.service.d/override.conf`
 - Add the following content to the file:
@@ -431,5 +433,22 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
 - Confirm the port is in LISTEN state with the LAN IP address:
   ```
   sudo netstat -lntp | grep dockerd
-  tcp        0      0 192.168.123.123:2375      0.0.0.0:*               LISTEN      1234/dockerd
+  tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
   ```
+
+## NetAlertX
+
+The container will create an updated [app.conf](./docker/netalert/config/app.conf) file and save it in the container at **/app.conf.new**. However, since the container creates a fresh
+file on initial install, we cannot simply copy it as part of our [Dockerfile](./docker/netalert/Dockerfile). Instead, when you first run the service,
+you must copy it yourself.
+
+Once the first run of NetAlertX shows the container as **healthy**, `docker exec` into the container and run the following commands:
+
+```
+cp /app/config/app.conf /app/config/app.conf.bak
+mv -f /app.conf.new /app/config/app.conf
+```
+
+Then perform a `docker restart` of the container, and your changes should be applied.
+
+**NOTE:** I haven't tried this with newer versions and how robust it is to major version upgrades. Hoping for the best.

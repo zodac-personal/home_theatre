@@ -32,7 +32,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     networks:
       - home
     ports:
@@ -63,7 +63,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -99,7 +99,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -140,7 +140,7 @@ services:
       # Base config
       PUID: "${PUID:?User ID missing}"
       PGID: "${PGID:?Group ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Scheduling config
       CRON_SCHEDULE: "@daily"
       # Radarr Config
@@ -179,7 +179,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -212,7 +212,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Auth config
       ND_REVERSEPROXYUSERHEADER: "X-Authentik-Username"
       ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
@@ -256,7 +256,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -289,7 +289,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     networks:
       - home
     ports:
@@ -324,7 +324,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Lidarr config
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY:?[unpackerr] Lidarr API key missing}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
@@ -389,7 +389,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -544,7 +544,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -581,7 +581,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
       WEBUI_PORT: "9000"
     healthcheck:
@@ -650,7 +650,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Logging config
       LOG_LEVEL: "info"
     healthcheck:
@@ -680,7 +680,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"
@@ -722,7 +722,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone not set}"
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
       # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor-ui] Tandoor secret key missing}"
     healthcheck:
@@ -753,7 +753,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone not set}"
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
       POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
@@ -822,7 +822,7 @@ services:
       # Base config
       USER_GID: "${PGID:?Group ID missing}"
       USER_UID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Secrets config
       SECRET_KEY: "${DAILYTXT_SECRET_KEY:?[dailytxt] Secret key missing}"
       # UI config
@@ -857,7 +857,7 @@ services:
           memory: "256M"
     environment:
       # Hosts config
-      DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname not set}"
+      DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname missing}"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
     healthcheck:
       interval: 30s

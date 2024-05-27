@@ -21,7 +21,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -43,7 +43,7 @@ services:
       # Base config
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
     networks:
       - home_pi
     ports:
@@ -66,7 +66,7 @@ services:
     command: server
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
@@ -80,7 +80,7 @@ services:
     networks:
       - home_pi
     ports:
-      - "${AUTHENTIK_UI_PORT:?[authentik] UI port not set}:9000"
+      - "${AUTHENTIK_UI_PORT:?[authentik] UI port missing}:9000"
     restart: unless-stopped
     volumes:
       # Logos to be copied to /media/public/application-icons/, but would be overwritten by volumes below, so must be done manually
@@ -103,7 +103,7 @@ services:
           condition: service_healthy
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
@@ -147,7 +147,7 @@ services:
     hostname: authentik-db
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone not set}"
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
       POSTGRES_DB: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
@@ -171,18 +171,33 @@ services:
 
   # WiFi/LAN network scanner
   netalert:
-    image: jokobsk/netalertx:24.5.9
+    build:
+      context: .
+      dockerfile: docker/netalert/Dockerfile
+      args:
+        # Docker image versions
+        NETALERT_VERSION: "24.5.9" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        # Build arguments
+        # Email notification config
+        NETALERT_GMAIL_ADDRESS: "${NETALERT_GMAIL_ADDRESS:?[netalert] GMail address missing}"
+        NETALERT_GMAIL_PASSKEY: "${NETALERT_GMAIL_PASSKEY:?[netalert] GMail passkey missing}"
+        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS:?[netalert] Admin email address missing}"
+        # Scanning config
+        NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
+        # UI config
+        DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
     container_name: netalert
     hostname: netalert
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone not set}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
-      PORT: "${NETALERT_UI_PORT:?[netalert] UI port not set}"
-    expose:
-      - "${NETALERT_UI_PORT:?[netalert] UI port not set}"
+      PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
+    ports:
+      - "${NETALERT_UI_PORT:?[netalert] Port missing}:${NETALERT_UI_PORT:?[netalert] Port missing}"
     restart: unless-stopped
+    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
     volumes:
       - ./storage/netalert/config/:/app/config
       - ./storage/netalert/db/:/app/db

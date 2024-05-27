@@ -194,8 +194,8 @@ services:
       # UI config
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
-    ports:
-      - "${NETALERT_UI_PORT:?[netalert] Port missing}:${NETALERT_UI_PORT:?[netalert] Port missing}"
+    expose:
+      - "${NETALERT_UI_PORT:?[netalert] Port missing}"
     restart: unless-stopped
     user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
     volumes:

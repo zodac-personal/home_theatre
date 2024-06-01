@@ -251,7 +251,7 @@ services:
       test: [ "CMD", "pidof", "autokuma" ]
       timeout: 5s
     networks:
-      - home
+      - home_pi
     restart: unless-stopped
     volumes:
       # Docker socket mount from host system

@@ -1,5 +1,5 @@
 ARG APACHE_VERSION
-FROM httpd:${APACHE_VERSION}-alpine
+FROM httpd:${APACHE_VERSION}-alpine AS apache_base
 
 RUN mkdir --parents /usr/local/apache2/conf/sites/ && \
     mkdir --parents /var/www/html

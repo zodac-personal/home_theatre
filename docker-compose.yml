@@ -12,17 +12,17 @@ services:
     hostname: homarr
     depends_on:
       qbittorrent:
-          condition: service_healthy
+        condition: service_healthy
       lidarr:
-          condition: service_healthy
+        condition: service_healthy
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       readarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
       tandoor-ui:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -33,6 +33,10 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Homarr (HomePage)"
+      kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -46,14 +50,14 @@ services:
       - ./storage/homarr/data:/data
       - ./storage/homarr/icons:/app/public/icons
 
-  # Movie searcher
+  # Movie manager
   radarr:
     image: linuxserver/radarr:nightly-version-5.7.0.8851
     container_name: radarr
     hostname: radarr
     depends_on:
       qbittorrent:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -70,6 +74,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
+      kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -82,14 +90,14 @@ services:
       # Persistent volumes
       - ./storage/radarr/:/config
 
-  # TV show searcher
+  # TV show manager
   sonarr:
     image: linuxserver/sonarr:develop-version-4.0.4.1695
     container_name: sonarr
     hostname: sonarr
     depends_on:
       qbittorrent:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -106,6 +114,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:3001/ping | grep -q 'OK' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
+      kuma.{{container_name}}.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -128,9 +140,9 @@ services:
     hostname: recyclarr
     depends_on:
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -162,14 +174,14 @@ services:
       - ./storage/recyclarr:/config
       - ./docker/recyclarr/config/recyclarr.yml:/config/recyclarr.yml
 
-  # Music searcher
+  # Music manager
   lidarr:
     image: linuxserver/lidarr:nightly-version-2.4.0.4211
     container_name: lidarr
     hostname: lidarr
     depends_on:
       qbittorrent:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -186,6 +198,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:3002/ping | grep -q 'OK' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
+      kuma.{{container_name}}.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -228,6 +244,10 @@ services:
       ND_COVERARTPRIORITY: "album.*, embedded, external"
       # Logging config
       ND_LOGLEVEL: "info"
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
+      kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -239,14 +259,14 @@ services:
       # Persistent volumes
       - ./storage/navidrome/:/data
 
-  # Book searcher
+  # eBook manager
   readarr:
     image: linuxserver/readarr:develop-version-0.3.26.2526
     container_name: readarr
     hostname: readarr
     depends_on:
       qbittorrent:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -263,6 +283,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:3004/ping | grep -q 'OK' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
+      kuma.{{container_name}}.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -290,6 +314,10 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Kavita (eBook Reader)"
+      kuma.{{container_name}}.http.url: "${KAVITA_MONITOR_URL:?[kavita] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -308,13 +336,13 @@ services:
     hostname: unpackerr
     depends_on:
       lidarr:
-          condition: service_healthy
+        condition: service_healthy
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       readarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -349,7 +377,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: ["CMD", "/unpackerr", "-v"]
+      test: [ "CMD", "/unpackerr", "-v" ]
       timeout: 5s
     networks:
       - home
@@ -380,11 +408,11 @@ services:
           memory: "1024M"
     depends_on:
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
       whisper:
-          condition: service_healthy
+        condition: service_healthy
     environment:
       # Base config
       PGID: "${PGID:?Group ID missing}"
@@ -396,6 +424,10 @@ services:
       start_period: 30s
       test: "curl --silent --insecure --fail --output /dev/null 'http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
+      kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -442,7 +474,7 @@ services:
     hostname: romm
     depends_on:
       romm-db:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -474,6 +506,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:8080/api/heartbeat | grep -q 'VERSION' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
+      kuma.{{container_name}}.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -526,15 +562,15 @@ services:
     hostname: prowlarr
     depends_on:
       flaresolverr:
-          condition: service_healthy
+        condition: service_healthy
       lidarr:
-          condition: service_healthy
+        condition: service_healthy
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       readarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -551,6 +587,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:9696/ping | grep -q 'OK' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
+      kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -590,6 +630,10 @@ services:
       start_period: 30s
       test: "curl --silent --fail http://localhost:9000/api/v2/app/version || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
+      kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -608,9 +652,9 @@ services:
     hostname: doplarr
     depends_on:
       radarr:
-          condition: service_healthy
+        condition: service_healthy
       sonarr:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -629,7 +673,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "ps -ef | grep -v grep | grep -q doplarr.jar || exit 1"
+      test: [ "CMD", "pidof", "java" ]
       timeout: 5s
     networks:
       - home
@@ -661,8 +705,6 @@ services:
       timeout: 5s
     networks:
       - home
-    ports:
-      - "8191:8191"
     restart: unless-stopped
 
   # Recipe manager
@@ -672,7 +714,7 @@ services:
     hostname: tandoor
     depends_on:
       tandoor-db:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -699,6 +741,11 @@ services:
       start_period: 30s
       test: "wget -q --spider http://localhost:8080/api 2>&1 | grep -q '404\\|403' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
+      kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: 2
     networks:
       - home
     restart: unless-stopped
@@ -714,7 +761,7 @@ services:
     hostname: tandoor-ui
     depends_on:
       tandoor:
-          condition: service_healthy
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -800,6 +847,10 @@ services:
       start_period: 30s
       test: "wget -q --no-verbose --tries=1 --output-document - http://localhost:7745/api/v1/status | grep -q '\"health\":true' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
+      kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -837,6 +888,10 @@ services:
       start_period: 30s
       test: "wget -q --no-verbose --tries=1 -O - http://127.0.0.1:8765 | grep -q 'DailyTxT' || exit 1"
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
+      kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -863,8 +918,12 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: ["CMD", "/dozzle", "healthcheck"]
+      test: [ "CMD", "/dozzle", "healthcheck" ]
       timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
+      kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -886,6 +945,12 @@ services:
           memory: "256M"
     environment:
       FB_NOAUTH: noauth
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
+      kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+    networks:
+      - home
     ports:
       - "4007:80"
     restart: unless-stopped
@@ -898,7 +963,54 @@ services:
       # Persistent volumes
       - ./storage/filebrowser/:/app/data/
 
+  # Automatic Uptime-Kuma monitor generator
+  autokuma:
+    build:
+      context: .
+      dockerfile: docker/autokuma/Dockerfile
+      args:
+        # Docker image versions
+        AUTOKUMA_VERSION: "0.6.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+        # Build arguments
+        # Host Monitor URLs
+        EMBY_MONITOR_URL: "${EMBY_MONITOR_URL:?[autokuma] Emby static monitor URL missing}"
+    container_name: autokuma
+    hostname: autokuma
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+    environment:
+      AUTOKUMA__DEFAULT_SETTINGS: |-
+        http.accepted_statuscodes:  [ "200" ]
+        http.expiry_notification: true
+        http.interval: 60
+        http.max_redirects: 1
+        http.max_retries: 5
+        http.retry_interval: 60
+        http.timeout: 30
+      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
+      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
+      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
+      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
+      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "autokuma" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      # Docker socket mount from host system
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+
 volumes:
-  # Volume required for romm-db, due to issues when using a Windows mount (NFS issues?)
+  # Volume required for romm-db, due to issues when using a Windows mount
   romm-db_data:
     name: romm-db_data

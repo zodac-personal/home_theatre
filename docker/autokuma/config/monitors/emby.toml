@@ -1,0 +1,5 @@
+name = "Emby (Media Server)"
+url = "%EMBY_MONITOR_URL%"
+type = "http"
+notification_id_list = { "1" = true }
+tags = '[{"tag_id": 1},{"tag_id": 2}]'

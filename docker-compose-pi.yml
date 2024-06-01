@@ -225,6 +225,9 @@ services:
     image: ghcr.io/bigboot/autokuma:0.6.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
     container_name: autokuma-pi
     hostname: autokuma-pi
+    depends_on:
+      uptime_kuma:
+        condition: service_healthy
     environment:
       AUTOKUMA__DEFAULT_SETTINGS: |-
         http.accepted_statuscodes:  [ "200" ]

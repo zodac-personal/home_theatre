@@ -469,7 +469,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.1.0
+    image: rommapp/romm:3.2.0
     container_name: romm
     hostname: romm
     depends_on:
@@ -517,12 +517,12 @@ services:
     restart: unless-stopped
     volumes:
       # Volume mounts from host system
-      - "${ROMS_DIRECTORY}:/romm/library:ro"
+      - "${ROM_GAMES_AND_BIOS_PARENT_DIRECTORY}:/romm/library:ro"
       - "${ROM_SAVES_DIRECTORY}:/romm/assets"
       - "./docker/romm/config/:/romm/config"
       # Persistent volumes
-      - ./storage/romm/resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
-      - ./storage/romm/redis:/redis-data # Cached data for background tasks
+      - ./storage/romm/resources:/romm/resources  # Resources fetched from IGDB (covers, screenshots, etc.)
+      - ./storage/romm/redis:/redis-data          # Cached data for background tasks
 
   # Database for RomM
   romm-db:

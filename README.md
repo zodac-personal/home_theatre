@@ -1,6 +1,6 @@
 # Architecture Diagram
 
-![Architecture Diagram](./doc/home_theatre.png)
+![Architecture Diagram](./doc/home_theatre.drawio.png)
 
 # !! Work In Progress Below !!
 

@@ -35,9 +35,9 @@ services:
     restart: unless-stopped
 
   # Monitoring and alerting
-  uptime_kuma:
+  uptime-kuma:
     image: louislam/uptime-kuma:1.23.13-alpine
-    container_name: uptime_kuma
+    container_name: uptime-kuma
     hostname: uptime-kuma
     environment:
       # Base config
@@ -46,8 +46,8 @@ services:
       TZ: "${TIMEZONE:?Timezone missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
-      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+      kuma.uptime-kuma.http.name: "Uptime Kuma (Status Page)"
+      kuma.uptime-kuma.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
       - home_pi
     ports:
@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - ./storage/uptime_kuma/:/app/data
+      - ./storage/uptime-kuma/:/app/data
 
   # Identity platform (authentication and SSO)
   authentik:
@@ -83,8 +83,8 @@ services:
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"
-      kuma.{{container_name}}.http.url: "${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
+      kuma.authentik.http.name: "Authentik (Identity Platform)"
+      kuma.authentik.http.url: "${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
     networks:
       - home_pi
     ports:
@@ -206,8 +206,8 @@ services:
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
-      kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
+      kuma.netalert.http.name: "NetAlert (Network Scanner)"
+      kuma.netalert.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
@@ -217,42 +217,3 @@ services:
       # Persistent volumes
       - ./storage/netalert/config/:/app/config
       - ./storage/netalert/db/:/app/db
-
-  # Automatic Uptime-Kuma monitor generator
-  # This is a near-duplicate of the main one in docker-compose.yml, but allows for labels to be used for the RaspberryPi containers.
-  # It also uses the published docker image, rather than building one for the static monitors.
-  autokuma_pi:
-    image: ghcr.io/bigboot/autokuma:0.6.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
-    container_name: autokuma-pi
-    hostname: autokuma-pi
-    depends_on:
-      uptime_kuma:
-        condition: service_healthy
-    environment:
-      AUTOKUMA__DEFAULT_SETTINGS: |-
-        http.accepted_statuscodes:  [ "200" ]
-        http.tags: '[{"tag_id": 5 }]'
-        http.expiry_notification: true
-        http.interval: 60
-        http.max_redirects: 1
-        http.max_retries: 5
-        http.retry_interval: 60
-        http.timeout: 30
-      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
-      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
-      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
-      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "pidof", "autokuma" ]
-      timeout: 5s
-    networks:
-      - home_pi
-    restart: unless-stopped
-    volumes:
-      # Docker socket mount from host system
-      - "${DOCKER_SOCKET}:/var/run/docker.sock"

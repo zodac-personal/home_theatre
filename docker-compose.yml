@@ -1010,6 +1010,43 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
+  # Automatic Uptime-Kuma monitor generator
+  # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
+  # It also uses the published docker image, rather than building one for any static monitors.
+  autokuma-pi:
+    image: ghcr.io/bigboot/autokuma:0.6.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+    container_name: autokuma-pi
+    hostname: autokuma-pi
+    environment:
+      AUTOKUMA__DEFAULT_SETTINGS: |-
+        http.accepted_statuscodes:  [ "200" ]
+        http.tags: [{"tag_id": 4 }]
+        http.expiry_notification: true
+        http.interval: 60
+        http.max_redirects: 1
+        http.max_retries: 5
+        http.retry_interval: 60
+        http.timeout: 30
+      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
+      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
+      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
+      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
+      DOCKER_HOST: "${AUTO_KUMA_REMOTE_HOST}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "autokuma" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      # Docker socket mount from host system
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+
 volumes:
   # Volume required for romm-db, due to issues when using a Windows mount
   romm-db_data:

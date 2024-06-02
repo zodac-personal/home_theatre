@@ -40,6 +40,10 @@ radarr:
     start_period: 30s
     test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
     timeout: 5s
+      labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
+      kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
   networks:
     - home
   ports:

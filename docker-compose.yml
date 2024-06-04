@@ -901,7 +901,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v6.6.3
+    image: amir20/dozzle:v7.0.4
     container_name: dozzle
     hostname: dozzle
     deploy:

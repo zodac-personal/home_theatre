@@ -745,7 +745,6 @@ services:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
       kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: 2
     networks:
       - home
     restart: unless-stopped
@@ -994,6 +993,7 @@ services:
       AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
       AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
       AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__SYNC_INTERVAL: 300 # Sync every 5 minutes
       AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
       AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
       AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
@@ -1031,6 +1031,7 @@ services:
       AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
       AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
       AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__SYNC_INTERVAL: 600 # Sync every 10 minutes
       AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
       AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
       DOCKER_HOST: "${AUTO_KUMA_REMOTE_HOST}"

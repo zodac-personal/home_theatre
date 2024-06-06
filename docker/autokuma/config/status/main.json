@@ -1,0 +1,26 @@
+{
+  "slug": "test",
+  "title": "Test",
+  "icon": "/icon.svg",
+  "theme": "dark",
+  "published": true,
+  "showTags": false,
+  "domainNameList": [],
+  "customCSS": "body {\n  \n}\n",
+  "showPoweredBy": true,
+  "showCertificateExpiry": false,
+  "publicGroupList": [
+    {
+      "id": 1,
+      "name": "Services",
+      "weight": 1,
+      "monitorList": [
+        {
+          "id": 1,
+          "name": "My Site",
+          "type": "http"
+        }
+      ]
+    }
+  ]
+}

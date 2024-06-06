@@ -909,10 +909,11 @@ services:
           memory: "256M"
     environment:
       # Hosts config
-      DOZZLE_ENABLE_ACTIONS: "true"
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname missing}"
-      DOZZLE_NO_ANALYTICS: "true"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
+      # UI config
+      DOZZLE_ENABLE_ACTIONS: "true"
+      DOZZLE_NO_ANALYTICS: "true"
     healthcheck:
       interval: 30s
       retries: 3

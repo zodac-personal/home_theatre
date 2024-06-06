@@ -43,8 +43,6 @@ services:
       - "4100:7575"
     restart: unless-stopped
     volumes:
-      # Docker socket mount from host system
-      - "${DOCKER_SOCKET}:/var/run/docker.sock"
       # Persistent volumes
       - ./storage/homarr/configs:/app/data/configs
       - ./storage/homarr/data:/data
@@ -901,7 +899,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v7.0.4
+    image: amir20/dozzle:v7.0.5
     container_name: dozzle
     hostname: dozzle
     deploy:
@@ -911,7 +909,9 @@ services:
           memory: "256M"
     environment:
       # Hosts config
+      DOZZLE_ENABLE_ACTIONS: "true"
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname missing}"
+      DOZZLE_NO_ANALYTICS: "true"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"
     healthcheck:
       interval: 30s

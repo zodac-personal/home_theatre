@@ -992,7 +992,7 @@ services:
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - ./storage/ollama/data:/root/.ollama
+      - ollama:/root/.ollama
       - ./storage/ollama/open-webui:/app/backend/data
 
   # Automatic Uptime-Kuma monitor generator
@@ -1083,7 +1083,9 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
+# These volumes are required by their service, due to issues when using a Windows mount
 volumes:
-  # Volume required for romm-db, due to issues when using a Windows mount
   romm-db_data:
     name: romm-db_data
+  ollama:
+    name: ollama

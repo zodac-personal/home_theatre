@@ -963,6 +963,37 @@ services:
       # Persistent volumes
       - ./storage/filebrowser/:/app/data/
 
+  # Large Language Model with ChatGPT-style UI
+  ollama:
+    image: ghcr.io/open-webui/open-webui:v0.2.5-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
+    container_name: ollama
+    hostname: ollama
+    deploy:
+      resources:
+        limits:
+          cpus: "8"
+          memory: "8192M"
+    environment:
+      # UI config
+      ENABLE_COMMUNITY_SHARING: "false"
+      ENABLE_SIGNUP: "false"
+      WEBUI_AUTH_TRUSTED_EMAIL_HEADER: "X-Authentik-Email"
+      WEBUI_NAME: "${DOMAIN_NAME:?[ollama] Domain name missing} LLM"
+      WEBUI_SECRET_KEY: "${OLLAMA_SECRET_KEY:?[ollama] Secret key missing}"
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Ollama (LLM)"
+      kuma.{{container_name}}.http.url: "${OLLAMA_MONITOR_URL:?[ollama] Monitor URL missing}"
+    networks:
+      - home
+    ports:
+      - "4012:8080"
+    restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - ./storage/ollama/data:/root/.ollama
+      - ./storage/ollama/open-webui:/app/backend/data
+
   # Automatic Uptime-Kuma monitor generator
   autokuma:
     build:

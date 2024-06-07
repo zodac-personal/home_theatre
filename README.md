@@ -463,3 +463,26 @@ mv -f /app.conf.new /app/config/app.conf
 Then perform a `docker restart` of the container, and your changes should be applied.
 
 **NOTE:** I haven't tried this with newer versions and how robust it is to major version upgrades. Hoping for the best.
+
+## Ollama
+
+The container first comes up with no users and no models. Neither of these can be set programatically, so on the first start-up some actions must be
+performed.
+
+### Create Admin User
+
+In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by Authentik,
+which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
+
+Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker-compose down` and `docker-compose up` to rebuild the container with
+the updated value.
+
+### Download Models
+
+Next the models need to be downloaded. This can be done through the UI itself, or you can `docker exec` into the container and run the following
+commands:
+
+```
+ollama pull llama3              # Main model
+ollama pull llama2-uncensored   # Older version of the model, but with no filters
+```

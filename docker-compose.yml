@@ -743,6 +743,7 @@ services:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
       kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: 2
     networks:
       - home
     restart: unless-stopped
@@ -1039,7 +1040,7 @@ services:
       timeout: 5s
     networks:
       - home
-    restart: unless-stopped
+    restart: no
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
@@ -1077,7 +1078,7 @@ services:
       timeout: 5s
     networks:
       - home
-    restart: unless-stopped
+    restart: no
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

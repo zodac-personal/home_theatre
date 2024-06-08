@@ -909,6 +909,11 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
+      # Authentication config
+      DOZZLE_AUTH_PROVIDER: "forward-proxy"
+      DOZZLE_AUTH_HEADER_USER: "X-Authentik-Username"
+      DOZZLE_AUTH_HEADER_EMAIL: "X-Authentik-Email"
+      DOZZLE_AUTH_HEADER_NAME: "X-Authentik-Name"
       # Hosts config
       DOZZLE_HOSTNAME: "${MAIN_HOST_NAME:?[dozzle] Hostname missing}"
       DOZZLE_REMOTE_HOST: "${REMOTE_HOSTS}"

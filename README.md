@@ -309,6 +309,8 @@ The following services are integrated with Authentik, and their configuration is
 
 TODO:
 
+## Basic Auth
+
 - Radarr
 - Sonarr
 - Readarr
@@ -317,9 +319,15 @@ TODO:
 - Bazarr
 - Navidrome
 
-Following have no auth of their own (both disabled explicitly), using Authentik as the only auth:
+## X-Authentik-* Headers
+
+The following services can't be logged in using the local URL, as they require X-Authentik-* headers to be forwarded:
 
 - Dozzle
+- Ollama
+
+## No Internal Auth, Authentik Only
+
 - File Browser
 - NetAlertX
 - Uptime-Kuma

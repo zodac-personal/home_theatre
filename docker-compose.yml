@@ -227,7 +227,7 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
-      # Auth config
+      # Authentication config
       ND_REVERSEPROXYUSERHEADER: "X-Authentik-Username"
       ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
       # External services config
@@ -721,6 +721,28 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
+      SOCIALACCOUNT_PROVIDERS: |
+        {
+          "openid_connect": {
+            "SERVERS": [
+              {
+                "id": "authentik",
+                "name": "Authentik",
+                "server_url": "${TANDOOR_AUTHENTIK_WELL_KNOWN_CONFIGURATION_URL:?[tandoor] Authetik URL missing}",
+                "token_auth_method": "client_secret_basic",
+                "APP": {
+                  "client_id": "${TANDOOR_AUTHENTIK_CLIENT_ID:?[tandoor] Authentik client ID missing}",
+                  "secret": "${TANDOOR_AUTHENTIK_CLIENT_SECRET:?[tandoor] Authentik client secret missing}"
+                }
+              }
+            ]
+          }
+        }
+      REMOTE_USER_AUTH: "1"
+      SOCIAL_DEFAULT_ACCESS: "1"
+      SOCIAL_DEFAULT_GROUP: "guest"
       # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"

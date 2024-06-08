@@ -311,6 +311,8 @@ TODO:
 
 ## Basic Auth
 
+The following services forward username/password information from the Authentik user's group to the service:
+
 - Radarr
 - Sonarr
 - Readarr
@@ -319,6 +321,12 @@ TODO:
 - Bazarr
 - Navidrome
 
+## OIDC
+
+The following services allow you to login/create an account using Authentik:
+
+- Tandoor
+
 ## X-Authentik-* Headers
 
 The following services can't be logged in using the local URL, as they require X-Authentik-* headers to be forwarded:
@@ -326,7 +334,9 @@ The following services can't be logged in using the local URL, as they require X
 - Dozzle
 - Ollama
 
-## No Internal Auth, Authentik Only
+## No Internal Auth
+
+The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication: 
 
 - File Browser
 - NetAlertX

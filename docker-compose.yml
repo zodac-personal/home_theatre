@@ -722,6 +722,9 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
+      REMOTE_USER_AUTH: "1"
+      SOCIAL_DEFAULT_ACCESS: "1"
+      SOCIAL_DEFAULT_GROUP: "guest"
       SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
       SOCIALACCOUNT_PROVIDERS: |
         {
@@ -740,9 +743,6 @@ services:
             ]
           }
         }
-      REMOTE_USER_AUTH: "1"
-      SOCIAL_DEFAULT_ACCESS: "1"
-      SOCIAL_DEFAULT_GROUP: "guest"
       # Database config
       DB_ENGINE: "django.db.backends.postgresql"
       POSTGRES_HOST: "tandoor-db"
@@ -750,9 +750,6 @@ services:
       POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor] Database name missing}"
       POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor] Database password missing}"
       POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor] Database user missing}"
-      # Logging config
-      DEBUG: "0"
-      SQL_DEBUG: "0"
       # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
     healthcheck:

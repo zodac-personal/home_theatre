@@ -336,7 +336,7 @@ The following services can't be logged in using the local URL, as they require X
 
 ## No Internal Auth
 
-The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication: 
+The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication:
 
 - File Browser
 - NetAlertX
@@ -504,3 +504,8 @@ commands:
 ollama pull llama3              # Main model
 ollama pull llama2-uncensored   # Older version of the model, but with no filters
 ```
+
+## Tandoor
+
+Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the _Domain Name_ and _Display Name_ to
+your own domain name. This cannot be configured throug environment variables.

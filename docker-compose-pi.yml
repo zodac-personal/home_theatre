@@ -167,6 +167,8 @@ services:
       PGDATABASE: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
       PGPASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
       PGUSER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+    expose:
+      - "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3

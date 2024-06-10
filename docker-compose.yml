@@ -540,7 +540,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${ROMM_DB_ROOT_PASSWORD:?[romm-db] Database root password missing}"
       MYSQL_USER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
     expose:
-      - "${ROMM_DB_PORT}"
+      - "${ROMM_DB_PORT:?[romm-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -828,7 +828,7 @@ services:
       PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
       PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
     expose:
-      - "${TANDOOR_DB_PORT}"
+      - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}}"
     healthcheck:
       interval: 30s
       retries: 3

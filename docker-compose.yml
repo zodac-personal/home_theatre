@@ -1019,6 +1019,79 @@ services:
       - ollama:/root/.ollama
       - ./storage/ollama/open-webui:/app/backend/data
 
+  # Static code analysis tool
+  sonarqube:
+    image: sonarqube:10.5.1-community
+    container_name: sonarqube
+    hostname: sonarqube
+    depends_on:
+      sonarqube-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "4096M"
+    environment:
+      SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:5432/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
+      SONAR_JDBC_USERNAME: "${SONARQUBE_DB_USER:?[sonarqube] Database user missing}"
+      SONAR_JDBC_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube] Database password missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/api/system/status" ]
+      timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
+      kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
+    networks:
+      - home
+    ports:
+      - "4013:9000"
+    restart: unless-stopped
+    volumes:
+      - ./storage/sonarqube/data/:/opt/sonarqube/data
+      - ./storage/sonarqube/extensions/:/opt/sonarqube/extensions
+      - ./storage/sonarqube/logs/:/opt/sonarqube/logs
+
+  # Database for SonarQube
+  sonarqube-db:
+    image: postgres:16.3-alpine
+    container_name: sonarqube-db
+    hostname: sonarqube-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
+      POSTGRES_DB: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}"
+      POSTGRES_USER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
+      POSTGRES_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGPASSWORD: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}"
+      PGUSER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
+      PGDATABASE: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
+    expose:
+      - "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "-d", "db_prod" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      - ./storage/sonarqube-db/data/:/var/lib/postgresql/data
+
   # Automatic Uptime-Kuma monitor generator
   autokuma:
     build:

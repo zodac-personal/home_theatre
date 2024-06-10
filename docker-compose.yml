@@ -70,7 +70,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:3000/ping | grep -q 'OK' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3000/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -110,7 +110,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:3001/ping | grep -q 'OK' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3001/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -163,7 +163,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "recyclarr -v || exit 1"
+      test: [ "CMD", "recyclarr", "-v" ]
       timeout: 5s
     networks:
       - home
@@ -194,7 +194,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:3002/ping | grep -q 'OK' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3002/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -279,7 +279,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:3004/ping | grep -q 'OK' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3004/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -420,7 +420,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --insecure --fail --output /dev/null 'http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "--insecure", "--output", "/dev/null", "http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -459,7 +459,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:9000/ || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/" ]
       timeout: 5s
     networks:
       - home
@@ -502,7 +502,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:8080/api/heartbeat | grep -q 'VERSION' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8080/heartbeat" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -545,7 +545,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "healthcheck.sh --su-mysql --connect --innodb_initialized || exit 1"
+      test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
       timeout: 5s
     networks:
       - home
@@ -583,7 +583,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:9696/ping | grep -q 'OK' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9696/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -626,7 +626,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:9000/api/v2/app/version || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/api/v2/app/version" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -699,7 +699,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost:8191/ | grep -q 'FlareSolverr is ready' || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8191/" ]
       timeout: 5s
     networks:
       - home
@@ -793,7 +793,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "curl --silent --fail http://localhost || exit 1"
+      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:80" ]
       timeout: 5s
     networks:
       - home
@@ -833,7 +833,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "pg_isready -d db_prod || exit 1"
+      test: [ "CMD", "pg_isready", "-d", "db_prod" ]
       timeout: 5s
     networks:
       - home
@@ -862,7 +862,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "wget -q --no-verbose --tries=1 --output-document - http://localhost:7745/api/v1/status | grep -q '\"health\":true' || exit 1"
+      test: [ "CMD", "wget", "-q", "--no-verbose", "--tries=1", "--output-document", "-", "http://localhost:7745/api/v1/status" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config

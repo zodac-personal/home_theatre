@@ -987,6 +987,8 @@ services:
       - "${DOCUMENTS_DIRECTORY}:/srv:ro"
       # Persistent volumes
       - ./storage/filebrowser/:/app/data/
+      - ./storage/filebrowser/.filebrowser.json:/.filebrowser.json
+      - ./storage/filebrowser/database.db:/database.db
 
   # Large Language Model with ChatGPT-style UI
   ollama:

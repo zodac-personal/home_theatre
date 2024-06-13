@@ -508,4 +508,4 @@ ollama pull llama2-uncensored   # Older version of the model, but with no filter
 ## Tandoor
 
 Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the _Domain Name_ and _Display Name_ to
-your own domain name. This cannot be configured throug environment variables.
+your own domain name. This cannot be configured through environment variables.

@@ -409,8 +409,6 @@ services:
         condition: service_healthy
       sonarr:
         condition: service_healthy
-      whisper:
-        condition: service_healthy
     environment:
       # Base config
       PGID: "${PGID:?Group ID missing}"
@@ -1093,6 +1091,86 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage/sonarqube-db/data/:/var/lib/postgresql/data
+
+  # Statistics for Emby
+  jellystat:
+    image: cyfershepard/jellystat:1.1.0
+    container_name: jellystat
+    hostname: jellystat
+    depends_on:
+      jellystat-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      POSTGRES_DATABASE: "${JELLYSTAT_DB_NAME:?[jellystat] Database name missing}"
+      POSTGRES_USER: "${JELLYSTAT_DB_USER:?[jellystat] Database user missing}"
+      POSTGRES_PASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat] Database password missing}"
+      POSTGRES_IP: "jellystat-db"
+      POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
+      # Secrets config
+      JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
+    # Healthcheck is temporary until https://github.com/CyferShepard/Jellystat/pull/220 is merged and released
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "node" ]
+      timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
+      kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
+    networks:
+      - home
+    ports:
+      - "4008:3000"
+    restart: unless-stopped
+    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
+    volumes:
+      - ./storage/jellystat/data/:/app/backend/backup-data
+
+  # Database for Jellystat
+  jellystat-db:
+    image: postgres:16.3-alpine
+    container_name: jellystat-db
+    hostname: jellystat-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
+      POSTGRES_DB: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
+      POSTGRES_PASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
+      POSTGRES_USER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
+      PGPASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
+      PGUSER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
+    expose:
+      - "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "-d", "db_prod" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      - ./storage/jellystat-db/data/:/var/lib/postgresql/data
 
   # Automatic Uptime-Kuma monitor generator
   autokuma:

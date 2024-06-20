@@ -805,7 +805,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:15.7-alpine
+    image: postgres:16.3-alpine
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:

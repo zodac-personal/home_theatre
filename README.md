@@ -437,6 +437,38 @@ New/replaced services
 Further auth integrations
 Better backup solutions
 
+# Database Upgrades
+
+When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
+container.
+
+## Tandoor
+
+Take backup of current database and shut containers down:
+
+TODO: Update this to backup/restore without exec-ing into the container on next upgrade.
+
+```
+docker exec -it tandoor-db /bin/bash
+pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup.sql
+exit
+docker cp tandoor-db:/backup.sql .
+docker compose down tandoor tandoor-ui tandoor-db
+```
+
+Upgrade version of postgresq for `tandoor-db`.
+Next, delete the storage for `tandoor-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining Tandoor containers:
+
+```
+docker compose up --build -d tandoor-db
+docker exec -it tandoor-db /bin/bash
+psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} < backup.sql
+exit
+docker compose up --build -d tandoor tandoor-ui
+```
+
 # Misc Info
 
 ## Authentik

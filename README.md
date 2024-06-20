@@ -320,7 +320,6 @@ The following services forward username/password information from the Authentik 
 - Prowlarr
 - Bazarr
 - Navidrome
-- Jellystat
 
 ## OIDC
 
@@ -340,6 +339,7 @@ The following services can't be logged in using the local URL, as they require X
 The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication:
 
 - File Browser
+- Jellystat
 - NetAlertX
 - Uptime-Kuma
 

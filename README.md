@@ -320,6 +320,7 @@ The following services forward username/password information from the Authentik 
 - Prowlarr
 - Bazarr
 - Navidrome
+- Jellystat
 
 ## OIDC
 

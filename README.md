@@ -313,18 +313,19 @@ TODO:
 
 The following services forward username/password information from the Authentik user's group to the service:
 
-- Radarr
-- Sonarr
-- Readarr
-- Lidarr
-- Prowlarr
 - Bazarr
+- Lidarr
 - Navidrome
+- Prowlarr
+- Radarr
+- Readarr
+- Sonarr
 
 ## OIDC
 
 The following services allow you to login/create an account using Authentik:
 
+- Homarr
 - Tandoor
 
 ## X-Authentik-* Headers
@@ -447,7 +448,7 @@ container.
 
 Take backup of current database and shut containers down:
 
-TODO: Update this to backup/restore without exec-ing into the container on next upgrade.
+TODO: Update this to back up/restore without exec-ing into the container on next upgrade.
 
 ```
 docker exec -it tandoor-db /bin/bash
@@ -496,6 +497,30 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
   sudo netstat -lntp | grep dockerd
   tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
   ```
+
+## Homarr
+
+On initial start, you'll be asked to create an admin user. You won't be able to log in with this user until you change the following environment
+variable:
+
+```
+AUTH_PROVIDER: "oidc"
+```
+
+to:
+
+```
+AUTH_PROVIDER: "credentials,oidc"
+```
+
+You can then log in with your primary email address through Authentik, which will create a normal user in Homarr. You can log in with the admin
+account and promote your main account to an administrator. Then finally, update the environment variable back to:
+
+```
+AUTH_PROVIDER: "oidc"
+```
+
+This will disable username/password login, and require authentication through Authentik.
 
 ## NetAlertX
 

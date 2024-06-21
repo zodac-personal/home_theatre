@@ -33,6 +33,14 @@ services:
       PGID: "${PGID:?Group ID missing}"
       PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
+      # Auth config
+      AUTH_OIDC_CLIENT_ID: "${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
+      AUTH_OIDC_CLIENT_NAME: "Authentik"
+      AUTH_OIDC_CLIENT_SECRET: "${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
+      AUTH_OIDC_URI: "${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
+      AUTH_PROVIDER: "credentials,oidc" # Disable 'credentials' when support for disabling role updates on OIDC is available
+      BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
     labels:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"

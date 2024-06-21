@@ -30,10 +30,8 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
-      # Auth config
+      # Authentication config
       AUTH_OIDC_CLIENT_ID: "${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
       AUTH_OIDC_CLIENT_NAME: "Authentik"
       AUTH_OIDC_CLIENT_SECRET: "${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
@@ -50,6 +48,7 @@ services:
     ports:
       - "4100:7575"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/homarr/configs:/app/data/configs
@@ -71,8 +70,6 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -89,6 +86,7 @@ services:
     ports:
       - "4000:3000"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -111,8 +109,6 @@ services:
           memory: "2048M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -129,6 +125,7 @@ services:
     ports:
       - "4001:3001"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -156,8 +153,6 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PUID: "${PUID:?User ID missing}"
-      PGID: "${PGID:?Group ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
       # Scheduling config
       CRON_SCHEDULE: "@daily"
@@ -176,6 +171,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/recyclarr:/config
       - ./docker/recyclarr/config/recyclarr.yml:/config/recyclarr.yml
@@ -195,8 +191,6 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -213,6 +207,7 @@ services:
     ports:
       - "4002:3002"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -232,8 +227,6 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       ND_REVERSEPROXYUSERHEADER: "X-Authentik-Username"
@@ -259,6 +252,7 @@ services:
     ports:
       - "4003:4533"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music:ro"
@@ -280,8 +274,6 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -298,6 +290,7 @@ services:
     ports:
       - "4004:3004"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${BOOKS_DIRECTORY}:/books"
@@ -317,8 +310,6 @@ services:
           memory: "2048M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     labels:
       # Uptime-Kuma monitor config
@@ -329,6 +320,7 @@ services:
     ports:
       - "4005:5000"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${BOOKS_DIRECTORY}:/books"
@@ -356,8 +348,6 @@ services:
           memory: "512M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
       # Lidarr config
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY:?[unpackerr] Lidarr API key missing}"
@@ -390,7 +380,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -419,8 +409,6 @@ services:
         condition: service_healthy
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -437,6 +425,7 @@ services:
     ports:
       - "4009:3009"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${MOVIE_DIRECTORY}:/movies"
@@ -470,6 +459,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
   # Video Game ROM Manager
   romm:
@@ -485,6 +475,8 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       DISABLE_CSRF_PROTECTION: "true"
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
@@ -519,6 +511,7 @@ services:
     ports:
       - "4006:8080"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${ROM_GAMES_AND_BIOS_PARENT_DIRECTORY}:/romm/library:ro"
@@ -539,6 +532,8 @@ services:
           cpus: "1"
           memory: "1024M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Database config
       MYSQL_TCP_PORT: "${ROMM_DB_PORT:?[romm-db] Database port missing}"
       MYSQL_DATABASE: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
@@ -556,6 +551,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - romm-db_data:/var/lib/mysql
 
@@ -582,8 +578,6 @@ services:
           memory: "1024M" # High memory resourcing to allow stats page to load
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -600,6 +594,7 @@ services:
     ports:
       - "9696:9696"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/prowlarr/:/config
@@ -623,8 +618,6 @@ services:
           memory: "4096M"
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
       WEBUI_PORT: "9000"
@@ -643,6 +636,7 @@ services:
     ports:
       - "9000-9002:9000-9002"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -682,6 +676,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/doplarr/:/config
@@ -710,6 +705,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
   # Recipe manager
   tandoor:
@@ -772,6 +768,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
       - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
@@ -806,6 +803,7 @@ services:
     ports:
       - "4010:80"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/tandoor/nginx/conf.d/:/etc/nginx/conf.d:ro
       - ./storage/tandoor/mediafiles/:/media:ro
@@ -844,6 +842,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/tandoor-db/:/var/lib/postgresql/data
 
@@ -858,6 +857,8 @@ services:
           cpus: "0.5"
           memory: "512M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Logging config
       HBOX_LOG_FORMAT: "text"
       HBOX_LOG_LEVEL: "info"
@@ -879,6 +880,7 @@ services:
     ports:
       - "4011:7745"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/homebox/:/data/
 
@@ -894,8 +896,8 @@ services:
           memory: "256M"
     environment:
       # Base config
-      USER_GID: "${PGID:?Group ID missing}"
-      USER_UID: "${PUID:?User ID missing}"
+      USER_GID: "${PGID_ROOT:?Group ID missing}"
+      USER_UID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
       # Secrets config
       SECRET_KEY: "${DAILYTXT_SECRET_KEY:?[dailytxt] Secret key missing}"
@@ -934,6 +936,8 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       DOZZLE_AUTH_PROVIDER: "forward-proxy"
       DOZZLE_AUTH_HEADER_USER: "X-Authentik-Username"
@@ -960,6 +964,7 @@ services:
     ports:
       - "4014:8080"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
@@ -975,6 +980,9 @@ services:
           cpus: "0.25"
           memory: "256M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
       FB_NOAUTH: noauth
     labels:
       # Uptime-Kuma monitor config
@@ -987,7 +995,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOCUMENTS_DIRECTORY}:/srv:ro"
@@ -1007,6 +1015,8 @@ services:
           cpus: "8"
           memory: "8192M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
       ENABLE_COMMUNITY_SHARING: "false"
       ENABLE_SIGNUP: "false"
@@ -1022,6 +1032,7 @@ services:
     ports:
       - "4012:8080"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ollama:/root/.ollama
@@ -1059,6 +1070,7 @@ services:
     ports:
       - "4013:9000"
     restart: unless-stopped
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/sonarqube/data/:/opt/sonarqube/data
       - ./storage/sonarqube/extensions/:/opt/sonarqube/extensions
@@ -1097,6 +1109,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/sonarqube-db/data/:/var/lib/postgresql/data
 
@@ -1140,7 +1153,7 @@ services:
     ports:
       - "4008:3000"
     restart: unless-stopped
-    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/jellystat/data/:/app/backend/backup-data
 
@@ -1177,6 +1190,7 @@ services:
     networks:
       - home
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/jellystat-db/data/:/var/lib/postgresql/data
 
@@ -1199,6 +1213,9 @@ services:
           cpus: "0.5"
           memory: "256M"
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Monitor config
       AUTOKUMA__DEFAULT_SETTINGS: |-
         http.accepted_statuscodes:  [ "200" ]
         http.expiry_notification: true
@@ -1226,6 +1243,7 @@ services:
     networks:
       - home
     restart: no
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
@@ -1238,6 +1256,9 @@ services:
     container_name: autokuma-pi
     hostname: autokuma-pi
     environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Monitor config
       AUTOKUMA__DEFAULT_SETTINGS: |-
         http.accepted_statuscodes:  [ "200" ]
         http.tags: [{"tag_id": 3 }]
@@ -1264,6 +1285,7 @@ services:
     networks:
       - home
     restart: no
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

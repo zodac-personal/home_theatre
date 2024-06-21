@@ -31,8 +31,6 @@ radarr:
         memory: "1024M"
   environment:
     # Base config
-    PGID: "${PGID:?Group ID missing}"
-    PUID: "${PUID:?User ID missing}"
     TZ: "${TIMEZONE:?Timezone not set}"
   healthcheck:
     interval: 30s
@@ -49,6 +47,7 @@ radarr:
   ports:
     - "4000:3000"
   restart: unless-stopped
+  user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
   volumes:
     # Volume mounts from host system
     - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -104,36 +103,23 @@ TODO: Discuss interval/retries/start_period/timeout default values
 
 Most services may contain the following environment variables:
 
-| Environment Variable Name | Purpose          | Example Value    |
-|---------------------------|------------------|------------------|
-| PGID                      | Process Group ID | 0 (for root)     |
-| PUID                      | Process User ID  | 0 (for root)     |
-| TZ (or TIMEZONE)          | Timezone         | Pacific/Auckland |
+| Environment Variable Name | Purpose  | Example Value    |
+|---------------------------|----------|------------------|
+| TZ (or TIMEZONE)          | Timezone | Pacific/Auckland |
 
 Since they are used throughout, we set these values in the `.env` file and pass them in through our docker-compose configuration.
 
 ### PGID/PUID
 
-**PGID** and **PUID** are used to override the group and user ID of the running container process, for permissions and privileges. Some services use
-the `user` element in [docker-compose](https://docs.docker.com/compose/compose-file/05-services/#user), but the same values should be used. For
-example, for any given service, the docker-compose definition could be:
+The **PGID** and **PUID** are used to override the group and user ID of the running container process, for permissions and privileges. Most services
+currently use the root user and group (**0**), exposed through the environment variables **PGID_ROOT** and **PUID_ROOT**. Some have been tested with
+non-root users and will instead use **PGID_NON_ROOT** and **PUID_NON_ROOT**.
 
 ```
 services:
   service_name:
     image: image_name:tag
-  environment:
-    PGID: ${PGID}
-    PUID: ${PUID}
-```
-
-or
-
-```
-services:
-  service_name:
-    image: image_name:tag
-  user: "${PUID}:${PGID}"
+  user: "${PUID_NON_ROOT}:${PGID_NON_ROOT}"
 ```
 
 ### TZ/TIMEZONE

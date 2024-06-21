@@ -19,8 +19,6 @@ services:
     hostname: apache
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -33,6 +31,7 @@ services:
     ports:
       - "80:80"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
   # Monitoring and alerting
   uptime-kuma:
@@ -41,8 +40,6 @@ services:
     hostname: uptime-kuma
     environment:
       # Base config
-      PGID: "${PGID:?Group ID missing}"
-      PUID: "${PUID:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     labels:
       # Uptime-Kuma monitor config
@@ -53,6 +50,7 @@ services:
     ports:
       - "3001:3001"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/uptime-kuma/:/app/data
@@ -90,6 +88,7 @@ services:
     ports:
       - "${AUTHENTIK_UI_PORT:?[authentik] UI port missing}:9000"
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik/media/:/media
@@ -124,7 +123,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
-    user: root # Removing this line prevents the worker from fixing the permissions on the mounted folders
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik/media/:/media
@@ -146,6 +145,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik-cache/:/data
@@ -178,6 +178,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik-db/:/var/lib/postgresql/data
@@ -214,7 +215,7 @@ services:
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
     restart: unless-stopped
-    user: "${PUID:?User ID missing}:${PGID:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/netalert/config/:/app/config

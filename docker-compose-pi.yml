@@ -33,28 +33,6 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
-  # Monitoring and alerting
-  uptime-kuma:
-    image: louislam/uptime-kuma:1.23.13-alpine
-    container_name: uptime-kuma
-    hostname: uptime-kuma
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-    labels:
-      # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
-      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
-    networks:
-      - home_pi
-    ports:
-      - "3001:3001"
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      # Persistent volumes
-      - ./storage/uptime-kuma/:/app/data
-
   # Identity platform (authentication and SSO)
   authentik:
     image: ghcr.io/goauthentik/server:2024.4.2 # https://github.com/goauthentik/authentik/pkgs/container/server
@@ -182,6 +160,28 @@ services:
     volumes:
       # Persistent volumes
       - ./storage/authentik-db/:/var/lib/postgresql/data
+
+  # Monitoring and alerting
+  uptime-kuma:
+    image: louislam/uptime-kuma:1.23.13-alpine
+    container_name: uptime-kuma
+    hostname: uptime-kuma
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
+      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+    networks:
+      - home_pi
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/uptime-kuma/:/app/data
 
   # WiFi/LAN network scanner
   netalert:

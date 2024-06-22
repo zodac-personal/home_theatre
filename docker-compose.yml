@@ -871,7 +871,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "-q", "--no-verbose", "--tries=1", "--output-document", "-", "http://localhost:7745/api/v1/status" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7745/api/v1/status" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -913,7 +913,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "wget -q --no-verbose --tries=1 -O - http://127.0.0.1:8765 | grep -q 'DailyTxT' || exit 1"
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8765" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config

@@ -32,11 +32,13 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
+      AUTH_OIDC_ADMIN_GROUP: "HomarrAdmins"
+      AUTH_OIDC_AUTO_LOGIN: "true"
       AUTH_OIDC_CLIENT_ID: "${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
       AUTH_OIDC_CLIENT_NAME: "Authentik"
       AUTH_OIDC_CLIENT_SECRET: "${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
       AUTH_OIDC_URI: "${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
-      AUTH_PROVIDER: "credentials,oidc" # Disable 'credentials' when support for disabling role updates on OIDC is available
+      AUTH_PROVIDER: "oidc"
       BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
     labels:

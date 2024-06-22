@@ -486,7 +486,7 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
 
 ## Homarr
 
-On initial start, you'll be asked to create an admin user. You won't be able to log in with this user until you change the following environment
+On initial start, you'll be asked to create an admin user. You won't be able to log in with this user unless you change the following environment
 variable:
 
 ```
@@ -499,14 +499,9 @@ to:
 AUTH_PROVIDER: "credentials,oidc"
 ```
 
-You can then log in with your primary email address through Authentik, which will create a normal user in Homarr. You can log in with the admin
-account and promote your main account to an administrator. Then finally, update the environment variable back to:
-
-```
-AUTH_PROVIDER: "oidc"
-```
-
-This will disable username/password login, and require authentication through Authentik.
+However, by creating a user in Authentik assigned to the group **HomarrAdmins**, your Authentik user will be logged in as an administrator and able to
+configure your Homarr instance. If this group name needs to be changed, update the `AUTH_OIDC_ADMIN_GROUP` environment variable for Homarr to match
+the group name in Authentik.
 
 ## NetAlertX
 

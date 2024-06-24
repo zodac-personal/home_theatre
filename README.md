@@ -430,29 +430,52 @@ Better backup solutions
 When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
 container.
 
+## Authentik
+
+Following instructions from the [Authentik documentation for DB upgrade](https://docs.goauthentik.io/docs/troubleshooting/postgres/upgrade_docker).
+
+Take backup of the current database, then shut the Authentik containers down:
+
+```
+docker compose exec authentik-db pg_dump -U ${AUTHENTIK_DB_USER} -d ${AUTHENTIK_DB_NAME} -cC > backup_authentik.sql
+docker compose -f docker-compose-pi.yml down authentik authentik-worker authentik-cache authentik-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `authentik-db`.
+Next, delete the storage for `authentik-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining Authentik containers:
+
+```
+docker compose -f docker-compose-pi.yml up --build -d authentik-db
+cat backup_authentik.sql | docker compose exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
+docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
+```
+
 ## Tandoor
 
-Take backup of current database and shut containers down:
+Take backup of the current database, then shut the Tandoor containers down:
 
-TODO: Update this to back up/restore without exec-ing into the container on next upgrade.
+TODO: Update this to back up/restore without exec-ing into the container on next upgrade, similar to [Authentik](#authentik) above.
 
 ```
 docker exec -it tandoor-db /bin/bash
-pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup.sql
+pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
 exit
-docker cp tandoor-db:/backup.sql .
+docker cp tandoor-db:/backup_tandoor.sql .
 docker compose down tandoor tandoor-ui tandoor-db
 ```
 
-Upgrade version of postgresq for `tandoor-db`.
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `tandoor-db`.
 Next, delete the storage for `tandoor-db` (make sure to copy this directory/volume first).
 
 Finally, start up the new DB container, restore the backup, then start the remaining Tandoor containers:
 
 ```
 docker compose up --build -d tandoor-db
+docker cp backup_tandoor.sql tandoor-db:/
 docker exec -it tandoor-db /bin/bash
-psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} < backup.sql
+psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} < backup_tandoor.sql
 exit
 docker compose up --build -d tandoor tandoor-ui
 ```

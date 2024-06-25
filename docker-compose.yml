@@ -1097,9 +1097,9 @@ services:
       POSTGRES_USER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
       POSTGRES_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
       # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGPASSWORD: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}"
+      PGDATABASE: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database password missing}"
+      PGPASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database name missing}"
       PGUSER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
-      PGDATABASE: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
     expose:
       - "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
     healthcheck:

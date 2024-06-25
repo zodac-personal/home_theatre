@@ -151,7 +151,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "-d", "db_prod" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
       - home_pi

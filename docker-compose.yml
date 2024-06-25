@@ -446,7 +446,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
+          cpus: "4"
           memory: "2048M"
     environment:
       # Model config

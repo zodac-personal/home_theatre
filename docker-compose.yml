@@ -453,11 +453,11 @@ services:
       ASR_MODEL: "small.en"
       ASR_ENGINE: "faster_whisper"
     healthcheck:
-      interval: 30s
+      interval: 60s
       retries: 3
       start_period: 30s
       test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/" ]
-      timeout: 5s
+      timeout: 15s
     networks:
       - home
     restart: unless-stopped

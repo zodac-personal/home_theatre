@@ -31,6 +31,8 @@ radarr:
         memory: "1024M"
   environment:
     # Base config
+    PGID: "${PGID_ROOT:?Group ID missing}"
+    PUID: "${PUID_ROOT:?User ID missing}"
     TZ: "${TIMEZONE:?Timezone not set}"
   healthcheck:
     interval: 30s

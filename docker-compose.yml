@@ -72,6 +72,8 @@ services:
           memory: "1024M"
     environment:
       # Base config
+      PGID: "${PGID_ROOT:?Group ID missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -111,6 +113,8 @@ services:
           memory: "2048M"
     environment:
       # Base config
+      PGID: "${PGID_ROOT:?Group ID missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -193,6 +197,8 @@ services:
           memory: "1024M"
     environment:
       # Base config
+      PGID: "${PGID_ROOT:?Group ID missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -276,6 +282,8 @@ services:
           memory: "512M"
     environment:
       # Base config
+      PGID: "${PGID_ROOT:?Group ID missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
@@ -411,6 +419,8 @@ services:
         condition: service_healthy
     environment:
       # Base config
+      PGID: "${PGID_ROOT:?Group ID missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
       TZ: "${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s

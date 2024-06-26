@@ -35,7 +35,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.4.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.6.0 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -75,7 +75,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.4.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.6.0 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker

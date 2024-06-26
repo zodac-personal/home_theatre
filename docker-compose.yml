@@ -447,7 +447,7 @@ services:
       resources:
         limits:
           cpus: "4"
-          memory: "2048M"
+          memory: "4096M"
     environment:
       # Model config
       ASR_MODEL: "small.en"

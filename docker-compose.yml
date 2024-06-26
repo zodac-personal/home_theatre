@@ -760,7 +760,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: "wget -q --spider http://localhost:8080/api 2>&1 | grep -q '404\\|403' || exit 1"
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/openapi" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config

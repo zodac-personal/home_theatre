@@ -77,7 +77,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3000/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -116,7 +116,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3001/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -198,7 +198,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3002/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3002/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -281,7 +281,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:3004/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3004/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -416,7 +416,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "--insecure", "--output", "/dev/null", "http://localhost:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -456,7 +456,7 @@ services:
       interval: 60s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/" ]
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:9000/" ] # wget fails
       timeout: 15s
     networks:
       - home
@@ -502,7 +502,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8080/heartbeat" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/heartbeat" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -585,7 +585,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9696/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9696/ping" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -627,7 +627,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/api/v2/app/version" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/api/v2/app/version" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -702,7 +702,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:8191/" ]
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8191/" ] # wget not installed
       timeout: 5s
     networks:
       - home
@@ -760,7 +760,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/openapi" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -798,7 +798,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:80" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80" ]
       timeout: 5s
     networks:
       - home
@@ -871,7 +871,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7745/api/v1/status" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7745/api/v1/status" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
@@ -1061,7 +1061,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://localhost:9000/api/system/status" ]
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:9000/api/system/status" ] # wget fails
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config

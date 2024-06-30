@@ -608,9 +608,9 @@ services:
       dockerfile: docker/qbittorrent/Dockerfile
       args:
         # Docker image versions
-        QBITTORRENT_VERSION: "4.6.4"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+        QBITTORRENT_VERSION: "4.6.5"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.8.1"   # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.10.2"  # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:

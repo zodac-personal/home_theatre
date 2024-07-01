@@ -531,8 +531,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "1024M"
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -819,8 +819,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "1024M"
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -1087,7 +1087,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "1024M"
+          memory: "512M"
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -1168,7 +1168,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "1024M"
+          memory: "512M"
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"

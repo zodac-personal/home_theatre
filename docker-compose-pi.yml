@@ -190,7 +190,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "24.5.9" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "24.6.8" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Email notification config
         NETALERT_GMAIL_ADDRESS: "${NETALERT_GMAIL_ADDRESS:?[netalert] GMail address missing}"

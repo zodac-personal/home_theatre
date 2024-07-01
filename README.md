@@ -452,6 +452,48 @@ cat backup_authentik.sql | docker compose exec -T authentik-db psql -U ${AUTHENT
 docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
 ```
 
+## Jellystat
+
+Take backup of the current database, then shut the Jellystat containers down:
+
+```
+docker compose exec jellystat-db pg_dump -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME} -cC > backup_jellystat.sql
+docker compose down jellystat jellystat-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `jellystat-db`.
+Next, delete the storage for `jellystat-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining Jellystat containers:
+
+```
+docker compose up --build -d jellystat-db
+cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
+docker compose up --build -d jellystat
+```
+
+## RomM
+
+TODO: Untested
+
+Take backup of the current database, then shut the RomM containers down:
+
+```
+docker compose exec romm-db mariadb-dump --all-databases -uroot -p"${ROMM_DB_ROOT_PASSWORD}" > backup_romm.sql
+docker compose down romm romm-db
+```
+
+Upgrade the version of [MariaDB](https://registry.hub.docker.com/_/mariadb) for `romm-db`.
+Next, delete the storage for `romm-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining RomM containers:
+
+```
+docker compose --build -d romm-db
+cat backup_romm.sql | docker compose exec romm-db sh -c 'exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}"'
+docker compose --build -d romm romm-db
+```
+
 ## Tandoor
 
 Take backup of the current database, then shut the Tandoor containers down:
@@ -479,6 +521,18 @@ psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} < backup_tandoor.sql
 exit
 docker compose up --build -d tandoor tandoor-ui
 ```
+
+# Upgrade
+
+## SonarQube
+
+When updating SonarQube, check the logs for a message like the following:
+
+```
+The database must be manually upgraded. Please backup the database and browse /setup. For more information: https://docs.sonarsource.com/sonarqube/latest/setup/upgrading
+```
+
+Log in to the `/setup` link and follow the instructions.
 
 # Misc Info
 
@@ -542,7 +596,7 @@ mv -f /app.conf.new /app/config/app.conf
 
 Then perform a `docker restart` of the container, and your changes should be applied.
 
-**NOTE:** I haven't tried this with newer versions and how robust it is to major version upgrades. Hoping for the best.
+**NOTE:** I haven't tried this with newer versions and how robust it is to major version upgrades. Hoping for the best (fine with minor upgrades).
 
 ## Ollama
 

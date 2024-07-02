@@ -587,16 +587,18 @@ since the container creates a fresh
 file on initial install, we cannot simply copy it as part of our [Dockerfile](./docker/netalert/Dockerfile). Instead, when you first run the service,
 you must copy it yourself.
 
-Once the first run of NetAlertX shows the container as **healthy**, `docker exec` into the container and run the following commands:
+Once the first run of NetAlertX shows the container as **healthy**, `docker exec` into the container and run the following commands to replace the
+configuration file, and then restart the `netalert` container.
 
 ```
 cp /app/config/app.conf /app/config/app.conf.bak
 mv -f /app.conf.new /app/config/app.conf
+exit
+docker compose restart netalert
 ```
 
-Then perform a `docker restart` of the container, and your changes should be applied.
-
-**NOTE:** I haven't tried this with newer versions and how robust it is to major version upgrades. Hoping for the best (fine with minor upgrades).
+**NOTE:** This isn't very robust to version upgrades, a fresh install with new config entries needs to be compared.
+An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
 
 ## Ollama
 

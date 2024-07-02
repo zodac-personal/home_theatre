@@ -192,10 +192,8 @@ services:
         # Docker image versions
         NETALERT_VERSION: "24.6.8" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
-        # Email notification config
-        NETALERT_GMAIL_ADDRESS: "${NETALERT_GMAIL_ADDRESS:?[netalert] GMail address missing}"
-        NETALERT_GMAIL_PASSKEY: "${NETALERT_GMAIL_PASSKEY:?[netalert] GMail passkey missing}"
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS:?[netalert] Admin email address missing}"
+        # Internal config
+        TIMEZONE: "${TIMEZONE:?Timezone missing}"
         # Scanning config
         NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
         # UI config

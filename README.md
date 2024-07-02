@@ -592,9 +592,9 @@ configuration file, and then restart the `netalert` container.
 
 ```
 cp /app/config/app.conf /app/config/app.conf.bak
-mv -f /app.conf.new /app/config/app.conf
+cp -f /app.conf.new /app/config/app.conf
 exit
-docker compose restart netalert
+docker compose -f docker-compose-pi.yml restart netalert
 ```
 
 **NOTE:** This isn't very robust to version upgrades, a fresh install with new config entries needs to be compared.

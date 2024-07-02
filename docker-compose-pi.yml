@@ -194,6 +194,8 @@ services:
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
+        # Notification config
+        DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL: "${DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL:?[netalert] Discord webhook URL missing}"
         # Scanning config
         NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
         # UI config

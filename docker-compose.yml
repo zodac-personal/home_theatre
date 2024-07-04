@@ -11,8 +11,6 @@ services:
     container_name: homarr
     hostname: homarr
     depends_on:
-      qbittorrent:
-        condition: service_healthy
       lidarr:
         condition: service_healthy
       radarr:
@@ -20,8 +18,6 @@ services:
       readarr:
         condition: service_healthy
       sonarr:
-        condition: service_healthy
-      tandoor-ui:
         condition: service_healthy
     deploy:
       resources:

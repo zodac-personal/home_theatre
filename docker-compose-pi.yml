@@ -126,7 +126,7 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ./storage/authentik-cache/:/data
+      - ./storage/authentik-cache/data/:/data
 
   # Database for Authentik
   authentik-db:
@@ -159,7 +159,7 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ./storage/authentik-db/:/var/lib/postgresql/data
+      - ./storage/authentik-db/data/:/var/lib/postgresql/data
 
   # Monitoring and alerting
   uptime-kuma:

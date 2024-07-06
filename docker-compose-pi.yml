@@ -220,3 +220,77 @@ services:
       # Persistent volumes
       - ./storage/netalert/config/:/app/config
       - ./storage/netalert/db/:/app/db
+
+  speedtest:
+    image: linuxserver/speedtest-tracker:0.20.6
+    container_name: speedtest
+    hostname: speedtest
+    depends_on:
+      speedtest-db:
+        condition: service_healthy
+    environment:
+      # Base config
+      APP_TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      # Reporting config
+      APP_KEY: "${SPEEDTEST_APP_KEY:?[speedtest] App key missing}"
+      APP_URL: "${SPEEDTEST_APP_URL:?[speedtest] App URL missing}"
+      PRUNE_RESULTS_OLDER_THAN: "30" # Days
+      SPEEDTEST_SCHEDULE: "${SPEEDTEST_SCHEDULE?:[speedtest] Cron schedule missing}"
+      SPEEDTEST_SERVERS: "${SPEEDTEST_SERVERS}"
+      # Database config
+      DB_CONNECTION: "pgsql"
+      DB_HOST: "speedtest-db"
+      DB_DATABASE: "${SPEEDTEST_DB_NAME:?[speedtest] Database name missing}"
+      DB_PASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest] Database password missing}"
+      DB_PORT: "${SPEEDTEST_DB_PORT:?[speedtest] Database port missing}"
+      DB_USERNAME: "${SPEEDTEST_DB_USER:?[speedtest] Database user missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/api/speedtest/latest" ]
+      timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Monitor)"
+      kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
+    networks:
+      - home_pi
+    ports:
+      - "5001:80"
+    restart: unless-stopped
+    volumes:
+      - ./storage/speedtest/config/:/config
+
+  speedtest-db:
+    image: postgres:16.3-alpine
+    container_name: speedtest-db
+    hostname: speedtest-db
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}"
+      POSTGRES_DB: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
+      POSTGRES_PASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
+      POSTGRES_USER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
+      PGPASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
+      PGUSER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
+    expose:
+      - 5432
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - home_pi
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/speedtest-db/data/:/var/lib/postgresql/data

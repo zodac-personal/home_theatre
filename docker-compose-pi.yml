@@ -254,7 +254,7 @@ services:
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Monitor)"
+      kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
       - home_pi

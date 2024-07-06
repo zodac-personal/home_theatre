@@ -259,7 +259,7 @@ services:
     networks:
       - home_pi
     ports:
-      - "5001:80"
+      - "5002:80"
     restart: unless-stopped
     volumes:
       - ./storage/speedtest/config/:/config

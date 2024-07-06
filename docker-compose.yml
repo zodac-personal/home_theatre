@@ -842,7 +842,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
-      - ./storage/tandoor-db/:/var/lib/postgresql/data
+      - ./storage/tandoor-db/data/:/var/lib/postgresql/data
 
   # Inventory management
   homebox:

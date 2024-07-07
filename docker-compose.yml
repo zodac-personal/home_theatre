@@ -846,7 +846,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.11.1 # https://github.com/sysadminsmedia/homebox/pkgs/container/homebox
+    image: ghcr.io/sysadminsmedia/homebox:0.12.0 # https://github.com/sysadminsmedia/homebox/pkgs/container/homebox
     container_name: homebox
     hostname: homebox
     deploy:

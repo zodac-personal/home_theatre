@@ -863,12 +863,6 @@ services:
       # UI config
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
       HBOX_WEB_MAX_UPLOAD_SIZE: "10"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7745/api/v1/status" ]
-      timeout: 5s
     labels:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Homebox (House Inventory)"

@@ -24,7 +24,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://localhost/" ]
       timeout: 5s
     networks:
       - home_pi
@@ -250,7 +250,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/api/speedtest/latest" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:80/api/speedtest/latest" ]
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config

@@ -413,7 +413,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.2.0
+    image: rommapp/romm:3.3.0
     container_name: romm
     hostname: romm
     depends_on:

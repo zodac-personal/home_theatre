@@ -549,20 +549,20 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
 - Create a file `/etc/systemd/system/docker.service.d/override.conf`
 - Add the following content to the file:
 
-  ```conf
-  [Service]
-  ExecStart=
-  ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_raspberry_pi>:2375 --containerd=/run/containerd/containerd.sock
-  ```
+```conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_raspberry_pi>:2375 --containerd=/run/containerd/containerd.sock
+```
 
 - Reload the daemon `sudo systemctl daemon-reload`
 - Restart the docker service `sudo systemctl edit docker.service`
 - Confirm the port is in LISTEN state with the LAN IP address:
 
-  ```conf
-  sudo netstat -lntp | grep dockerd
-  tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
-  ```
+```conf
+sudo netstat -lntp | grep dockerd
+tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
+```
 
 ### Homarr
 

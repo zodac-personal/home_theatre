@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
       - '.github/workflows/doc.yml'
-      - 'doc/markdownlint.yaml'
+      - 'doc/.markdownlint.json'
       - 'README.md'
 
 jobs:
@@ -23,5 +23,5 @@ jobs:
 
       - uses: DavidAnson/markdownlint-cli2-action@v16.0.0
         with:
-          config: 'doc/markdownlint.yaml'
+          config: 'doc/.markdownlint.json'
           globs: 'README.md'

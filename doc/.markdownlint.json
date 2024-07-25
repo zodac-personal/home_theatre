@@ -37,5 +37,8 @@
   },
   "MD049": {
     "style": "asterisk"
+  },
+  "MD055": {
+    "style": "leading_and_trailing"
   }
 }

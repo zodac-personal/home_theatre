@@ -1,22 +1,24 @@
-# Architecture Diagram
+# Main
+
+## Architecture Diagram
 
 ![Architecture Diagram](./doc/home_theatre.drawio.png)
 
-# !! Work In Progress Below !!
+## !! Work In Progress Below
 
 ----
 
-# Services
+## Services
 
 TODO: Decide the order of the subheadings within each service
 
-## <img src="./logos/radarr.png" width="50" height="50" alt="radarr_logo"/> Radarr
+### <img src="./logos/radarr.png" width="50" height="50" alt="radarr_logo"/> Radarr
 
 TODO: Purpose
 
-### Docker Compose Extract
+#### Docker Compose Extract
 
-```
+```yaml
 radarr:
   image: linuxserver/radarr:nightly-version-5.7.0.8851
   container_name: radarr
@@ -56,13 +58,13 @@ radarr:
     - ./storage/radarr/:/config
 ```
 
-### Additional Environment Variables
+#### Additional Environment Variables
 
 None.
 
-### Required Services
+#### Required Services
 
-### Is It Mandatory
+#### Is It Mandatory
 
 No.
 
@@ -72,34 +74,34 @@ automatically, this service can be removed.
 It is possible to search for content through Prowlarr directly if a movie is wanted. However, they may potentially need to be manually renamed/moved
 after the download is completed.
 
-### Healthcheck
+#### Healthcheck
 
 Radarr exposes a healthcheck endpoint, **/ping**. We configure the h
 
-### Ports
+#### Ports
 
 The default Radarr port of **7878** has been changed in the Radarr UI to **3000**. We then publicly expose it as port **4000**. This is minor
 obfuscation, and should not be considered actual security.
 
-### Volumes
+#### Volumes
 
-## <img src="./logos/homarr.png" width="70" height="49" alt="homarr_logo"/> Homarr
+### <img src="./logos/homarr.png" width="70" height="49" alt="homarr_logo"/> Homarr
 
-## <img src="./logos/sonarr.png" width="50" height="50" alt="sonarr_logo"/> Sonarr
+### <img src="./logos/sonarr.png" width="50" height="50" alt="sonarr_logo"/> Sonarr
 
-## <img src="./logos/lidarr.png" width="50" height="50" alt="lidarr_logo"/> Lidarr
+### <img src="./logos/lidarr.png" width="50" height="50" alt="lidarr_logo"/> Lidarr
 
-## <img src="./logos/readarr.png" width="50" height="50" alt="readarr_logo"/> Readarr
+### <img src="./logos/readarr.png" width="50" height="50" alt="readarr_logo"/> Readarr
 
 ----
 
-# Misc/Common Info
+## Misc/Common Info
 
-## Common Healthcheck
+### Common Healthcheck
 
 TODO: Discuss interval/retries/start_period/timeout default values
 
-## Common Environment Variables
+### Common Environment Variables
 
 Most services may contain the following environment variables:
 
@@ -109,47 +111,47 @@ Most services may contain the following environment variables:
 
 Since they are used throughout, we set these values in the `.env` file and pass them in through our docker-compose configuration.
 
-### PGID/PUID
+#### PGID/PUID
 
 The **PGID** and **PUID** are used to override the group and user ID of the running container process, for permissions and privileges. Most services
 currently use the root user and group (**0**), exposed through the environment variables **PGID_ROOT** and **PUID_ROOT**. Some have been tested with
 non-root users and will instead use **PGID_NON_ROOT** and **PUID_NON_ROOT**.
 
-```
+```yaml
 services:
   service_name:
     image: image_name:tag
   user: "${PUID_NON_ROOT}:${PGID_NON_ROOT}"
 ```
 
-### TZ/TIMEZONE
+#### TZ/TIMEZONE
 
 **TZ** or **TIMEZONE** is used to tell the service the running host's timezone, as defined by
 the [tz database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List).
 
 ----
 
-# Environment Variables File (.env)
+## Environment Variables File (.env)
 
 TODO: Describe either in detail here, or high-level but with better comments in the .env.template file
 
 ----
 
-# Public Access
+## Public Access
 
 Access to the services is controlled by an instance of [Apache](https://httpd.apache.org/), being used as a reverse-proxy. This means all requests go
 through the Apache web-server and are then forwarded on to the correct internal system. This means we do not need to expose the ports for each service
 publicly, as Apache will be able to forward those requests itself.
 
-## Macro Definition
+### Macro Definition
 
 The following macro is used as a template for most of the services:
 
-```
+```bash
 <VirtualHost *:80>
-    ServerAdmin <email_address>
-    ServerName $server_name.<domain_name>.<domain_tld>
-    ServerAlias $server_name.<domain_name>.*
+    ServerAdmin admin@email.com
+    ServerName $server_name.site.com
+    ServerAlias $server_name.site.*
 
     ProxyPass / $protocol://$url/
     ProxyPassReverse / $protocol://$url/
@@ -164,16 +166,16 @@ The following macro is used as a template for most of the services:
     RemoteIPHeader X-Forwarded-For
 
     TimeOut 20
-    ErrorDocument 502 <status_page_url>
-    ErrorDocument 503 <status_page_url>
+    ErrorDocument 502 https://status.site.com
+    ErrorDocument 503 https://status.site.com
 </VirtualHost>
 ```
 
 Breaking down the macro, we can define each section/line:
 
-### VirtualHost
+#### VirtualHost
 
-```
+```bash
 <VirtualHost *:80>
 ...
 </VirtualHost>
@@ -181,113 +183,113 @@ Breaking down the macro, we can define each section/line:
 
 Definition
 
-### Host Configuration
+#### Host Configuration
 
-```
-ServerAdmin <email_address>
-```
-
-Definition
-
-```
-ServerName $server_name.<domain_name>.<domain_tld>
+```bash
+ServerAdmin admin@email.com
 ```
 
 Definition
 
-```
-ServerAlias $server_name.<domain_name>.*
+```bash
+ServerName $server_name.site.com
 ```
 
 Definition
 
-### URL Proxying
-
+```bash
+ServerAlias $server_name.site.*
 ```
+
+Definition
+
+#### URL Proxying
+
+```bash
 ProxyPass / $protocol://$url/
 ```
 
 Definition
 
-```
+```bash
 ProxyPassReverse / $protocol://$url/
 ```
 
 Definition
 
-## Websocket Enabling
+#### Websocket Enabling
 
-```
+```bash
 RewriteEngine on
 ```
 
 Definition
 
-```
+```bash
 RewriteCond %{HTTP:Upgrade} websocket [NC]
 ```
 
 Definition
 
-```
+```bash
 RewriteCond %{HTTP:Connection} upgrade [NC]
 ```
 
 Definition
 
-```
+```bash
 RewriteRule ^/?(.*) "ws://$url/$1" [P,L]
 ```
 
 Definition
 
-### Preserving Originating Host
+#### Preserving Originating Host
 
-```
+```bash
 ProxyPreserveHost on
 ```
 
 Definition
 
-```
+```bash
 ProxyRequests Off
 ```
 
 Definition
 
-```
+```bash
 RemoteIPHeader X-Forwarded-For
 ```
 
 Definition
 
-### Timeouts And Errors
+#### Timeouts And Errors
 
-```
+```bash
 TimeOut 20
 ```
 
 Definition
 
-```
+```bash
 ErrorDocument 502 <status_page_url>
 ```
 
 Definition
 
-```
+```bash
 ErrorDocument 503 <status_page_url>
 ```
 
 Definition
 
-## Custom Configuration
+### Custom Configuration
 
 In addition to the basic configuration, we have extra configuration for (TODO: discuss tandoor, homarr, redirects next)
 
 ----
 
-# Authentication
+## Authentication
 
 Where possible, we use [Authentik](https://goauthentik.io/) to secure the services.
 
@@ -295,7 +297,7 @@ The following services are integrated with Authentik, and their configuration is
 
 TODO:
 
-## Basic Auth
+### Basic Auth
 
 The following services forward username/password information from the Authentik user's group to the service:
 
@@ -307,21 +309,21 @@ The following services forward username/password information from the Authentik 
 - Readarr
 - Sonarr
 
-## OIDC
+### OIDC
 
 The following services allow you to login/create an account using Authentik:
 
 - Homarr
 - Tandoor
 
-## X-Authentik-* Headers
+### X-Authentik-* Headers
 
 The following services can't be logged in using the local URL, as they require X-Authentik-* headers to be forwarded:
 
 - Dozzle
 - Ollama
 
-## No Internal Auth
+### No Internal Auth
 
 The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication:
 
@@ -332,14 +334,14 @@ The following services don't have any authentication of their own (or it is disa
 
 ----
 
-# Backups
+## Backups
 
 TODO: Move all this info into the service-level documentation instead of making it common
 TODO: Add description of how we use bind mounts rather than volumes (except for where required), and why
 
-## Creating Backups
+### Creating Backups
 
-### Scheduled Backups
+#### Scheduled Backups
 
 The following containers have backup systems which are configured to take weekly backups.
 You can either retrieve the latest automated backup, or can export a fresh one.
@@ -353,7 +355,7 @@ For the following containers, a new backup can be generated by going to **System
 - `readarr`
 - `sonarr`
 
-### Built-In Backups
+#### Built-In Backups
 
 The following containers have no scheduled backup, but there is an option in the UI to export one:
 
@@ -362,7 +364,7 @@ The following containers have no scheduled backup, but there is an option in the
 For the `tandoor` container, the backup can be generated by clicking on the toolbox icon in the toolbar, selecting **Export**, selecting the option
 **All recipes**, then pressing the **Export** button.
 
-### Manual Backups
+#### Manual Backups
 
 The following containers have no built-in backup systems, and must have their content archived manually.
 
@@ -371,7 +373,7 @@ The following containers have no built-in backup systems, and must have their co
 For the `homebox` container, there is an import/export feature, but we need to manually back up any uploaded screenshots/PDFs/attachments. This can be
 done using the commands:
 
-```
+```bash
 docker exec -it homebox sh
 root@homebox:/# tar -czf homebox.tar.gz /data/
 ```
@@ -379,7 +381,7 @@ root@homebox:/# tar -czf homebox.tar.gz /data/
 These attachments will unfortunately have to be manually added to each item (as of v0.9.0). In addition, an export of all items must be done by going
 to **Tools**> **Import/Export**> **Export Inventory**.
 
-### No Backups
+#### No Backups
 
 The following containers have no need for backups, or backups are not used:
 
@@ -392,51 +394,51 @@ The following containers have no need for backups, or backups are not used:
 For `navidrome`, the music directory is read-only so on creating a new container, you simply need to re-create the admin user. Custom playlists are
 lost, but I don't use them, so I don't really care. Might update this if I use more playlists in the future.
 
-## Retrieving Backups
+### Retrieving Backups
 
 Once a backup has been created on the container, it should be copied to the host system. This can be done by copying the file from the container.
 If you are unsure of where the file is saved, you can connect to the container and search the file system by using the command:
 
-```
+```bash
 docker exec -it [CONTAINER_ID] bash
 ```
 
 Once you know the filepath of the backup file, you can copy it to the host by executing this command from the host itself:
 
-```
+```bash
 docker cp [CONTAINER_ID]:/path/to/backup/file.tar.gz ./host/path/to/backup/file.tar.gz
 ```
 
-## Restoring Backups
+### Restoring Backups
 
 TODO:
 
 ----
 
-# Logos & Images
+## Logos & Images
 
 TODO: Describe the ./logos directory and where those icons are use. Re-organise the structure while you're at it
 
 ----
 
-# Future Plans
+## Future Plans
 
 New/replaced services
 Further auth integrations
 Better backup solutions
 
-# Database Upgrades
+## Database Upgrades
 
 When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
 container.
 
-## Authentik
+### Authentik DB
 
 Following instructions from the [Authentik documentation for DB upgrade](https://docs.goauthentik.io/docs/troubleshooting/postgres/upgrade_docker).
 
 Take backup of the current database, then shut the Authentik containers down:
 
-```
+```bash
 docker compose exec authentik-db pg_dump -U ${AUTHENTIK_DB_USER} -d ${AUTHENTIK_DB_NAME} -cC > backup_authentik.sql
 docker compose -f docker-compose-pi.yml down authentik authentik-worker authentik-cache authentik-db
 ```
@@ -446,17 +448,17 @@ Next, delete the storage for `authentik-db` (make sure to copy this directory/vo
 
 Finally, start up the new DB container, restore the backup, then start the remaining Authentik containers:
 
-```
+```bash
 docker compose -f docker-compose-pi.yml up --build -d authentik-db
 cat backup_authentik.sql | docker compose exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
 docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
 ```
 
-## Jellystat
+### Jellystat DB
 
 Take backup of the current database, then shut the Jellystat containers down:
 
-```
+```bash
 docker compose exec jellystat-db pg_dump -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME} -cC > backup_jellystat.sql
 docker compose down jellystat jellystat-db
 ```
@@ -466,19 +468,19 @@ Next, delete the storage for `jellystat-db` (make sure to copy this directory/vo
 
 Finally, start up the new DB container, restore the backup, then start the remaining Jellystat containers:
 
-```
+```bash
 docker compose up --build -d jellystat-db
 cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
 docker compose up --build -d jellystat
 ```
 
-## RomM
+### RomM DB
 
 TODO: Untested
 
 Take backup of the current database, then shut the RomM containers down:
 
-```
+```bash
 docker compose exec romm-db mariadb-dump --all-databases -uroot -p"${ROMM_DB_ROOT_PASSWORD}" > backup_romm.sql
 docker compose down romm romm-db
 ```
@@ -488,19 +490,19 @@ Next, delete the storage for `romm-db` (make sure to copy this directory/volume 
 
 Finally, start up the new DB container, restore the backup, then start the remaining RomM containers:
 
-```
+```bash
 docker compose --build -d romm-db
 cat backup_romm.sql | docker compose exec romm-db sh -c 'exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}"'
 docker compose --build -d romm romm-db
 ```
 
-## Tandoor
+### Tandoor DB
 
 Take backup of the current database, then shut the Tandoor containers down:
 
 TODO: Update this to back up/restore without exec-ing into the container on next upgrade, similar to [Authentik](#authentik) above.
 
-```
+```bash
 docker exec -it tandoor-db /bin/bash
 pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
 exit
@@ -513,7 +515,7 @@ Next, delete the storage for `tandoor-db` (make sure to copy this directory/volu
 
 Finally, start up the new DB container, restore the backup, then start the remaining Tandoor containers:
 
-```
+```bash
 docker compose up --build -d tandoor-db
 docker cp backup_tandoor.sql tandoor-db:/
 docker exec -it tandoor-db /bin/bash
@@ -522,57 +524,60 @@ exit
 docker compose up --build -d tandoor tandoor-ui
 ```
 
-# Upgrade
+## Upgrade
 
-## SonarQube
+### SonarQube
 
 When updating SonarQube, check the logs for a message like the following:
 
-```
+```log
 The database must be manually upgraded. Please backup the database and browse /setup. For more information: https://docs.sonarsource.com/sonarqube/latest/setup/upgrading
 ```
 
 Log in to the `/setup` link and follow the instructions.
 
-# Misc Info
+## Misc Info
 
-## Authentik
+### Authentik
 
 We use our domain [logos](./logos/site) in the container. But because the **/media** directory is also a volume, they can be overridden by the
 container being built. After the initial run, once the container is in a **healthy** state, `docker cp` the logos to the
 **/media/public/application-icons/** directory in the container.
 
-## Dozzle
+### Dozzle
 
 In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP. For a RaspberryPi 4, the following needs to be done:
 
 - Create a file `/etc/systemd/system/docker.service.d/override.conf`
 - Add the following content to the file:
-  ```
+
+  ```conf
   [Service]
   ExecStart=
   ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_raspberry_pi>:2375 --containerd=/run/containerd/containerd.sock
   ```
+
 - Reload the daemon `sudo systemctl daemon-reload`
 - Restart the docker service `sudo systemctl edit docker.service`
 - Confirm the port is in LISTEN state with the LAN IP address:
-  ```
+
+  ```conf
   sudo netstat -lntp | grep dockerd
   tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
   ```
 
-## Homarr
+### Homarr
 
 On initial start, you'll be asked to create an admin user. You won't be able to log in with this user unless you change the following environment
 variable:
 
-```
+```yaml
 AUTH_PROVIDER: "oidc"
 ```
 
 to:
 
-```
+```yaml
 AUTH_PROVIDER: "credentials,oidc"
 ```
 
@@ -580,7 +585,7 @@ However, by creating a user in Authentik assigned to the group **HomarrAdmins**,
 configure your Homarr instance. If this group name needs to be changed, update the `AUTH_OIDC_ADMIN_GROUP` environment variable for Homarr to match
 the group name in Authentik.
 
-## NetAlertX
+### NetAlertX
 
 The container will create an updated [app.conf](./docker/netalert/config/app.conf) file and save it in the container at **/app.conf.new**. However,
 since the container creates a fresh
@@ -590,7 +595,7 @@ you must copy it yourself.
 Once the first run of NetAlertX shows the container as **healthy**, `docker exec` into the container and run the following commands to replace the
 configuration file, and then restart the `netalert` container.
 
-```
+```bash
 cp /app/config/app.conf /app/config/app.conf.bak
 cp -f /app.conf.new /app/config/app.conf
 exit
@@ -600,12 +605,12 @@ docker compose -f docker-compose-pi.yml restart netalert
 **NOTE:** This isn't very robust to version upgrades, a fresh install with new config entries needs to be compared.
 An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
 
-## Ollama
+### Ollama
 
 The container first comes up with no users and no models. Neither of these can be set programatically, so on the first start-up some actions must be
 performed.
 
-### Create Admin User
+#### Create Admin User
 
 In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by Authentik,
 which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
@@ -613,17 +618,17 @@ which will pass the **X-Authentik-Email** header value. This will create an admi
 Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker-compose down` and `docker-compose up` to rebuild the container with
 the updated value.
 
-### Download Models
+#### Download Models
 
 Next the models need to be downloaded. This can be done through the UI itself, or you can `docker exec` into the container and run the following
 commands:
 
-```
+```bash
 ollama pull llama3              # Main model
 ollama pull llama2-uncensored   # Older version of the model, but with no filters
 ```
 
-## Tandoor
+### Tandoor
 
 Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the _Domain Name_ and _Display Name_ to
 your own domain name. This cannot be configured through environment variables.

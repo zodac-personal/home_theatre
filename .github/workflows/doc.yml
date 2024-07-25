@@ -1,0 +1,31 @@
+name: Documentation CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'README.md'
+
+jobs:
+  analyze:
+    name: Documentation Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.7
+
+      - name: Fetch all commits & tags
+        run: |
+          git fetch --prune --depth=10000 && \
+          git fetch --prune --unshallow --tags
+
+      - uses: articulate/actions-markdownlint@v1.1.0
+        with:
+          config: './doc/markdownlint.yaml'
+          files: 'README.md'
+          version: 0.41.0

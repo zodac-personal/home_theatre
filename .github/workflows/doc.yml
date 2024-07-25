@@ -25,3 +25,4 @@ jobs:
         with:
           config: 'doc/.markdownlint.json'
           globs: 'README.md'
+          separator: ','

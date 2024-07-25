@@ -3,17 +3,23 @@
   "MD009": {
     "strict": true
   },
+  "MD007": {
+    "indent": 4
+  },
   "MD010": {
     "spaces_per_tab": 2
   },
   "MD013": {
     "line_length": 150,
     "heading_line_length": 120,
-    "code_block_line_length": 150
+    "code_block_line_length": 200,
+    "tables": false
   },
   "MD033": {
     "allowed_elements": [
-      "img"
+      "details",
+      "img",
+      "summary"
     ]
   },
   "MD043": false

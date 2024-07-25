@@ -4,7 +4,6 @@
 
 # Project files
 .env
-.htpasswd
 
 # Test files
 .env.test

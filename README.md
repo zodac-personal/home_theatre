@@ -66,7 +66,7 @@ None.
 
 No.
 
-Radarr is a companion to Sonarr/Lidarr/Readarr, but it is used to finding movies. If you have no need of _ever_ wanting movies to be downloaded
+Radarr is a companion to Sonarr/Lidarr/Readarr, but it is used to finding movies. If you have no need of *ever* wanting movies to be downloaded
 automatically, this service can be removed.
 
 It is possible to search for content through Prowlarr directly if a movie is wanted. However, they may potentially need to be manually renamed/moved
@@ -107,7 +107,7 @@ Most services may contain the following environment variables:
 |---------------------------|----------|------------------|
 | TZ (or TIMEZONE)          | Timezone | Pacific/Auckland |
 
-Since they are used throughout, we set these values in the `.env` file and pass them in through our docker-compose configuration.
+Since they are used throughout, we set these values in the `.env` file and pass them in through our docker compose configuration.
 
 #### PGID/PUID
 
@@ -600,7 +600,7 @@ exit
 docker compose -f docker-compose-pi.yml restart netalert
 ```
 
-**NOTE:** This isn't very robust to version upgrades, a fresh install with new config entries needs to be compared.
+**NOTE:** This isn't very robust to version upgrades, a fresh installation with new config entries needs to be compared.
 An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
 
 ### Ollama
@@ -613,7 +613,7 @@ performed.
 In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by Authentik,
 which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
 
-Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker-compose down` and `docker-compose up` to rebuild the container with
+Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker compose down` and `docker compose up` to rebuild the container with
 the updated value.
 
 #### Download Models
@@ -628,5 +628,5 @@ ollama pull llama2-uncensored   # Older version of the model, but with no filter
 
 ### Tandoor
 
-Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the _Domain Name_ and _Display Name_ to
+Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the *Domain Name* and *Display Name* to
 your own domain name. This cannot be configured through environment variables.

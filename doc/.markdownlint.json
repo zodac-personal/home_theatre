@@ -1,5 +1,11 @@
 {
   "default": true,
+  "MD003": {
+    "style": "atx"
+  },
+  "MD004": {
+    "style": "dash"
+  },
   "MD009": {
     "strict": true
   },
@@ -22,5 +28,14 @@
       "summary"
     ]
   },
-  "MD043": false
+  "MD035": {
+    "style": "----"
+  },
+  "MD043": false,
+  "MD046": {
+    "style": "fenced"
+  },
+  "MD049": {
+    "style": "asterisk"
+  }
 }

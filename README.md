@@ -25,7 +25,7 @@ radarr:
   hostname: radarr
   depends_on:
     qbittorrent:
-        condition: service_healthy
+      condition: service_healthy
   deploy:
     resources:
       limits:

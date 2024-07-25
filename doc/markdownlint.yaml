@@ -38,7 +38,7 @@ MD009:
   # Allow spaces for empty lines in list items
   list_item_empty_lines: false
   # Include unnecessary breaks
-  strict: false
+  strict: true
 
 # MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/main/doc/md010.md
 MD010:
@@ -47,7 +47,7 @@ MD010:
   # Fenced code languages to ignore
   ignore_code_languages: []
   # Number of spaces for each hard tab
-  spaces_per_tab: 1
+  spaces_per_tab: 2
 
 # MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/main/doc/md011.md
 MD011: true
@@ -62,7 +62,7 @@ MD013:
   # Number of characters
   line_length: 150
   # Number of characters for headings
-  heading_line_length: 80
+  heading_line_length: 120
   # Number of characters for code blocks
   code_block_line_length: 150
   # Include code blocks
@@ -74,7 +74,7 @@ MD013:
   # Strict length checking
   strict: false
   # Stern length checking
-  stern: true
+  stern: false
 
 # MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/main/doc/md014.md
 MD014: true
@@ -193,11 +193,12 @@ MD041:
 MD042: true
 
 # MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/main/doc/md043.md
-MD043:
-  # List of headings
-  headings: []
-  # Match case of headings
-  match_case: false
+# Disabled
+# MD043:
+#  # List of headings
+#  headings: []
+#  # Match case of headings
+#  match_case: false
 
 # MD044/proper-names : Proper names should have the correct capitalization : https://github.com/DavidAnson/markdownlint/blob/main/doc/md044.md
 MD044:

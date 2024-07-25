@@ -151,7 +151,7 @@ MD032: true
 # MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/main/doc/md033.md
 MD033:
   # Allowed elements
-  allowed_elements: [ 'img' ]
+  allowed_elements: [ "img" ]
 
 # MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/main/doc/md034.md
 MD034: true

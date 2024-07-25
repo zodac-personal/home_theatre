@@ -1,6 +1,4 @@
-# Main
-
-## Architecture Diagram
+# Architecture Diagram
 
 ![Architecture Diagram](./doc/home_theatre.drawio.png)
 

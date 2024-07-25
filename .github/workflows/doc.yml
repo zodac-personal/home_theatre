@@ -25,4 +25,3 @@ jobs:
         with:
           config: './doc/markdownlint.yaml'
           files: 'README.md'
-          version: 0.41.0

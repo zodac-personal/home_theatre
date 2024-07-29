@@ -1,4 +1,4 @@
-ARG APACHE_VERSION
+ARG APACHE_VERSION=latest
 FROM httpd:${APACHE_VERSION}-alpine AS apache_base
 
 RUN mkdir --parents /usr/local/apache2/conf/sites/ && \

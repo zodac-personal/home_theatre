@@ -1,4 +1,4 @@
-ARG AUTOKUMA_VERSION
+ARG AUTOKUMA_VERSION=latest
 FROM ghcr.io/bigboot/kuma:${AUTOKUMA_VERSION}
 
 COPY ./docker/autokuma/config/monitor /var/static/monitor/

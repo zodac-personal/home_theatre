@@ -1,4 +1,4 @@
-ARG BAZARR_VERSION
+ARG BAZARR_VERSION=latest
 FROM linuxserver/bazarr:${BAZARR_VERSION} AS bazarr_base
 
 # - Install https://github.com/smacke/ffsubsync/ for subtitle syncing, and dependencies

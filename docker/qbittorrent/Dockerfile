@@ -1,4 +1,4 @@
-ARG QBITTORRENT_VERSION
+ARG QBITTORRENT_VERSION=latest
 FROM linuxserver/qbittorrent:${QBITTORRENT_VERSION}-libtorrentv1 AS qbittorrent_base
 
 # Install https://github.com/WDaan/VueTorrent/ for custom Web UI

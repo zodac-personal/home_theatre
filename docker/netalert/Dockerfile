@@ -1,4 +1,4 @@
-ARG NETALERT_VERSION
+ARG NETALERT_VERSION=latest
 FROM jokobsk/netalertx:${NETALERT_VERSION} as netalert_base
 
 RUN mkdir -p /app/config/

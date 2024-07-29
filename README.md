@@ -312,6 +312,7 @@ The following services forward username/password information from the Authentik 
 The following services allow you to login/create an account using Authentik:
 
 - Homarr
+- Synology NAS
 - Tandoor
 
 ### X-Authentik-* Headers

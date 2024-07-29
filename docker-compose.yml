@@ -1149,6 +1149,8 @@ services:
         # Build arguments
         # Host Monitor URLs
         EMBY_MONITOR_URL: "${EMBY_MONITOR_URL:?[autokuma] Emby static monitor URL missing}"
+        # NAS URLs
+        SYNOLOGY_MONITOR_URL: "${SYNOLOGY_MONITOR_URL:?[autokuma] Synology static monitor URL missing}"
     container_name: autokuma
     hostname: autokuma
     deploy:

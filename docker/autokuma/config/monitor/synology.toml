@@ -1,0 +1,6 @@
+name = "Synology (NAS)"
+url = "%SYNOLOGY_MONITOR_URL%"
+type = "http"
+max_retries = 3
+notification_id_list = { "2" = true }
+tags = '[{"tag_id": 1},{"tag_id": 2}]'

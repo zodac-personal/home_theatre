@@ -2,9 +2,19 @@
 
 ![Architecture Diagram](./doc/home_theatre.drawio.png)
 
-## !! Work In Progress Below
+## Work In Progress
 
 ----
+
+## Systems
+
+### Main PC
+
+### Raspberry Pi
+
+### Synology NAS
+
+### Mobile Apps
 
 ## Services
 
@@ -270,13 +280,13 @@ TimeOut 20
 Definition
 
 ```bash
-ErrorDocument 502 <status_page_url>
+ErrorDocument 502 https://status.site.com
 ```
 
 Definition
 
 ```bash
-ErrorDocument 503 <status_page_url>
+ErrorDocument 503 https://status.site.com
 ```
 
 Definition

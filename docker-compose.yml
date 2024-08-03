@@ -7,7 +7,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:nightly-version-5.8.1.8899
+    image: linuxserver/radarr:nightly-version-5.9.0.9004
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -46,7 +46,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.5.1801
+    image: linuxserver/sonarr:develop-version-4.0.8.2008
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -88,7 +88,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:7.0.0 # https://github.com/recyclarr/recyclarr/pkgs/container/recyclarr
+    image: ghcr.io/recyclarr/recyclarr:7.2.0 # https://github.com/recyclarr/recyclarr/pkgs/container/recyclarr
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -128,7 +128,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.4.2.4236
+    image: linuxserver/lidarr:nightly-version-2.5.1.4285
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:nightly-version-0.3.30.2572
+    image: linuxserver/readarr:nightly-version-0.4.0.2593
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -250,7 +250,7 @@ services:
 
   # eBook management
   kavita:
-    image: jvmilazz0/kavita:nightly-0.8.1.17
+    image: jvmilazz0/kavita:nightly-0.8.2.1
     container_name: kavita
     hostname: kavita
     deploy:
@@ -279,7 +279,7 @@ services:
 
   # Downloaded archive extracter
   unpackerr:
-    image: golift/unpackerr:0.13.1
+    image: golift/unpackerr:0.14.5
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
@@ -319,6 +319,8 @@ services:
       UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
       UN_SONARR_0_URL: "http://sonarr:3001"
+      # Logging config
+      UN_LOG_FILE: "/config/unpackerr.log"
     healthcheck:
       interval: 30s
       retries: 3
@@ -328,8 +330,6 @@ services:
     networks:
       - home
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
@@ -339,12 +339,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    build:
-      context: .
-      dockerfile: docker/bazarr/Dockerfile
-      args:
-        # Docker image versions
-        BAZARR_VERSION: "development-version-v1.4.3" # https://hub.docker.com/r/linuxserver/bazarr/tags
+    image: linuxserver/bazarr:development-version-v1.4.4-beta.27
     container_name: bazarr
     hostname: bazarr
     deploy:
@@ -384,11 +379,12 @@ services:
       - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
+      - ./docker/bazarr/scripts/cleansubs.sh:/opt/cleansubs.sh
       - ./storage/bazarr/:/config
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.4.1
+    image: onerahmet/openai-whisper-asr-webservice:v1.5.0
     container_name: whisper
     hostname: whisper
     deploy:
@@ -507,7 +503,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.20.1.4591
+    image: linuxserver/prowlarr:nightly-version-1.21.2.4648
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -558,7 +554,7 @@ services:
         # Docker image versions
         QBITTORRENT_VERSION: "4.6.5"  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
         # Build arguments
-        VUETORRENT_VERSION: "2.10.2"  # https://github.com/WDaan/VueTorrent/releases/
+        VUETORRENT_VERSION: "2.11.1"  # https://github.com/WDaan/VueTorrent/releases/
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -798,7 +794,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.12.1 # https://github.com/sysadminsmedia/homebox/pkgs/container/homebox
+    image: ghcr.io/sysadminsmedia/homebox:0.13.0 # https://github.com/sysadminsmedia/homebox/pkgs/container/homebox
     container_name: homebox
     hostname: homebox
     deploy:
@@ -871,7 +867,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v7.0.7
+    image: amir20/dozzle:v8.1.3
     container_name: dozzle
     hostname: dozzle
     deploy:
@@ -950,7 +946,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.3.7-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
+    image: ghcr.io/open-webui/open-webui:v0.3.11-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1145,7 +1141,7 @@ services:
       dockerfile: docker/autokuma/Dockerfile
       args:
         # Docker image versions
-        AUTOKUMA_VERSION: "0.6.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+        AUTOKUMA_VERSION: "0.7.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
         # Build arguments
         # Host Monitor URLs
         EMBY_MONITOR_URL: "${EMBY_MONITOR_URL:?[autokuma] Emby static monitor URL missing}"
@@ -1198,7 +1194,7 @@ services:
   # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
   # It also uses the published docker image, rather than building one for any static monitors.
   autokuma-pi:
-    image: ghcr.io/bigboot/autokuma:0.6.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+    image: ghcr.io/bigboot/autokuma:0.7.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
     container_name: autokuma-pi
     hostname: autokuma-pi
     environment:

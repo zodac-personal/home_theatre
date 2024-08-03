@@ -1,0 +1,50 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/docker.yml'
+      - 'doc/.hadolint.yaml'
+      - 'docker/**'
+
+jobs:
+  analyze:
+    name: Docker Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Additional Docker Analysis
+      - name: Run Hadolint and generate report
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          config: ./ci/.hadolint.yaml
+          dockerfile: Dockerfile
+          output-file: hadolint-report.json
+          recursive: true
+
+        # SonarQube Analysis
+      - name: Execute SonarQube Scan
+        env:
+          SONAR_HOST: ${{ vars.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_PAT }}
+        run: |
+          docker run \
+          --rm \
+          -e SONAR_HOST_URL=${{ vars.SONAR_HOST_URL }} \
+          -v "$(pwd):/usr/src/" \
+          sonarsource/sonar-scanner-cli:10.0 \
+            -Dsonar.projectKey=home_theatre  \
+            -Dsonar.projectName=home_theatre  \
+            -Dsonar.sources=/usr/src/docker/ \
+            -Dsonar.token=${{ secrets.SONARQUBE_PAT }} \
+            -Dsonar.docker.hadolint.reportPaths=hadolint-report.json

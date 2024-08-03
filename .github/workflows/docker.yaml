@@ -27,7 +27,7 @@ jobs:
       - name: Run Hadolint and generate report
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          config: ./ci/.hadolint.yaml
+          config: ./doc/.hadolint.yaml
           dockerfile: Dockerfile
           output-file: hadolint-report.json
           recursive: true

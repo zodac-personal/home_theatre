@@ -707,7 +707,6 @@ services:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
       kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: 1
     networks:
       - home
     restart: unless-stopped

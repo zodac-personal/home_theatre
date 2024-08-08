@@ -1278,6 +1278,11 @@ services:
     image: ghcr.io/bigboot/autokuma:0.7.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
     container_name: autokuma-pi
     hostname: autokuma-pi
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

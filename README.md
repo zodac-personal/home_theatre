@@ -322,6 +322,7 @@ The following services forward username/password information from the Authentik 
 The following services allow you to login/create an account using Authentik:
 
 - Homarr
+- Linkwarden
 - Synology NAS
 - Tandoor
 
@@ -481,6 +482,26 @@ Finally, start up the new DB container, restore the backup, then start the remai
 docker compose up --build -d jellystat-db
 cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
 docker compose up --build -d jellystat
+```
+
+### Linkwarden DB
+
+Take backup of the current database, then shut the Linkwarden containers down:
+
+```bash
+docker compose exec linkwarden-db pg_dump -U ${LINKWARDEN_DB_USER} -d ${LINKWARDEN_DB_NAME} -cC > backup_linkwarden.sql
+docker compose down linkwarden linkwarden-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `linkwarden-db`.
+Next, delete the storage for `linkwarden-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining Linkwarden containers:
+
+```bash
+docker compose up --build -d linkwarden-db
+cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
+docker compose up --build -d linkwarden
 ```
 
 ### RomM DB

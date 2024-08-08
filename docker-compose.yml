@@ -1131,6 +1131,92 @@ services:
     volumes:
       - ./storage/jellystat-db/data/:/var/lib/postgresql/data
 
+  # Bookmark manager
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:v2.6.2 # https://github.com/linkwarden/linkwarden/pkgs/container/linkwarden
+    container_name: linkwarden
+    hostname: linkwarden
+    depends_on:
+      linkwarden-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Auth config
+      AUTHENTIK_CLIENT_ID: "${LINKWARDEN_AUTHENTIK_CLIENT_ID:?[linkwarden] Authentik client ID missing}"
+      AUTHENTIK_CLIENT_SECRET: "${LINKWARDEN_AUTHENTIK_CLIENT_SECRET:?[linkwarden] Authentik client secret missing}"
+      AUTHENTIK_CUSTOM_NAME: "Authentik"
+      AUTHENTIK_ISSUER: "${LINKWARDEN_AUTHENTIK_OIDC_URI:?[linkwarden] Authentik OIDC URL missing}"
+      NEXTAUTH_SECRET: "${LINKWARDEN_SECRET_KEY:?[linkwarden] Secret key missing}"
+      NEXTAUTH_URL: "${LINKWARDEN_PUBLIC_URL:?[linkwarden] Public URL missing}/api/v1/auth"
+      NEXT_PUBLIC_AUTHENTIK_ENABLED: "true"
+      NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"
+      NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
+      # Database config
+      DATABASE_URL: "postgresql://${LINKWARDEN_DB_USER:?[linkwarden] Database user missing}:${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}@linkwarden-db:${LINKWARDEN_DB_PORT:?[linkwarden] Database port missing}/${LINKWARDEN_DB_NAME:?[linkwarden] Database name missing}"
+      POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
+      timeout: 5s
+    labels:
+      # Uptime-Kuma monitor config
+      kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
+      kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: 1
+    networks:
+      - home
+    ports:
+      - "4017:3000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/linkwarden/data/:/data/data
+
+  # Database for Linkwarden
+  linkwarden-db:
+    image: postgres:16.3-alpine
+    container_name: linkwarden-db
+    hostname: linkwarden-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
+      POSTGRES_DB: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
+      POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
+      POSTGRES_USER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
+      PGPASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
+      PGUSER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
+    expose:
+      - "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/linkwarden-db/data/:/var/lib/postgresql/data
+
   # Automatic Uptime-Kuma monitor generator
   autokuma:
     build:

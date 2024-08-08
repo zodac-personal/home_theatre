@@ -1170,7 +1170,6 @@ services:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
       kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: 1
     networks:
       - home
     ports:

@@ -409,7 +409,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.3.0
+    image: rommapp/romm:3.4.0
     container_name: romm
     hostname: romm
     depends_on:
@@ -424,10 +424,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      DISABLE_CSRF_PROTECTION: "true"
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
-      ROMM_AUTH_PASSWORD: "${ROMM_ADMIN_PASSWORD:?[romm] Admin password missing}"
-      ROMM_AUTH_USERNAME: "${ADMIN_USERNAME:?[romm] Admin username missing}"
       # Database config
       ROMM_DB_DRIVER: "mariadb"
       DB_HOST: "romm-db"

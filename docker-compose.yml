@@ -707,7 +707,7 @@ services:
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
       kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: 2
+      kuma.{{container_name}}.http.max_redirects: 1
     networks:
       - home
     restart: unless-stopped
@@ -775,7 +775,7 @@ services:
       PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
       PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
     expose:
-      - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}}"
+      - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3

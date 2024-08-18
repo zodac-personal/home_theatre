@@ -158,7 +158,7 @@ The following macro is used as a template for most of the services:
 ```bash
 <VirtualHost *:80>
     ServerAdmin admin@email.com
-    ServerName $server_name.site.com
+    ServerName $server_name.example.com
     ServerAlias $server_name.site.*
 
     ProxyPass / $protocol://$url/
@@ -174,8 +174,8 @@ The following macro is used as a template for most of the services:
     RemoteIPHeader X-Forwarded-For
 
     TimeOut 20
-    ErrorDocument 502 https://status.site.com
-    ErrorDocument 503 https://status.site.com
+    ErrorDocument 502 https://status.example.com
+    ErrorDocument 503 https://status.example.com
 </VirtualHost>
 ```
 
@@ -200,7 +200,7 @@ ServerAdmin admin@email.com
 Definition
 
 ```bash
-ServerName $server_name.site.com
+ServerName $server_name.example.com
 ```
 
 Definition
@@ -280,13 +280,13 @@ TimeOut 20
 Definition
 
 ```bash
-ErrorDocument 502 https://status.site.com
+ErrorDocument 502 https://status.example.com
 ```
 
 Definition
 
 ```bash
-ErrorDocument 503 https://status.site.com
+ErrorDocument 503 https://status.example.com
 ```
 
 Definition

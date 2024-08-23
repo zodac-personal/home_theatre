@@ -652,7 +652,7 @@ services:
 
   # Recipe manager
   tandoor:
-    image: vabene1111/recipes:1.5.17
+    image: vabene1111/recipes:1.5.19
     container_name: tandoor
     hostname: tandoor
     depends_on:

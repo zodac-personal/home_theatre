@@ -1,4 +1,4 @@
-# Architecture Diagram
+[# Architecture Diagram
 
 ![Architecture Diagram](./doc/home_theatre.drawio.png)
 
@@ -440,7 +440,7 @@ Better backup solutions
 ## Database Upgrades
 
 When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
-container.
+container. For the following, use `source .env` to ensure the variables are loaded in the terminal.
 
 ### Authentik DB
 
@@ -506,7 +506,7 @@ docker compose up --build -d linkwarden
 
 ### RomM DB
 
-TODO: Untested
+TODO: Restore untested
 
 Take backup of the current database, then shut the RomM containers down:
 
@@ -524,6 +524,46 @@ Finally, start up the new DB container, restore the backup, then start the remai
 docker compose --build -d romm-db
 cat backup_romm.sql | docker compose exec romm-db sh -c 'exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}"'
 docker compose --build -d romm romm-db
+```
+
+### SonarQube DB
+
+Take backup of the current database, then shut the SonarQube containers down:
+
+```bash
+docker compose exec sonarqube-db pg_dump -U ${SONARQUBE_DB_USER} -d ${SONARQUBE_DB_NAME} -cC > backup_sonarqube.sql
+docker compose down sonarqube sonarqube-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `sonarqube-db`.
+Next, delete the storage for `sonarqube-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining SonarQube containers:
+
+```bash
+docker compose up --build -d sonarqube-db
+cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SPEEDTEST_DB_USER}
+docker compose up --build -d sonarqube
+```
+
+### SpeedTest DB
+
+Take backup of the current database, then shut the SpeedTest containers down:
+
+```bash
+docker compose exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
+docker compose down speedtest speedtest-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `speedtest-db`.
+Next, delete the storage for `speedtest-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining SpeedTest containers:
+
+```bash
+docker compose up --build -d speedtest-db
+cat backup_speedtest.sql | docker compose exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
+docker compose up --build -d speedtest
 ```
 
 ### Tandoor DB
@@ -662,3 +702,4 @@ ollama pull llama2-uncensored   # Older version of the model, but with no filter
 
 Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the *Domain Name* and *Display Name* to
 your own domain name. This cannot be configured through environment variables.
+]()

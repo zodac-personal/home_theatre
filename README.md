@@ -1,4 +1,4 @@
-[# Architecture Diagram
+# Architecture Diagram
 
 ![Architecture Diagram](./doc/home_theatre.drawio.png)
 
@@ -440,7 +440,7 @@ Better backup solutions
 ## Database Upgrades
 
 When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
-container. For the following, use `source .env` to ensure the variables are loaded in the terminal.
+container. For the following, use `source .env` to ensure the variables are loaded into the terminal.
 
 ### Authentik DB
 
@@ -702,4 +702,3 @@ ollama pull llama2-uncensored   # Older version of the model, but with no filter
 
 Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the *Domain Name* and *Display Name* to
 your own domain name. This cannot be configured through environment variables.
-]()

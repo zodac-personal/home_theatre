@@ -35,7 +35,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.3 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.4 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     environment:
@@ -69,7 +69,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.6.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.8.2 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -110,7 +110,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.6.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.8.2 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -165,7 +165,7 @@ services:
 
   # Database for Authentik
   authentik-db:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     container_name: authentik-db
     hostname: authentik-db
     environment:
@@ -198,7 +198,7 @@ services:
 
   # Monitoring and alerting
   uptime-kuma:
-    image: louislam/uptime-kuma:1.23.11-alpine
+    image: louislam/uptime-kuma:1.23.13-alpine
     container_name: uptime-kuma
     hostname: uptime-kuma
     environment:
@@ -227,7 +227,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "24.7.18" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "24.9.12" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -259,7 +259,7 @@ services:
       - ./storage/netalert/db/:/app/db
 
   speedtest:
-    image: linuxserver/speedtest-tracker:0.20.8
+    image: linuxserver/speedtest-tracker:0.21.2
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -302,7 +302,7 @@ services:
       - ./storage/speedtest/config/:/config
 
   speedtest-db:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     container_name: speedtest-db
     hostname: speedtest-db
     environment:

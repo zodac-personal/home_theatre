@@ -93,7 +93,7 @@ services:
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.accepted_statuscodes:  '[ "204" ]'
+      kuma.{{container_name}}.http.accepted_statuscodes:  '[ "200" ]'
       kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"
       kuma.{{container_name}}.http.url: "${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
     networks:

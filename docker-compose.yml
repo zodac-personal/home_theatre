@@ -665,7 +665,7 @@ services:
           memory: "1024M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       REMOTE_USER_AUTH: "1"
       SOCIAL_DEFAULT_ACCESS: "1"

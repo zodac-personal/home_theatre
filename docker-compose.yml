@@ -698,6 +698,7 @@ services:
       # Secrets config
       SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
       # System config
+      ENABLE_PDF_EXPORT: "1"
       DEBUG: "0"
     healthcheck:
       interval: 30s

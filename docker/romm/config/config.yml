@@ -12,6 +12,7 @@ system:
     # [folder name in your 'ROMs' directory on your machine]: [RomM platform name]
     3DS: '3ds'
     DS: 'nds'
+    Flash: 'flash'
     GameBoy: 'gb'
     GameBoyAdvance: 'gba'
     GameBoyColor: 'gbc'

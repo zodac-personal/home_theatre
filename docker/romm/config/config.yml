@@ -5,6 +5,7 @@ exclude:
       extensions:
         - 'jpg'
         - 'jpeg'
+        - 'png'
 
 # Associate different platform names to your current file system platform names
 system:

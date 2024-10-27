@@ -14,7 +14,7 @@ services:
         # Docker image version
         APACHE_VERSION: "2.4.62" # https://hub.docker.com/_/httpd
         # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[apache] Admin email address missing}"
+        ADMIN_EMAIL_ADDRESS: "$${ADMIN_EMAIL_ADDRESS?[apache] Admin email address missing}"
     container_name: apache
     hostname: apache
     deploy:
@@ -22,7 +22,7 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -34,7 +34,7 @@ services:
     ports:
       - "80:80"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
 
   # Homepage
   homarr:
@@ -46,27 +46,27 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
       # Authentication config
       AUTH_OIDC_ADMIN_GROUP: "HomarrAdmins"
       AUTH_OIDC_AUTO_LOGIN: "true"
-      AUTH_OIDC_CLIENT_ID: "${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
+      AUTH_OIDC_CLIENT_ID: "$${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
       AUTH_OIDC_CLIENT_NAME: "Authentik"
-      AUTH_OIDC_CLIENT_SECRET: "${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
-      AUTH_OIDC_URI: "${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
+      AUTH_OIDC_CLIENT_SECRET: "$${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
+      AUTH_OIDC_URI: "$${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
       AUTH_PROVIDER: "oidc"
-      BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
-      NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      BASE_URL: "$${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      NEXTAUTH_URL: "$${HOMARR_BASE_URL:?[homarr] Base URL missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "Homarr (HomePage)"
-      kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
+      kuma.homarr.http.name: "Homarr (HomePage)"
+      kuma.homarr.http.url: "$${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
       - home_pi
     ports:
       - "5000:7575"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/homarr/configs:/app/data/configs
@@ -89,28 +89,28 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
-      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik] Database name missing}"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik] Database password missing}"
-      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik] Database port missing}"
-      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik] Database user missing}"
+      AUTHENTIK_POSTGRESQL__NAME: "$${AUTHENTIK_DB_NAME:?[authentik] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "$${AUTHENTIK_DB_PASSWORD:?[authentik] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "$${AUTHENTIK_DB_PORT:?[authentik] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "$${AUTHENTIK_DB_USER?[authentik] Database user missing}"
       # Authentik config
       AUTHENTIK_BOOTSTRAP_PASSWORD: "admin"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
+      AUTHENTIK_SECRET_KEY: "$${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.accepted_statuscodes:  '[ "200" ]'
-      kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"
-      kuma.{{container_name}}.http.url: "${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
+      kuma.authentik.http.accepted_statuscodes:  '[ "200" ]'
+      kuma.authentik.http.name: "Authentik (Identity Platform)"
+      kuma.authentik.http.url: "$${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
     networks:
       - home_pi
     ports:
-      - "${AUTHENTIK_UI_PORT:?[authentik] UI port missing}:9000"
+      - "$${AUTHENTIK_UI_PORT:?[authentik] UI port missing}:9000"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik/media/:/media
@@ -135,20 +135,20 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
       # Database/cache config
       AUTHENTIK_REDIS__HOST: authentik-cache
       AUTHENTIK_POSTGRESQL__HOST: authentik-db
-      AUTHENTIK_POSTGRESQL__NAME: "${AUTHENTIK_DB_NAME:?[authentik-worker] Database name missing}"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-worker] Database password missing}"
-      AUTHENTIK_POSTGRESQL__PORT: "${AUTHENTIK_DB_PORT:?[authentik-worker] Database port missing}"
-      AUTHENTIK_POSTGRESQL__USER: "${AUTHENTIK_DB_USER?[authentik-worker] Database user missing}"
+      AUTHENTIK_POSTGRESQL__NAME: "$${AUTHENTIK_DB_NAME:?[authentik-worker] Database name missing}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "$${AUTHENTIK_DB_PASSWORD:?[authentik-worker] Database password missing}"
+      AUTHENTIK_POSTGRESQL__PORT: "$${AUTHENTIK_DB_PORT:?[authentik-worker] Database port missing}"
+      AUTHENTIK_POSTGRESQL__USER: "$${AUTHENTIK_DB_USER?[authentik-worker] Database user missing}"
       # Authentik config
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik-worker] Authentik secret key missing}"
+      AUTHENTIK_SECRET_KEY: "$${AUTHENTIK_SECRET_KEY:?[authentik-worker] Authentik secret key missing}"
     networks:
       - home_pi
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik/media/:/media
@@ -173,7 +173,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik-cache/data/:/data
@@ -188,18 +188,18 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TIMEZONE: "$${TIMEZONE:?Timezone missing}"
       # Database config
-      PGPORT: "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
-      POSTGRES_DB: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
-      POSTGRES_PASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
-      POSTGRES_USER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      PGPORT: "$${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
+      POSTGRES_DB: "$${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      POSTGRES_PASSWORD: "$${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      POSTGRES_USER: "$${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
       # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
-      PGPASSWORD: "${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
-      PGUSER: "${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
+      PGDATABASE: "$${AUTHENTIK_DB_NAME:?[authentik-db] Database name missing}"
+      PGPASSWORD: "$${AUTHENTIK_DB_PASSWORD:?[authentik-db] Database password missing}"
+      PGUSER: "$${AUTHENTIK_DB_USER?[authentik-db] Database user missing}"
     expose:
-      - "${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
+      - "$${AUTHENTIK_DB_PORT:?[authentik-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -209,7 +209,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/authentik-db/data/:/var/lib/postgresql/data
@@ -224,19 +224,19 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
       # Port config
-      UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+      UPTIME_KUMA_PORT: "$${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
-      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+      kuma.uptime-kuma.http.name: "Uptime Kuma (Status Page)"
+      kuma.uptime-kuma.http.url: "$${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
       - home_pi
     ports:
-      - "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+      - "$${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:$${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/uptime-kuma/:/app/data
@@ -251,13 +251,13 @@ services:
         NETALERT_VERSION: "24.9.12" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
-        TIMEZONE: "${TIMEZONE:?Timezone missing}"
+        TIMEZONE: "$${TIMEZONE:?Timezone missing}"
         # Notification config
-        DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL: "${DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL:?[netalert] Discord webhook URL missing}"
+        DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL: "$${DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL:?[netalert] Discord webhook URL missing}"
         # Scanning config
-        NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
+        NETALERT_PRIMARY_SUBNET: "$${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
         # UI config
-        DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
+        DOMAIN_NAME: "$${DOMAIN_NAME:?[netalert] Domain name missing}"
     container_name: netalert
     hostname: netalert
     deploy:
@@ -265,18 +265,18 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TZ: "$${TIMEZONE:?Timezone missing}"
       # UI config
-      PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
+      PORT: "$${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
-      kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
+      kuma.netalert.http.name: "NetAlert (Network Scanner)"
+      kuma.netalert.http.url: "$${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
-      - "${NETALERT_UI_PORT:?[netalert] Port missing}"
+      - "$${NETALERT_UI_PORT:?[netalert] Port missing}"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ./storage/netalert/config/:/app/config
@@ -294,22 +294,22 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      APP_TIMEZONE: "${TIMEZONE:?Timezone missing}"
-      PGID: "${PGID_NON_ROOT:?Group ID missing}"
-      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      APP_TIMEZONE: "$${TIMEZONE:?Timezone missing}"
+      PGID: "$${PGID_NON_ROOT:?Group ID missing}"
+      PUID: "$${PUID_NON_ROOT:?User ID missing}"
       # Reporting config
-      APP_KEY: "${SPEEDTEST_APP_KEY:?[speedtest] App key missing}"
-      APP_URL: "${SPEEDTEST_APP_URL:?[speedtest] App URL missing}"
+      APP_KEY: "$${SPEEDTEST_APP_KEY:?[speedtest] App key missing}"
+      APP_URL: "$${SPEEDTEST_APP_URL:?[speedtest] App URL missing}"
       PRUNE_RESULTS_OLDER_THAN: "30" # Days
-      SPEEDTEST_SCHEDULE: "${SPEEDTEST_SCHEDULE?:[speedtest] Cron schedule missing}"
-      SPEEDTEST_SERVERS: "${SPEEDTEST_SERVERS}"
+      SPEEDTEST_SCHEDULE: "$${SPEEDTEST_SCHEDULE?:[speedtest] Cron schedule missing}"
+      SPEEDTEST_SERVERS: "$${SPEEDTEST_SERVERS}"
       # Database config
       DB_CONNECTION: "pgsql"
       DB_HOST: "speedtest-db"
-      DB_DATABASE: "${SPEEDTEST_DB_NAME:?[speedtest] Database name missing}"
-      DB_PASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest] Database password missing}"
-      DB_PORT: "${SPEEDTEST_DB_PORT:?[speedtest] Database port missing}"
-      DB_USERNAME: "${SPEEDTEST_DB_USER:?[speedtest] Database user missing}"
+      DB_DATABASE: "$${SPEEDTEST_DB_NAME:?[speedtest] Database name missing}"
+      DB_PASSWORD: "$${SPEEDTEST_DB_PASSWORD:?[speedtest] Database password missing}"
+      DB_PORT: "$${SPEEDTEST_DB_PORT:?[speedtest] Database port missing}"
+      DB_USERNAME: "$${SPEEDTEST_DB_USER:?[speedtest] Database user missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -318,8 +318,8 @@ services:
       timeout: 5s
     labels:
       # Uptime-Kuma monitor config
-      kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
-      kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
+      kuma.speedtest.http.name: "SpeedTest Tracker (Network Speed Test)"
+      kuma.speedtest.http.url: "$${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
       - home_pi
     ports:
@@ -337,16 +337,16 @@ services:
         constraints: [ node.labels.role == manager ]
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TIMEZONE: "$${TIMEZONE:?Timezone missing}"
       # Database config
-      PGPORT: "${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}"
-      POSTGRES_DB: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
-      POSTGRES_PASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
-      POSTGRES_USER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
+      PGPORT: "$${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}"
+      POSTGRES_DB: "$${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
+      POSTGRES_PASSWORD: "$${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
+      POSTGRES_USER: "$${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
       # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
-      PGPASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
-      PGUSER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
+      PGDATABASE: "$${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
+      PGPASSWORD: "$${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
+      PGUSER: "$${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
     expose:
       - 5432
     healthcheck:
@@ -358,6 +358,6 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
+    user: "$${PUID_ROOT:?User ID missing}:$${PUID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data

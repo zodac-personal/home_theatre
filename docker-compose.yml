@@ -14,6 +14,8 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -53,6 +55,8 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "2"
@@ -97,6 +101,8 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -135,6 +141,8 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -171,6 +179,8 @@ services:
     container_name: navidrome
     hostname: navidrome
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -218,6 +228,8 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -254,6 +266,8 @@ services:
     container_name: kavita
     hostname: kavita
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -292,6 +306,8 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "2"
@@ -342,16 +358,18 @@ services:
     image: linuxserver/bazarr:development-version-v1.4.5-beta.0
     container_name: bazarr
     hostname: bazarr
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1024M"
     depends_on:
       radarr:
         condition: service_healthy
       sonarr:
         condition: service_healthy
+    deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -388,6 +406,8 @@ services:
     container_name: whisper
     hostname: whisper
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "4"
@@ -416,6 +436,8 @@ services:
       romm-db:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -470,6 +492,8 @@ services:
     container_name: romm-db
     hostname: romm-db
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -515,6 +539,8 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -555,6 +581,8 @@ services:
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1.5"
@@ -597,6 +625,8 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -630,6 +660,8 @@ services:
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -659,6 +691,8 @@ services:
       tandoor-db:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -728,6 +762,8 @@ services:
       tandoor:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -760,6 +796,8 @@ services:
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -797,6 +835,8 @@ services:
     container_name: homebox
     hostname: homebox
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -829,6 +869,8 @@ services:
     container_name: dailytxt
     hostname: dailytxt
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -870,6 +912,8 @@ services:
     container_name: dozzle
     hostname: dozzle
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -914,6 +958,8 @@ services:
     container_name: filebrowser
     hostname: filebrowser
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.25"
@@ -949,6 +995,8 @@ services:
     container_name: ollama
     hostname: ollama
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "8"
@@ -986,6 +1034,8 @@ services:
       sonarqube-db:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -1021,6 +1071,8 @@ services:
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1061,6 +1113,8 @@ services:
       jellystat-db:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1102,6 +1156,8 @@ services:
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1142,6 +1198,8 @@ services:
       linkwarden-db:
         condition: service_healthy
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1187,6 +1245,8 @@ services:
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1234,6 +1294,8 @@ services:
     container_name: autokuma
     hostname: autokuma
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1282,6 +1344,8 @@ services:
     container_name: autokuma-pi
     hostname: autokuma-pi
     deploy:
+      placement:
+        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"

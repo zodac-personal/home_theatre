@@ -38,7 +38,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.4 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.7 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
     deploy:
@@ -75,7 +75,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.8.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.10.1 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -119,7 +119,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.8.2 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.10.1 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -157,7 +157,7 @@ services:
 
   # Cache for Authentik
   authentik-cache:
-    image: redis:7.4.0-alpine
+    image: redis:7.4.1-alpine
     container_name: authentik-cache
     hostname: authentik-cache
     command: --save 60 1 --loglevel warning
@@ -180,7 +180,7 @@ services:
 
   # Database for Authentik
   authentik-db:
-    image: postgres:16.4-alpine
+    image: postgres:17.0-alpine
     container_name: authentik-db
     hostname: authentik-db
     deploy:
@@ -216,7 +216,7 @@ services:
 
   # Monitoring and alerting
   uptime-kuma:
-    image: louislam/uptime-kuma:1.23.13-alpine
+    image: louislam/uptime-kuma:1.23.15-alpine
     container_name: uptime-kuma
     hostname: uptime-kuma
     deploy:
@@ -248,7 +248,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "24.9.12" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "24.10.31" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -283,7 +283,7 @@ services:
       - ./storage/netalert/db/:/app/db
 
   speedtest:
-    image: linuxserver/speedtest-tracker:0.21.2
+    image: linuxserver/speedtest-tracker:0.21.4
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -329,7 +329,7 @@ services:
       - ./storage/speedtest/config/:/config
 
   speedtest-db:
-    image: postgres:16.4-alpine
+    image: postgres:17.0-alpine
     container_name: speedtest-db
     hostname: speedtest-db
     deploy:

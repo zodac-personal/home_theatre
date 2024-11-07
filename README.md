@@ -459,7 +459,7 @@ Next, delete the storage for `authentik-db` (make sure to copy this directory/vo
 Finally, start up the new DB container, restore the backup, then start the remaining Authentik containers:
 
 ```bash
-docker compose -f docker-compose-pi.yml up --build -d authentik-db
+docker compose -f docker-compose-pi.yml up --build -d authentik-db --wait
 cat backup_authentik.sql | docker compose exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
 docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
 ```
@@ -479,7 +479,7 @@ Next, delete the storage for `jellystat-db` (make sure to copy this directory/vo
 Finally, start up the new DB container, restore the backup, then start the remaining Jellystat containers:
 
 ```bash
-docker compose up --build -d jellystat-db
+docker compose up --build -d jellystat-db --wait
 cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
 docker compose up --build -d jellystat
 ```
@@ -499,14 +499,12 @@ Next, delete the storage for `linkwarden-db` (make sure to copy this directory/v
 Finally, start up the new DB container, restore the backup, then start the remaining Linkwarden containers:
 
 ```bash
-docker compose up --build -d linkwarden-db
+docker compose up --build -d linkwarden-db --wait
 cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
 docker compose up --build -d linkwarden
 ```
 
 ### RomM DB
-
-TODO: Restore untested
 
 Take backup of the current database, then shut the RomM containers down:
 
@@ -521,9 +519,20 @@ Next, delete the storage for `romm-db` (make sure to copy this directory/volume 
 Finally, start up the new DB container, restore the backup, then start the remaining RomM containers:
 
 ```bash
-docker compose --build -d romm-db
+docker compose up --build -d romm-db --wait
 cat backup_romm.sql | docker compose exec romm-db sh -c 'exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}"'
-docker compose --build -d romm romm-db
+docker compose up --build -d romm
+```
+
+Workaround for Windows, due to input device not being a TTY:
+
+```bash
+docker compose up --build -d romm-db
+docker cp backup_romm.sql romm-db:/
+winpty docker exec -it romm-db bash
+exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}" < /backup_romm.sql
+exit
+docker compose up --build -d romm
 ```
 
 ### SonarQube DB
@@ -541,8 +550,8 @@ Next, delete the storage for `sonarqube-db` (make sure to copy this directory/vo
 Finally, start up the new DB container, restore the backup, then start the remaining SonarQube containers:
 
 ```bash
-docker compose up --build -d sonarqube-db
-cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SPEEDTEST_DB_USER}
+docker compose up --build -d sonarqube-db --wait
+cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SONARQUBE_DB_USER}
 docker compose up --build -d sonarqube
 ```
 
@@ -552,7 +561,7 @@ Take backup of the current database, then shut the SpeedTest containers down:
 
 ```bash
 docker compose exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
-docker compose down speedtest speedtest-db
+docker compose -f docker-compose-pi.yml down speedtest speedtest-db
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `speedtest-db`.
@@ -561,22 +570,17 @@ Next, delete the storage for `speedtest-db` (make sure to copy this directory/vo
 Finally, start up the new DB container, restore the backup, then start the remaining SpeedTest containers:
 
 ```bash
-docker compose up --build -d speedtest-db
+docker compose -f docker-compose-pi.yml up --build -d speedtest-db --wait
 cat backup_speedtest.sql | docker compose exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
-docker compose up --build -d speedtest
+docker compose -f docker-compose-pi.yml up --build -d speedtest
 ```
 
 ### Tandoor DB
 
 Take backup of the current database, then shut the Tandoor containers down:
 
-TODO: Update this to back up/restore without exec-ing into the container on next upgrade, similar to [Authentik](#authentik) above.
-
 ```bash
-docker exec -it tandoor-db /bin/bash
-pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
-exit
-docker cp tandoor-db:/backup_tandoor.sql .
+docker compose exec tandoor-db pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
 docker compose down tandoor tandoor-ui tandoor-db
 ```
 
@@ -586,11 +590,8 @@ Next, delete the storage for `tandoor-db` (make sure to copy this directory/volu
 Finally, start up the new DB container, restore the backup, then start the remaining Tandoor containers:
 
 ```bash
-docker compose up --build -d tandoor-db
-docker cp backup_tandoor.sql tandoor-db:/
-docker exec -it tandoor-db /bin/bash
-psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} < backup_tandoor.sql
-exit
+docker compose up --build -d tandoor-db --wait
+cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
 docker compose up --build -d tandoor tandoor-ui
 ```
 

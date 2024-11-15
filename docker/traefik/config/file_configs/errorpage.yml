@@ -1,0 +1,8 @@
+http:
+  middlewares:
+    redirect-on-error:
+      plugin:
+        traefik-plugin-redirect-on-status:
+          redirectUri: "{{ env "STATUS_URL" | trimAll "\"" }}"
+          status:
+            - "500-599"

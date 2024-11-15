@@ -1,0 +1,16 @@
+http:
+  routers:
+    traefik-router:
+      rule: "Host(`traefik.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      service: traefik-service
+      entryPoints:
+        - websecure
+      tls: {} # Ensures TLS is enabled but uses default certificates
+      middlewares:
+        - redirect-on-error@file
+
+  services:
+    traefik-service:
+      loadBalancer:
+        servers:
+          - url: "{{ env "TRAEFIK_URL" | trimAll "\"" }}/dashboard/#/"

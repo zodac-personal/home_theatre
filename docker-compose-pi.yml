@@ -6,6 +6,61 @@ networks:
 services:
 
   # Reverse proxy
+  traefik:
+    image: traefik:v3.2.0
+    container_name: traefik
+    hostname: traefik
+    command: --configFile=/config/traefik.yml
+    environment:
+      # Variables used for Go template substitution in the config files
+      DOMAIN_NAME: "${PUBLIC_DOMAIN_NAME}"
+      # Non-docker service IPs
+      EMBY_URL: "${EMBY_URL}"
+      STATUS_URL: "${STATUS_URL}"
+      TRAEFIK_URL: "${TRAEFIK_URL}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      timeout: 5s
+    networks:
+      - home_pi
+    ports:
+      - "443:443"
+      - "5555:8080"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      - ./docker/traefik/config/traefik.yml:/config/traefik.yml:ro
+      - ./docker/traefik/config/file_configs/:/file_configs:ro
+      - ./docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
+      - ./docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
+
+  # Reverse proxy connector for external hosts
+  traefik-provider:
+    image: redis:7.4.1-alpine
+    container_name: traefik-provider
+    hostname: traefik-provider
+    command: --save 60 1 --loglevel warning
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "redis-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - home_pi
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/traefik-provider/data/:/data
+
+  # Reverse proxy
   apache:
     build: 
       context: .
@@ -101,6 +156,11 @@ services:
       AUTHENTIK_BOOTSTRAP_PASSWORD: "admin"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
     labels:
+      traefik.enable: "true"
+      # Main router for the service
+      traefik.http.routers.authentik.rule: "Host(`auth.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.authentik.entrypoints: "websecure"
+      traefik.http.routers.authentik.tls: "true"
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.accepted_statuscodes:  '[ "200" ]'
       kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"
@@ -317,6 +377,11 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:80/api/speedtest/latest" ]
       timeout: 5s
     labels:
+      traefik.enable: "true"
+      # Main router for the service
+      traefik.http.routers.speedtest.rule: "Host(`speedtest.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.speedtest.entrypoints: "websecure"
+      traefik.http.routers.speedtest.tls: "true"
       # Uptime-Kuma monitor config
       kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"

@@ -14,8 +14,6 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -30,7 +28,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3000/ping" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
       kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
     networks:
@@ -55,8 +53,6 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "2"
@@ -71,7 +67,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3001/ping" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
       kuma.{{container_name}}.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
     networks:
@@ -101,8 +97,6 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -141,8 +135,6 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -157,7 +149,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3002/ping" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
       kuma.{{container_name}}.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
     networks:
@@ -179,8 +171,6 @@ services:
     container_name: navidrome
     hostname: navidrome
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -204,7 +194,7 @@ services:
       # Logging config
       ND_LOGLEVEL: "info"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
       kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
     networks:
@@ -228,8 +218,6 @@ services:
       qbittorrent:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -244,7 +232,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3004/ping" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
       kuma.{{container_name}}.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
     networks:
@@ -266,8 +254,6 @@ services:
     container_name: kavita
     hostname: kavita
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -276,7 +262,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Kavita (eBook Reader)"
       kuma.{{container_name}}.http.url: "${KAVITA_MONITOR_URL:?[kavita] Monitor URL missing}"
     networks:
@@ -306,8 +292,6 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "2"
@@ -364,8 +348,6 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -380,7 +362,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
       kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
     networks:
@@ -406,8 +388,6 @@ services:
     container_name: whisper
     hostname: whisper
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "4"
@@ -436,8 +416,6 @@ services:
       romm-db:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -468,7 +446,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/heartbeat" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
       kuma.{{container_name}}.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
     networks:
@@ -492,8 +470,6 @@ services:
     container_name: romm-db
     hostname: romm-db
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -539,8 +515,6 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -555,7 +529,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3016/ping" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
       kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
     networks:
@@ -574,8 +548,6 @@ services:
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1.5"
@@ -592,7 +564,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/v2/app/version" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
       kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
     networks:
@@ -618,8 +590,6 @@ services:
       sonarr:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -653,8 +623,6 @@ services:
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -684,8 +652,6 @@ services:
       tandoor-db:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -734,7 +700,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/openapi" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
       kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
     networks:
@@ -755,8 +721,6 @@ services:
       tandoor:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -789,8 +753,6 @@ services:
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -828,8 +790,6 @@ services:
     container_name: homebox
     hostname: homebox
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -844,7 +804,7 @@ services:
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
       HBOX_WEB_MAX_UPLOAD_SIZE: "10"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
       kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
     networks:
@@ -862,8 +822,6 @@ services:
     container_name: dailytxt
     hostname: dailytxt
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -888,7 +846,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8765" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
       kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
     networks:
@@ -905,8 +863,6 @@ services:
     container_name: dozzle
     hostname: dozzle
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -932,7 +888,7 @@ services:
       test: [ "CMD", "/dozzle", "healthcheck" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
       kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
     networks:
@@ -951,8 +907,6 @@ services:
     container_name: filebrowser
     hostname: filebrowser
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.25"
@@ -963,7 +917,7 @@ services:
       # Authentication config
       FB_NOAUTH: noauth
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
       kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
@@ -988,8 +942,6 @@ services:
     container_name: ollama
     hostname: ollama
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "8"
@@ -1004,7 +956,7 @@ services:
       WEBUI_NAME: "${DOMAIN_NAME:?[ollama] Domain name missing} LLM"
       WEBUI_SECRET_KEY: "${OLLAMA_SECRET_KEY:?[ollama] Secret key missing}"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Ollama (LLM)"
       kuma.{{container_name}}.http.url: "${OLLAMA_MONITOR_URL:?[ollama] Monitor URL missing}"
     networks:
@@ -1027,8 +979,6 @@ services:
       sonarqube-db:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "1"
@@ -1044,7 +994,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
       kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
     networks:
@@ -1064,8 +1014,6 @@ services:
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1106,8 +1054,6 @@ services:
       jellystat-db:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1131,7 +1077,7 @@ services:
       test: [ "CMD", "pidof", "node" ]
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
       kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
     networks:
@@ -1149,8 +1095,6 @@ services:
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1191,8 +1135,6 @@ services:
       linkwarden-db:
         condition: service_healthy
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1220,7 +1162,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
       timeout: 5s
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
       kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
     networks:
@@ -1238,8 +1180,6 @@ services:
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1287,8 +1227,6 @@ services:
     container_name: autokuma
     hostname: autokuma
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"
@@ -1337,8 +1275,6 @@ services:
     container_name: autokuma-pi
     hostname: autokuma-pi
     deploy:
-      placement:
-        constraints: [ node.labels.role == worker ]
       resources:
         limits:
           cpus: "0.5"

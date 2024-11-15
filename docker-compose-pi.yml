@@ -72,9 +72,6 @@ services:
         ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[apache] Admin email address missing}"
     container_name: apache
     hostname: apache
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -96,9 +93,6 @@ services:
     image: ghcr.io/ajnart/homarr:0.15.7 # https://github.com/ajnart/homarr/pkgs/container/homarr
     container_name: homarr
     hostname: homarr
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -113,7 +107,7 @@ services:
       BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
@@ -139,9 +133,6 @@ services:
       authentik-db:
           condition: service_healthy
     command: server
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -156,12 +147,12 @@ services:
       AUTHENTIK_BOOTSTRAP_PASSWORD: "admin"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?[authentik] Authentik secret key missing}"
     labels:
+      # Reverse proxy config
       traefik.enable: "true"
-      # Main router for the service
       traefik.http.routers.authentik.rule: "Host(`auth.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.accepted_statuscodes:  '[ "200" ]'
       kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"
       kuma.{{container_name}}.http.url: "${AUTHENTIK_MONITOR_URL:?[authentik] Monitor URL missing}"
@@ -190,9 +181,6 @@ services:
           condition: service_healthy
       authentik-db:
           condition: service_healthy
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -221,9 +209,6 @@ services:
     container_name: authentik-cache
     hostname: authentik-cache
     command: --save 60 1 --loglevel warning
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     healthcheck:
       interval: 30s
       retries: 3
@@ -243,9 +228,6 @@ services:
     image: postgres:17.0-alpine
     container_name: authentik-db
     hostname: authentik-db
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -279,16 +261,13 @@ services:
     image: louislam/uptime-kuma:1.23.15-alpine
     container_name: uptime-kuma
     hostname: uptime-kuma
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Port config
       UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
@@ -320,16 +299,13 @@ services:
         DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
     container_name: netalert
     hostname: netalert
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
       kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
@@ -349,9 +325,6 @@ services:
     depends_on:
       speedtest-db:
         condition: service_healthy
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       APP_TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -377,12 +350,12 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:80/api/speedtest/latest" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
       traefik.enable: "true"
-      # Main router for the service
       traefik.http.routers.speedtest.rule: "Host(`speedtest.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.speedtest.entrypoints: "websecure"
       traefik.http.routers.speedtest.tls: "true"
-      # Uptime-Kuma monitor config
+      # Monitor config
       kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
@@ -397,9 +370,6 @@ services:
     image: postgres:17.0-alpine
     container_name: speedtest-db
     hostname: speedtest-db
-    deploy:
-      placement:
-        constraints: [ node.labels.role == manager ]
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"

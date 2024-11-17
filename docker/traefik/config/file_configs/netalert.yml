@@ -33,5 +33,5 @@ http:
     netalert-redirect-regex:
       redirectRegex:
         regex: "^https://netalertx.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}(.*)"
-        replacement: "https://netalert.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}${1}"
+        replacement: "https://netalert.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}$${1}"
         permanent: true

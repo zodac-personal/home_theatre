@@ -5,6 +5,20 @@ networks:
 
 services:
 
+  # Traefik connector
+  traefik-kop:
+    image: ghcr.io/jittering/traefik-kop:0.14 # https://github.com/jittering/traefik-kop/pkgs/container/traefik-kop
+    container_name: traefik-kop
+    hostname: traefik-kop
+    environment:
+      BIND_IP: "${MAIN_HOST_IP}" # IP address of this host
+      REDIS_ADDR: "${REVERSE_PROXY_HOST_IP}:6379" # Port of the redis instance on the reverse proxy host
+    networks:
+      - home
+    restart: unless-stopped
+    volumes:
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+
   # Movie manager
   radarr:
     image: linuxserver/radarr:nightly-version-5.15.1.9434

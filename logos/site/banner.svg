@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 150">
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216.768 85.144">
   <defs>
     <style>
       .cls-1 {
@@ -21,9 +21,5 @@
       }
     </style>
   </defs>
-  <text class="cls-3" transform="translate(68.96 95.06)"><tspan class="cls-1" x="0" y="0">z</tspan><tspan x="38.09" y="0">odac.me</tspan></text>
-  <text class="cls-2" transform="translate(19.04 111.82) scale(.61 1)"><tspan x="0" y="0">|</tspan></text>
-  <text class="cls-2" transform="translate(135.18 136.43) rotate(-90) scale(.61 1)"><tspan x="0" y="0">|</tspan></text>
-  <text class="cls-2" transform="translate(433.43 38.12) rotate(-180) scale(.61 1)"><tspan x="0" y="0">|</tspan></text>
-  <text class="cls-2" transform="translate(317.29 13.49) rotate(90) scale(.61 1)"><tspan x="0" y="0">|</tspan></text>
+  <text class="cls-3" style="white-space: pre;" x="7.097" y="62.882"><tspan class="cls-1" x="7.097" y="62.882" style="font-size: 65px; word-spacing: 0px;">z</tspan><tspan x="45.187" y="62.882" style="font-size: 65px; word-spacing: 0px;">odac</tspan></text>
 </svg>

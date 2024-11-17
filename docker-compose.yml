@@ -1176,6 +1176,21 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.linkwarden.rule: "Host(`bookmark.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden.entrypoints: "websecure"
+      traefik.http.routers.linkwarden.tls: "true"
+      traefik.http.services.linkwarden.loadbalancer.server.port: "4017"
+      # Redirect from 'bookmarks' subdomain to 'bookmark' subdomain
+      traefik.http.routers.linkwarden-redirect.rule: "Host(`bookmarks.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden-redirect.entryPoints: "websecure"
+      traefik.http.routers.linkwarden-redirect.tls: "true"
+      traefik.http.routers.linkwarden-redirect.middlewares: "linkwarden-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
       kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"

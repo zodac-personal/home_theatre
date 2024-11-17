@@ -276,10 +276,9 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`) && !PathPrefix(`/status/`)"
+      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
-      #traefik.http.routers.uptime-kuma.priority: "1"
       traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       traefik.http.routers.uptime-kuma.middlewares: "authentik@file"
       # Redirect from status.zodac.net to monitor.zodac.net/status/main

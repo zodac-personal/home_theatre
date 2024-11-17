@@ -1,7 +1,7 @@
 http:
   routers:
     emby-router:
-      rule: "Host(`emby.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      rule: "Host(`emby.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`)"
       service: emby-service
       entryPoints:
         - websecure

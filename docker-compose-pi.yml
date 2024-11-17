@@ -16,11 +16,11 @@ services:
           condition: service_healthy
     environment:
       # Variables used for Go template substitution in the config files
-      DOMAIN_NAME: "${PUBLIC_DOMAIN_NAME}"
+      PUBLIC_DOMAIN_NAME: "${PUBLIC_DOMAIN_NAME}"
       # Non-docker service IPs
       EMBY_URL: "${EMBY_URL}"
       STATUS_URL: "${STATUS_URL}"
-      TRAEFIK_URL: "${TRAEFIK_URL}"
+      TRAEFIK_URL: "${TRAEFIK_URL}" # TODO: Add labels to this service instead
     healthcheck:
       interval: 30s
       retries: 3
@@ -155,6 +155,10 @@ services:
       traefik.http.routers.authentik.rule: "Host(`auth.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
+      # Middleware config to allow for forward auth using Traefik and Authentik
+      traefik.http.routers.authentik-outpost.rule: "HostRegexp(`{subdomain:[a-z0-9-]+}.${PUBLIC_DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik-outpost.entrypoints: "websecure"
+      traefik.http.routers.authentik-outpost.tls: "true"
       # Monitor config
       kuma.{{container_name}}.http.accepted_statuscodes:  '[ "200" ]'
       kuma.{{container_name}}.http.name: "Authentik (Identity Platform)"

@@ -1,13 +1,14 @@
 http:
   routers:
     traefik-router:
-      rule: "Host(`traefik.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      rule: "Host(`traefik.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`)"
       service: traefik-service
       entryPoints:
         - websecure
       tls: {} # Ensures TLS is enabled but uses default certificates
       middlewares:
-        - redirect-on-error@file
+        - authentik@file         # Authenticate using Authentik
+        - redirect-on-error@file # Probably not needed, since if this is down, Traefik itself is probably down
 
   services:
     traefik-service:

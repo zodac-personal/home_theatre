@@ -274,6 +274,22 @@ services:
       # Port config
       UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`) && !PathPrefix(`/status/`)"
+      traefik.http.routers.uptime-kuma.entrypoints: "websecure"
+      traefik.http.routers.uptime-kuma.tls: "true"
+      #traefik.http.routers.uptime-kuma.priority: "1"
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+      traefik.http.routers.uptime-kuma.middlewares: "authentik@file"
+      # Redirect from status.zodac.net to monitor.zodac.net/status/main
+      traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
+      traefik.http.routers.uptime-kuma-redirect.tls: "true"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${PUBLIC_DOMAIN_NAME}/status/main"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
+      traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
       # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"

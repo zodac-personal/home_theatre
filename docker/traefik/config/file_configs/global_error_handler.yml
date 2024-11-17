@@ -1,0 +1,33 @@
+# Configuration file for that defines a catch-all router for any subdomains that don't exist (such as
+# invalid.domain.tld), or valid subdomains that have had their router dynamically removed by Traefik because
+# the docker service is down (valid.domain.tld, but the docker container is stopped).
+#
+# In both cases, the catch-all router, which has the lower priority of all routers, will receive the request
+# and forward it using a middleware to a status URL page.
+#
+# Note that every router must have a service defined, so we create a noop service which does nothing and should
+# never be used.
+http:
+  routers:
+    catchall-router:
+      rule: "PathPrefix(`/`)"  # Matches all paths
+      priority: 1  # Lowest priority
+      entryPoints:
+        - websecure  # HTTPS entry point
+      middlewares:
+        - redirect-to-status
+      service: noop-service  # Add a dummy service to fulfill the requirement
+      tls: {}  # Enable TLS without specifying certificates
+
+  middlewares:
+    redirect-to-status:
+      redirectRegex:
+        regex: ".*"  # Match all
+        replacement: "{{ env "STATUS_URL" | trimAll "\"" }}"  # Redirect URL
+        permanent: true  # Set to true for a permanent redirect (301)
+
+  services:
+    noop-service:
+      loadBalancer:
+        servers:
+          - url: "http://0.0.0.0"  # Dummy service, won't actually be used

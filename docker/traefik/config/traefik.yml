@@ -83,11 +83,14 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    watch: true
+
   redis:
     endpoints:
       - traefik-provider:6379
+
   file:
-    directory: /file_configs # Apps, LoadBalancers, TLS Options, Middlewares, Middleware Chains
+    directory: /file_configs
     watch: true
 
 

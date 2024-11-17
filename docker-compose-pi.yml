@@ -11,6 +11,9 @@ services:
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
+    depends_on:
+      traefik-provider:
+          condition: service_healthy
     environment:
       # Variables used for Go template substitution in the config files
       DOMAIN_NAME: "${PUBLIC_DOMAIN_NAME}"

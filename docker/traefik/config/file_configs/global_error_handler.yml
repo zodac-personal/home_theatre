@@ -5,8 +5,11 @@
 # In both cases, the catch-all router, which has the lower priority of all routers, will receive the request
 # and forward it using a middleware to a status URL page.
 #
-# Note that every router must have a service defined, so we create a noop service which does nothing and should
-# never be used.
+# Note that every router must have a service defined, so we use a dummy service.
+
+
+# TODO: Update so invalid service (404) goes to homepage, all others go to status page
+
 http:
   routers:
     catchall-router:
@@ -16,7 +19,7 @@ http:
         - websecure  # HTTPS entry point
       middlewares:
         - redirect-to-status
-      service: noop-service  # Add a dummy service to fulfill the requirement
+      service: dummy-service-global-handler  # Add a dummy service to fulfill the requirement
       tls: {}  # Enable TLS without specifying certificates
 
   middlewares:
@@ -27,7 +30,7 @@ http:
         permanent: true  # Set to true for a permanent redirect (301)
 
   services:
-    noop-service:
+    dummy-service-global-handler:
       loadBalancer:
         servers:
           - url: "http://0.0.0.0"  # Dummy service, won't actually be used

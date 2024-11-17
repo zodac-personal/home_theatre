@@ -21,6 +21,7 @@ services:
       EMBY_URL: "${EMBY_URL}"
       STATUS_URL: "${STATUS_URL}"
       TRAEFIK_URL: "${TRAEFIK_URL}" # TODO: Add labels to this service instead
+      NETALERT_URL: "${NETALERT_URL}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -332,6 +333,11 @@ services:
       # UI config
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
+      # Reverse proxy config
+      #   Because NetAlert uses 'network_mode: host', we cannot use docker labels to configure the service with Traefik
+      #   Instead, there is a dynamic config file netalert.yml to define this, and the home network IP address of this
+      #   service is passed in to the Traefik as an environment variable
+      #   We can configure the redirects here, but it makes sense to leave it all in the config file instead.
       # Monitor config
       kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
       kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"

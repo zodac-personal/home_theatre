@@ -110,6 +110,11 @@ services:
       BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.netalert.rule: "Host(`${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.netalert.entrypoints: "websecure"
+      traefik.http.routers.netalert.tls: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
@@ -155,7 +160,7 @@ services:
       traefik.http.routers.authentik.rule: "Host(`auth.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
-      # Middleware config to allow for forward auth using Traefik and Authentik
+      # Additional router to allow for forward auth using Traefik and Authentik
       traefik.http.routers.authentik-outpost.rule: "HostRegexp(`{subdomain:[a-z0-9-]+}.${PUBLIC_DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
       traefik.http.routers.authentik-outpost.entrypoints: "websecure"
       traefik.http.routers.authentik-outpost.tls: "true"

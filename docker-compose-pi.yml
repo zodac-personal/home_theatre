@@ -112,9 +112,9 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.netalert.rule: "Host(`${PUBLIC_DOMAIN_NAME}`)"
-      traefik.http.routers.netalert.entrypoints: "websecure"
-      traefik.http.routers.netalert.tls: "true"
+      traefik.http.routers.homarr.rule: "Host(`${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.homarr.entrypoints: "websecure"
+      traefik.http.routers.homarr.tls: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"

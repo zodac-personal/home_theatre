@@ -1091,6 +1091,22 @@ services:
       test: [ "CMD", "pidof", "node" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.jellystat.rule: "Host(`stat.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat.entrypoints: "websecure"
+      traefik.http.routers.jellystat.tls: "true"
+      traefik.http.routers.jellystat.middlewares: "authentik@file"
+      traefik.http.services.jellystat.loadbalancer.server.port: "4008"
+      # Redirect from 'stats' subdomain to 'stat' subdomain
+      traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat-redirect.entryPoints: "websecure"
+      traefik.http.routers.jellystat-redirect.tls: "true"
+      traefik.http.routers.jellystat-redirect.middlewares: "jellystat-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
       kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"

@@ -1008,6 +1008,12 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.sonarqube.rule: "Host(`sonarqube.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.sonarqube.entrypoints: "websecure"
+      traefik.http.routers.sonarqube.tls: "true"
+      traefik.http.services.sonarqube.loadbalancer.server.port: "4013"
       # Monitor config
       kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
       kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"

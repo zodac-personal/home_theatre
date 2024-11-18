@@ -713,10 +713,6 @@ services:
       start_period: 30s
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/openapi" ]
       timeout: 5s
-    labels:
-      # Monitor config
-      kuma.{{container_name}}.http.name: "Tandoor (Recipes)"
-      kuma.{{container_name}}.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
     networks:
       - home
     restart: unless-stopped
@@ -750,6 +746,25 @@ services:
       start_period: 30s
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:80" ]
       timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.tandoor.rule: "Host(`recipe.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor.entrypoints: "websecure"
+      traefik.http.routers.tandoor.tls: "true"
+      traefik.http.services.tandoor.loadbalancer.server.port: "4010"
+      # Redirect from 'recipes' subdomain to 'recipe' subdomain
+      traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor-redirect.entryPoints: "websecure"
+      traefik.http.routers.tandoor-redirect.tls: "true"
+      traefik.http.routers.tandoor-redirect.middlewares: "tandoor-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.tandoor.http.name: "Tandoor (Recipes)"
+      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
     networks:
       - home
     ports:

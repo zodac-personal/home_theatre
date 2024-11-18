@@ -295,6 +295,7 @@ services:
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${PUBLIC_DOMAIN_NAME}/status/main"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
       traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
+      # TODO: Disable authentik for status page
       # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"

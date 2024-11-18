@@ -931,6 +931,23 @@ services:
       # Authentication config
       FB_NOAUTH: noauth
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser.rule: "Host(`file.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser.entrypoints: "websecure"
+      traefik.http.routers.filebrowser.tls: "true"
+      traefik.http.routers.filebrowser.middlewares: "authentik@file"
+      traefik.http.services.filebrowser.loadbalancer.server.port: "4007"
+      # Redirect from 'files' subdomain to 'file' subdomain
+      traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser-redirect.entryPoints: "websecure"
+      traefik.http.routers.filebrowser-redirect.tls: "true"
+      traefik.http.routers.filebrowser-redirect.middlewares: "filebrowser-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
+      # TODO: Disable authentik for shared files
       # Monitor config
       kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
       kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"

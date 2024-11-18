@@ -276,6 +276,21 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.kavita.rule: "Host(`book.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.kavita.entrypoints: "websecure"
+      traefik.http.routers.kavita.tls: "true"
+      traefik.http.services.kavita.loadbalancer.server.port: "4005"
+      # Redirect from 'books' subdomain to 'book' subdomain
+      traefik.http.routers.kavita-redirect.rule: "Host(`books.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.kavita-redirect.entryPoints: "websecure"
+      traefik.http.routers.kavita-redirect.tls: "true"
+      traefik.http.routers.kavita-redirect.middlewares: "kavita-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.kavita-redirect-regex.redirectregex.regex: "^https://books.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.kavita-redirect-regex.redirectregex.replacement: "https://book.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.kavita-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Kavita (eBook Reader)"
       kuma.{{container_name}}.http.url: "${KAVITA_MONITOR_URL:?[kavita] Monitor URL missing}"
@@ -460,6 +475,21 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/heartbeat" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.romm.rule: "Host(`game.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.romm.entrypoints: "websecure"
+      traefik.http.routers.romm.tls: "true"
+      traefik.http.services.romm.loadbalancer.server.port: "4006"
+      # Redirect from 'games' subdomain to 'game' subdomain
+      traefik.http.routers.romm-redirect.rule: "Host(`games.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.romm-redirect.entryPoints: "websecure"
+      traefik.http.routers.romm-redirect.tls: "true"
+      traefik.http.routers.romm-redirect.middlewares: "romm-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
       kuma.{{container_name}}.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
@@ -833,6 +863,12 @@ services:
       HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
       HBOX_WEB_MAX_UPLOAD_SIZE: "10"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.homebox.rule: "Host(`inventory.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.homebox.entrypoints: "websecure"
+      traefik.http.routers.homebox.tls: "true"
+      traefik.http.services.homebox.loadbalancer.server.port: "4011"
       # Monitor config
       kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
       kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
@@ -875,6 +911,12 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8765" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.dailytxt.rule: "Host(`journal.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dailytxt.entrypoints: "websecure"
+      traefik.http.routers.dailytxt.tls: "true"
+      traefik.http.services.dailytxt.loadbalancer.server.port: "4015"
       # Monitor config
       kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
       kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"

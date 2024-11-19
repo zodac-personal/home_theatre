@@ -19,9 +19,11 @@ serversTransport:
 
 log:
   level: DEBUG # Options: DEBUG, PANIC, FATAL, ERROR (Default), WARN, and INFO
-  noColor: false
+  noColor: false # Set to 'true' if format is 'json'
   maxSize: 100 # In megabytes
   compress: true # gzip compression when rotating
+  
+# accessLog: {} # Uncomment to enable access logging
 
 ################################################################
 # API and Dashboard

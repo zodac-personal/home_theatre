@@ -8,7 +8,6 @@ http:
       tls: {} # Ensures TLS is enabled but uses default certificates
       middlewares:
         - authentik@file         # Authenticate using Authentik
-        - redirect-on-error@file # Probably not needed, since if this is down, Traefik itself is probably down
 
   services:
     traefik-service:

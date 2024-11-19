@@ -285,17 +285,24 @@ services:
       traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
-      traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       traefik.http.routers.uptime-kuma.middlewares: "authentik@file"
-      # Redirect from status.zodac.net to monitor.zodac.net/status/main
+      traefik.http.routers.uptime-kuma.service: "uptime-kuma"
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+      # Disable authentication for '/status/' path and subpaths
+      # Also including '/assets/', '/upload/' and '/api/' to allow the page to load required information
+      traefik.http.routers.uptime-kuma-status.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`) && (PathPrefix(`/status/`) || PathPrefix(`/assets/`) || PathPrefix(`/upload/`) || PathPrefix(`/api/`))"
+      traefik.http.routers.uptime-kuma-status.entrypoints: "websecure"
+      traefik.http.routers.uptime-kuma-status.tls: "true"
+      traefik.http.routers.uptime-kuma-status.service: "uptime-kuma"
+      # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
       traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${PUBLIC_DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
       traefik.http.routers.uptime-kuma-redirect.tls: "true"
+      traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
+      traefik.http.routers.uptime-kuma-redirect.service: "uptime-kuma"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${PUBLIC_DOMAIN_NAME}(.*)"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${PUBLIC_DOMAIN_NAME}/status/main"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
-      traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
-      # TODO: Disable authentik for status page
       # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"

@@ -1,0 +1,5 @@
+name = "qBittorrent (Native Torrent Downloader)"
+url = "%QBITTORRENT_MONITOR_URL%"
+type = "http"
+max_retries = 3
+tags = '[{"tag_id": 1}]'

@@ -608,13 +608,19 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/v2/app/version" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.qbittorrent.entrypoints: "websecure"
+      traefik.http.routers.qbittorrent.tls: "true"
+      traefik.http.services.qbittorrent.loadbalancer.server.port: "9000"
       # Monitor config
       kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
       kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
     networks:
       - home
     ports:
-      - "9000-9002:9000-9002"
+      - "9000:9000"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:

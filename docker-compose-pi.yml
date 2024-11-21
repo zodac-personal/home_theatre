@@ -170,7 +170,7 @@ services:
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
       # Additional router to allow for forward auth using Traefik and Authentik
-      traefik.http.routers.authentik-outpost.rule: "HostRegexp(`{subdomain:[a-z0-9-]+}.${PUBLIC_DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik-outpost.rule: "Host(`${PUBLIC_DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
       traefik.http.routers.authentik-outpost.entrypoints: "websecure"
       traefik.http.routers.authentik-outpost.tls: "true"
       # Monitor config

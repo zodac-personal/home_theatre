@@ -20,7 +20,6 @@ services:
       # Non-docker service IPs
       EMBY_URL: "${EMBY_URL}"
       STATUS_URL: "${STATUS_URL}"
-      TRAEFIK_URL: "${TRAEFIK_URL}" # TODO: Add labels to this service instead
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
     healthcheck:
@@ -29,6 +28,14 @@ services:
       start_period: 30s
       test: [ "CMD", "traefik", "healthcheck", "--ping" ]
       timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: "Host(`traefik.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.traefik.entrypoints: "websecure"
+      traefik.http.routers.traefik.tls: "true"
+      traefik.http.routers.traefik.middlewares: "authentik@file"
+      traefik.http.routers.traefik.service: "api@internal"
     networks:
       - home_pi
     ports:

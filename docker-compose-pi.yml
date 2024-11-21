@@ -23,6 +23,7 @@ services:
       TRAEFIK_URL: "${TRAEFIK_URL}" # TODO: Add labels to this service instead
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
+      AUTHENTIK_INTERNAL_URL: "${AUTHENTIK_INTERNAL_URL}"
     healthcheck:
       interval: 30s
       retries: 3

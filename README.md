@@ -49,9 +49,16 @@ radarr:
     test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/ping" ]
     timeout: 5s
   labels:
-  # Uptime-Kuma monitor config
-  kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
-  kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
+    # Reverse proxy config
+    traefik.enable: "true"
+    traefik.http.routers.radarr.rule: "Host(`radarr.${PUBLIC_DOMAIN_NAME}`)"
+    traefik.http.routers.radarr.entrypoints: "websecure"
+    traefik.http.routers.radarr.tls: "true"
+    traefik.http.routers.radarr.middlewares: "authentik@file"
+    traefik.http.services.radarr.loadbalancer.server.port: "4000"
+    # Uptime-Kuma monitor config
+    kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
+    kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
   networks:
     - home
   ports:

@@ -42,6 +42,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3000/ping" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.radarr.entrypoints: "websecure"
+      traefik.http.routers.radarr.tls: "true"
+      traefik.http.routers.radarr.middlewares: "authentik@file"
+      traefik.http.services.radarr.loadbalancer.server.port: "4000"
       # Monitor config
       kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
       kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
@@ -81,6 +88,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3001/ping" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.sonarr.entrypoints: "websecure"
+      traefik.http.routers.sonarr.tls: "true"
+      traefik.http.routers.sonarr.middlewares: "authentik@file"
+      traefik.http.services.sonarr.loadbalancer.server.port: "4001"
       # Monitor config
       kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
       kuma.{{container_name}}.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
@@ -163,6 +177,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3002/ping" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.lidarr.rule: "Host(`lidarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.lidarr.entrypoints: "websecure"
+      traefik.http.routers.lidarr.tls: "true"
+      traefik.http.routers.lidarr.middlewares: "authentik@file"
+      traefik.http.services.lidarr.loadbalancer.server.port: "4002"
       # Monitor config
       kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
       kuma.{{container_name}}.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
@@ -208,6 +229,13 @@ services:
       # Logging config
       ND_LOGLEVEL: "info"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.navidrome.rule: "Host(`music.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.navidrome.entrypoints: "websecure"
+      traefik.http.routers.navidrome.tls: "true"
+      traefik.http.routers.navidrome.middlewares: "authentik@file"
+      traefik.http.services.navidrome.loadbalancer.server.port: "4003"
       # Monitor config
       kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
       kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
@@ -246,6 +274,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3004/ping" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.readarr.rule: "Host(`readarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.readarr.entrypoints: "websecure"
+      traefik.http.routers.readarr.tls: "true"
+      traefik.http.routers.readarr.middlewares: "authentik@file"
+      traefik.http.services.readarr.loadbalancer.server.port: "4004"
       # Monitor config
       kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
       kuma.{{container_name}}.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
@@ -391,6 +426,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.bazarr.rule: "Host(`bazarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.bazarr.entrypoints: "websecure"
+      traefik.http.routers.bazarr.tls: "true"
+      traefik.http.routers.bazarr.middlewares: "authentik@file"
+      traefik.http.services.bazarr.loadbalancer.server.port: "4009"
       # Monitor config
       kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
       kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
@@ -573,6 +615,13 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3016/ping" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.prowlarr.entrypoints: "websecure"
+      traefik.http.routers.prowlarr.tls: "true"
+      traefik.http.routers.prowlarr.middlewares: "authentik@file"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "4016"
       # Monitor config
       kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
       kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
@@ -965,6 +1014,22 @@ services:
       test: [ "CMD", "/dozzle", "healthcheck" ]
       timeout: 5s
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.dozzle.rule: "Host(`log.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dozzle.entrypoints: "websecure"
+      traefik.http.routers.dozzle.tls: "true"
+      traefik.http.routers.dozzle.middlewares: "authentik@file"
+      traefik.http.services.dozzle.loadbalancer.server.port: "4014"
+      # Redirect from 'logs' subdomain to 'log' subdomain
+      traefik.http.routers.dozzle-redirect.rule: "Host(`logs.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dozzle-redirect.entryPoints: "websecure"
+      traefik.http.routers.dozzle-redirect.tls: "true"
+      traefik.http.routers.dozzle-redirect.middlewares: "dozzle-redirect-regex"
+      # Middleware to redirect plural subdomain name to singular
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs.${PUBLIC_DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
       kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
@@ -1010,7 +1075,6 @@ services:
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${PUBLIC_DOMAIN_NAME}(.*)"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${PUBLIC_DOMAIN_NAME}$${1}"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
-      # TODO: Disable authentik for shared files
       # Monitor config
       kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
       kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
@@ -1050,6 +1114,13 @@ services:
       WEBUI_NAME: "${DOMAIN_NAME:?[ollama] Domain name missing} LLM"
       WEBUI_SECRET_KEY: "${OLLAMA_SECRET_KEY:?[ollama] Secret key missing}"
     labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.ollama.rule: "Host(`ai.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.ollama.entrypoints: "websecure"
+      traefik.http.routers.ollama.tls: "true"
+      traefik.http.routers.ollama.middlewares: "authentik@file"
+      traefik.http.services.ollama.loadbalancer.server.port: "4012"
       # Monitor config
       kuma.{{container_name}}.http.name: "Ollama (LLM)"
       kuma.{{container_name}}.http.url: "${OLLAMA_MONITOR_URL:?[ollama] Monitor URL missing}"
@@ -1078,7 +1149,7 @@ services:
           cpus: "1"
           memory: "4096M"
     environment:
-      SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:5432/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
+      SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
       SONAR_JDBC_USERNAME: "${SONARQUBE_DB_USER:?[sonarqube] Database user missing}"
       SONAR_JDBC_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube] Database password missing}"
     healthcheck:
@@ -1169,7 +1240,7 @@ services:
       POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
       # Secrets config
       JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
-    # Healthcheck is temporary until https://github.com/CyferShepard/Jellystat/pull/220 is merged and released
+    # TODO: Healthcheck is temporary until https://github.com/CyferShepard/Jellystat/pull/220 is merged and released
     healthcheck:
       interval: 30s
       retries: 3

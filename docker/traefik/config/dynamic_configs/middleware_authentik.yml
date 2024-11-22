@@ -4,7 +4,7 @@ http:
   middlewares:
     authentik:
       forwardAuth:
-        address: https://auth.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}/outpost.goauthentik.io/auth/traefik
+        address: https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}/outpost.goauthentik.io/auth/traefik
         trustForwardHeader: true
         authResponseHeaders:
           - Authorization

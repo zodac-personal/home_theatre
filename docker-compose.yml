@@ -44,7 +44,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.radarr.rule: "Host(`radarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
       traefik.http.routers.radarr.entrypoints: "websecure"
       traefik.http.routers.radarr.tls: "true"
       traefik.http.routers.radarr.middlewares: "authentik@file"
@@ -90,7 +90,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.sonarr.rule: "Host(`sonarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarr.entrypoints: "websecure"
       traefik.http.routers.sonarr.tls: "true"
       traefik.http.routers.sonarr.middlewares: "authentik@file"
@@ -179,7 +179,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.lidarr.rule: "Host(`lidarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.lidarr.rule: "Host(`lidarr.${DOMAIN_NAME}`)"
       traefik.http.routers.lidarr.entrypoints: "websecure"
       traefik.http.routers.lidarr.tls: "true"
       traefik.http.routers.lidarr.middlewares: "authentik@file"
@@ -231,7 +231,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.navidrome.rule: "Host(`music.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.navidrome.rule: "Host(`music.${DOMAIN_NAME}`)"
       traefik.http.routers.navidrome.entrypoints: "websecure"
       traefik.http.routers.navidrome.tls: "true"
       traefik.http.routers.navidrome.middlewares: "authentik@file"
@@ -276,7 +276,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.readarr.rule: "Host(`readarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.readarr.rule: "Host(`readarr.${DOMAIN_NAME}`)"
       traefik.http.routers.readarr.entrypoints: "websecure"
       traefik.http.routers.readarr.tls: "true"
       traefik.http.routers.readarr.middlewares: "authentik@file"
@@ -313,18 +313,18 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.kavita.rule: "Host(`book.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.kavita.rule: "Host(`book.${DOMAIN_NAME}`)"
       traefik.http.routers.kavita.entrypoints: "websecure"
       traefik.http.routers.kavita.tls: "true"
       traefik.http.services.kavita.loadbalancer.server.port: "4005"
       # Redirect from 'books' subdomain to 'book' subdomain
-      traefik.http.routers.kavita-redirect.rule: "Host(`books.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.kavita-redirect.rule: "Host(`books.${DOMAIN_NAME}`)"
       traefik.http.routers.kavita-redirect.entryPoints: "websecure"
       traefik.http.routers.kavita-redirect.tls: "true"
       traefik.http.routers.kavita-redirect.middlewares: "kavita-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.kavita-redirect-regex.redirectregex.regex: "^https://books.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.kavita-redirect-regex.redirectregex.replacement: "https://book.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.kavita-redirect-regex.redirectregex.regex: "^https://books.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.kavita-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.kavita-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Kavita (eBook Reader)"
@@ -428,7 +428,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.bazarr.rule: "Host(`bazarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.bazarr.rule: "Host(`bazarr.${DOMAIN_NAME}`)"
       traefik.http.routers.bazarr.entrypoints: "websecure"
       traefik.http.routers.bazarr.tls: "true"
       traefik.http.routers.bazarr.middlewares: "authentik@file"
@@ -519,18 +519,18 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.romm.rule: "Host(`game.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.romm.rule: "Host(`game.${DOMAIN_NAME}`)"
       traefik.http.routers.romm.entrypoints: "websecure"
       traefik.http.routers.romm.tls: "true"
       traefik.http.services.romm.loadbalancer.server.port: "4006"
       # Redirect from 'games' subdomain to 'game' subdomain
-      traefik.http.routers.romm-redirect.rule: "Host(`games.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.romm-redirect.rule: "Host(`games.${DOMAIN_NAME}`)"
       traefik.http.routers.romm-redirect.entryPoints: "websecure"
       traefik.http.routers.romm-redirect.tls: "true"
       traefik.http.routers.romm-redirect.middlewares: "romm-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
@@ -617,7 +617,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN_NAME}`)"
       traefik.http.routers.prowlarr.entrypoints: "websecure"
       traefik.http.routers.prowlarr.tls: "true"
       traefik.http.routers.prowlarr.middlewares: "authentik@file"
@@ -659,7 +659,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.${DOMAIN_NAME}`)"
       traefik.http.routers.qbittorrent.entrypoints: "websecure"
       traefik.http.routers.qbittorrent.tls: "true"
       traefik.http.services.qbittorrent.loadbalancer.server.port: "9000"
@@ -834,18 +834,18 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.tandoor.rule: "Host(`recipe.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor.rule: "Host(`recipe.${DOMAIN_NAME}`)"
       traefik.http.routers.tandoor.entrypoints: "websecure"
       traefik.http.routers.tandoor.tls: "true"
       traefik.http.services.tandoor.loadbalancer.server.port: "4010"
       # Redirect from 'recipes' subdomain to 'recipe' subdomain
-      traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${DOMAIN_NAME}`)"
       traefik.http.routers.tandoor-redirect.entryPoints: "websecure"
       traefik.http.routers.tandoor-redirect.tls: "true"
       traefik.http.routers.tandoor-redirect.middlewares: "tandoor-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.tandoor.http.name: "Tandoor (Recipes)"
@@ -920,7 +920,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.homebox.rule: "Host(`inventory.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.homebox.rule: "Host(`inventory.${DOMAIN_NAME}`)"
       traefik.http.routers.homebox.entrypoints: "websecure"
       traefik.http.routers.homebox.tls: "true"
       traefik.http.services.homebox.loadbalancer.server.port: "4011"
@@ -968,7 +968,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.dailytxt.rule: "Host(`journal.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dailytxt.rule: "Host(`journal.${DOMAIN_NAME}`)"
       traefik.http.routers.dailytxt.entrypoints: "websecure"
       traefik.http.routers.dailytxt.tls: "true"
       traefik.http.services.dailytxt.loadbalancer.server.port: "4015"
@@ -1016,19 +1016,19 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.dozzle.rule: "Host(`log.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dozzle.rule: "Host(`log.${DOMAIN_NAME}`)"
       traefik.http.routers.dozzle.entrypoints: "websecure"
       traefik.http.routers.dozzle.tls: "true"
       traefik.http.routers.dozzle.middlewares: "authentik@file"
       traefik.http.services.dozzle.loadbalancer.server.port: "4014"
       # Redirect from 'logs' subdomain to 'log' subdomain
-      traefik.http.routers.dozzle-redirect.rule: "Host(`logs.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.dozzle-redirect.rule: "Host(`logs.${DOMAIN_NAME}`)"
       traefik.http.routers.dozzle-redirect.entryPoints: "websecure"
       traefik.http.routers.dozzle-redirect.tls: "true"
       traefik.http.routers.dozzle-redirect.middlewares: "dozzle-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
@@ -1061,19 +1061,19 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.filebrowser.rule: "Host(`file.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser.rule: "Host(`file.${DOMAIN_NAME}`)"
       traefik.http.routers.filebrowser.entrypoints: "websecure"
       traefik.http.routers.filebrowser.tls: "true"
       traefik.http.routers.filebrowser.middlewares: "authentik@file"
       traefik.http.services.filebrowser.loadbalancer.server.port: "4007"
       # Redirect from 'files' subdomain to 'file' subdomain
-      traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${DOMAIN_NAME}`)"
       traefik.http.routers.filebrowser-redirect.entryPoints: "websecure"
       traefik.http.routers.filebrowser-redirect.tls: "true"
       traefik.http.routers.filebrowser-redirect.middlewares: "filebrowser-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
@@ -1116,7 +1116,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.ollama.rule: "Host(`ai.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.ollama.rule: "Host(`ai.${DOMAIN_NAME}`)"
       traefik.http.routers.ollama.entrypoints: "websecure"
       traefik.http.routers.ollama.tls: "true"
       traefik.http.routers.ollama.middlewares: "authentik@file"
@@ -1161,7 +1161,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.sonarqube.rule: "Host(`sonarqube.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.sonarqube.rule: "Host(`sonarqube.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarqube.entrypoints: "websecure"
       traefik.http.routers.sonarqube.tls: "true"
       traefik.http.services.sonarqube.loadbalancer.server.port: "4013"
@@ -1250,19 +1250,19 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.jellystat.rule: "Host(`stat.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat.rule: "Host(`stat.${DOMAIN_NAME}`)"
       traefik.http.routers.jellystat.entrypoints: "websecure"
       traefik.http.routers.jellystat.tls: "true"
       traefik.http.routers.jellystat.middlewares: "authentik@file"
       traefik.http.services.jellystat.loadbalancer.server.port: "4008"
       # Redirect from 'stats' subdomain to 'stat' subdomain
-      traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${DOMAIN_NAME}`)"
       traefik.http.routers.jellystat-redirect.entryPoints: "websecure"
       traefik.http.routers.jellystat-redirect.tls: "true"
       traefik.http.routers.jellystat-redirect.middlewares: "jellystat-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
@@ -1351,18 +1351,18 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.linkwarden.rule: "Host(`bookmark.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden.rule: "Host(`bookmark.${DOMAIN_NAME}`)"
       traefik.http.routers.linkwarden.entrypoints: "websecure"
       traefik.http.routers.linkwarden.tls: "true"
       traefik.http.services.linkwarden.loadbalancer.server.port: "4017"
       # Redirect from 'bookmarks' subdomain to 'bookmark' subdomain
-      traefik.http.routers.linkwarden-redirect.rule: "Host(`bookmarks.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden-redirect.rule: "Host(`bookmarks.${DOMAIN_NAME}`)"
       traefik.http.routers.linkwarden-redirect.entryPoints: "websecure"
       traefik.http.routers.linkwarden-redirect.tls: "true"
       traefik.http.routers.linkwarden-redirect.middlewares: "linkwarden-redirect-regex"
       # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${PUBLIC_DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"

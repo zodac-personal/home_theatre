@@ -16,7 +16,7 @@ services:
           condition: service_healthy
     environment:
       # Variables used for Go template substitution in the config files
-      PUBLIC_DOMAIN_NAME: "${PUBLIC_DOMAIN_NAME}"
+      DOMAIN_NAME: "${DOMAIN_NAME}"
       # Non-docker service IPs
       EMBY_URL: "${EMBY_URL}"
       STATUS_URL: "${STATUS_URL}"
@@ -31,7 +31,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.traefik.rule: "Host(`traefik.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAIN_NAME}`)"
       traefik.http.routers.traefik.entrypoints: "websecure"
       traefik.http.routers.traefik.tls: "true"
       traefik.http.routers.traefik.middlewares: "authentik@file"
@@ -46,7 +46,7 @@ services:
     volumes:
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
       - ./docker/traefik/config/traefik.yml:/config/traefik.yml:ro
-      - ./docker/traefik/config/file_configs/:/file_configs:ro
+      - ./docker/traefik/config/dynamic_configs/:/dynamic_configs:ro
       - ./docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
       - ./docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
 
@@ -121,7 +121,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.homarr.rule: "Host(`${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.homarr.rule: "Host(`${DOMAIN_NAME}`)"
       traefik.http.routers.homarr.entrypoints: "websecure"
       traefik.http.routers.homarr.tls: "true"
       # Monitor config
@@ -166,11 +166,11 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.authentik.rule: "Host(`auth.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.authentik.rule: "Host(`auth.${DOMAIN_NAME}`)"
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
       # Additional router to allow for forward auth using Traefik and Authentik
-      traefik.http.routers.authentik-outpost.rule: "Host(`${PUBLIC_DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik-outpost.rule: "Host(`${DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
       traefik.http.routers.authentik-outpost.entrypoints: "websecure"
       traefik.http.routers.authentik-outpost.tls: "true"
       # Monitor config
@@ -290,18 +290,18 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
       traefik.http.routers.uptime-kuma.middlewares: "authentik@file"
       traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
-      traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
       traefik.http.routers.uptime-kuma-redirect.tls: "true"
       traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${PUBLIC_DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${PUBLIC_DOMAIN_NAME}/status/main"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/main"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
@@ -393,7 +393,7 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.speedtest.rule: "Host(`speedtest.${PUBLIC_DOMAIN_NAME}`)"
+      traefik.http.routers.speedtest.rule: "Host(`speedtest.${DOMAIN_NAME}`)"
       traefik.http.routers.speedtest.entrypoints: "websecure"
       traefik.http.routers.speedtest.tls: "true"
       # Monitor config

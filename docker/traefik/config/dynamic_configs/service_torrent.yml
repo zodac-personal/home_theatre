@@ -1,0 +1,16 @@
+http:
+  routers:
+    torrent-router:
+      rule: "Host(`torrent.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`)"
+      service: torrent-service
+      entryPoints:
+        - websecure
+      tls: {} # Ensures TLS is enabled but uses default certificates
+      middlewares:
+        - redirect-on-error@file
+
+  services:
+    torrent-service:
+      loadBalancer:
+        servers:
+          - url: "{{ env "TORRENT_URL" | trimAll "\"" }}"

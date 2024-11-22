@@ -92,7 +92,7 @@ providers:
       - traefik-provider:6379
 
   file:
-    directory: /file_configs
+    directory: /dynamic_configs
     watch: true
 
 ################################################################

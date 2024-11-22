@@ -1,0 +1,37 @@
+http:
+  routers:
+    netalert-router:
+      rule: "Host(`netalert.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      service: netalert-service
+      entryPoints:
+        - websecure
+      tls: {} # Ensures TLS is enabled but uses default certificates
+      middlewares:
+        - authentik@file
+    
+    netalert-redirect:
+      rule: "Host(`netalertx.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - "netalert-redirect-regex"
+      service: dummy-service-netalert-redirect
+      tls: {}
+
+  services:
+    netalert-service:
+      loadBalancer:
+        servers:
+          - url: "{{ env "NETALERT_URL" | trimAll "\"" }}"
+
+    dummy-service-netalert-redirect:
+      loadBalancer:
+        servers:
+          - url: "http://0.0.0.0"  # Dummy service, won't actually be used
+
+  middlewares:
+    netalert-redirect-regex:
+      redirectRegex:
+        regex: "^https://netalertx.{{ env "DOMAIN_NAME" | trimAll "\"" }}(.*)"
+        replacement: "https://netalert.{{ env "DOMAIN_NAME" | trimAll "\"" }}$${1}"
+        permanent: true

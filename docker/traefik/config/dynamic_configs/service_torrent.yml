@@ -1,7 +1,7 @@
 http:
   routers:
     torrent-router:
-      rule: "Host(`torrent.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`)"
+      rule: "Host(`torrent.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
       service: torrent-service
       entryPoints:
         - websecure

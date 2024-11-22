@@ -51,7 +51,7 @@ radarr:
   labels:
     # Reverse proxy config
     traefik.enable: "true"
-    traefik.http.routers.radarr.rule: "Host(`radarr.${PUBLIC_DOMAIN_NAME}`)"
+    traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
     traefik.http.routers.radarr.entrypoints: "websecure"
     traefik.http.routers.radarr.tls: "true"
     traefik.http.routers.radarr.middlewares: "authentik@file"

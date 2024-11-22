@@ -18,7 +18,7 @@ serversTransport:
 ################################################################
 
 log:
-  level: DEBUG # Options: DEBUG, PANIC, FATAL, ERROR (Default), WARN, and INFO
+  level: INFO # Options: DEBUG, INFO, WANR, ERROR (Default), PANIC, FATAL  
   noColor: false # Set to 'true' if format is 'json'
   maxSize: 100 # In megabytes
   compress: true # gzip compression when rotating
@@ -94,7 +94,6 @@ providers:
   file:
     directory: /file_configs
     watch: true
-
 
 ################################################################
 # Plugins - https://plugins.traefik.io/plugins

@@ -7,14 +7,19 @@ http:
         address: https://auth.{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}/outpost.goauthentik.io/auth/traefik
         trustForwardHeader: true
         authResponseHeaders:
-          - X-authentik-username
-          - X-authentik-groups
-          - X-authentik-email
-          - X-authentik-name
-          - X-authentik-uid
-          - X-authentik-jwt
-          - X-authentik-meta-jwks
-          - X-authentik-meta-outpost
-          - X-authentik-meta-provider
-          - X-authentik-meta-app
-          - X-authentik-meta-version
+          - Authorization
+          - Remote-Email
+          - Remote-Groups
+          - Remote-Name
+          - Remote-User
+          - X-Authentik-Email
+          - X-Authentik-Groups
+          - X-Authentik-JWT
+          - X-Authentik-Name
+          - X-Authentik-UID
+          - X-Authentik-Username
+          - X-Authentik-Meta-App
+          - X-Authentik-Meta-JWKS
+          - X-Authentik-Meta-Outpost
+          - X-Authentik-Meta-Provider
+          - X-Authentik-Meta-Version

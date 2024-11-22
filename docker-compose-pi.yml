@@ -36,6 +36,9 @@ services:
       traefik.http.routers.traefik.tls: "true"
       traefik.http.routers.traefik.middlewares: "authentik@file"
       traefik.http.routers.traefik.service: "api@internal"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
+      kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
       - home_pi
     ports:

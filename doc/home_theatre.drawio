@@ -217,6 +217,9 @@
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-18" value="&lt;a href=&quot;https://github.com/traefik/traefik&quot;&gt;Traefik&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Reverse Proxy&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" parent="ROIVXRoGKlTalxw2WbaJ-18" vertex="1">
           <mxGeometry width="120" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="m5CkstzO8_yG1yKLl-sh-1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" vertex="1" parent="ROIVXRoGKlTalxw2WbaJ-18">
+          <mxGeometry x="110" width="10" height="10" as="geometry" />
+        </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-19" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="560" y="200" width="200" height="40" as="geometry" />
         </mxCell>

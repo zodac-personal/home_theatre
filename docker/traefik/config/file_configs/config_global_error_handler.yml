@@ -13,7 +13,7 @@
 http:
   routers:
     global_error_handler:
-      rule: "Host(`{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`)" # Matches all paths on domain
+      rule: "Host(`{{ env "PUBLIC_DOMAIN_NAME" | trimAll "\"" }}`) || PathPrefix(`/`)" # Matches all paths on domain
       priority: 1  # Lowest priority
       entryPoints:
         - websecure  # HTTPS entry point

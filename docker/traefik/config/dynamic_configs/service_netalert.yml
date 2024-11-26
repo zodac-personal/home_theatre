@@ -7,7 +7,8 @@ http:
         - websecure
       tls: {} # Ensures TLS is enabled but uses default certificates
       middlewares:
-        - authentik@file
+        - authentik-forward-auth@file
+        - redirect-on-error@file
     
     netalert-redirect:
       rule: "Host(`netalertx.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"

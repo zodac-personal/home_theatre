@@ -34,12 +34,13 @@ services:
       traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAIN_NAME}`)"
       traefik.http.routers.traefik.entrypoints: "websecure"
       traefik.http.routers.traefik.tls: "true"
-      traefik.http.routers.traefik.middlewares: "authentik@file"
+      traefik.http.routers.traefik.middlewares: "authentik-forward-auth@file"
       traefik.http.routers.traefik.service: "api@internal"
       # Disable authentication for 'ping' path
       traefik.http.routers.traefik-ping.rule: "Host(`traefik.${DOMAIN_NAME}`) && Path(`/ping`)"
       traefik.http.routers.traefik-ping.entrypoints: "websecure"
       traefik.http.routers.traefik-ping.tls: "true"
+      traefik.http.routers.traefik-ping.middlewares: "no-forward-auth@file"
       traefik.http.services.traefik-ping.loadbalancer.server.port: "8080"
       # Monitor config
       kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
@@ -132,6 +133,7 @@ services:
       traefik.http.routers.homarr.rule: "Host(`${DOMAIN_NAME}`)"
       traefik.http.routers.homarr.entrypoints: "websecure"
       traefik.http.routers.homarr.tls: "true"
+      traefik.http.routers.homarr.middlewares: "no-forward-auth@file"
       # Monitor config
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
@@ -177,6 +179,7 @@ services:
       traefik.http.routers.authentik.rule: "Host(`auth.${DOMAIN_NAME}`)"
       traefik.http.routers.authentik.entrypoints: "websecure"
       traefik.http.routers.authentik.tls: "true"
+      traefik.http.routers.authentik.middlewares: "no-forward-auth@file"
       # Additional router to allow for forward auth using Traefik and Authentik
       traefik.http.routers.authentik-outpost.rule: "Host(`${DOMAIN_NAME}`) && PathPrefix(`/outpost.goauthentik.io/`)"
       traefik.http.routers.authentik-outpost.entrypoints: "websecure"
@@ -301,7 +304,7 @@ services:
       traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
-      traefik.http.routers.uptime-kuma.middlewares: "authentik@file"
+      traefik.http.routers.uptime-kuma.middlewares: "authentik-forward-auth@file"
       traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
       traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"
@@ -404,6 +407,7 @@ services:
       traefik.http.routers.speedtest.rule: "Host(`speedtest.${DOMAIN_NAME}`)"
       traefik.http.routers.speedtest.entrypoints: "websecure"
       traefik.http.routers.speedtest.tls: "true"
+      traefik.http.routers.speedtest.middlewares: "no-forward-auth@file"
       # Monitor config
       kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"

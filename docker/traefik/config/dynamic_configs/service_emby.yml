@@ -5,8 +5,9 @@ http:
       service: emby-service
       entryPoints:
         - websecure
-      tls: {} # Ensures TLS is enabled but uses default certificates
+      tls: {}
       middlewares:
+        - no-forward-auth@file
         - redirect-on-error@file
 
   services:

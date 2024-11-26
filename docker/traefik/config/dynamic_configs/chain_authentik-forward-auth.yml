@@ -1,0 +1,9 @@
+http:
+  middlewares:
+    authentik-forward-auth:
+      chain:
+        middlewares:
+          - authentik@file
+          - compress@file
+          - rate-limit@file
+          - secure-headers@file

@@ -47,7 +47,7 @@ services:
       traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
       traefik.http.routers.radarr.entrypoints: "websecure"
       traefik.http.routers.radarr.tls: "true"
-      traefik.http.routers.radarr.middlewares: "authentik@file"
+      traefik.http.routers.radarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.radarr.loadbalancer.server.port: "4000"
       # Monitor config
       kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
@@ -93,7 +93,7 @@ services:
       traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarr.entrypoints: "websecure"
       traefik.http.routers.sonarr.tls: "true"
-      traefik.http.routers.sonarr.middlewares: "authentik@file"
+      traefik.http.routers.sonarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.sonarr.loadbalancer.server.port: "4001"
       # Monitor config
       kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
@@ -182,7 +182,7 @@ services:
       traefik.http.routers.lidarr.rule: "Host(`lidarr.${DOMAIN_NAME}`)"
       traefik.http.routers.lidarr.entrypoints: "websecure"
       traefik.http.routers.lidarr.tls: "true"
-      traefik.http.routers.lidarr.middlewares: "authentik@file"
+      traefik.http.routers.lidarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.lidarr.loadbalancer.server.port: "4002"
       # Monitor config
       kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
@@ -234,7 +234,7 @@ services:
       traefik.http.routers.navidrome.rule: "Host(`music.${DOMAIN_NAME}`)"
       traefik.http.routers.navidrome.entrypoints: "websecure"
       traefik.http.routers.navidrome.tls: "true"
-      traefik.http.routers.navidrome.middlewares: "authentik@file"
+      traefik.http.routers.navidrome.middlewares: "authentik-forward-auth@file"
       traefik.http.services.navidrome.loadbalancer.server.port: "4003"
       # Monitor config
       kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
@@ -279,7 +279,7 @@ services:
       traefik.http.routers.readarr.rule: "Host(`readarr.${DOMAIN_NAME}`)"
       traefik.http.routers.readarr.entrypoints: "websecure"
       traefik.http.routers.readarr.tls: "true"
-      traefik.http.routers.readarr.middlewares: "authentik@file"
+      traefik.http.routers.readarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.readarr.loadbalancer.server.port: "4004"
       # Monitor config
       kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
@@ -316,6 +316,7 @@ services:
       traefik.http.routers.kavita.rule: "Host(`book.${DOMAIN_NAME}`)"
       traefik.http.routers.kavita.entrypoints: "websecure"
       traefik.http.routers.kavita.tls: "true"
+      traefik.http.routers.kavita.middlewares: "no-forward-auth@file"
       traefik.http.services.kavita.loadbalancer.server.port: "4005"
       # Redirect from 'books' subdomain to 'book' subdomain
       traefik.http.routers.kavita-redirect.rule: "Host(`books.${DOMAIN_NAME}`)"
@@ -431,7 +432,7 @@ services:
       traefik.http.routers.bazarr.rule: "Host(`bazarr.${DOMAIN_NAME}`)"
       traefik.http.routers.bazarr.entrypoints: "websecure"
       traefik.http.routers.bazarr.tls: "true"
-      traefik.http.routers.bazarr.middlewares: "authentik@file"
+      traefik.http.routers.bazarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.bazarr.loadbalancer.server.port: "4009"
       # Monitor config
       kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
@@ -522,6 +523,7 @@ services:
       traefik.http.routers.romm.rule: "Host(`game.${DOMAIN_NAME}`)"
       traefik.http.routers.romm.entrypoints: "websecure"
       traefik.http.routers.romm.tls: "true"
+      traefik.http.routers.romm.middlewares: "no-forward-auth@file"
       traefik.http.services.romm.loadbalancer.server.port: "4006"
       # Redirect from 'games' subdomain to 'game' subdomain
       traefik.http.routers.romm-redirect.rule: "Host(`games.${DOMAIN_NAME}`)"
@@ -620,7 +622,7 @@ services:
       traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN_NAME}`)"
       traefik.http.routers.prowlarr.entrypoints: "websecure"
       traefik.http.routers.prowlarr.tls: "true"
-      traefik.http.routers.prowlarr.middlewares: "authentik@file"
+      traefik.http.routers.prowlarr.middlewares: "authentik-forward-auth@file"
       traefik.http.services.prowlarr.loadbalancer.server.port: "4016"
       # Monitor config
       kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
@@ -662,6 +664,7 @@ services:
       traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.${DOMAIN_NAME}`)"
       traefik.http.routers.qbittorrent.entrypoints: "websecure"
       traefik.http.routers.qbittorrent.tls: "true"
+      traefik.http.routers.qbittorrent.middlewares: "no-forward-auth@file"
       traefik.http.services.qbittorrent.loadbalancer.server.port: "9000"
       # Monitor config
       kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
@@ -837,6 +840,7 @@ services:
       traefik.http.routers.tandoor.rule: "Host(`recipe.${DOMAIN_NAME}`)"
       traefik.http.routers.tandoor.entrypoints: "websecure"
       traefik.http.routers.tandoor.tls: "true"
+      traefik.http.routers.tandoor.middlewares: "no-forward-auth@file"
       traefik.http.services.tandoor.loadbalancer.server.port: "4010"
       # Redirect from 'recipes' subdomain to 'recipe' subdomain
       traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${DOMAIN_NAME}`)"
@@ -923,6 +927,7 @@ services:
       traefik.http.routers.homebox.rule: "Host(`inventory.${DOMAIN_NAME}`)"
       traefik.http.routers.homebox.entrypoints: "websecure"
       traefik.http.routers.homebox.tls: "true"
+      traefik.http.routers.homebox.middlewares: "no-forward-auth@file"
       traefik.http.services.homebox.loadbalancer.server.port: "4011"
       # Monitor config
       kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
@@ -971,6 +976,7 @@ services:
       traefik.http.routers.dailytxt.rule: "Host(`journal.${DOMAIN_NAME}`)"
       traefik.http.routers.dailytxt.entrypoints: "websecure"
       traefik.http.routers.dailytxt.tls: "true"
+      traefik.http.routers.dailytxt.middlewares: "no-forward-auth@file"
       traefik.http.services.dailytxt.loadbalancer.server.port: "4015"
       # Monitor config
       kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
@@ -1019,7 +1025,7 @@ services:
       traefik.http.routers.dozzle.rule: "Host(`log.${DOMAIN_NAME}`)"
       traefik.http.routers.dozzle.entrypoints: "websecure"
       traefik.http.routers.dozzle.tls: "true"
-      traefik.http.routers.dozzle.middlewares: "authentik@file"
+      traefik.http.routers.dozzle.middlewares: "authentik-forward-auth@file"
       traefik.http.services.dozzle.loadbalancer.server.port: "4014"
       # Redirect from 'logs' subdomain to 'log' subdomain
       traefik.http.routers.dozzle-redirect.rule: "Host(`logs.${DOMAIN_NAME}`)"
@@ -1064,7 +1070,7 @@ services:
       traefik.http.routers.filebrowser.rule: "Host(`file.${DOMAIN_NAME}`)"
       traefik.http.routers.filebrowser.entrypoints: "websecure"
       traefik.http.routers.filebrowser.tls: "true"
-      traefik.http.routers.filebrowser.middlewares: "authentik@file"
+      traefik.http.routers.filebrowser.middlewares: "authentik-forward-auth@file"
       traefik.http.services.filebrowser.loadbalancer.server.port: "4007"
       # Redirect from 'files' subdomain to 'file' subdomain
       traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${DOMAIN_NAME}`)"
@@ -1119,7 +1125,7 @@ services:
       traefik.http.routers.ollama.rule: "Host(`ai.${DOMAIN_NAME}`)"
       traefik.http.routers.ollama.entrypoints: "websecure"
       traefik.http.routers.ollama.tls: "true"
-      traefik.http.routers.ollama.middlewares: "authentik@file"
+      traefik.http.routers.ollama.middlewares: "authentik-forward-auth@file"
       traefik.http.services.ollama.loadbalancer.server.port: "4012"
       # Monitor config
       kuma.{{container_name}}.http.name: "Ollama (LLM)"
@@ -1164,6 +1170,7 @@ services:
       traefik.http.routers.sonarqube.rule: "Host(`sonarqube.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarqube.entrypoints: "websecure"
       traefik.http.routers.sonarqube.tls: "true"
+      traefik.http.routers.sonarqube.middlewares: "no-forward-auth@file"
       traefik.http.services.sonarqube.loadbalancer.server.port: "4013"
       # Monitor config
       kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
@@ -1253,7 +1260,7 @@ services:
       traefik.http.routers.jellystat.rule: "Host(`stat.${DOMAIN_NAME}`)"
       traefik.http.routers.jellystat.entrypoints: "websecure"
       traefik.http.routers.jellystat.tls: "true"
-      traefik.http.routers.jellystat.middlewares: "authentik@file"
+      traefik.http.routers.jellystat.middlewares: "authentik-forward-auth@file"
       traefik.http.services.jellystat.loadbalancer.server.port: "4008"
       # Redirect from 'stats' subdomain to 'stat' subdomain
       traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${DOMAIN_NAME}`)"
@@ -1354,6 +1361,7 @@ services:
       traefik.http.routers.linkwarden.rule: "Host(`bookmark.${DOMAIN_NAME}`)"
       traefik.http.routers.linkwarden.entrypoints: "websecure"
       traefik.http.routers.linkwarden.tls: "true"
+      traefik.http.routers.linkwarden.middlewares: "no-forward-auth@file"
       traefik.http.services.linkwarden.loadbalancer.server.port: "4017"
       # Redirect from 'bookmarks' subdomain to 'bookmark' subdomain
       traefik.http.routers.linkwarden-redirect.rule: "Host(`bookmarks.${DOMAIN_NAME}`)"

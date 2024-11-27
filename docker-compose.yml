@@ -297,15 +297,15 @@ services:
       # Persistent volumes
       - ./storage/readarr/:/config
 
-  # eBook management
-  kavita:
-    image: jvmilazz0/kavita:nightly-0.8.3.24
-    container_name: kavita
-    hostname: kavita
+  # eBook & Audiobook management
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:2.17.2
+    container_name: audiobookshelf
+    hostname: audiobookshelf
     deploy:
       resources:
         limits:
-          cpus: "0.5"
+          cpus: "1"
           memory: "2048M"
     environment:
       # Base config
@@ -313,34 +313,34 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.kavita.rule: "Host(`book.${DOMAIN_NAME}`)"
-      traefik.http.routers.kavita.entrypoints: "websecure"
-      traefik.http.routers.kavita.tls: "true"
-      traefik.http.routers.kavita.middlewares: "no-forward-auth@file"
-      traefik.http.services.kavita.loadbalancer.server.port: "4005"
+      traefik.http.routers.audiobookshelf.rule: "Host(`book.${DOMAIN_NAME}`)"
+      traefik.http.routers.audiobookshelf.entrypoints: "websecure"
+      traefik.http.routers.audiobookshelf.tls: "true"
+      traefik.http.routers.audiobookshelf.middlewares: "no-forward-auth@file"
+      traefik.http.services.audiobookshelf.loadbalancer.server.port: "4005"
       # Redirect from 'books' subdomain to 'book' subdomain
-      traefik.http.routers.kavita-redirect.rule: "Host(`books.${DOMAIN_NAME}`)"
-      traefik.http.routers.kavita-redirect.entryPoints: "websecure"
-      traefik.http.routers.kavita-redirect.tls: "true"
-      traefik.http.routers.kavita-redirect.middlewares: "kavita-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
-      traefik.http.middlewares.kavita-redirect-regex.redirectregex.regex: "^https://books.${DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.kavita-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
-      traefik.http.middlewares.kavita-redirect-regex.redirectregex.permanent: "true"
+      traefik.http.routers.audiobookshelf-redirect.rule: "Host(`books.${DOMAIN_NAME}`)"
+      traefik.http.routers.audiobookshelf-redirect.entryPoints: "websecure"
+      traefik.http.routers.audiobookshelf-redirect.tls: "true"
+      traefik.http.routers.audiobookshelf-redirect.middlewares: "audiobookshelf-redirect-regex"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.regex: "^https://books.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Kavita (eBook Reader)"
-      kuma.{{container_name}}.http.url: "${KAVITA_MONITOR_URL:?[kavita] Monitor URL missing}"
+      kuma.{{container_name}}.http.name: "AudioBookShelf (eBook/Audiobook Reader)"
+      kuma.{{container_name}}.http.url: "${AUDIOBOOKSHELF_MONITOR_URL:?[audiobookshelf] Monitor URL missing}"
     networks:
       - home
     ports:
-      - "4005:5000"
+      - "4005:80"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
-      - "${BOOKS_DIRECTORY}:/books"
+      - "${BOOKS_DIRECTORY}:/ebooks:ro"
       # Persistent volumes
-      - ./storage/kavita/:/kavita/config
+      - ./storage/audiobookshelf/config:/config
+      - ./storage/audiobookshelf/metadata:/metadata
 
   # Downloaded archive extracter
   unpackerr:
@@ -530,7 +530,6 @@ services:
       traefik.http.routers.romm-redirect.entryPoints: "websecure"
       traefik.http.routers.romm-redirect.tls: "true"
       traefik.http.routers.romm-redirect.middlewares: "romm-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.permanent: "true"
@@ -847,7 +846,6 @@ services:
       traefik.http.routers.tandoor-redirect.entryPoints: "websecure"
       traefik.http.routers.tandoor-redirect.tls: "true"
       traefik.http.routers.tandoor-redirect.middlewares: "tandoor-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.permanent: "true"
@@ -1032,7 +1030,6 @@ services:
       traefik.http.routers.dozzle-redirect.entryPoints: "websecure"
       traefik.http.routers.dozzle-redirect.tls: "true"
       traefik.http.routers.dozzle-redirect.middlewares: "dozzle-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.permanent: "true"
@@ -1077,7 +1074,6 @@ services:
       traefik.http.routers.filebrowser-redirect.entryPoints: "websecure"
       traefik.http.routers.filebrowser-redirect.tls: "true"
       traefik.http.routers.filebrowser-redirect.middlewares: "filebrowser-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
@@ -1267,7 +1263,6 @@ services:
       traefik.http.routers.jellystat-redirect.entryPoints: "websecure"
       traefik.http.routers.jellystat-redirect.tls: "true"
       traefik.http.routers.jellystat-redirect.middlewares: "jellystat-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
@@ -1368,7 +1363,6 @@ services:
       traefik.http.routers.linkwarden-redirect.entryPoints: "websecure"
       traefik.http.routers.linkwarden-redirect.tls: "true"
       traefik.http.routers.linkwarden-redirect.middlewares: "linkwarden-redirect-regex"
-      # Middleware to redirect plural subdomain name to singular
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"

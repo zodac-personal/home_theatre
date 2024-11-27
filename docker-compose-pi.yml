@@ -17,9 +17,9 @@ services:
     environment:
       # Variables used for Go template substitution in the config files
       DOMAIN_NAME: "${DOMAIN_NAME}"
+      STATUS_URL: "${STATUS_URL}"
       # Non-docker service IPs
       EMBY_URL: "${EMBY_URL}"
-      STATUS_URL: "${STATUS_URL}"
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
     healthcheck:

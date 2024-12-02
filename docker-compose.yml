@@ -13,6 +13,12 @@ services:
     environment:
       BIND_IP: "${MAIN_HOST_IP}" # IP address of this host
       REDIS_ADDR: "${REVERSE_PROXY_HOST_IP}:6379" # Port of the redis instance on the reverse proxy host
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "/traefik-kop", "-V" ]
+      timeout: 5s
     networks:
       - home
     restart: unless-stopped
@@ -1243,7 +1249,8 @@ services:
       POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
       # Secrets config
       JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
-    # TODO: Healthcheck is temporary until https://github.com/CyferShepard/Jellystat/pull/220 is merged and released
+      # TODO: Add configuration for minumum playback period when >=1.1.2 is released
+    # TODO: Healthcheck is temporary until >=1.1.1 is released
     healthcheck:
       interval: 30s
       retries: 3

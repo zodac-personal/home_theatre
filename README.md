@@ -624,7 +624,11 @@ container being built. After the initial run, once the container is in a **healt
 
 ### Dozzle
 
-In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP. For a RaspberryPi 4, the following needs to be done:
+In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP.
+
+#### Linux
+
+For a Linux-based host, the following needs to be done:
 
 - Create a file `/etc/systemd/system/docker.service.d/override.conf`
 - Add the following content to the file:
@@ -643,6 +647,44 @@ ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_raspberry_pi>:23
 sudo netstat -lntp | grep dockerd
 tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
 ```
+
+#### Windows
+
+For a Window-based host using Docker Desktop, the following needs to be done:
+
+- Open Docker Desktop
+- Navigate to **Settings** > **General**
+- Check the box for "Expose daemon on tcp://localhost:2375 without TLS"
+- Restart
+
+Next, open a Powershell terminal as admin, and allow binding to 0.0.0.0:
+
+```bash
+netsh interface portproxy add v4tov4 listenport=2375 listenaddress=0.0.0.0 connectport=2375 connectaddress=127.0.0.1
+```
+
+Confirm this has been applied:
+
+```bash
+netsh interface portproxy show v4tov4
+
+Listen on ipv4:             Connect to ipv4:
+
+Address         Port        Address         Port
+--------------- ----------  --------------- ----------
+0.0.0.0         2375        127.0.0.1       2375
+```
+
+Finally, allow inbound connections to this port through the Windows Firewall:
+
+- Open Windows Firewall settings
+- Navigate to **Advanced Settings** > **Inbound Rules**
+- Add a new rule:
+    - Select **Port** as the rule type
+    - Enter **2375** for the port
+    - Allow all connections
+    - Apply the rule to the appropriate profiles (private, public, or domain)
+    - Name the rule (for example, "Docker TCP")
 
 ### Homarr
 

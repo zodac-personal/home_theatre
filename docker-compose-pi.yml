@@ -502,3 +502,16 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
+  
+  watchstate:
+    image: ghcr.io/arabcoders/watchstate:master-20241230-885d606
+    container_name: watchstate
+    hostname: watchstate
+    networks:
+      - home_pi
+    ports:
+      - "5006:8080"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/watchstate/data:/config:rw

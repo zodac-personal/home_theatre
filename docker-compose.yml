@@ -5,6 +5,54 @@ networks:
 
 services:
 
+  # Media Server
+  emby:
+    image: emby/embyserver:4.8.10.0
+    container_name: emby
+    hostname: emby
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8096/emby/system/info/public?format=json" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.emby.rule: "Host(`emby.${DOMAIN_NAME}`)"
+      traefik.http.routers.emby.entrypoints: "websecure"
+      traefik.http.routers.emby.tls: "true"
+      traefik.http.routers.emby.middlewares: "no-forward-auth@file"
+      traefik.http.services.emby.loadbalancer.server.port: "8096"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Emby (Media Server)"
+      kuma.{{container_name}}.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_retries: "3"
+      # TODO: Below are not working
+      #      kuma.{{container_name}}.http.notification_id_list: '{ "1": true }'
+      #      kuma.{{container_name}}.http.tags: '[{"tag_id": 2}]'
+    networks:
+      - home
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${AUDIO_DIRECTORY}:/media/audio"
+      - "${MOVIE_DIRECTORY}:/media/movies"
+      - "${RECORDINGS_DIRECTORY}:/media/recordings"
+      - "${TV1_DIRECTORY}:/media/tv1"
+      - "${TV2_DIRECTORY}:/media/tv2"
+      - "${TV_TRASH_DIRECTORY}:/media/trash"
+      - "${TV_KIDS_DIRECTORY}:/media/kids"
+      # Persistent volumes
+      - ./storage/emby/config/:/config
+      - ./storage/emby/backup/:/backup
+
   # Traefik connector
   traefik-kop:
     image: ghcr.io/jittering/traefik-kop:0.14 # https://github.com/jittering/traefik-kop/pkgs/container/traefik-kop

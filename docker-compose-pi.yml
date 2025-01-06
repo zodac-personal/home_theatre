@@ -19,7 +19,6 @@ services:
       DOMAIN_NAME: "${DOMAIN_NAME}"
       STATUS_URL: "${STATUS_URL}"
       # Non-docker service IPs
-      EMBY_URL: "${EMBY_URL}"
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
     healthcheck:
@@ -134,34 +133,6 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
-  # Reverse proxy
-  apache:
-    build: 
-      context: .
-      dockerfile: docker/apache/Dockerfile
-      args:
-        # Docker image version
-        APACHE_VERSION: "2.4.62" # https://hub.docker.com/_/httpd
-        # Build arguments
-        ADMIN_EMAIL_ADDRESS: "${ADMIN_EMAIL_ADDRESS?[apache] Admin email address missing}"
-    container_name: apache
-    hostname: apache
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://localhost/" ]
-      timeout: 5s
-    networks:
-      - home_pi
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-
   # Homepage
   homarr:
     image: ghcr.io/ajnart/homarr:0.15.7 # https://github.com/ajnart/homarr/pkgs/container/homarr
@@ -204,7 +175,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.10.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.12.1 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -255,7 +226,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.10.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.12.1 # https://github.com/goauthentik/authentik/pkgs/container/server
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -406,7 +377,7 @@ services:
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
       # Reverse proxy config
-      #   Because NetAlert uses 'network_mode: host', we cannot use docker labels to configure the service with Traefik
+      #   Because NetAlert uses `network_mode: host`, we cannot use docker labels to configure the service with Traefik
       #   Instead, there is a dynamic config file netalert.yml to define this, and the home network IP address of this
       #   service is passed in to the Traefik as an environment variable
       #   We can configure the redirects here, but it makes sense to leave it all in the config file instead.
@@ -423,6 +394,7 @@ services:
       - ./storage/netalert/config/:/app/config
       - ./storage/netalert/db/:/app/db
 
+  # Automated SpeedTest runner with graphs
   speedtest:
     image: linuxserver/speedtest-tracker:0.21.4
     container_name: speedtest
@@ -472,6 +444,7 @@ services:
     volumes:
       - ./storage/speedtest/config/:/config
 
+  # Database for SpeedTest
   speedtest-db:
     image: postgres:17.0-alpine
     container_name: speedtest-db
@@ -502,11 +475,15 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
-  
+
+  # Tool to import/export played state of media in Emby
   watchstate:
     image: ghcr.io/arabcoders/watchstate:master-20241230-885d606
     container_name: watchstate
     hostname: watchstate
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
     networks:
       - home_pi
     ports:
@@ -514,4 +491,4 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
     volumes:
-      - ./storage/watchstate/data:/config:rw
+      - ./storage/watchstate/data:/config

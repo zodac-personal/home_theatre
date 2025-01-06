@@ -18,11 +18,11 @@ serversTransport:
 ################################################################
 
 log:
-  level: INFO # Options: DEBUG, INFO, WANR, ERROR (Default), PANIC, FATAL  
+  level: INFO # Options: DEBUG, INFO, WARN, ERROR (Default), PANIC, FATAL
   noColor: false # Set to 'true' if format is 'json'
   maxSize: 100 # In megabytes
   compress: true # gzip compression when rotating
-  
+
 # accessLog: {} # Uncomment to enable access logging
 
 ################################################################
@@ -81,7 +81,7 @@ entryPoints:
 ################################################################
 
 providers:
-  # Enable auto loading of newly created rules by watching a directory
+  # Enable autoloading of newly created rules by watching a directory
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
@@ -105,4 +105,3 @@ experimental:
     traefik-plugin-redirect-on-status:
       moduleName: "github.com/m-riedel/traefik-plugin-redirect-on-status"
       version: "v1.0.1"
-

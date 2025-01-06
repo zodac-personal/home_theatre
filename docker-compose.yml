@@ -45,7 +45,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3000/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -91,7 +91,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3001/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -180,7 +180,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3002/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3002/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -277,7 +277,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3004/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3004/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -354,7 +354,7 @@ services:
       - ./storage/audiobookshelf/config:/config
       - ./storage/audiobookshelf/metadata:/metadata
 
-  # Downloaded archive extracter
+  # Downloaded archive extractor
   unpackerr:
     image: golift/unpackerr:0.14.5
     container_name: unpackerr
@@ -416,7 +416,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:development-version-v1.4.6-beta.16
+    image: linuxserver/bazarr:development-version-v1.5.1-beta.3
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -436,7 +436,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3009/api/system/status?apikey=${BAZARR_API_KEY}" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:6767/api/system/status?apikey=${BAZARR_API_KEY}" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -452,7 +452,7 @@ services:
     networks:
       - home
     ports:
-      - "4009:3009"
+      - "4009:6767"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -463,7 +463,6 @@ services:
       - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
-      - ./docker/bazarr/scripts/cleansubs.sh:/opt/cleansubs.sh
       - ./storage/bazarr/:/config
 
   # Automated Speech Recognition tool for subtitles
@@ -484,7 +483,7 @@ services:
       interval: 60s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/" ] # '--spider' fails
       timeout: 15s
     networks:
       - home
@@ -493,7 +492,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.6.0-rc.1
+    image: rommapp/romm:3.7.0-beta.1
     container_name: romm
     hostname: romm
     depends_on:
@@ -514,9 +513,8 @@ services:
       DB_HOST: "romm-db"
       DB_NAME: "${ROMM_DB_NAME:?[romm] Database name missing}"
       DB_PORT: "${ROMM_DB_PORT:?[romm] Database port missing}"
-      # Do not quote the following two, or leave a comment afterward, can cause issues, for some reason (I think the quotes are passed in)
-      DB_PASSWD: ${ROMM_DB_PASSWORD:?[romm] Database password missing}
-      DB_ROOT_PASSWD: ${ROMM_DB_ROOT_PASSWORD:?[romm] Database root password missing}
+      DB_PASSWD: "${ROMM_DB_PASSWORD:?[romm] Database password missing}"
+      DB_ROOT_PASSWD: "${ROMM_DB_ROOT_PASSWORD:?[romm] Database root password missing}"
       DB_USER: "${ROMM_DB_USER:?[romm] Database user missing}"
       # External systems config
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID:?[romm] Twitch client ID missing}"
@@ -527,7 +525,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/heartbeat" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/heartbeat" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -560,7 +558,7 @@ services:
       - "${ROM_SAVES_DIRECTORY}:/romm/assets"
       - "./docker/romm/config/:/romm/config"
       # Persistent volumes
-      - ./storage/romm/resources:/romm/resources  # Resources fetched from IGDB (covers, screenshots, etc.)
+      - ./storage/romm/resources:/romm/resources  # Resources (covers, screenshots, etc.) that are fetched externally
       - ./storage/romm/redis:/redis-data          # Cached data for background tasks
 
   # Database for RomM
@@ -595,7 +593,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
-      - romm-db_data:/var/lib/mysql
+      - ./storage/romm-db/:/var/lib/mysql
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -625,7 +623,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:3016/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3016/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -667,7 +665,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/v2/app/version" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/api/v2/app/version" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -810,7 +808,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8080/openapi" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi" ]
       timeout: 5s
     networks:
       - home
@@ -843,7 +841,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:80" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -978,7 +976,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:8765" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8765" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -1051,7 +1049,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.3.35-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
+    image: ghcr.io/open-webui/open-webui:v0.5.4-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1063,6 +1061,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # UI config
+      OLLAMA_BASE_URL: "https://ai.${DOMAIN_NAME}"
       ENABLE_COMMUNITY_SHARING: "false"
       ENABLE_SIGNUP: "false"
       WEBUI_AUTH_TRUSTED_EMAIL_HEADER: "X-Authentik-Email"
@@ -1087,7 +1086,6 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ollama:/root/.ollama
       - ./storage/ollama/open-webui:/app/backend/data
 
   # Static code analysis tool
@@ -1104,6 +1102,7 @@ services:
           cpus: "1"
           memory: "4096M"
     environment:
+      # Database config
       SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
       SONAR_JDBC_USERNAME: "${SONARQUBE_DB_USER:?[sonarqube] Database user missing}"
       SONAR_JDBC_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube] Database password missing}"
@@ -1111,7 +1110,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ] # '--spider' fails
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -1196,7 +1195,7 @@ services:
       POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
       # Secrets config
       JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
-      # TODO: Add configuration for minumum playback period when >=1.1.2 is released
+      # TODO: Add configuration for minimum playback period when >=1.1.2 is released
     # TODO: Healthcheck is temporary until >=1.1.1 is released
     healthcheck:
       interval: 30s
@@ -1271,7 +1270,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.7.1 # https://github.com/linkwarden/linkwarden/pkgs/container/linkwarden
+    image: ghcr.io/linkwarden/linkwarden:v2.8.4 # https://github.com/linkwarden/linkwarden/pkgs/container/linkwarden
     container_name: linkwarden
     hostname: linkwarden
     depends_on:
@@ -1295,15 +1294,17 @@ services:
       NEXT_PUBLIC_AUTHENTIK_ENABLED: "true"
       NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"
       NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
+      DISABLE_NEW_SSO_USERS: "true"
       # Database config
       DATABASE_URL: "postgresql://${LINKWARDEN_DB_USER:?[linkwarden] Database user missing}:${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}@linkwarden-db:${LINKWARDEN_DB_PORT:?[linkwarden] Database port missing}/${LINKWARDEN_DB_NAME:?[linkwarden] Database name missing}"
       POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
-      timeout: 5s
+    # TODO: Use native healthcheck once >2.8.4 is released
+#    healthcheck:
+#      interval: 30s
+#      retries: 3
+#      start_period: 30s
+#      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
+#      timeout: 5s
     labels:
       # Reverse proxy config
       traefik.enable: "true"
@@ -1379,7 +1380,6 @@ services:
         AUTOKUMA_VERSION: "0.8.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
         # Build arguments
         # Host Monitor URLs
-        EMBY_MONITOR_URL: "${EMBY_MONITOR_URL:?[autokuma] Emby static monitor URL missing}"
         QBITTORRENT_MONITOR_URL: "${QBITTORRENT_NATIVE_MONITOR_URL:?[autokuma] qBittorrent static monitor URL missing}"
         # NAS URLs
         SYNOLOGY_MONITOR_URL: "${SYNOLOGY_MONITOR_URL:?[autokuma] Synology static monitor URL missing}"
@@ -1410,7 +1410,7 @@ services:
       AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
       AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
       AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-      # Status page envs
+      # Status page environment variables
       STATUS_PAGE_SLUG: "main"
     healthcheck:
       interval: 30s
@@ -1469,10 +1469,3 @@ services:
       - home
     restart: no
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-
-# These volumes are required by their service, due to issues when using a Windows mount
-volumes:
-  romm-db_data:
-    name: romm-db_data
-  ollama:
-    name: ollama

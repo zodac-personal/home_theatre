@@ -21,6 +21,9 @@
     "code_block_line_length": 200,
     "tables": false
   },
+  "MD024": {
+    "siblings_only": true
+  },
   "MD033": {
     "allowed_elements": [
       "details",

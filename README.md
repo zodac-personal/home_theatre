@@ -778,6 +778,7 @@ max virtual memory areas vm.max_map_count [65530] is too low
 ```
 
 This can be resolved by updating the setting on the host machine, by running the following commands:
+
 ```shell
 sudo vi /etc/sysctl.conf
 # Add the following line:

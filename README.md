@@ -602,18 +602,6 @@ cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_
 docker compose up --build -d tandoor tandoor-ui
 ```
 
-## Upgrade
-
-### SonarQube
-
-When updating SonarQube, check the logs for a message like the following:
-
-```log
-The database must be manually upgraded. Please backup the database and browse /setup. For more information: https://docs.sonarsource.com/sonarqube/latest/setup/upgrading
-```
-
-Log in to the `/setup` link and follow the instructions.
-
 ## Misc Info
 
 ### Authentik
@@ -628,24 +616,29 @@ In order for Dozzle to connect to another host, the docker socket needs to be ex
 
 #### Linux
 
-For a Linux-based host, the following needs to be done:
+For a Linux-based host, first we must find the service:
 
-- Create a file `/etc/systemd/system/docker.service.d/override.conf`
-- Add the following content to the file:
+```shell
+systemctl status docker | grep "Loaded:"
+```
+
+- Find the path to the service in the output, for example: `/lib/systemd/system/docker.service`
+- Edit the service: `sudo systemctl edit docker.service`
+- Add the following content to the file in the section above the ignored content:
 
 ```conf
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_raspberry_pi>:2375 --containerd=/run/containerd/containerd.sock
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_host>:2375 --containerd=/run/containerd/containerd.sock
 ```
 
-- Reload the daemon `sudo systemctl daemon-reload`
-- Restart the docker service `sudo systemctl edit docker.service`
+- Reload the daemon: `sudo systemctl daemon-reload`
+- Restart the docker service `sudo systemctl restart docker.service`
 - Confirm the port is in LISTEN state with the LAN IP address:
 
-```conf
+```shell
 sudo netstat -lntp | grep dockerd
-tcp        0      0 <lan_ip_address_of_raspberry_pi>:2375      0.0.0.0:*               LISTEN      1234/dockerd
+tcp        0      0 <lan_ip_address_of_host>:2375      0.0.0.0:*               LISTEN      1234/dockerd
 ```
 
 #### Windows
@@ -688,6 +681,8 @@ Finally, allow inbound connections to this port through the Windows Firewall:
 
 ### Homarr
 
+#### Initial Setup
+
 On initial start, you'll be asked to create an admin user. You won't be able to log in with this user unless you change the following environment
 variable:
 
@@ -706,6 +701,8 @@ configure your Homarr instance. If this group name needs to be changed, update t
 the group name in Authentik.
 
 ### NetAlertX
+
+#### Initial Setup
 
 The container will create an updated [app.conf](./docker/netalert/config/app.conf) file and save it in the container at **/app.conf.new**. However,
 since the container creates a fresh
@@ -727,18 +724,20 @@ An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), bu
 
 ### Ollama
 
+#### Initial Setup
+
 The container first comes up with no users and no models. Neither of these can be set programatically, so on the first start-up some actions must be
 performed.
 
-#### Create Admin User
+##### Create Admin User
 
 In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by Authentik,
 which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
 
-Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker compose down` and `docker compose up` to rebuild the container with
-the updated value.
+Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker compose down ollama` and `docker compose up --build -d ollama` to
+rebuild the container with the updated value.
 
-#### Download Models
+##### Download Models
 
 Next the [models](https://ollama.com/library) need to be downloaded. This can be done through the UI itself, or you can `docker exec` into the
 container and run the following commands:
@@ -748,7 +747,58 @@ ollama pull llama3.1:8b         # Main model
 ollama pull llama2-uncensored   # Older version of the model, but with no filters
 ```
 
+### SonarQube
+
+#### Initial Setup
+
+When first starting SonarQube, the container may fail to come up with the following error:
+
+```shell
+ERROR es[][o.e.b.Elasticsearch] fatal exception while booting Elasticsearch
+java.lang.IllegalStateException: Unable to access 'path.data' (/opt/sonarqube/data/es8)
+  at org.elasticsearch.bootstrap.FilePermissionUtils.addDirectoryPath(FilePermissionUtils.java:66) ~[elasticsearch-8.14.3.jar:?]
+  at org.elasticsearch.bootstrap.Security.addFilePermissions(Security.java:236) ~[elasticsearch-8.14.3.jar:?]
+  at org.elasticsearch.bootstrap.Security.createPermissions(Security.java:178) ~[elasticsearch-8.14.3.jar:?]
+  at org.elasticsearch.bootstrap.Security.configure(Security.java:125) ~[elasticsearch-8.14.3.jar:?]
+  at org.elasticsearch.bootstrap.Elasticsearch.initPhase2(Elasticsearch.java:202) ~[elasticsearch-8.14.3.jar:?]
+  at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:74) ~[elasticsearch-8.14.3.jar:?]
+Caused by: java.nio.file.AccessDeniedException: /opt/sonarqube/data/es8
+```
+
+This can be resolved by stopping the container and running the following command on the mounted directory:
+
+```shell
+sudo chown -R "${PUID_NON_ROOT}:${PUID_NON_ROOT}" ./storage/sonarqube
+```
+
+There may be a subsequent error on Linux:
+
+```shell
+max virtual memory areas vm.max_map_count [65530] is too low
+```
+
+This can be resolved by updating the setting on the host machine, by running the following commands:
+```shell
+sudo vi /etc/sysctl.conf
+# Add the following line:
+vm.max_map_count=262144
+# Exit vi
+sudo sysctl --system
+```
+
+#### Upgrade
+
+When updating SonarQube, check the logs for a message like the following:
+
+```log
+The database must be manually upgraded. Please backup the database and browse /setup. For more information: https://docs.sonarsource.com/sonarqube/latest/setup/upgrading
+```
+
+Log in to the `/setup` link and follow the instructions.
+
 ### Tandoor
+
+#### Initial Setup
 
 Once installed, go to the Django admin console (**User**> **Admin**), then click on **Sites**. Manually update the *Domain Name* and *Display Name* to
 your own domain name. This cannot be configured through environment variables.

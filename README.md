@@ -747,6 +747,26 @@ ollama pull llama3.1:8b         # Main model
 ollama pull llama2-uncensored   # Older version of the model, but with no filters
 ```
 
+### RomM
+
+#### Logging
+
+To reduce the amount of nginx logs printed in the docker console, the following update can be done (there is currently no easy way to configure this).
+
+```bash
+docker exec -it romm bash
+vi /etc/nginx/nginx.conf
+
+# Find the line with 'access_log', and replace with the following:
+map $status $loggable
+{ 
+  ~^[2] 0; 
+  default 1; 
+} 
+
+access_log /dev/stdout romm_log if=$loggable;
+```
+
 ### SonarQube
 
 #### Initial Setup

@@ -476,7 +476,7 @@ services:
     volumes:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
 
-  # Tool to import/export played state of media in Emby
+  # Tool to import/export played state of media in Emby, instead of using Trakt
   watchstate:
     image: ghcr.io/arabcoders/watchstate:master-20241230-885d606
     container_name: watchstate

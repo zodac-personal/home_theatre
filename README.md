@@ -762,9 +762,12 @@ map $status $loggable
 { 
   ~^[2] 0; 
   default 1; 
-} 
+}
 
 access_log /dev/stdout romm_log if=$loggable;
+
+# Then exit and restart the container
+docker restart romm
 ```
 
 ### SonarQube

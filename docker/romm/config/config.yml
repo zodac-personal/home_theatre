@@ -26,5 +26,6 @@ system:
     PSVita: 'psvita'
     Switch: 'switch'
     Wii: 'wii'
+    Windows: 'win'
     XBox360: 'xbox360'
     XBox: 'xbox'

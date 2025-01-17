@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.8.10.0
+    image: emby/embyserver:4.9.0.35
     container_name: emby
     hostname: emby
     environment:
@@ -55,7 +55,7 @@ services:
 
   # Traefik connector
   traefik-kop:
-    image: ghcr.io/jittering/traefik-kop:0.14 # https://github.com/jittering/traefik-kop/pkgs/container/traefik-kop
+    image: ghcr.io/jittering/traefik-kop:0.14
     container_name: traefik-kop
     hostname: traefik-kop
     environment:
@@ -75,7 +75,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:nightly-version-5.15.1.9434
+    image: linuxserver/radarr:nightly-version-5.18.1.9602
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -121,7 +121,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.10.2624
+    image: linuxserver/sonarr:develop-version-4.0.12.2849
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -170,7 +170,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:7.3.0 # https://github.com/recyclarr/recyclarr/pkgs/container/recyclarr
+    image: ghcr.io/recyclarr/recyclarr:7.4.0
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -210,7 +210,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.8.1.4442
+    image: linuxserver/lidarr:nightly-version-2.9.4.4539
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -256,7 +256,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.53.3
+    image: deluan/navidrome:0.54.4
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -282,6 +282,8 @@ services:
       ND_COVERARTPRIORITY: "album.*, embedded, external"
       # Logging config
       ND_LOGLEVEL: "info"
+      # System config
+      ND_ENABLEINSIGHTSCOLLECTOR: "false"
     labels:
       # Reverse proxy config
       traefik.enable: "true"
@@ -307,7 +309,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:nightly-version-0.4.4.2666
+    image: linuxserver/readarr:nightly-version-0.4.9.2730
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -353,7 +355,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.17.2
+    image: ghcr.io/advplyr/audiobookshelf:2.17.7
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -464,7 +466,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:development-version-v1.5.1-beta.3
+    image: linuxserver/bazarr:development-version-v1.5.2-beta.5
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -515,7 +517,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.6.0
+    image: onerahmet/openai-whisper-asr-webservice:v1.7.1
     container_name: whisper
     hostname: whisper
     deploy:
@@ -540,7 +542,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.7.0-beta.1
+    image: rommapp/romm:3.7.2
     container_name: romm
     hostname: romm
     depends_on:
@@ -611,7 +613,7 @@ services:
 
   # Database for RomM
   romm-db:
-    image: mariadb:11.5.2
+    image: mariadb:11.6.2
     container_name: romm-db
     hostname: romm-db
     deploy:
@@ -645,7 +647,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.26.1.4837
+    image: linuxserver/prowlarr:nightly-version-1.30.1.4928
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -696,7 +698,7 @@ services:
 
   # Torrent downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:5.0.1-libtorrentv1
+    image: linuxserver/qbittorrent:5.0.3-libtorrentv1
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -804,7 +806,7 @@ services:
 
   # Recipe manager
   tandoor:
-    image: vabene1111/recipes:1.5.20
+    image: vabene1111/recipes:1.5.27
     container_name: tandoor
     hostname: tandoor
     depends_on:
@@ -869,7 +871,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor-ui:
-    image: nginx:1.27.2-alpine
+    image: nginx:1.27.3-alpine
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
@@ -923,7 +925,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -960,7 +962,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.15.2 # https://github.com/sysadminsmedia/homebox/pkgs/container/homebox
+    image: ghcr.io/sysadminsmedia/homebox:0.17.2
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1097,7 +1099,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.5.4-ollama # https://github.com/open-webui/open-webui/pkgs/container/open-webui
+    image: ghcr.io/open-webui/open-webui:v0.5.4-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1138,7 +1140,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:10.7.0-community
+    image: sonarqube:25.1.0.102122-community
     container_name: sonarqube
     hostname: sonarqube
     depends_on:
@@ -1181,10 +1183,11 @@ services:
       - ./storage/sonarqube/data/:/opt/sonarqube/data
       - ./storage/sonarqube/extensions/:/opt/sonarqube/extensions
       - ./storage/sonarqube/logs/:/opt/sonarqube/logs
+      - ./storage/sonarqube/temp/:/opt/sonarqube/temp
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
@@ -1221,7 +1224,7 @@ services:
 
   # Statistics for Emby
   jellystat:
-    image: cyfershepard/jellystat:1.1.0
+    image: cyfershepard/jellystat:1.1.2
     container_name: jellystat
     hostname: jellystat
     depends_on:
@@ -1243,14 +1246,8 @@ services:
       POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
       # Secrets config
       JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
-      # TODO: Add configuration for minimum playback period when >=1.1.2 is released
-    # TODO: Healthcheck is temporary until >=1.1.1 is released
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "pidof", "node" ]
-      timeout: 5s
+      # System config
+      MINIMUM_SECONDS_TO_INCLUDE_PLAYBACK: "10"
     labels:
       # Reverse proxy config
       traefik.enable: "true"
@@ -1281,7 +1278,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
@@ -1318,7 +1315,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.8.4 # https://github.com/linkwarden/linkwarden/pkgs/container/linkwarden
+    image: ghcr.io/linkwarden/linkwarden:v2.9.3
     container_name: linkwarden
     hostname: linkwarden
     depends_on:
@@ -1346,13 +1343,6 @@ services:
       # Database config
       DATABASE_URL: "postgresql://${LINKWARDEN_DB_USER:?[linkwarden] Database user missing}:${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}@linkwarden-db:${LINKWARDEN_DB_PORT:?[linkwarden] Database port missing}/${LINKWARDEN_DB_NAME:?[linkwarden] Database name missing}"
       POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}"
-    # TODO: Use native healthcheck once >2.8.4 is released
-#    healthcheck:
-#      interval: 30s
-#      retries: 3
-#      start_period: 30s
-#      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:3000/" ] # wget not installed
-#      timeout: 5s
     labels:
       # Reverse proxy config
       traefik.enable: "true"
@@ -1383,7 +1373,7 @@ services:
 
   # Database for Linkwarden
   linkwarden-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:
@@ -1478,7 +1468,7 @@ services:
   # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
   # It also uses the published docker image, rather than building one for any static monitors.
   autokuma-pi:
-    image: ghcr.io/bigboot/autokuma:0.8.0 # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+    image: ghcr.io/bigboot/autokuma:0.8.0
     container_name: autokuma-pi
     hostname: autokuma-pi
     deploy:

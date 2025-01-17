@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.2.0
+    image: traefik:v3.3.2
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -60,7 +60,7 @@ services:
 
   # Reverse proxy connector for external hosts
   traefik-provider:
-    image: redis:7.4.1-alpine
+    image: redis:7.4.2-alpine
     container_name: traefik-provider
     hostname: traefik-provider
     command: --save 60 1 --loglevel warning
@@ -82,7 +82,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v8.7.2
+    image: amir20/dozzle:v8.10.4
     container_name: dozzle
     hostname: dozzle
     environment:
@@ -135,7 +135,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.7 # https://github.com/ajnart/homarr/pkgs/container/homarr
+    image: ghcr.io/ajnart/homarr:0.15.10
     container_name: homarr
     hostname: homarr
     environment:
@@ -175,7 +175,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2024.12.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.12.2
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -226,7 +226,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2024.12.1 # https://github.com/goauthentik/authentik/pkgs/container/server
+    image: ghcr.io/goauthentik/server:2024.12.2
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -261,7 +261,7 @@ services:
 
   # Cache for Authentik
   authentik-cache:
-    image: redis:7.4.1-alpine
+    image: redis:7.4.2-alpine
     container_name: authentik-cache
     hostname: authentik-cache
     command: --save 60 1 --loglevel warning
@@ -281,7 +281,7 @@ services:
 
   # Database for Authentik
   authentik-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: authentik-db
     hostname: authentik-db
     environment:
@@ -314,7 +314,7 @@ services:
 
   # Monitoring and alerting
   uptime-kuma:
-    image: louislam/uptime-kuma:1.23.15-alpine
+    image: louislam/uptime-kuma:1.23.16-alpine
     container_name: uptime-kuma
     hostname: uptime-kuma
     environment:
@@ -358,7 +358,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "24.10.31" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "25.1.8" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -396,7 +396,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:0.21.4
+    image: linuxserver/speedtest-tracker:1.1.0
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -446,7 +446,7 @@ services:
 
   # Database for SpeedTest
   speedtest-db:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     container_name: speedtest-db
     hostname: speedtest-db
     environment:
@@ -472,7 +472,7 @@ services:
     networks:
       - home_pi
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
 
@@ -489,6 +489,6 @@ services:
     ports:
       - "5006:8080"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PUID_ROOT:?Group ID missing}"
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       - ./storage/watchstate/data:/config

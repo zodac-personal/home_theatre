@@ -11,3 +11,4 @@ storage/
 .env.test
 docker/test/
 docker-compose-test.yml
+tmp_backup/

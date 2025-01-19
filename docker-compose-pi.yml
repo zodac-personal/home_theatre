@@ -152,7 +152,7 @@ services:
       BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       # Secrets config
-      SECRET_ENCRYPTION_KEY: "${HOMARR_SECRET_KEY:[homarr] Secret key missing}"
+      SECRET_ENCRYPTION_KEY: "${HOMARR_SECRET_KEY:?[homarr] Secret key missing}"
     healthcheck:
       interval: 30s
       retries: 3

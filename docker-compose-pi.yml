@@ -135,22 +135,24 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/ajnart/homarr:0.15.10
+    image: ghcr.io/homarr-labs/homarr:v1.0.1
     container_name: homarr
     hostname: homarr
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      AUTH_OIDC_ADMIN_GROUP: "HomarrAdmins"
+      # AUTH_OIDC_ADMIN_GROUP: "HomarrAdmins" # Configured in UI at start-up
       AUTH_OIDC_AUTO_LOGIN: "true"
       AUTH_OIDC_CLIENT_ID: "${HOMARR_AUTHENTIK_CLIENT_ID:?[homarr] Authentik client ID missing}"
       AUTH_OIDC_CLIENT_NAME: "Authentik"
       AUTH_OIDC_CLIENT_SECRET: "${HOMARR_AUTHENTIK_CLIENT_SECRET:?[homarr] Authentik client secret missing}"
-      AUTH_OIDC_URI: "${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
-      AUTH_PROVIDER: "oidc"
+      AUTH_OIDC_ISSUER: "${HOMARR_AUTHENTIK_OIDC_URI:?[homarr] Authentik OIDC URI missing}"
+      AUTH_PROVIDERS: "oidc"
       BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
       NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      # Secrets config
+      SECRET_ENCRYPTION_KEY: "${HOMARR_SECRET_KEY:[homarr] Secret key missing}"
     labels:
       # Reverse proxy config
       traefik.enable: "true"
@@ -169,9 +171,7 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ./storage/homarr/configs:/app/data/configs
-      - ./storage/homarr/data:/data
-      - ./storage/homarr/icons:/app/public/icons
+      - ./storage/homarr/data:/appdata
 
   # Identity platform (authentication and SSO)
   authentik:

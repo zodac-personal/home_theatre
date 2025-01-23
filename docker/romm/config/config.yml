@@ -24,6 +24,7 @@ system:
     PS3: 'ps3'
     PSP: 'psp'
     PSVita: 'psvita'
+    SegaGenesis: 'genesis-slash-megadrive'
     Switch: 'switch'
     Wii: 'wii'
     Windows: 'win'

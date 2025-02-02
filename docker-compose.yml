@@ -542,7 +542,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.7.2
+    image: rommapp/romm:3.7.3
     container_name: romm
     hostname: romm
     depends_on:
@@ -557,7 +557,17 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
+      DISABLE_USERPASS_LOGIN: "false" # TODO: Migrate all existing users to Authentik
+      OIDC_CLIENT_ID: "${ROMM_AUTHENTIK_CLIENT_ID:?[romm] Authentik client ID missing}"
+      OIDC_CLIENT_SECRET: "${ROMM_AUTHENTIK_CLIENT_SECRET:?[romm] Authentik client secret missing}"
+      OIDC_ENABLED: "true"
+      OIDC_PROVIDER: "Authentik"
+      OIDC_REDIRECT_URI: "${ROMM_AUTHENTIK_REDIRECT_URL:?[romm] Authentik redirect URL missing}"
+      OIDC_SERVER_APPLICATION_URL: "${ROMM_AUTHENTIK_OIDC_URL:?[romm] Authentik OIDC URL missing}"
+      LOGLEVEL: "DEBUG"
+      # Background task config
+      ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
+      ENABLE_SCHEDULED_RESCAN: "true"
       # Database config
       ROMM_DB_DRIVER: "mariadb"
       DB_HOST: "romm-db"
@@ -571,6 +581,8 @@ services:
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET:?[romm] Twitch client secret missing}"
       MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:?[romm] MobyGames API key missing}"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
+      # Secrets config
+      ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
     healthcheck:
       interval: 30s
       retries: 3

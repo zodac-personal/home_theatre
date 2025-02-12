@@ -100,7 +100,7 @@ obfuscation, and should not be considered actual security.
 
 #### Volumes
 
-### <img src="./logos/homarr.png" width="70" height="49" alt="homarr_logo"/> Homarr
+### <img src="./logos/homarr.png" width="50" height="50" alt="homarr_logo"/> Homarr
 
 ### <img src="./logos/sonarr.png" width="50" height="50" alt="sonarr_logo"/> Sonarr
 

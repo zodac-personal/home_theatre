@@ -557,7 +557,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      DISABLE_USERPASS_LOGIN: "false" # TODO: Migrate all existing users to Authentik
+      DISABLE_USERPASS_LOGIN: "true"
       OIDC_CLIENT_ID: "${ROMM_AUTHENTIK_CLIENT_ID:?[romm] Authentik client ID missing}"
       OIDC_CLIENT_SECRET: "${ROMM_AUTHENTIK_CLIENT_SECRET:?[romm] Authentik client secret missing}"
       OIDC_ENABLED: "true"

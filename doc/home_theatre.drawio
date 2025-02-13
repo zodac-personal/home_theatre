@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="24.9.1">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.0.13">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1687" dy="875" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -123,7 +123,7 @@
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-8" value="&lt;a href=&quot;https://github.com/ZoneMinder&quot;&gt;Frigate&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Home Camera Streaming&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="800" y="520" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-10" target="oyaQrTRKLkGkAWCvTF3D-5">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="Tl25KXTgNwVIgyIWhWGG-10" target="oyaQrTRKLkGkAWCvTF3D-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-10" value="&lt;a href=&quot;https://github.com/kiranshila/Doplarr&quot;&gt;Doplarr&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Discord Request Bot&lt;br&gt;&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
@@ -208,7 +208,7 @@
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;endArrow=classic;endFill=1;startArrow=classic;startFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="ROIVXRoGKlTalxw2WbaJ-14" target="oyaQrTRKLkGkAWCvTF3D-21" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROIVXRoGKlTalxw2WbaJ-14" value="&lt;a href=&quot;https://github.com/HaveAGitGat/Tdarr&quot;&gt;Tdarr&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Media Transcoder&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;fillStyle=solid;" parent="1" vertex="1">
+        <mxCell id="ROIVXRoGKlTalxw2WbaJ-14" value="&lt;a href=&quot;https://github.com/Unmanic/unmanic&quot;&gt;Unmanic&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Media Transcoder&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;fillStyle=solid;" parent="1" vertex="1">
           <mxGeometry x="760" y="960" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-18" value="" style="group" parent="1" vertex="1" connectable="0">
@@ -310,7 +310,7 @@
         <mxCell id="Fif5-x-M6B1vJOmEHzV4-1" value="&lt;a href=&quot;https://github.com/MariaDB/mariadb-docker&quot;&gt;MDB&lt;/a&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="ROIVXRoGKlTalxw2WbaJ-26" vertex="1">
           <mxGeometry width="30" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="gErYVcJsU2c04pcpEg-A-11" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" parent="ROIVXRoGKlTalxw2WbaJ-26" vertex="1">
+        <mxCell id="Q0VvJ70L2bGEV7D_ZZ47-1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" vertex="1" parent="ROIVXRoGKlTalxw2WbaJ-26">
           <mxGeometry x="110" width="10" height="10" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-27" value="" style="group" parent="1" vertex="1" connectable="0">
@@ -602,13 +602,13 @@
         <mxCell id="ZHVau_gpumx4E9w_0-pG-5" value="Internet" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="130.31" y="50" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-1" value="" style="group" vertex="1" connectable="0" parent="1">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-1" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="240" y="280" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-2" value="&lt;a href=&quot;https://github.com/arabcoders/watchstate&quot;&gt;WatchState&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Emby watched data&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" vertex="1" parent="L6m80jQgylzgtWpYlu2N-1">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-2" value="&lt;a href=&quot;https://github.com/arabcoders/watchstate&quot;&gt;WatchState&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Emby watched data&lt;/sub&gt;&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" parent="L6m80jQgylzgtWpYlu2N-1" vertex="1">
           <mxGeometry width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="L6m80jQgylzgtWpYlu2N-2" target="0rjydeuM3OXjqDoLz8A_-4">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="L6m80jQgylzgtWpYlu2N-2" target="0rjydeuM3OXjqDoLz8A_-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

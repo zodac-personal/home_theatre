@@ -11,7 +11,7 @@ http:
         contentTypeNosniff: true
         customFrameOptionsValue: SAMEORIGIN # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
         customResponseHeaders:
-          Content-Security-Policy: "default-src 'none'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+          Content-Security-Policy: "frame-ancestors 'none'; upgrade-insecure-requests;"
           X-Forwarded-Proto: "https"
           X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
         forceSTSHeader: true

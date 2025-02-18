@@ -22,9 +22,9 @@ http:
   middlewares:
     redirect-to-status:
       redirectRegex:
+        permanent: true  # Set to true for a permanent redirect (301)
         regex: ".*"  # Match all
         replacement: "{{ env "STATUS_URL" | trimAll "\"" }}"  # Redirect URL
-        permanent: true  # Set to true for a permanent redirect (301)
 
   services:
     dummy-service-global-handler:

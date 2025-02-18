@@ -3,21 +3,22 @@ http:
     secure-headers:
       headers:
         accessControlAllowMethods:
-         - GET
-         - OPTIONS
-         - PUT
+          - GET
+          - OPTIONS
+          - PUT
         accessControlMaxAge: 100
+        browserXssFilter: true
+        contentTypeNosniff: true
+        customFrameOptionsValue: SAMEORIGIN # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+        customResponseHeaders:
+          Content-Security-Policy: "default-src 'none'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+          X-Forwarded-Proto: "https"
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+        forceSTSHeader: true
         hostsProxyHeaders:
-        - "X-Forwarded-Host"
+          - "X-Forwarded-Host"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        referrerPolicy: "same-origin"
         stsSeconds: 63072000
         stsIncludeSubdomains: true
         stsPreload: true
-        forceSTSHeader: true
-        customFrameOptionsValue: SAMEORIGIN # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-        contentTypeNosniff: true
-        browserXssFilter: true
-        referrerPolicy: "same-origin"
-        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
-        customResponseHeaders:
-         X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
-         X-Forwarded-Proto: "https"          

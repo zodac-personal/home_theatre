@@ -8,11 +8,11 @@
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
-  
+
 serversTransport:
   forwardingTimeouts:
     dialTimeout: 20s # Default timeout to connect to a backend service
-  
+
 ################################################################
 # Logs - https://doc.traefik.io/traefik/observability/logs/
 ################################################################
@@ -32,7 +32,7 @@ log:
 api:
   dashboard: true
   insecure: true
-ping: {}
+ping: { }
 
 ################################################################
 # Entrypoints - https://doc.traefik.io/traefik/routing/entrypoints/
@@ -51,7 +51,8 @@ entryPoints:
   websecure:
     address: ":443"
     http:
-      tls: {}
+      tls:
+        options: default
     forwardedHeaders:
       trustedIPs:
         # Cloudflare (https://www.cloudflare.com/ips-v4)

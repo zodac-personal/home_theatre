@@ -43,6 +43,7 @@ services:
     volumes:
       # Volume mounts from host system
       - "${AUDIO_DIRECTORY}:/media/audio"
+      - "${BOOKS_DIRECTORY}:/media/books"
       - "${MOVIE_DIRECTORY}:/media/movies"
       - "${RECORDINGS_DIRECTORY}:/media/recordings"
       - "${TV1_DIRECTORY}:/media/tv1"

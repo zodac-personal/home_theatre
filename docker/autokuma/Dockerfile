@@ -7,5 +7,4 @@ ARG QBITTORRENT_MONITOR_URL
 ARG SYNOLOGY_MONITOR_URL
 # Replace templates with environment variables in any file in this directory that contains the template value
 RUN sed -i "s|%QBITTORRENT_MONITOR_URL%|${QBITTORRENT_MONITOR_URL}|g" /var/static/monitor/torrent.toml && \
-    escaped_synology_monitor_url=$(printf '%s\n' "${SYNOLOGY_MONITOR_URL}" | sed 's/[\/&]/\\&/g') && \
-    sed -i "s|%SYNOLOGY_MONITOR_URL%|${escaped_synology_monitor_url}|g" /var/static/monitor/synology.toml
+    sed -i "s|%SYNOLOGY_MONITOR_URL%|$(printf '%s\n' "${SYNOLOGY_MONITOR_URL}" | sed 's/[\/&]/\\&/g')|g" /var/static/monitor/synology.toml

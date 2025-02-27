@@ -490,6 +490,8 @@ services:
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Logging config
+      WS_LOGGER_FILE_ENABLE: "false" # Disabled due to logs being too large, and not needing them
     networks:
       - home_pi
     ports:

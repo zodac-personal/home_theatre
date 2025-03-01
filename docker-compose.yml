@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.0.37
+    image: emby/embyserver:4.9.0.40
     container_name: emby
     hostname: emby
     environment:
@@ -76,7 +76,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:nightly-version-5.19.0.9681
+    image: linuxserver/radarr:nightly-version-5.20.0.9735
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -122,7 +122,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.12.2900
+    image: linuxserver/sonarr:develop-version-4.0.13.2933
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -171,7 +171,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:7.4.0
+    image: ghcr.io/recyclarr/recyclarr:7.4.1
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.10.0.4553
+    image: linuxserver/lidarr:nightly-version-2.10.1.4576
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -257,7 +257,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.54.4
+    image: deluan/navidrome:0.54.5
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -310,7 +310,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:nightly-version-0.4.11.2735
+    image: linuxserver/readarr:nightly-version-0.4.11.2747
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -356,7 +356,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.19.0
+    image: ghcr.io/advplyr/audiobookshelf:2.19.5
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -467,7 +467,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:development-version-v1.5.2-beta.13
+    image: linuxserver/bazarr:development-version-v1.5.2-beta.20
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -518,7 +518,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.7.1
+    image: onerahmet/openai-whisper-asr-webservice:v1.8.2
     container_name: whisper
     hostname: whisper
     deploy:
@@ -626,7 +626,7 @@ services:
 
   # Database for RomM
   romm-db:
-    image: mariadb:11.6.2
+    image: mariadb:11.7.2
     container_name: romm-db
     hostname: romm-db
     deploy:
@@ -660,7 +660,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.31.1.4950
+    image: linuxserver/prowlarr:nightly-version-1.32.0.4976
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -711,7 +711,7 @@ services:
 
   # Torrent downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:5.0.3-libtorrentv1
+    image: linuxserver/qbittorrent:5.0.4-libtorrentv1
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -884,7 +884,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor-ui:
-    image: nginx:1.27.3-alpine
+    image: nginx:1.27.4-alpine
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
@@ -938,7 +938,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:17.2-alpine
+    image: postgres:17.4-alpine
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -1112,7 +1112,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.5.7-ollama
+    image: ghcr.io/open-webui/open-webui:v0.5.18-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1153,7 +1153,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:25.1.0.102122-community
+    image: sonarqube:25.2.0.102705-community
     container_name: sonarqube
     hostname: sonarqube
     depends_on:
@@ -1200,7 +1200,7 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:17.2-alpine
+    image: postgres:17.4-alpine
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
@@ -1291,7 +1291,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:17.2-alpine
+    image: postgres:17.4-alpine
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
@@ -1386,7 +1386,7 @@ services:
 
   # Database for Linkwarden
   linkwarden-db:
-    image: postgres:17.2-alpine
+    image: postgres:17.4-alpine
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:

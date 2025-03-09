@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.0.40
+    image: emby/embyserver:4.9.0.41
     container_name: emby
     hostname: emby
     environment:

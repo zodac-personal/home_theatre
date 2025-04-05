@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.0.41
+    image: emby/embyserver:4.9.0.43
     container_name: emby
     hostname: emby
     environment:
@@ -76,7 +76,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:nightly-version-5.20.0.9735
+    image: linuxserver/radarr:nightly-version-5.22.1.9832
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -122,7 +122,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.13.2933
+    image: linuxserver/sonarr:develop-version-4.0.14.2938
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:nightly-version-2.10.1.4576
+    image: linuxserver/lidarr:nightly-version-2.11.1.4618
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -257,7 +257,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.54.5
+    image: deluan/navidrome:0.55.1
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -277,7 +277,7 @@ services:
       ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID:?[navidrome] Spotify Client ID missing}"
       ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET:?[navidrome] Spotify Client secret missing}"
       # Scheduling config
-      ND_SCANSCHEDULE: "@every 24h"
+      ND_SCANNER_SCHEDULE: "@every 24h"
       # Metadata config
       ND_ARTISTARTPRIORITY: "artist.*, external"
       ND_COVERARTPRIORITY: "album.*, embedded, external"
@@ -310,7 +310,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:nightly-version-0.4.11.2747
+    image: linuxserver/readarr:nightly-version-0.4.14.2764
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -356,7 +356,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.19.5
+    image: ghcr.io/advplyr/audiobookshelf:2.20.0
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -467,7 +467,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:development-version-v1.5.2-beta.20
+    image: linuxserver/bazarr:development-version-v1.5.2-beta.32
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -543,7 +543,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.7.3
+    image: rommapp/romm:3.8.1
     container_name: romm
     hostname: romm
     depends_on:
@@ -660,7 +660,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:nightly-version-1.32.0.4976
+    image: linuxserver/prowlarr:nightly-version-1.33.2.5002
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -819,7 +819,7 @@ services:
 
   # Recipe manager
   tandoor:
-    image: vabene1111/recipes:1.5.31
+    image: vabene1111/recipes:1.5.34
     container_name: tandoor
     hostname: tandoor
     depends_on:
@@ -975,7 +975,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.17.2
+    image: ghcr.io/sysadminsmedia/homebox:0.18.0
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1112,7 +1112,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.5.18-ollama
+    image: ghcr.io/open-webui/open-webui:v0.6.0-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1153,7 +1153,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:25.2.0.102705-community
+    image: sonarqube:25.3.0.104237-community
     container_name: sonarqube
     hostname: sonarqube
     depends_on:

@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.3.4
+    image: traefik:v3.3.5
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -82,7 +82,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v8.11.7
+    image: amir20/dozzle:v8.12.4
     container_name: dozzle
     hostname: dozzle
     environment:
@@ -135,7 +135,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/homarr-labs/homarr:v1.8.0
+    image: ghcr.io/homarr-labs/homarr:v1.14.0
     container_name: homarr
     hostname: homarr
     environment:
@@ -181,7 +181,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2025.2.1
+    image: ghcr.io/goauthentik/server:2025.2.3
     container_name: authentik
     hostname: authentik
     depends_on:
@@ -232,7 +232,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2025.2.1
+    image: ghcr.io/goauthentik/server:2025.2.3
     container_name: authentik-worker
     hostname: authentik-worker
     command: worker
@@ -364,7 +364,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "25.2.8" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "25.4.1" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -402,7 +402,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:1.2.5
+    image: linuxserver/speedtest-tracker:1.3.0
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -484,7 +484,7 @@ services:
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:master-20250226-60a4a26
+    image: ghcr.io/arabcoders/watchstate:master-20250402-01e1b3c
     container_name: watchstate
     hostname: watchstate
     environment:

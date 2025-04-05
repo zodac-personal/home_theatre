@@ -467,7 +467,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose -f docker-compose-pi.yml up --build -d authentik-db --wait
-cat backup_authentik.sql | docker compose exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
+cat backup_authentik.sql | docker compose -f docker-compose-pi.yml exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
 docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
 ```
 
@@ -578,7 +578,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose -f docker-compose-pi.yml up --build -d speedtest-db --wait
-cat backup_speedtest.sql | docker compose exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
+cat backup_speedtest.sql | docker compose -f docker-compose-pi.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
 docker compose -f docker-compose-pi.yml up --build -d speedtest
 ```
 

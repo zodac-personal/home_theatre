@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.0.51
+    image: emby/embyserver:4.9.1.0
     container_name: emby
     hostname: emby
     environment:
@@ -76,7 +76,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:5.23.1-nightly
+    image: linuxserver/radarr:5.26.1-nightly
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -122,7 +122,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:develop-version-4.0.14.2938
+    image: linuxserver/sonarr:4.0.14-develop
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:2.12.0-nightly
+    image: linuxserver/lidarr:2.12.1-nightly
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -257,7 +257,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.55.2
+    image: deluan/navidrome:0.56.1
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -316,7 +316,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:0.4.16-nightly
+    image: linuxserver/readarr:0.4.17-nightly
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -362,7 +362,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.21.0
+    image: ghcr.io/advplyr/audiobookshelf:2.24.0
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -473,7 +473,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:development-version-v1.5.2-beta.46
+    image: linuxserver/bazarr:1.5.3-development
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -549,7 +549,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.9.0
+    image: rommapp/romm:3.10.0-beta.1
     container_name: romm
     hostname: romm
     depends_on:
@@ -571,7 +571,7 @@ services:
       OIDC_PROVIDER: "Authentik"
       OIDC_REDIRECT_URI: "${ROMM_AUTHENTIK_REDIRECT_URL:?[romm] Authentik redirect URL missing}"
       OIDC_SERVER_APPLICATION_URL: "${ROMM_AUTHENTIK_OIDC_URL:?[romm] Authentik OIDC URL missing}"
-      LOGLEVEL: "DEBUG"
+      LOGLEVEL: "INFO"
       # Background task config
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
       ENABLE_SCHEDULED_RESCAN: "true"
@@ -586,8 +586,10 @@ services:
       # External systems config
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID:?[romm] Twitch client ID missing}"
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET:?[romm] Twitch client secret missing}"
-      MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:?[romm] MobyGames API key missing}"
+      MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:-}"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
+      # RetroAchievements config
+      RETROACHIEVEMENTS_API_KEY: "${RETROACHIEVEMENTS_API_KEY:-}"
       # Secrets config
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
     healthcheck:
@@ -666,7 +668,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.36.0-nightly
+    image: linuxserver/prowlarr:1.37.0-nightly
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -944,7 +946,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -981,7 +983,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.18.0
+    image: ghcr.io/sysadminsmedia/homebox:0.19.0
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1118,7 +1120,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.6.5-ollama
+    image: ghcr.io/open-webui/open-webui:v0.6.13-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1159,7 +1161,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:25.4.0.105899-community
+    image: sonarqube:25.5.0.107428-community
     container_name: sonarqube
     hostname: sonarqube
     depends_on:
@@ -1206,7 +1208,7 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
@@ -1298,7 +1300,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
@@ -1335,7 +1337,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.10.0
+    image: ghcr.io/linkwarden/linkwarden:v2.10.2
     container_name: linkwarden
     hostname: linkwarden
     depends_on:
@@ -1393,7 +1395,7 @@ services:
 
   # Database for Linkwarden
   linkwarden-db:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:
@@ -1435,7 +1437,7 @@ services:
       dockerfile: docker/autokuma/Dockerfile
       args:
         # Docker image versions
-        AUTOKUMA_VERSION: "0.8.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+        AUTOKUMA_VERSION: "1.0.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
         # Build arguments
         # Host Monitor URLs
         QBITTORRENT_MONITOR_URL: "${QBITTORRENT_NATIVE_MONITOR_URL:?[autokuma] qBittorrent static monitor URL missing}"
@@ -1483,12 +1485,13 @@ services:
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      - ./storage/autokuma/data:/data
 
   # Automatic Uptime-Kuma monitor generator
   # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
   # It also uses the published docker image, rather than building one for any static monitors.
   autokuma-pi:
-    image: ghcr.io/bigboot/autokuma:0.8.0
+    image: ghcr.io/bigboot/autokuma:1.0.0
     container_name: autokuma-pi
     hostname: autokuma-pi
     deploy:
@@ -1527,3 +1530,5 @@ services:
       - home
     restart: no
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/autokuma-pi/data:/data

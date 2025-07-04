@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.1.0
+    image: emby/embyserver:4.9.1.3
     container_name: emby
     hostname: emby
     environment:
@@ -76,7 +76,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:5.26.1-nightly
+    image: linuxserver/radarr:5.27.1-nightly
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -122,7 +122,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:4.0.14-develop
+    image: linuxserver/sonarr:4.0.15-develop
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:2.12.1-nightly
+    image: linuxserver/lidarr:2.13.1-nightly
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -257,7 +257,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.56.1
+    image: deluan/navidrome:0.57.0
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -316,7 +316,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:0.4.17-nightly
+    image: linuxserver/readarr:0.4.19-nightly
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -362,7 +362,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.24.0
+    image: ghcr.io/advplyr/audiobookshelf:2.25.1
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -524,7 +524,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.8.2
+    image: onerahmet/openai-whisper-asr-webservice:v1.9.1
     container_name: whisper
     hostname: whisper
     deploy:
@@ -549,7 +549,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.10.0-beta.1
+    image: rommapp/romm:3.10.2
     container_name: romm
     hostname: romm
     depends_on:
@@ -634,7 +634,7 @@ services:
 
   # Database for RomM
   romm-db:
-    image: mariadb:11.7.2
+    image: mariadb:11.8.2
     container_name: romm-db
     hostname: romm-db
     deploy:
@@ -719,7 +719,7 @@ services:
 
   # Torrent downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:5.1.0-libtorrentv1
+    image: linuxserver/qbittorrent:5.1.2-libtorrentv1
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -801,7 +801,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v3.3.21
+    image: flaresolverr/flaresolverr:v3.3.25
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -827,7 +827,7 @@ services:
 
   # Recipe manager
   tandoor:
-    image: vabene1111/recipes:1.5.34
+    image: vabene1111/recipes:1.5.35
     container_name: tandoor
     hostname: tandoor
     depends_on:
@@ -892,7 +892,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor-ui:
-    image: nginx:1.27.5-alpine
+    image: nginx:1.29.0-alpine
     container_name: tandoor-ui
     hostname: tandoor-ui
     depends_on:
@@ -983,7 +983,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.19.0
+    image: ghcr.io/sysadminsmedia/homebox:0.20.2
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1070,7 +1070,7 @@ services:
 
   # Documents file browser
   filebrowser:
-    image: filebrowser/filebrowser:v2.32.0
+    image: filebrowser/filebrowser:v2.36.1
     container_name: filebrowser
     hostname: filebrowser
     deploy:
@@ -1109,18 +1109,17 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOCUMENTS_DIRECTORY}:/srv:ro"
       # Persistent volumes
-      - ./storage/filebrowser/:/app/data/
-      - ./storage/filebrowser/.filebrowser.json:/.filebrowser.json
-      - ./storage/filebrowser/database.db:/database.db
+      - ./storage/filebrowser/database/:/database
+      - ./storage/filebrowser/config/:/config
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.6.13-ollama
+    image: ghcr.io/open-webui/open-webui:v0.6.15-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1161,6 +1160,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
+    #'Known issue with sonarqube:25.6.0.109173-community: https://community.sonarsource.com/t/error-while-upgrading-to-25-6-0-109173/143845/2
     image: sonarqube:25.5.0.107428-community
     container_name: sonarqube
     hostname: sonarqube
@@ -1337,7 +1337,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.10.2
+    image: ghcr.io/linkwarden/linkwarden:v2.11.2
     container_name: linkwarden
     hostname: linkwarden
     depends_on:

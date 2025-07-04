@@ -674,11 +674,11 @@ Finally, allow inbound connections to this port through the Windows Firewall:
 - Open Windows Firewall settings
 - Navigate to **Advanced Settings** > **Inbound Rules**
 - Add a new rule:
-  - Rule Type: Select **Port** as the rule type
-  - Protocol and Ports: **TCP** on port **2375**
-  - Action: **Allow the connection**
-  - Profile: Apply the rule to the appropriate profiles for your machine
-  - Name: Any free-text. For example, "Docker TCP"
+    - Rule Type: Select **Port** as the rule type
+    - Protocol and Ports: **TCP** on port **2375**
+    - Action: **Allow the connection**
+    - Profile: Apply the rule to the appropriate profiles for your machine
+    - Name: Any free-text. For example, "Docker TCP"
 
 ### Homarr
 
@@ -834,14 +834,21 @@ By default users logging in using OIDC will be assigned to the `sonar-users` gro
 #### Admin Authentication
 
 If OIDC authentication fails, you can force SonarQube to allow you to use admin credentials by going to this link:
-**<sonarServerBaseURL>/?auto-login=false**
+**https://sonarqube.example.com/?auto-login=false**
 
 If the admin password needs to be reset, the following commands can reset it to `admin`:
 
 ```shell
 dockerexec sonarqube-db
 psql
-update users set crypted_password='100000$t2h8AtNs1AlCHuLobDjHQTn9XppwTIx88UjqUm4s8RsfTuXQHSd/fpFexAnewwPsO6jGFQUv/24DnO55hY6Xew==', salt='k9x9eN127/3e/hf38iNiKwVfaVk=', hash_method='PBKDF2', reset_password='true', user_local='true' where login='admin';
+
+update users set crypted_password='100000$t2h8AtNs1AlCHuLobDjHQTn9XppwTIx88UjqUm4s8RsfTuXQHSd/fpFexAnewwPsO6jGFQUv/24DnO55hY6Xew==',
+salt='k9x9eN127/3e/hf38iNiKwVfaVk=',
+hash_method='PBKDF2',
+reset_password='true',
+user_local='true'
+where login='admin';
+
 exit
 exit
 ```

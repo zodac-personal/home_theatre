@@ -668,7 +668,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:1.37.0-nightly
+    image: linuxserver/prowlarr:2.0.3-nightly
     container_name: prowlarr
     hostname: prowlarr
     depends_on:

@@ -550,7 +550,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:3.10.2
+    image: rommapp/romm:4.0.1
     container_name: romm
     hostname: romm
     depends_on:
@@ -585,9 +585,11 @@ services:
       DB_ROOT_PASSWD: "${ROMM_DB_ROOT_PASSWORD:?[romm] Database root password missing}"
       DB_USER: "${ROMM_DB_USER:?[romm] Database user missing}"
       # External systems config
+      HASHEOUS_API_ENABLED: "true"
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID:?[romm] Twitch client ID missing}"
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET:?[romm] Twitch client secret missing}"
       MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:-}"
+      PLAYMATCH_API_ENABLED: "true"
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
       # RetroAchievements config
       RETROACHIEVEMENTS_API_KEY: "${RETROACHIEVEMENTS_API_KEY:-}"

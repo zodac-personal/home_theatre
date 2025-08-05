@@ -257,7 +257,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.57.0
+    image: deluan/navidrome:0.58.0
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -311,6 +311,7 @@ services:
     volumes:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music:ro"
+      - "${PODCAST_DIRECTORY}:/podcast:ro"
       # Persistent volumes
       - ./storage/navidrome/:/data
 

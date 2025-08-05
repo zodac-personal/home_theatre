@@ -834,7 +834,7 @@ By default users logging in using OIDC will be assigned to the `sonar-users` gro
 #### Admin Authentication
 
 If OIDC authentication fails, you can force SonarQube to allow you to use admin credentials by going to this link:
-**https://sonarqube.example.com/?auto-login=false**
+**<https://sonarqube.example.com/?auto-login=false>**
 
 If the admin password needs to be reset, the following commands can reset it to `admin`:
 

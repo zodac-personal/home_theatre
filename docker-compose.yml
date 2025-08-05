@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.1.3
+    image: emby/embyserver:4.9.1.14
     container_name: emby
     hostname: emby
     environment:
@@ -56,7 +56,7 @@ services:
 
   # Traefik connector
   traefik-kop:
-    image: ghcr.io/jittering/traefik-kop:0.16
+    image: ghcr.io/jittering/traefik-kop:0.17
     container_name: traefik-kop
     hostname: traefik-kop
     environment:
@@ -76,7 +76,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:5.27.1-nightly
+    image: linuxserver/radarr:5.27.4-nightly
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -211,7 +211,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:2.13.1-nightly
+    image: linuxserver/lidarr:2.13.2-nightly
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -1070,7 +1070,7 @@ services:
 
   # Documents file browser
   filebrowser:
-    image: filebrowser/filebrowser:v2.36.1
+    image: filebrowser/filebrowser:v2.42.1
     container_name: filebrowser
     hostname: filebrowser
     deploy:
@@ -1119,7 +1119,7 @@ services:
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.6.15-ollama
+    image: ghcr.io/open-webui/open-webui:v0.6.18-ollama
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1337,7 +1337,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.11.2
+    image: ghcr.io/linkwarden/linkwarden:v2.11.5
     container_name: linkwarden
     hostname: linkwarden
     depends_on:

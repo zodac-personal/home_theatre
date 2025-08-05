@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.4.3
+    image: traefik:v3.5.0
     platform: linux/arm64
     container_name: traefik
     hostname: traefik
@@ -61,7 +61,7 @@ services:
 
   # Reverse proxy connector for external hosts
   traefik-provider:
-    image: redis:8.0.2-alpine
+    image: redis:8.2.0-alpine
     platform: linux/arm64
     container_name: traefik-provider
     hostname: traefik-provider
@@ -84,7 +84,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v8.13.4
+    image: amir20/dozzle:v8.13.8
     platform: linux/arm64
     container_name: dozzle
     hostname: dozzle
@@ -138,7 +138,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/homarr-labs/homarr:v1.26.0
+    image: ghcr.io/homarr-labs/homarr:v1.31.0
     platform: linux/arm64
     container_name: homarr
     hostname: homarr
@@ -185,7 +185,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authentik:
-    image: ghcr.io/goauthentik/server:2025.6.3
+    image: ghcr.io/goauthentik/server:2025.6.4
     platform: linux/arm64
     container_name: authentik
     hostname: authentik
@@ -237,7 +237,7 @@ services:
 
   # Worker node for Authentik
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2025.6.3
+    image: ghcr.io/goauthentik/server:2025.6.4
     platform: linux/arm64
     container_name: authentik-worker
     hostname: authentik-worker
@@ -273,7 +273,7 @@ services:
 
   # Cache for Authentik
   authentik-cache:
-    image: redis:8.0.2-alpine
+    image: redis:8.2.0-alpine
     platform: linux/arm64
     container_name: authentik-cache
     hostname: authentik-cache
@@ -373,7 +373,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "25.7.3" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
+        NETALERT_VERSION: "25.7.30" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -412,7 +412,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:1.6.1
+    image: linuxserver/speedtest-tracker:1.6.6
     platform: linux/arm64
     container_name: speedtest
     hostname: speedtest
@@ -496,7 +496,7 @@ services:
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v0.1.2
+    image: ghcr.io/arabcoders/watchstate:v0.3.0
     platform: linux/arm64
     container_name: watchstate
     hostname: watchstate

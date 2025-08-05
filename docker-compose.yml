@@ -1160,8 +1160,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    #'Known issue with sonarqube:25.6.0.109173-community: https://community.sonarsource.com/t/error-while-upgrading-to-25-6-0-109173/143845/2
-    image: sonarqube:25.5.0.107428-community
+    image: sonarqube:25.7.0.110598-community
     container_name: sonarqube
     hostname: sonarqube
     depends_on:

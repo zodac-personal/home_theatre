@@ -1,0 +1,426 @@
+###############################################################################
+##                           Authelia Configuration                          ##
+###############################################################################
+
+# Authelia server configuration
+server:
+  address: 'tcp://0.0.0.0:{{ env "SERVER_PORT" }}'
+  timeouts:
+    read: '30s'
+    write: '30s'
+    idle: '1m'
+
+# Log configuration
+log:
+  level: '{{ env "LOG_LEVEL" | lower}}'
+  format: 'text'
+  keep_stdout: 'true'
+
+# The theme to display: light, dark, grey, auto.
+theme: 'auto'
+
+# Reset Password flow. Adjusts how the reset password flow operates.
+identity_validation:
+  reset_password:
+    jwt_lifespan: '30 minutes'
+    jwt_secret: '{{ env "RESET_PASSWORD_SECRET" }}'
+
+# Auth session configuration
+session:
+  name: 'authelia_session'
+  secret: '{{ env "SESSION_SECRET" }}'
+  cookies:
+    - domain: '{{ env "DOMAIN_NAME" }}'
+      authelia_url: 'https://auth.{{ env "DOMAIN_NAME" }}'
+  redis:
+    host: '{{ env "REDIS_HOSTNAME" }}'
+    port: '{{ env "REDIS_PORT" }}'
+
+# Security configuration
+regulation:
+  max_retries: '3'
+  find_time: '120'
+  ban_time: '300'
+
+# Backend configuration
+storage:
+  encryption_key: '{{ env "STORAGE_ENCRYPTION_KEY" }}'
+  postgres:
+    address: 'tcp://{{ env "BACKEND_HOSTNAME" }}:{{ env "BACKEND_PORT" }}'
+    database: '{{ env "BACKEND_NAME" }}'
+    username: '{{ env "BACKEND_USER" }}'
+    password: '{{ env "BACKEND_PASSWORD" }}'
+
+# LDAP authentication configuration
+authentication_backend:
+  ldap:
+    address: 'ldap://{{ env "LDAP_HOSTNAME" }}:{{ env "LDAP_PORT" }}'
+    implementation: '{{ env "LDAP_IMPL" }}'
+    base_dn: '{{ env "BASE_DN" }}'
+    additional_users_dn: 'ou=people'
+    additional_groups_dn: 'ou=groups'
+    group_search_mode: 'filter'
+    # LDAP bind auth
+    user: 'cn=admin,ou=people,{{ env "BASE_DN" }}'
+    password: '{{ env "ADMIN_PASSWORD" }}'
+    attributes:
+      username: 'uid'
+      mail: 'mail'
+
+# ACL rules for forward-auth services
+access_control:
+  default_policy: 'deny'
+  rules:
+    # Dozzle
+    - domain: 'log.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/healthcheck'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'log.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:dozzle_admins" ]
+    # Traefik
+    - domain: 'traefik.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/ping'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'traefik.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:traefik_admins" ]
+    # Filebrowser
+    - domain: 'file.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/health'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'file.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:filebrowser_admins" ]
+    # Jellystat
+    - domain: 'stat.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/auth/isconfigured'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'stat.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:jellystat_admins" ]
+    # Navidrome
+    - domain: 'music.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/ping$'
+        - '^/rest/.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'music.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:navidrome_admins" ]
+    # Uptime-Kuma
+    - domain: 'monitor.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/status'
+        - '^/assets/'
+        - '^/assets'
+        - '^/icon.svg'
+        - '^/api/.*'
+        - '^/upload/.*'
+        - '^/metrics'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'monitor.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:uptimekuma_admins" ]
+    # NetAlert
+    - domain: 'netalert.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/php/server/query_json\.php.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'netalert.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:netalert_admins" ]
+    # Servarr
+    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+    - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+    - domain: 'readarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'readarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+    - domain: 'bazarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/system/ping'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'bazarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+    - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
+
+notifier:
+  smtp:
+    address: 'submission://smtp.gmail.com:587'
+    timeout: '15 seconds'
+    username: '{{ env "SMTP_EMAIL_ADDRESS" }}'
+    password: '{{ env "SMTP_APP_PASSWORD" }}'
+    sender: '{{ env "SMTP_FROM_EMAIL_ADDRESS" | lower }}'
+    subject: '[{{ env "DOMAIN_NAME" }}] {title}' # {title} is replaced by the text from the notifier.
+
+# Enable OAuth2 provider for Authelia
+identity_providers:
+  oidc:
+    hmac_secret: '{{ env "OIDC_HMAC_SECRET" }}'
+    jwks:
+      - key_id: 'main'
+        key: |
+          {{- fileContent "/etc/certs/authelia_private_key.pem" | nindent 10 }}
+    authorization_policies:
+      audiobookshelf:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:admin" ]
+              - [ "group:user" ]
+      homarr:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:homarr_admins" ]
+              - [ "group:homarr_users" ]
+      linkwarden:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:linkwarden_users" ]
+      romm:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:romm_admins" ]
+              - [ "group:romm_users" ]
+      sonarqube:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:sonarqube_admins" ]
+              - [ "group:sonarqube_users" ]
+      tandoor:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:tandoor_admins" ]
+              - [ "group:tandoor_users" ]
+    claims_policies:
+      romm:
+        id_token: [ 'email', 'email_verified', 'alt_emails', 'preferred_username', 'name' ]
+    clients:
+      - client_name: 'AudioBookShelf OIDC'
+        client_id: '7sVXYwkuBWJ6iDtXlaDPf2R95d2cINSo6T1BIy9f'
+        client_secret: '$pbkdf2-sha512$310000$8FrbVHuz2U1wejjAFqvrPg$CdYeXwNDmTa9S9857nQCbWYRNQyKIu.VImcNUmO6qH0/TYRzlr85t6E7QTJVmK9fNjO9ZlPshit3Vc7CAK.Qfw'
+        authorization_policy: 'audiobookshelf'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+          - 'refresh_token'
+        redirect_uris:
+          - 'https://book.{{ env "DOMAIN_NAME" }}/audiobookshelf/auth/openid/callback'
+          - 'https://book.{{ env "DOMAIN_NAME" }}/audiobookshelf/auth/openid/mobile-redirect'
+          - 'audiobookshelf://oauth'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'offline_access'
+          - 'openid'
+          - 'profile'
+      - client_name: 'Linkwarden OIDC'
+        client_id: 'EgSJT2zMVkpa0w8p13yCnaSYKU6oAaZ8U5ptwzsl'
+        client_secret: '$pbkdf2-sha512$310000$aiToguWpH15R2gblMBubvA$i9RGmYQPo2ywXX.O6OdjY871IInXIeplPflAOor3HBfrO10MtIZQfJE82KwJwqG.nheL1.4dGp7VXeW7t/Pubg'
+        authorization_policy: 'linkwarden'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        consent_mode: 'implicit'
+        grant_types:
+          - 'authorization_code'
+          - 'refresh_token'
+        redirect_uris:
+          - 'https://bookmark.{{ env "DOMAIN_NAME" }}/api/v1/auth/callback/authelia'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'offline_access'
+          - 'openid'
+          - 'profile'
+      - client_name: 'SonarQube OIDC'
+        client_id: 'wmi4ibqCHsU5vOWQcb0FqqA8rG8RXuSk4yesFFHk'
+        client_secret: '$pbkdf2-sha512$310000$KtoKEF/Vp.7YF/cRnSu3oQ$Ujvhy1nPPfiqiRQOvuk98qfASvu0K3F7lbzi9TA7jOew3b4RVG5PbKMIyfLw6drIe3cjNNwfdZG13I3rhAv3cA'
+        authorization_policy: 'sonarqube'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+          - 'refresh_token'
+        redirect_uris:
+          - 'https://sonarqube.{{ env "DOMAIN_NAME" }}/oauth2/callback/oidc'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'offline_access'
+          - 'openid'
+          - 'profile'
+      - client_name: 'RomM OIDC'
+        client_id: 'nzuvgxuOuMvycZqS5I1tPGMS92L9xmDXaPfJTH4m'
+        client_secret: '$pbkdf2-sha512$310000$TcUzDo4VtRqBdmQTRFgdtQ$7e2S3rKFKoNi8yiZHMn9YgK/hmUSr/EOcEiQkc8ZSqoECZIE.vGLg7OwRW9OHhSpYA1yransdsHApiAF5Xa53w'
+        authorization_policy: 'romm'
+        claims_policy: 'romm'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://game.{{ env "DOMAIN_NAME" }}/api/oauth/openid/'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'openid'
+          - 'profile'
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_basic"
+      - client_name: 'Tandoor OIDC'
+        client_id: 'wiVnb3bpNGXQrKLXksSMN5yxGUOW2NLmByxEQGAE'
+        client_secret: '$pbkdf2-sha512$310000$yVXlfilW/SkHhsalGkF6qg$k/rwRboud/PRBNNn4Rpx3PkSvTwunaz7D4NQo8rWBT.yemP70UdKE51imMjm9GLYDtxV/aax4ANA3nKZvadoYA'
+        authorization_policy: 'tandoor'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        require_pkce: 'false'
+        pkce_challenge_method: ''
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://recipe.{{ env "DOMAIN_NAME" }}/accounts/oidc/authelia/login/callback/'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: "client_secret_basic"
+      - client_name: 'Homarr OIDC'
+        client_id: 'XWHZppH34u95U2pJmTsDkQwrU5g8824h9PHICa9g'
+        client_secret: '$pbkdf2-sha512$310000$qAmmI2bjStxuvvx0jkskWw$Nnqj2VcIhpKVRYvVmppKD4c4Zvv5DfJRj2jbv4M2Cdy8rynGcEco5LjlcVCkXnJUgTeIBhNCVsTBVB3xSkojZw'
+        authorization_policy: 'homarr'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+          - 'refresh_token'
+        redirect_uris:
+          - 'https://{{ env "DOMAIN_NAME" }}/api/auth/callback/oidc'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'offline_access'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
+        require_pkce: 'true'
+        pkce_challenge_method: 'S256'

@@ -1,0 +1,27 @@
+# Configuration file that defines a middleware for forward authentication which calls the Authelia forward
+# auth flow. Used by services with no authentication, and sits as an authentication front-end for those services.
+http:
+  middlewares:
+    authelia:
+      forwardAuth:
+        address: https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}/api/verify?rd=https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}
+#        address: http://authelia:9091/api/verify?rd=https://auth2.{{ env "DOMAIN_NAME" | trimAll "\"" }}  # TODO: Test with this once everything is on RPi
+        trustForwardHeader: true
+        authResponseHeaders:
+          - Remote-Email
+          - Remote-Groups
+          - Remote-Name
+          - Remote-User
+
+    authelia-error-redirect:
+      errors:
+        status:
+          - "403"
+        service: authelia-login
+        query: /
+
+  services:
+    authelia-login:
+      loadBalancer:
+        servers:
+          - url: "https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}"

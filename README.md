@@ -54,7 +54,7 @@ radarr:
     traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
     traefik.http.routers.radarr.entrypoints: "websecure"
     traefik.http.routers.radarr.tls: "true"
-    traefik.http.routers.radarr.middlewares: "authentik@file"
+    traefik.http.routers.radarr.middlewares: "authelia@file"
     traefik.http.services.radarr.loadbalancer.server.port: "4000"
     # Uptime-Kuma monitor config
     kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
@@ -306,48 +306,51 @@ In addition to the basic configuration, we have extra configuration for (TODO: d
 
 ## Authentication
 
-Where possible, we use [Authentik](https://goauthentik.io/) to secure the services.
+Where possible, we use an IdP ([Authelia](https://www.authelia.com/)) to secure the services.
 
-The following services are integrated with Authentik, and their configuration is below.
+The following services are integrated with the IdP, and their configuration is below.
 
 TODO:
 
 ### Basic Auth
 
-The following services forward username/password information from the Authentik user's group to the service:
+The following services forward username/password information from the user's group in the IdP to the service:
 
-- Bazarr
-- Lidarr
+- Dozzle
 - Navidrome
-- Prowlarr
-- Radarr
-- Readarr
-- Sonarr
 
 ### OIDC
 
-The following services allow you to login/create an account using Authentik:
+The following services allow you to login/create an account using the IdP:
 
+- AudioBookShelf
 - Homarr
 - Linkwarden
+- RomM
 - SonarQube
-- Synology NAS
 - Tandoor
 
-### X-Authentik-* Headers
+### X-Authentik-* Headers (TBC)
 
 The following services can't be logged in using the local URL, as they require X-Authentik-* headers to be forwarded:
 
-- Dozzle
 - Ollama
 
 ### No Internal Auth
 
-The following services don't have any authentication of their own (or it is disabled), so Authentik is the only authentication:
+The following services don't have any authentication of their own (or it is disabled), so the IdP is the only authentication:
 
+- Arrs
+    - Bazarr
+    - Lidarr
+    - Prowlarr
+    - Radarr
+    - Readarr
+    - Sonarr
 - File Browser
 - Jellystat
 - NetAlertX
+- Traefik
 - Uptime-Kuma
 
 ----
@@ -450,26 +453,24 @@ Better backup solutions
 When upgrading major versions of databases, the existing database needs to be backed up, the container updated, and the backup restored on the new
 container. For the following, use `source .env` to ensure the variables are loaded into the terminal.
 
-### Authentik DB
+### Authelia DB
 
-Following instructions from the [Authentik documentation for DB upgrade](https://docs.goauthentik.io/docs/troubleshooting/postgres/upgrade_docker).
-
-Take backup of the current database, then shut the Authentik containers down:
+Take backup of the current database, then shut the Authelia containers down:
 
 ```bash
-docker compose exec authentik-db pg_dump -U ${AUTHENTIK_DB_USER} -d ${AUTHENTIK_DB_NAME} -cC > backup_authentik.sql
-docker compose -f docker-compose-pi.yml down authentik authentik-worker authentik-cache authentik-db
+docker compose exec authelia-db pg_dump -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME} -cC > backup_authelia.sql
+docker compose -f docker-compose-pi.yml down authelia authelia-cache authelia-db
 ```
 
-Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `authentik-db`.
-Next, delete the storage for `authentik-db` (make sure to copy this directory/volume first).
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `authelia-db`.
+Next, delete the storage for `authelia-db` (make sure to copy this directory/volume first).
 
-Finally, start up the new DB container, restore the backup, then start the remaining Authentik containers:
+Finally, start up the new DB container, restore the backup, then start the remaining Authelia containers:
 
 ```bash
-docker compose -f docker-compose-pi.yml up --build -d authentik-db --wait
-cat backup_authentik.sql | docker compose -f docker-compose-pi.yml exec -T authentik-db psql -U ${AUTHENTIK_DB_USER}
-docker compose -f docker-compose-pi.yml up --build -d authentik authentik-worker authentik-cache
+docker compose -f docker-compose-pi.yml up --build -d authelia-db --wait
+cat backup_authelia.sql | docker compose -f docker-compose-pi.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER}
+docker compose -f docker-compose-pi.yml up --build -d authelia authelia-cache
 ```
 
 ### Jellystat DB
@@ -510,6 +511,26 @@ Finally, start up the new DB container, restore the backup, then start the remai
 docker compose up --build -d linkwarden-db --wait
 cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
 docker compose up --build -d linkwarden
+```
+
+### LLDAP DB
+
+Take backup of the current database, then shut the LLDAP containers down:
+
+```bash
+docker compose -f docker-compose-pi.yml exec lldap-db pg_dump -U ${LLDAP_DB_USER} -d ${LLDAP_DB_NAME} -cC > backup_lldap.sql
+docker compose -f docker-compose-pi.yml down lldap lldap-db
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `lldap-db`.
+Next, delete the storage for `lldap-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining LLDAP containers:
+
+```bash
+docker compose -f docker-compose-pi.yml up --build -d lldap-db --wait
+cat backup_lldap.sql | docker compose -f docker-compose-pi.yml exec -T lldap-db psql -U ${LLDAP_DB_USER}
+docker compose -f docker-compose-pi.yml up --build -d lldap
 ```
 
 ### RomM DB
@@ -568,7 +589,7 @@ docker compose up --build -d sonarqube
 Take backup of the current database, then shut the SpeedTest containers down:
 
 ```bash
-docker compose exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
+docker compose -f docker-compose-pi.yml exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
 docker compose -f docker-compose-pi.yml down speedtest speedtest-db
 ```
 
@@ -604,12 +625,6 @@ docker compose up --build -d tandoor tandoor-ui
 ```
 
 ## Misc Info
-
-### Authentik
-
-We use our domain [logos](./logos/site) in the container. But because the **/media** directory is also a volume, they can be overridden by the
-container being built. After the initial run, once the container is in a **healthy** state, `docker cp` the logos to the
-**/media/public/application-icons/** directory in the container.
 
 ### Dozzle
 
@@ -697,9 +712,8 @@ To:
 AUTH_PROVIDER: "credentials,oidc"
 ```
 
-However, by creating a user in Authentik assigned to the group **HomarrAdmins**, your Authentik user will be logged in as an administrator and able to
-configure your Homarr instance. If this group name needs to be changed, update the `AUTH_OIDC_ADMIN_GROUP` environment variable for Homarr to match
-the group name in Authentik.
+You will be asked to define a group used by your IdP (like Authelia or Authentik). You can use **homarr_admins** (or another value if wanted), and you
+will need to ensure your user has the same role in the IdP.
 
 ### NetAlertX
 
@@ -723,7 +737,7 @@ docker compose -f docker-compose-pi.yml restart netalert
 **NOTE:** This isn't robust to version upgrades, a fresh installation with new config entries needs to be compared.
 An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
 
-### Ollama
+### Ollama (TBC)
 
 #### Initial Setup
 
@@ -732,7 +746,7 @@ performed.
 
 ##### Create Admin User
 
-In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by Authentik,
+In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by the IdP,
 which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
 
 Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker compose down ollama` and `docker compose up --build -d ollama` to
@@ -828,8 +842,9 @@ docker cp sonar-auth-oidc-plugin-3.0.0.jar sonarqube:/opt/sonarqube/extensions/p
 docker restart sonarqube
 ```
 
-By default users logging in using OIDC will be assigned to the `sonar-users` group. In order to create an administrator, ensure they are added to the
-`sonar-administrators` group in Authentik.
+By default users logging in using OIDC will be assigned to the `sonar-users` group (built-in to SonarQube). In order to create an administrator,
+ensure they are added to the `sonar_admins` group in your IdP (the name of the admin group can be changed at
+<https://sonarqube.example.com/admin/groups>).
 
 #### Admin Authentication
 

@@ -1,9 +1,9 @@
 http:
   middlewares:
-    authentik-forward-auth:
+    authelia-forward-auth:
       chain:
         middlewares:
-          - authentik@file
-          - compress@file
+          - authelia@file
+          - authelia-error-redirect@file
           - rate-limit@file
           - secure-headers@file

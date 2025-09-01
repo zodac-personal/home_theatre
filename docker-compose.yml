@@ -7,12 +7,14 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.1.14
+    image: emby/embyserver:4.9.1.19
     container_name: emby
     hostname: emby
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      UID: "${PUID_NON_ROOT:?User ID missing}"
+      GID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -39,7 +41,7 @@ services:
     ports:
       - "8096:8096"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    #    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${AUDIO_DIRECTORY}:/media/audio"
@@ -102,7 +104,7 @@ services:
       traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
       traefik.http.routers.radarr.entrypoints: "websecure"
       traefik.http.routers.radarr.tls: "true"
-      traefik.http.routers.radarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.radarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.radarr.loadbalancer.server.port: "4000"
       # Monitor config
       kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
@@ -110,7 +112,7 @@ services:
     networks:
       - home
     ports:
-      - "4000:3000"
+      - "4000:3000"  # TODO: Revert to original internal port
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -148,7 +150,7 @@ services:
       traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarr.entrypoints: "websecure"
       traefik.http.routers.sonarr.tls: "true"
-      traefik.http.routers.sonarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.sonarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.sonarr.loadbalancer.server.port: "4001"
       # Monitor config
       kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
@@ -156,7 +158,7 @@ services:
     networks:
       - home
     ports:
-      - "4001:3001"
+      - "4001:3001"  # TODO: Revert to original internal port
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -237,7 +239,7 @@ services:
       traefik.http.routers.lidarr.rule: "Host(`lidarr.${DOMAIN_NAME}`)"
       traefik.http.routers.lidarr.entrypoints: "websecure"
       traefik.http.routers.lidarr.tls: "true"
-      traefik.http.routers.lidarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.lidarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.lidarr.loadbalancer.server.port: "4002"
       # Monitor config
       kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
@@ -245,7 +247,7 @@ services:
     networks:
       - home
     ports:
-      - "4002:3002"
+      - "4002:3002"  # TODO: Revert to original internal port
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -269,7 +271,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      ND_REVERSEPROXYUSERHEADER: "X-Authentik-Username"
+      ND_REVERSEPROXYUSERHEADER: "Remote-User"
       ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
       # External services config
       ND_LASTFM_APIKEY: "${LASTFM_API_KEY:?[navidrome] LastFM API key missing}"
@@ -297,11 +299,12 @@ services:
       traefik.http.routers.navidrome.rule: "Host(`music.${DOMAIN_NAME}`)"
       traefik.http.routers.navidrome.entrypoints: "websecure"
       traefik.http.routers.navidrome.tls: "true"
-      traefik.http.routers.navidrome.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.navidrome.middlewares: "authelia-forward-auth@file"
       traefik.http.services.navidrome.loadbalancer.server.port: "4003"
       # Monitor config
       kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
       kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: "0"
     networks:
       - home
     ports:
@@ -343,7 +346,7 @@ services:
       traefik.http.routers.readarr.rule: "Host(`readarr.${DOMAIN_NAME}`)"
       traefik.http.routers.readarr.entrypoints: "websecure"
       traefik.http.routers.readarr.tls: "true"
-      traefik.http.routers.readarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.readarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.readarr.loadbalancer.server.port: "4004"
       # Monitor config
       kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
@@ -351,7 +354,7 @@ services:
     networks:
       - home
     ports:
-      - "4004:3004"
+      - "4004:3004"  # TODO: Revert to original internal port
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -494,7 +497,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:6767/api/system/status?apikey=${BAZARR_API_KEY}" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:6767/api/system/status?apikey=${BAZARR_API_KEY}" ]  # TODO: Update to BAZARR_MONITOR_URL
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -502,7 +505,7 @@ services:
       traefik.http.routers.bazarr.rule: "Host(`bazarr.${DOMAIN_NAME}`)"
       traefik.http.routers.bazarr.entrypoints: "websecure"
       traefik.http.routers.bazarr.tls: "true"
-      traefik.http.routers.bazarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.bazarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.bazarr.loadbalancer.server.port: "4009"
       # Monitor config
       kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
@@ -566,12 +569,12 @@ services:
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       DISABLE_USERPASS_LOGIN: "true"
-      OIDC_CLIENT_ID: "${ROMM_AUTHENTIK_CLIENT_ID:?[romm] Authentik client ID missing}"
-      OIDC_CLIENT_SECRET: "${ROMM_AUTHENTIK_CLIENT_SECRET:?[romm] Authentik client secret missing}"
+      OIDC_CLIENT_ID: "${ROMM_OIDC_CLIENT_ID:?[romm] OIDC client ID missing}"
+      OIDC_CLIENT_SECRET: "${ROMM_OIDC_CLIENT_SECRET:?[romm] OIDC client secret missing}"
       OIDC_ENABLED: "true"
-      OIDC_PROVIDER: "Authentik"
-      OIDC_REDIRECT_URI: "${ROMM_AUTHENTIK_REDIRECT_URL:?[romm] Authentik redirect URL missing}"
-      OIDC_SERVER_APPLICATION_URL: "${ROMM_AUTHENTIK_OIDC_URL:?[romm] Authentik OIDC URL missing}"
+      OIDC_PROVIDER: "Authelia"
+      OIDC_REDIRECT_URI: "${ROMM_OIDC_REDIRECT_URL:?[romm] RomM redirect URL missing}"
+      OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
       LOGLEVEL: "INFO"
       # Background task config
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
@@ -705,7 +708,7 @@ services:
       traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN_NAME}`)"
       traefik.http.routers.prowlarr.entrypoints: "websecure"
       traefik.http.routers.prowlarr.tls: "true"
-      traefik.http.routers.prowlarr.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.prowlarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.prowlarr.loadbalancer.server.port: "4016"
       # Monitor config
       kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
@@ -713,7 +716,7 @@ services:
     networks:
       - home
     ports:
-      - "4016:3016"
+      - "4016:3016"  # TODO: Revert to original internal port
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -828,6 +831,83 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
+  tandoor-new:
+    image: vabene1111/recipes:2.0.2
+    container_name: tandoor-new
+    hostname: tandoor-new
+    depends_on:
+      tandoor-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      REMOTE_USER_AUTH: "1"
+      SOCIAL_DEFAULT_ACCESS: "1"
+      SOCIAL_DEFAULT_GROUP: "guest"
+      SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
+      SOCIALACCOUNT_PROVIDERS: |
+        {
+          "openid_connect": {
+            "SERVERS": [
+              {
+                "id": "authelia",
+                "name": "Authelia",
+                "server_url": "${TANDOOR_OIDC_WELLKNOWN_URL:?[tandoor] OIDC URL missing}",
+                "token_auth_method": "client_secret_basic",
+                "APP": {
+                  "client_id": "${TANDOOR_OIDC_CLIENT_ID:?[tandoor] OIDC client ID missing}",
+                  "secret": "${TANDOOR_OIDC_CLIENT_SECRET:?[tandoor] OIDC client secret missing}"
+                }
+              }
+            ]
+          }
+        }
+      # Database config
+      DB_ENGINE: "django.db.backends.postgresql"
+      POSTGRES_HOST: "tandoor-db"
+      POSTGRES_PORT: "${TANDOOR_DB_PORT:?[tandoor] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor] Database user missing}"
+      # Secrets config
+      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
+      # System config
+      ENABLE_PDF_EXPORT: "1"
+      DEBUG: "0"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.tandoor-new.rule: "Host(`recipe-new.${DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor-new.entrypoints: "websecure"
+      traefik.http.routers.tandoor-new.tls: "true"
+      traefik.http.routers.tandoor-new.middlewares: "no-forward-auth@file"
+      traefik.http.services.tandoor-new.loadbalancer.server.port: "4014"
+#      # Monitor config
+#      kuma.tandoor.http.name: "Tandoor (Recipes)"
+#      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+    networks:
+      - home
+    ports:
+      - "4014:80"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
+      - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
+      - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles
+
   # Recipe manager
   tandoor:
     image: vabene1111/recipes:1.5.35
@@ -854,13 +934,13 @@ services:
           "openid_connect": {
             "SERVERS": [
               {
-                "id": "authentik",
-                "name": "Authentik",
-                "server_url": "${TANDOOR_AUTHENTIK_WELL_KNOWN_CONFIGURATION_URL:?[tandoor] Authetik URL missing}",
+                "id": "authelia",
+                "name": "Authelia",
+                "server_url": "${TANDOOR_OIDC_WELLKNOWN_URL:?[tandoor] OIDC URL missing}",
                 "token_auth_method": "client_secret_basic",
                 "APP": {
-                  "client_id": "${TANDOOR_AUTHENTIK_CLIENT_ID:?[tandoor] Authentik client ID missing}",
-                  "secret": "${TANDOOR_AUTHENTIK_CLIENT_SECRET:?[tandoor] Authentik client secret missing}"
+                  "client_id": "${TANDOOR_OIDC_CLIENT_ID:?[tandoor] OIDC client ID missing}",
+                  "secret": "${TANDOOR_OIDC_CLIENT_SECRET:?[tandoor] OIDC client secret missing}"
                 }
               }
             ]
@@ -898,9 +978,9 @@ services:
     image: nginx:1.29.0-alpine
     container_name: tandoor-ui
     hostname: tandoor-ui
-    depends_on:
-      tandoor:
-        condition: service_healthy
+#    depends_on:
+#      tandoor:
+#        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -1092,7 +1172,7 @@ services:
       traefik.http.routers.filebrowser.rule: "Host(`file.${DOMAIN_NAME}`)"
       traefik.http.routers.filebrowser.entrypoints: "websecure"
       traefik.http.routers.filebrowser.tls: "true"
-      traefik.http.routers.filebrowser.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.filebrowser.middlewares: "authelia-forward-auth@file"
       traefik.http.services.filebrowser.loadbalancer.server.port: "4007"
       # Redirect from 'files' subdomain to 'file' subdomain
       traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${DOMAIN_NAME}`)"
@@ -1146,7 +1226,7 @@ services:
       traefik.http.routers.ollama.rule: "Host(`ai.${DOMAIN_NAME}`)"
       traefik.http.routers.ollama.entrypoints: "websecure"
       traefik.http.routers.ollama.tls: "true"
-      traefik.http.routers.ollama.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.ollama.middlewares: "authelia-forward-auth@file"
       traefik.http.services.ollama.loadbalancer.server.port: "4012"
       # Monitor config
       kuma.{{container_name}}.http.name: "Ollama (LLM)"
@@ -1278,7 +1358,7 @@ services:
       traefik.http.routers.jellystat.rule: "Host(`stat.${DOMAIN_NAME}`)"
       traefik.http.routers.jellystat.entrypoints: "websecure"
       traefik.http.routers.jellystat.tls: "true"
-      traefik.http.routers.jellystat.middlewares: "authentik-forward-auth@file"
+      traefik.http.routers.jellystat.middlewares: "authelia-forward-auth@file"
       traefik.http.services.jellystat.loadbalancer.server.port: "4008"
       # Redirect from 'stats' subdomain to 'stat' subdomain
       traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${DOMAIN_NAME}`)"
@@ -1354,16 +1434,16 @@ services:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
       # Auth config
-      AUTHENTIK_CLIENT_ID: "${LINKWARDEN_AUTHENTIK_CLIENT_ID:?[linkwarden] Authentik client ID missing}"
-      AUTHENTIK_CLIENT_SECRET: "${LINKWARDEN_AUTHENTIK_CLIENT_SECRET:?[linkwarden] Authentik client secret missing}"
-      AUTHENTIK_CUSTOM_NAME: "Authentik"
-      AUTHENTIK_ISSUER: "${LINKWARDEN_AUTHENTIK_OIDC_URI:?[linkwarden] Authentik OIDC URL missing}"
+      AUTHELIA_CLIENT_ID: "${LINKWARDEN_OIDC_CLIENT_ID:?[linkwarden] OIDC client ID missing}"
+      AUTHELIA_CLIENT_SECRET: "${LINKWARDEN_OIDC_CLIENT_SECRET:?[linkwarden] OIDC client secret missing}"
+      AUTHELIA_CUSTOM_NAME: "Authelia"
+      AUTHELIA_WELLKNOWN_URL: "${LINKWARDEN_OIDC_WELLKNOWN_URL:?[linkwarden] OIDC URL missing}"
       NEXTAUTH_SECRET: "${LINKWARDEN_SECRET_KEY:?[linkwarden] Secret key missing}"
       NEXTAUTH_URL: "${LINKWARDEN_PUBLIC_URL:?[linkwarden] Public URL missing}/api/v1/auth"
-      NEXT_PUBLIC_AUTHENTIK_ENABLED: "true"
+      NEXT_PUBLIC_AUTHELIA_ENABLED: "true"
       NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"
       NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
-      DISABLE_NEW_SSO_USERS: "true"
+      DISABLE_NEW_SSO_USERS: "false"
       # Database config
       DATABASE_URL: "postgresql://${LINKWARDEN_DB_USER:?[linkwarden] Database user missing}:${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}@linkwarden-db:${LINKWARDEN_DB_PORT:?[linkwarden] Database port missing}/${LINKWARDEN_DB_NAME:?[linkwarden] Database name missing}"
       POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}"

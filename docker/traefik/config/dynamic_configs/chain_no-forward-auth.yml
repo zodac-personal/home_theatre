@@ -3,6 +3,5 @@ http:
     no-forward-auth:
       chain:
         middlewares:
-          - compress@file
           - rate-limit@file
           - secure-headers@file

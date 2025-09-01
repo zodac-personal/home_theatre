@@ -11,7 +11,10 @@ global:
 
 serversTransport:
   forwardingTimeouts:
-    dialTimeout: 20s # Default timeout to connect to a backend service
+    # Default timeouts to connect to a backend service
+    dialTimeout: 20s
+    responseHeaderTimeout: 30s
+    idleConnTimeout: 1m
 
 ################################################################
 # Logs - https://doc.traefik.io/traefik/observability/logs/

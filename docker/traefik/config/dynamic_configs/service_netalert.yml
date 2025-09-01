@@ -7,7 +7,7 @@ http:
         - websecure
       tls: {} # Ensures TLS is enabled but uses default certificates
       middlewares:
-        - authentik-forward-auth@file
+        - authelia-forward-auth@file
         - redirect-on-error@file
     
     netalert-redirect:

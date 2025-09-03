@@ -14,7 +14,7 @@ sonarr:
       # Audio definitions
       - trash_ids:
           - 204c8c3e7315bb0ea81332774fa888d6 # 7.1 Surround
-        quality_profiles:
+        assign_scores_to:
           - name: "1080p+"
           - name: "1080p"
           - name: "1080p, else 720p"
@@ -25,7 +25,7 @@ sonarr:
       - trash_ids:
           - 3fbafa924f361e66fbc6187af82dfa85 # 5.1 Surround
           - 834e534f103938853ffced4203b53e72 # 2.0 Stereo
-        quality_profiles:
+        assign_scores_to:
           - name: "1080p"
           - name: "1080p, else 720p"
           - name: "1080p, else Any"
@@ -34,7 +34,7 @@ sonarr:
           - name: "SD, else 720p"
       - trash_ids:
           - bd6dd5e043aa27ff4696a08d011c7d96 # 1.0 Mono
-        quality_profiles:
+        assign_scores_to:
           - name: "720p, else 1080p"
           - name: "Any"
           - name: "SD, else 720p"
@@ -46,7 +46,7 @@ sonarr:
           - 89358767a60cc28783cdc3d0be9388a4 # Disney+
           - a880d6abc21e7c16884f3ae393f84179 # HBO Max
           - d34870697c9db575f17700212167be23 # Netflix
-        quality_profiles:
+        assign_scores_to:
           - name: "1080p+"
           - name: "1080p"
           - name: "1080p, else 720p"
@@ -61,7 +61,7 @@ sonarr:
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # Low Quality
           - 47435ece6b99a0b477caf360e79ba0bb # x265 for 1080p/720p content
           - fbcb31d8dabd2a319072b84fc0b7249c # Extras/Bonus
-        quality_profiles:
+        assign_scores_to:
           - name: "1080p+"
           - name: "1080p"
           - name: "1080p, else 720p"

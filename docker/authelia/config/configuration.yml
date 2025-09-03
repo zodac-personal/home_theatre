@@ -165,72 +165,108 @@ access_control:
     # Servarr
     - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/ping$'
       policy: 'bypass'
       methods:
         - 'GET'
     - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
+    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
     - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/ping$'
       policy: 'bypass'
       methods:
         - 'GET'
+    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
     - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
     - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/ping$'
       policy: 'bypass'
       methods:
         - 'GET'
+    - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
     - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
     - domain: 'readarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/ping$'
       policy: 'bypass'
       methods:
         - 'GET'
+    - domain: 'readarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
     - domain: 'readarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
     - domain: 'bazarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/system/ping'
       policy: 'bypass'
       methods:
         - 'GET'
     - domain: 'bazarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
+    - domain: 'bazarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
     - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/api.*$'
         - '^/favicon\.ico$'
         - '^/ping$'
       policy: 'bypass'
       methods:
         - 'GET'
+    - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
     - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:

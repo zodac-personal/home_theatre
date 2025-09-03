@@ -884,7 +884,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi/" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -962,7 +962,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi/" ]
       timeout: 5s
     networks:
       - home

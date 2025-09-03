@@ -544,7 +544,7 @@ services:
       interval: 60s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/" ] # '--spider' fails
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/docs" ]
       timeout: 15s
     networks:
       - home

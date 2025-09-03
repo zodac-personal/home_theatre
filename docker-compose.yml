@@ -96,7 +96,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7878/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -112,7 +112,7 @@ services:
     networks:
       - home
     ports:
-      - "4000:3000"  # TODO: Revert to original internal port
+      - "4000:7878"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -142,7 +142,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8989/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -158,7 +158,7 @@ services:
     networks:
       - home
     ports:
-      - "4001:3001"  # TODO: Revert to original internal port
+      - "4001:8989"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -231,7 +231,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3002/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8686/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -247,7 +247,7 @@ services:
     networks:
       - home
     ports:
-      - "4002:3002"  # TODO: Revert to original internal port
+      - "4002:8686"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -338,7 +338,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3004/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8787/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -354,7 +354,7 @@ services:
     networks:
       - home
     ports:
-      - "4004:3004"  # TODO: Revert to original internal port
+      - "4004:8787"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -700,7 +700,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3016/ping" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9696/ping" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -716,7 +716,7 @@ services:
     networks:
       - home
     ports:
-      - "4016:3016"  # TODO: Revert to original internal port
+      - "4016:9696"
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:

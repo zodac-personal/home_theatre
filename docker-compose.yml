@@ -1003,7 +1003,7 @@ services:
       traefik.http.routers.tandoor.rule: "Host(`recipe.${DOMAIN_NAME}`)"
       traefik.http.routers.tandoor.entrypoints: "websecure"
       traefik.http.routers.tandoor.tls: "true"
-      traefik.http.routers.tandoor.middlewares: "no-forward-auth@file"
+      traefik.http.routers.tandoor.middlewares: "no-forward-auth@file,redirect-tandoor-login@redis"
       traefik.http.services.tandoor.loadbalancer.server.port: "4010"
       # Redirect from 'recipes' subdomain to 'recipe' subdomain
       traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${DOMAIN_NAME}`)"
@@ -1013,6 +1013,10 @@ services:
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.tandoor-redirect-regex.redirectregex.permanent: "true"
+      # Redirect login page to IdP login
+      traefik.http.middlewares.redirect-tandoor-login.redirectregex.regex: "/accounts/login(?:/.*)?$"
+      traefik.http.middlewares.redirect-tandoor-login.redirectregex.replacement: "/accounts/oidc/authelia/login/?process=login"
+      traefik.http.middlewares.redirect-tandoor-login.redirectregex.permanent: "true"
       # Monitor config
       kuma.tandoor.http.name: "Tandoor (Recipes)"
       kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"

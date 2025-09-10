@@ -111,7 +111,13 @@ access_control:
     - domain: 'stat.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
-        - '^/auth/isconfigured'
+        - '^/manifest\.json$'
+        - '^/auth/isconfigured$'
+        - '^/.*\.css$'
+        - '^/.*\.js$'
+        - '^/.*\.png$'
+        - '^/.*\.jpg$'
+        - '^/.*\.svg$'
       policy: 'bypass'
       methods:
         - 'GET'

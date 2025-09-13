@@ -1233,7 +1233,7 @@ services:
       traefik.http.services.filebrowser-ftp.loadbalancer.server.port: "4018"
       # Monitor config
       kuma.{{container_name}}.http.name: "FileBrowser (FTP uploads)"
-      kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+      kuma.{{container_name}}.http.url: "${FILEBROWSER_FTP_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
       - home
     ports:

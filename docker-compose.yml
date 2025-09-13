@@ -1561,105 +1561,106 @@ services:
     volumes:
       - ./storage/linkwarden-db/data/:/var/lib/postgresql/data
 
-  # Automatic Uptime-Kuma monitor generator
-  autokuma:
-    build:
-      context: .
-      dockerfile: docker/autokuma/Dockerfile
-      args:
-        # Docker image versions
-        AUTOKUMA_VERSION: "1.0.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
-        # Build arguments
-        # Host Monitor URLs
-        QBITTORRENT_MONITOR_URL: "${QBITTORRENT_NATIVE_MONITOR_URL:?[autokuma] qBittorrent static monitor URL missing}"
-        # NAS URLs
-        SYNOLOGY_MONITOR_URL: "${SYNOLOGY_MONITOR_URL:?[autokuma] Synology static monitor URL missing}"
-    container_name: autokuma
-    hostname: autokuma
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "256M"
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-      # Monitor config
-      AUTOKUMA__DEFAULT_SETTINGS: |-
-        http.accepted_statuscodes:  [ "200" ]
-        http.expiry_notification: true
-        http.interval: 60
-        http.max_redirects: 1
-        http.max_retries: 5
-        http.retry_interval: 60
-        http.timeout: 30
-      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
-      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
-      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-      AUTOKUMA__SYNC_INTERVAL: 300 # Sync every 5 minutes
-      AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
-      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
-      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-      # Status page environment variables
-      STATUS_PAGE_SLUG: "main"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "pidof", "autokuma" ]
-      timeout: 5s
-    networks:
-      - home
-    restart: no
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      # Docker socket mount from host system
-      - "${DOCKER_SOCKET}:/var/run/docker.sock"
-      - ./storage/autokuma/data:/data
-
-  # Automatic Uptime-Kuma monitor generator
-  # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
-  # It also uses the published docker image, rather than building one for any static monitors.
-  autokuma-pi:
-    image: ghcr.io/bigboot/autokuma:1.0.0
-    container_name: autokuma-pi
-    hostname: autokuma-pi
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "256M"
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-      # Monitor config
-      AUTOKUMA__DEFAULT_SETTINGS: |-
-        http.accepted_statuscodes:  [ "200" ]
-        http.tags: [{"tag_id": 3 }]
-        http.expiry_notification: true
-        http.interval: 60
-        http.max_redirects: 1
-        http.max_retries: 5
-        http.retry_interval: 60
-        http.timeout: 30
-      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
-      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
-      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-      AUTOKUMA__SYNC_INTERVAL: 600 # Sync every 10 minutes
-      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
-      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-      DOCKER_HOST: "${AUTO_KUMA_REMOTE_HOST}"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "pidof", "autokuma" ]
-      timeout: 5s
-    networks:
-      - home
-    restart: no
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      - ./storage/autokuma-pi/data:/data
+# TODO: Waiting for Uptime-Kuma v2 and AutoKuma v2
+#  # Automatic Uptime-Kuma monitor generator
+#  autokuma:
+#    build:
+#      context: .
+#      dockerfile: docker/autokuma/Dockerfile
+#      args:
+#        # Docker image versions
+#        AUTOKUMA_VERSION: "1.0.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+#        # Build arguments
+#        # Host Monitor URLs
+#        QBITTORRENT_MONITOR_URL: "${QBITTORRENT_NATIVE_MONITOR_URL:?[autokuma] qBittorrent static monitor URL missing}"
+#        # NAS URLs
+#        SYNOLOGY_MONITOR_URL: "${SYNOLOGY_MONITOR_URL:?[autokuma] Synology static monitor URL missing}"
+#    container_name: autokuma
+#    hostname: autokuma
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.5"
+#          memory: "256M"
+#    environment:
+#      # Base config
+#      TZ: "${TIMEZONE:?Timezone missing}"
+#      # Monitor config
+#      AUTOKUMA__DEFAULT_SETTINGS: |-
+#        http.accepted_statuscodes:  [ "200" ]
+#        http.expiry_notification: true
+#        http.interval: 60
+#        http.max_redirects: 1
+#        http.max_retries: 5
+#        http.retry_interval: 60
+#        http.timeout: 30
+#      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+#      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
+#      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
+#      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+#      AUTOKUMA__SYNC_INTERVAL: 300 # Sync every 5 minutes
+#      AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
+#      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
+#      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
+#      # Status page environment variables
+#      STATUS_PAGE_SLUG: "main"
+#    healthcheck:
+#      interval: 30s
+#      retries: 3
+#      start_period: 30s
+#      test: [ "CMD", "pidof", "autokuma" ]
+#      timeout: 5s
+#    networks:
+#      - home
+#    restart: no
+#    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+#    volumes:
+#      # Docker socket mount from host system
+#      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+#      - ./storage/autokuma/data:/data
+#
+#  # Automatic Uptime-Kuma monitor generator
+#  # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
+#  # It also uses the published docker image, rather than building one for any static monitors.
+#  autokuma-pi:
+#    image: ghcr.io/bigboot/autokuma:1.0.0
+#    container_name: autokuma-pi
+#    hostname: autokuma-pi
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.5"
+#          memory: "256M"
+#    environment:
+#      # Base config
+#      TZ: "${TIMEZONE:?Timezone missing}"
+#      # Monitor config
+#      AUTOKUMA__DEFAULT_SETTINGS: |-
+#        http.accepted_statuscodes:  [ "200" ]
+#        http.tags: [{"tag_id": 3 }]
+#        http.expiry_notification: true
+#        http.interval: 60
+#        http.max_redirects: 1
+#        http.max_retries: 5
+#        http.retry_interval: 60
+#        http.timeout: 30
+#      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+#      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
+#      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
+#      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+#      AUTOKUMA__SYNC_INTERVAL: 600 # Sync every 10 minutes
+#      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
+#      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
+#      DOCKER_HOST: "${AUTO_KUMA_REMOTE_HOST}"
+#    healthcheck:
+#      interval: 30s
+#      retries: 3
+#      start_period: 30s
+#      test: [ "CMD", "pidof", "autokuma" ]
+#      timeout: 5s
+#    networks:
+#      - home
+#    restart: no
+#    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+#    volumes:
+#      - ./storage/autokuma-pi/data:/data

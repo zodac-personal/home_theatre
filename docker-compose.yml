@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.1.19
+    image: emby/embyserver:4.9.1.31  # https://hub.docker.com/r/emby/embyserver/tags
     container_name: emby
     hostname: emby
     environment:
@@ -58,7 +58,7 @@ services:
 
   # Traefik connector
   traefik-kop:
-    image: ghcr.io/jittering/traefik-kop:0.17
+    image: ghcr.io/jittering/traefik-kop:0.17  # https://github.com/jittering/traefik-kop/releases
     container_name: traefik-kop
     hostname: traefik-kop
     environment:
@@ -78,7 +78,7 @@ services:
 
   # Movie manager
   radarr:
-    image: linuxserver/radarr:5.27.4-nightly
+    image: linuxserver/radarr:5.28.1-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
     depends_on:
@@ -124,7 +124,7 @@ services:
 
   # TV show manager
   sonarr:
-    image: linuxserver/sonarr:4.0.15-develop
+    image: linuxserver/sonarr:4.0.15-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -173,7 +173,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:7.4.1
+    image: ghcr.io/recyclarr/recyclarr:7.4.1  # https://github.com/recyclarr/recyclarr/releases
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -213,7 +213,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:2.13.2-nightly
+    image: linuxserver/lidarr:2.14.2-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
     container_name: lidarr
     hostname: lidarr
     depends_on:
@@ -259,7 +259,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.58.0
+    image: deluan/navidrome:0.58.0  # https://github.com/navidrome/navidrome/releases/
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -320,7 +320,7 @@ services:
 
   # eBook manager
   readarr:
-    image: linuxserver/readarr:0.4.19-nightly
+    image: linuxserver/readarr:0.4.19-nightly  # https://hub.docker.com/r/linuxserver/readarr/tags?name=nightly
     container_name: readarr
     hostname: readarr
     depends_on:
@@ -366,7 +366,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.27.0
+    image: ghcr.io/advplyr/audiobookshelf:2.29.0  # https://github.com/advplyr/audiobookshelf/releases
     container_name: audiobookshelf
     hostname: audiobookshelf
     deploy:
@@ -417,7 +417,7 @@ services:
 
   # Downloaded archive extractor
   unpackerr:
-    image: golift/unpackerr:0.14.5
+    image: golift/unpackerr:0.14.5  # https://hub.docker.com/r/golift/unpackerr/tags
     container_name: unpackerr
     hostname: unpackerr
     depends_on:
@@ -441,22 +441,22 @@ services:
       UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY:?[unpackerr] Lidarr API key missing}"
       UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
       UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
-      UN_LIDARR_0_URL: "http://lidarr:3002"
+      UN_LIDARR_0_URL: "http://lidarr:8686"
       # Radarr config
       UN_RADARR_0_API_KEY: "${RADARR_API_KEY:?[unpackerr] Radarr API key missing}"
       UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
       UN_RADARR_0_PROTOCOLS: "torrent,usenet"
-      UN_RADARR_0_URL: "http://radarr:3000"
+      UN_RADARR_0_URL: "http://radarr:7878"
       # Readarr config
       UN_READARR_0_API_KEY: "${READARR_API_KEY:?[unpackerr] Readarr API key missing}"
       UN_READARR_0_PATHS_0: "/downloads/complete/readarr"
       UN_READARR_0_PROTOCOLS: "torrent,usenet"
-      UN_READARR_0_URL: "http://readarr:3004"
+      UN_READARR_0_URL: "http://readarr:8787"
       # Sonarr config
       UN_SONARR_0_API_KEY: "${SONARR_API_KEY:?[unpackerr] Sonarr API key missing}"
       UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
       UN_SONARR_0_PROTOCOLS: "torrent,usenet"
-      UN_SONARR_0_URL: "http://sonarr:3001"
+      UN_SONARR_0_URL: "http://sonarr:8989"
       # Logging config
       UN_LOG_FILE: "/config/unpackerr.log"
     healthcheck:
@@ -477,7 +477,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.5.3-development
+    image: linuxserver/bazarr:1.5.3-development  # https://hub.docker.com/r/linuxserver/bazarr/tags?name=development
     container_name: bazarr
     hostname: bazarr
     depends_on:
@@ -528,7 +528,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.9.1
+    image: onerahmet/openai-whisper-asr-webservice:v1.9.1  # https://github.com/ahmetoner/whisper-asr-webservice/releases
     container_name: whisper
     hostname: whisper
     deploy:
@@ -553,7 +553,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:4.0.1
+    image: rommapp/romm:4.2.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
     depends_on:
@@ -577,6 +577,7 @@ services:
       OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
       LOGLEVEL: "INFO"
       # Background task config
+      ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP: "false" # TODO: Fix images
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
       ENABLE_SCHEDULED_RESCAN: "true"
       # Database config
@@ -596,6 +597,7 @@ services:
       STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
       # RetroAchievements config
       RETROACHIEVEMENTS_API_KEY: "${RETROACHIEVEMENTS_API_KEY:-}"
+      ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC: "true"
       # Secrets config
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
     healthcheck:
@@ -640,7 +642,8 @@ services:
 
   # Database for RomM
   romm-db:
-    image: mariadb:11.8.2
+    # TODO: Migrate to PostgreSQL
+    image: mariadb:11.8.3  # https://hub.docker.com/_/mariadb
     container_name: romm-db
     hostname: romm-db
     deploy:
@@ -674,7 +677,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:2.0.3-nightly
+    image: linuxserver/prowlarr:2.1.1-nightly
     container_name: prowlarr
     hostname: prowlarr
     depends_on:
@@ -725,7 +728,7 @@ services:
 
   # Torrent downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:5.1.2-libtorrentv1
+    image: linuxserver/qbittorrent:5.1.2-libtorrentv1  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
     container_name: qbittorrent
     hostname: qbittorrent
     deploy:
@@ -769,7 +772,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr:3.6.3
+    image: linuxserver/doplarr:3.6.3  # https://hub.docker.com/r/linuxserver/doplarr/tags
     container_name: doplarr
     hostname: doplarr
     depends_on:
@@ -807,7 +810,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v3.3.25
+    image: flaresolverr/flaresolverr:v3.4.0  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
     container_name: flaresolverr
     hostname: flaresolverr
     deploy:
@@ -832,7 +835,8 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
   tandoor-new:
-    image: vabene1111/recipes:2.0.2
+    # TODO: Waiting for iOS app to be ready: https://github.com/aimok04/kitshn/issues/95
+    image: vabene1111/recipes:2.1.2  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor-new
     hostname: tandoor-new
     depends_on:
@@ -975,7 +979,7 @@ services:
 
   # Recipe manager reverse-proxy/UI
   tandoor-ui:
-    image: nginx:1.29.0-alpine
+    image: nginx:1.29.1-alpine  # https://hub.docker.com/_/nginx
     container_name: tandoor-ui
     hostname: tandoor-ui
 #    depends_on:
@@ -995,7 +999,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80" ]
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1" ]  # wget fails, but curl is installed
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -1033,7 +1037,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:17.5-alpine
+    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -1070,7 +1074,7 @@ services:
 
   # Inventory management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.20.2
+    image: ghcr.io/sysadminsmedia/homebox:0.21.0  # https://github.com/sysadminsmedia/homebox/releases
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1109,7 +1113,7 @@ services:
 
   # Daily journal
   dailytxt:
-    image: phitux/dailytxt:1.0.15
+    image: phitux/dailytxt:1.0.15  # https://hub.docker.com/r/phitux/dailytxt/tags
     container_name: dailytxt
     hostname: dailytxt
     deploy:
@@ -1157,7 +1161,7 @@ services:
 
   # Documents file browser
   filebrowser:
-    image: filebrowser/filebrowser:v2.42.1
+    image: filebrowser/filebrowser:v2.42.5  # https://github.com/filebrowser/filebrowser/releases
     container_name: filebrowser
     hostname: filebrowser
     deploy:
@@ -1199,14 +1203,14 @@ services:
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
-      - "${DOCUMENTS_DIRECTORY}:/srv:ro"
+      - "${DOCUMENTS_DIRECTORY}:/doc:ro"
       # Persistent volumes
       - ./storage/filebrowser/database/:/database
       - ./storage/filebrowser/config/:/config
 
   # Large Language Model with ChatGPT-style UI
   ollama:
-    image: ghcr.io/open-webui/open-webui:v0.6.18-ollama
+    image: ghcr.io/open-webui/open-webui:v0.6.28-ollama  # https://github.com/open-webui/open-webui/releases/
     container_name: ollama
     hostname: ollama
     deploy:
@@ -1247,7 +1251,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:25.7.0.110598-community
+    image: sonarqube:25.9.0.112764-community  # https://hub.docker.com/_/sonarqube
     container_name: sonarqube
     hostname: sonarqube
     depends_on:
@@ -1294,7 +1298,7 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:17.5-alpine
+    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
@@ -1331,7 +1335,7 @@ services:
 
   # Statistics for Emby
   jellystat:
-    image: cyfershepard/jellystat:1.1.6
+    image: cyfershepard/jellystat:1.1.6  # https://github.com/CyferShepard/Jellystat/releases
     container_name: jellystat
     hostname: jellystat
     depends_on:
@@ -1386,7 +1390,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:17.5-alpine
+    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
@@ -1423,7 +1427,7 @@ services:
 
   # Bookmark manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.11.5
+    image: ghcr.io/linkwarden/linkwarden:v2.12.2  # https://github.com/linkwarden/linkwarden/releases
     container_name: linkwarden
     hostname: linkwarden
     depends_on:
@@ -1481,7 +1485,7 @@ services:
 
   # Database for Linkwarden
   linkwarden-db:
-    image: postgres:17.5-alpine
+    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:

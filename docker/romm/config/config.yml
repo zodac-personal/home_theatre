@@ -1,32 +1,41 @@
 exclude:
-  # Exclude ROMs (or parts of ROMs) from a scan
+  platforms: []
   roms:
+    multi_file:
+      names: []
+      parts:
+        extensions: []
+        names: []
     single_file:
       extensions:
-        - 'jpg'
-        - 'jpeg'
-        - 'png'
-
-# Associate different platform names to your current file system platform names
+      - jpg
+      - jpeg
+      - png
+      names: []
+filesystem:
+  firmware_folder: bios
+  roms_folder: roms
 system:
   platforms:
-    # [folder name in your 'ROMs' directory on your machine]: [RomM platform name]
-    3DS: '3ds'
-    DS: 'nds'
-    Flash: 'flash'
-    GameBoy: 'gb'
-    GameBoyAdvance: 'gba'
-    GameBoyColor: 'gbc'
-    GameCube: 'ngc'
-    N64: 'n64'
-    PS: 'ps'
-    PS2: 'ps2'
-    PS3: 'ps3'
-    PSP: 'psp'
-    PSVita: 'psvita'
-    SegaGenesis: 'genesis-slash-megadrive'
-    Switch: 'switch'
-    Wii: 'wii'
-    Windows: 'win'
-    XBox360: 'xbox360'
-    XBox: 'xbox'
+    3DS: 3ds
+    DS: nds
+    Flash: flash
+    GameBoy: gb
+    GameBoyAdvance: gba
+    GameBoyColor: gbc
+    GameCube: ngc
+    N64: n64
+    PS: ps
+    PS2: ps2
+    PS3: ps3
+    PSP: psp
+    PSVita: psvita
+    SegaGenesis: genesis-slash-megadrive
+    Switch: switch
+    Wii: wii
+    Windows: win
+    XBox: xbox
+    XBox360: xbox360
+    genesis-slash-megadrive: genesis
+    ps: psx
+  versions: {}

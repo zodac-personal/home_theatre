@@ -5,6 +5,9 @@
 # Authelia server configuration
 server:
   address: 'tcp://0.0.0.0:{{ env "SERVER_PORT" }}'
+  buffers:
+    read: '8192'
+    write: '8192'
   timeouts:
     read: '30s'
     write: '30s'

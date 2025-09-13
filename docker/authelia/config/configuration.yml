@@ -110,6 +110,18 @@ access_control:
       policy: 'one_factor'
       subject:
         - [ "group:filebrowser_admins" ]
+    # FTP
+    - domain: 'ftp.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/health'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'ftp.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:ftp_users" ]
     # Jellystat
     - domain: 'stat.{{ env "DOMAIN_NAME" }}'
       resources:

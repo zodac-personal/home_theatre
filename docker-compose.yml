@@ -1208,6 +1208,47 @@ services:
       - ./storage/filebrowser/database/:/database
       - ./storage/filebrowser/config/:/config
 
+  # FTP server
+  filebrowser-ftp:
+    image: filebrowser/filebrowser:v2.42.5  # https://github.com/filebrowser/filebrowser/releases
+    container_name: filebrowser-ftp
+    hostname: filebrowser-ftp
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      FB_NOAUTH: noauth
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser-ftp.rule: "Host(`ftp.${DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser-ftp.entrypoints: "websecure"
+      traefik.http.routers.filebrowser-ftp.tls: "true"
+      traefik.http.routers.filebrowser-ftp.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.filebrowser-ftp.loadbalancer.server.port: "4018"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "FileBrowser (FTP uploads)"
+      kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+    networks:
+      - home
+    ports:
+      - "4018:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${FTP_UPLOAD_DIRECTORY}:/ftp"
+      # Persistent volumes
+      - ./storage/filebrowser-ftp/database/:/database
+      - ./storage/filebrowser-ftp/config/:/config
+
   # Large Language Model with ChatGPT-style UI
   ollama:
     image: ghcr.io/open-webui/open-webui:v0.6.28-ollama  # https://github.com/open-webui/open-webui/releases/

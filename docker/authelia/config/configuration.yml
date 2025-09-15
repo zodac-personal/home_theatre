@@ -103,6 +103,9 @@ access_control:
       resources:
         - '^/favicon\.ico$'
         - '^/health'
+        - '^(.*)?/api/public/(.*)$'
+        - '^(.*)?/share/(.*)?$'
+        - '^(.*)?/static/(.*)?$'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -115,6 +118,9 @@ access_control:
       resources:
         - '^/favicon\.ico$'
         - '^/health'
+        - '^(.*)?/api/public/(.*)$'
+        - '^(.*)?/share/(.*)?$'
+        - '^(.*)?/static/(.*)?$'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -125,13 +131,13 @@ access_control:
     # Jellystat
     - domain: 'stat.{{ env "DOMAIN_NAME" }}'
       resources:
+        - '^/auth/isconfigured$'
         - '^/favicon\.ico$'
         - '^/manifest\.json$'
-        - '^/auth/isconfigured$'
         - '^/.*\.css$'
+        - '^/.*\.jpg$'
         - '^/.*\.js$'
         - '^/.*\.png$'
-        - '^/.*\.jpg$'
         - '^/.*\.svg$'
       policy: 'bypass'
       methods:
@@ -156,14 +162,14 @@ access_control:
     # Uptime-Kuma
     - domain: 'monitor.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^/favicon\.ico$'
-        - '^/status'
+        - '^/api/.*'
         - '^/assets/'
         - '^/assets'
+        - '^/favicon\.ico$'
         - '^/icon.svg'
-        - '^/api/.*'
-        - '^/upload/.*'
         - '^/metrics'
+        - '^/status'
+        - '^/upload/.*'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -366,9 +372,9 @@ identity_providers:
           - 'authorization_code'
           - 'refresh_token'
         redirect_uris:
+          - 'audiobookshelf://oauth'
           - 'https://book.{{ env "DOMAIN_NAME" }}/audiobookshelf/auth/openid/callback'
           - 'https://book.{{ env "DOMAIN_NAME" }}/audiobookshelf/auth/openid/mobile-redirect'
-          - 'audiobookshelf://oauth'
         response_types:
           - 'code'
         scopes:

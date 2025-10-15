@@ -202,6 +202,7 @@ access_control:
         - '^/api.*$'
       policy: 'bypass'
       methods:
+        - 'DELETE'
         - 'GET'
         - 'POST'
     - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
@@ -220,6 +221,7 @@ access_control:
         - '^/api.*$'
       policy: 'bypass'
       methods:
+        - 'DELETE'
         - 'GET'
         - 'POST'
     - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'

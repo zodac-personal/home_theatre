@@ -205,6 +205,7 @@ access_control:
         - 'DELETE'
         - 'GET'
         - 'POST'
+        - 'PUT'
     - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:
@@ -224,6 +225,7 @@ access_control:
         - 'DELETE'
         - 'GET'
         - 'POST'
+        - 'PUT'
     - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:

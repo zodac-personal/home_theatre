@@ -12,30 +12,56 @@ exclude:
       - jpeg
       - png
       names: []
+
 filesystem:
   firmware_folder: bios
   roms_folder: roms
+
 system:
   platforms:
     3DS: 3ds
     DS: nds
-    Flash: flash
+    Flash: browser
     GameBoy: gb
     GameBoyAdvance: gba
     GameBoyColor: gbc
     GameCube: ngc
     N64: n64
-    PS: ps
+    PS: psx
     PS2: ps2
     PS3: ps3
     PSP: psp
     PSVita: psvita
-    SegaGenesis: genesis-slash-megadrive
+    SegaGenesis: genesis
     Switch: switch
     Wii: wii
     Windows: win
     XBox: xbox
     XBox360: xbox360
-    genesis-slash-megadrive: genesis
-    ps: psx
   versions: {}
+
+# Metadata priority during scans
+scan:
+ priority:
+   metadata: # Top-level metadata source priority
+     - "igdb" # IGDB
+     - "ra" # RetroAchievements
+     - "hasheous" # Hasheous
+     - "flashpoint" # Flashpoint Project
+     - "hltb" # HowLongToBeat
+     - "ss" # Screenscraper
+   artwork: # Cover art and screenshots
+     - "igdb" # IGDB
+     - "ra" # RetroAchievements
+     - "hasheous" # Hasheous
+     - "flashpoint" # Flashpoint Project
+     - "hltb" # HowLongToBeat
+     - "ss" # Screenscraper
+   region: # Cover art and game title (only used by Screenscraper)
+     - "eu"
+     - "us"
+     - "wor"
+     - "ss"
+     - "jp"
+   language: # Cover art and game title (only used by Screenscraper)
+     - "en"

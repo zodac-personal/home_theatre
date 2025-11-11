@@ -364,7 +364,14 @@ identity_providers:
               - [ "group:tandoor_users" ]
     claims_policies:
       romm:
-        id_token: [ 'email', 'email_verified', 'alt_emails', 'preferred_username', 'name' ]
+        id_token: [
+          'alt_emails',
+          'email',
+          'email_verified',
+          'groups',
+          'name',
+          'preferred_username'
+        ]
     clients:
       - client_name: 'AudioBookShelf OIDC'
         client_id: '7sVXYwkuBWJ6iDtXlaDPf2R95d2cINSo6T1BIy9f'

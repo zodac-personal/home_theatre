@@ -553,51 +553,69 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:4.2.0  # https://github.com/rommapp/romm/releases
+    image: rommapp/romm:4.4.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
     depends_on:
+      romm-cache:
+        condition: service_healthy
       romm-db:
         condition: service_healthy
     deploy:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
+          memory: "2048M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      DISABLE_USERPASS_LOGIN: "true"
+      DISABLE_SETUP_WIZARD: "true"  # Set to 'true' for initial set-up
+      DISABLE_USERPASS_LOGIN: "true"  # Set to 'true' for initial set-up
       OIDC_CLIENT_ID: "${ROMM_OIDC_CLIENT_ID:?[romm] OIDC client ID missing}"
       OIDC_CLIENT_SECRET: "${ROMM_OIDC_CLIENT_SECRET:?[romm] OIDC client secret missing}"
       OIDC_ENABLED: "true"
       OIDC_PROVIDER: "Authelia"
       OIDC_REDIRECT_URI: "${ROMM_OIDC_REDIRECT_URL:?[romm] RomM redirect URL missing}"
       OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
-      LOGLEVEL: "INFO"
-      # Background task config
-      ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP: "false" # TODO: Fix images
+      OIDC_ROLE_ADMIN: "romm_admins"
+      OIDC_ROLE_VIEWER: "romm_users"
+      OIDC_CLAIM_ROLES: "groups"
+      # Task config
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
+      ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP: "true"
       ENABLE_SCHEDULED_RESCAN: "true"
+      ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC: "true"
+      ENABLE_SCHEDULED_UPDATE_LAUNCHBOX_METADATA: "false"
+      # Cache config
+      REDIS_HOST: "romm-cache"
+      REDIS_PORT: "6379"
       # Database config
-      ROMM_DB_DRIVER: "mariadb"
+      ROMM_DB_DRIVER: "postgresql"
       DB_HOST: "romm-db"
       DB_NAME: "${ROMM_DB_NAME:?[romm] Database name missing}"
       DB_PORT: "${ROMM_DB_PORT:?[romm] Database port missing}"
       DB_PASSWD: "${ROMM_DB_PASSWORD:?[romm] Database password missing}"
-      DB_ROOT_PASSWD: "${ROMM_DB_ROOT_PASSWORD:?[romm] Database root password missing}"
       DB_USER: "${ROMM_DB_USER:?[romm] Database user missing}"
       # External systems config
-      HASHEOUS_API_ENABLED: "true"
+      FLASHPOINT_API_ENABLED: "true"
+      HASHEOUS_API_ENABLED: "true"    # https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#hasheous
+      HLTB_API_ENABLED: "true"
+      LAUNCHBOX_API_ENABLED: "false"  # https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#launchbox
+      PLAYMATCH_API_ENABLED: "true"   # https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#playmatch
+      # External systems credentials
       IGDB_CLIENT_ID: "${TWITCH_CLIENT_ID:?[romm] Twitch client ID missing}"
       IGDB_CLIENT_SECRET: "${TWITCH_CLIENT_SECRET:?[romm] Twitch client secret missing}"
       MOBYGAMES_API_KEY: "${MOBYGAMES_API_KEY:-}"
-      PLAYMATCH_API_ENABLED: "true"
-      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:?[romm] SteamGridDB API key missing}"
-      # RetroAchievements config
       RETROACHIEVEMENTS_API_KEY: "${RETROACHIEVEMENTS_API_KEY:-}"
-      ENABLE_SCHEDULED_RETROACHIEVEMENTS_PROGRESS_SYNC: "true"
+      SCREENSCRAPER_USER: "${SCREENSCRAPER_USER:-}"
+      SCREENSCRAPER_PASSWORD: "${SCREENSCRAPER_PASSWORD:-}"
+      STEAMGRIDDB_API_KEY: "${STEAMGRIDDB_API_KEY:-}"  # Not picked up in scanners, only for manual image searches
+      # Logging config
+      FORCE_COLOR: "true"
+      LOGLEVEL: "INFO"
+      # Network config
+      IPV4_ONLY: "true"
       # Secrets config
       ROMM_AUTH_SECRET_KEY: "${ROMM_SECRET_KEY:?[romm] Authentication secret key missing}"
     healthcheck:
@@ -640,10 +658,35 @@ services:
       - ./storage/romm/resources:/romm/resources  # Resources (covers, screenshots, etc.) that are fetched externally
       - ./storage/romm/redis:/redis-data          # Cached data for background tasks
 
+  # External cache for RomM (used due to an issue with the internal valkey)
+  romm-cache:
+    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    container_name: romm-cache
+    hostname: romm-cache
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "valkey-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - home
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/romm-cache/data/:/data
+
   # Database for RomM
   romm-db:
-    # TODO: Migrate to PostgreSQL
-    image: mariadb:11.8.3  # https://hub.docker.com/_/mariadb
+    image: postgres:18.0-alpine  # https://hub.docker.com/_/postgres
     container_name: romm-db
     hostname: romm-db
     deploy:
@@ -653,27 +696,30 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
       # Database config
-      MYSQL_TCP_PORT: "${ROMM_DB_PORT:?[romm-db] Database port missing}"
-      MYSQL_DATABASE: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
-      MYSQL_PASSWORD: "${ROMM_DB_PASSWORD:?[romm-db] Database password missing}"
-      MYSQL_ROOT_PASSWORD: "${ROMM_DB_ROOT_PASSWORD:?[romm-db] Database root password missing}"
-      MYSQL_USER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
+      PGPORT: "${ROMM_DB_PORT:?[romm-db] Database port missing}"
+      POSTGRES_DB: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
+      POSTGRES_PASSWORD: "${ROMM_DB_PASSWORD:?[romm-db] Database password missing}"
+      POSTGRES_USER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
+      PGPASSWORD: "${ROMM_DB_PASSWORD:?[romm-db] Database password missing}"
+      PGUSER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
     expose:
       - "${ROMM_DB_PORT:?[romm-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "mariadb-admin", "-proot", "ping", "-h", "localhost", "--protocol=tcp" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
       - home
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
-      - ./storage/romm-db/:/var/lib/mysql
+      - ./storage/romm-db/data/:/var/lib/postgresql/data
 
   # Indexer (Torrents + Usenet)
   prowlarr:
@@ -1207,6 +1253,7 @@ services:
       # Persistent volumes
       - ./storage/filebrowser/database/:/database
       - ./storage/filebrowser/config/:/config
+      # TODO: Missing /srv mount point
 
   # FTP server
   filebrowser-ftp:

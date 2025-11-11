@@ -9,6 +9,6 @@ http:
     redirect-on-error:
       plugin:
         traefik-plugin-redirect-on-status:
-          redirectUri: "{{ env "STATUS_URL" | trimAll "\"" }}"
+          redirectUri: "{{ env "STATUS_URL" | trimAll "\"" }}" # TODO: Don't allow this to run for monitor.zodac.net?
           status:
             - "400-599"

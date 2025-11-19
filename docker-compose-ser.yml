@@ -8,7 +8,6 @@ services:
   # Reverse proxy
   traefik:
     image: traefik:v3.5.2  # https://github.com/traefik/traefik/releases
-    platform: linux/arm64
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -62,7 +61,6 @@ services:
   # Reverse proxy connector for external hosts
   traefik-provider:
     image: redis:8.2.1-alpine  # https://hub.docker.com/_/redis
-    platform: linux/arm64
     container_name: traefik-provider
     hostname: traefik-provider
     command: --save 60 1 --loglevel warning
@@ -85,7 +83,6 @@ services:
   # Docker log viewer
   dozzle:
     image: amir20/dozzle:v8.13.12  # https://github.com/amir20/dozzle/releases
-    platform: linux/arm64
     container_name: dozzle
     hostname: dozzle
     environment:
@@ -136,7 +133,6 @@ services:
   # Homepage
   homarr:
     image: ghcr.io/homarr-labs/homarr:v1.37.0  # https://github.com/homarr-labs/homarr/releases
-    platform: linux/arm64
     container_name: homarr
     hostname: homarr
     environment:
@@ -190,7 +186,6 @@ services:
   # Identity platform (authentication and SSO)
   authelia:
     image: authelia/authelia:4.39.9  # https://github.com/authelia/authelia/releases
-    platform: linux/arm64
     container_name: authelia
     hostname: authelia
     depends_on:
@@ -259,7 +254,6 @@ services:
 
   authelia-db:
     image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
-    platform: linux/arm64
     container_name: authelia-db
     hostname: authelia-db
     environment:
@@ -292,7 +286,6 @@ services:
 
   authelia-cache:
     image: redis:8.2.1-alpine  # https://hub.docker.com/_/redis
-    platform: linux/arm64
     container_name: authelia-cache
     hostname: authelia-cache
     command: --save 60 1 --loglevel warning
@@ -315,7 +308,6 @@ services:
   # LDAP User-store
   lldap:
     image: lldap/lldap:2025-08-31-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
-    platform: linux/arm64
     container_name: lldap
     hostname: lldap
     depends_on:
@@ -356,7 +348,6 @@ services:
 
   lldap-db:
     image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
-    platform: linux/arm64
     container_name: lldap-db
     hostname: lldap-db
     environment:
@@ -389,7 +380,6 @@ services:
   # Monitoring and alerting
   uptime-kuma:
     image: louislam/uptime-kuma:1.23.16-alpine  # https://github.com/louislam/uptime-kuma/releases
-    platform: linux/arm64
     container_name: uptime-kuma
     hostname: uptime-kuma
     environment:
@@ -443,7 +433,6 @@ services:
         NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
         # UI config
         DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
-    platform: linux/arm64
     container_name: netalert
     hostname: netalert
     environment:
@@ -474,7 +463,6 @@ services:
   # Automated SpeedTest runner with graphs
   speedtest:
     image: linuxserver/speedtest-tracker:1.6.6  # https://github.com/alexjustesen/speedtest-tracker/releases
-    platform: linux/arm64
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -525,7 +513,6 @@ services:
   # Database for SpeedTest
   speedtest-db:
     image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
-    platform: linux/arm64
     container_name: speedtest-db
     hostname: speedtest-db
     environment:
@@ -558,7 +545,6 @@ services:
   # Tool to import/export played state of media in Emby, instead of using Trakt
   watchstate:
     image: ghcr.io/arabcoders/watchstate:v0.4.1  # https://github.com/arabcoders/watchstate/releases
-    platform: linux/arm64
     container_name: watchstate
     hostname: watchstate
     environment:

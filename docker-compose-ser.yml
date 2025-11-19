@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.5.2  # https://github.com/traefik/traefik/releases
+    image: traefik:v3.6.2  # https://github.com/traefik/traefik/releases
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -60,15 +60,16 @@ services:
 
   # Reverse proxy connector for external hosts
   traefik-provider:
-    image: redis:8.2.1-alpine  # https://hub.docker.com/_/redis
+    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: traefik-provider
     hostname: traefik-provider
-    command: --save 60 1 --loglevel warning
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
       - home_ser
@@ -285,17 +286,16 @@ services:
       - ./storage/authelia-db/data/:/var/lib/postgresql/data
 
   authelia-cache:
-    image: redis:8.2.1-alpine  # https://hub.docker.com/_/redis
+    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: authelia-cache
     hostname: authelia-cache
-    command: --save 60 1 --loglevel warning
-    expose:
-      - 6379
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
       - home_ser

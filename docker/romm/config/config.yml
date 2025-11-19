@@ -2,7 +2,8 @@ exclude:
   platforms: []
   roms:
     multi_file:
-      names: []
+      names:
+        - ".Trash*"
       parts:
         extensions: []
         names: []
@@ -11,6 +12,8 @@ exclude:
       - jpg
       - jpeg
       - png
+      - webp
+      - xml
       names: []
 
 filesystem:
@@ -43,20 +46,28 @@ system:
 # Metadata priority during scans
 scan:
  priority:
-   metadata: # Top-level metadata source priority
-     - "igdb" # IGDB
-     - "ra" # RetroAchievements
-     - "hasheous" # Hasheous
+   metadata:
+     - "gamelist"   # ES-DE gamelist.xml
+     - "igdb"       # IGDB
+     - "ra"         # RetroAchievements
+     - "hasheous"   # Hasheous
      - "flashpoint" # Flashpoint Project
-     - "hltb" # HowLongToBeat
-     - "ss" # Screenscraper
-   artwork: # Cover art and screenshots
-     - "igdb" # IGDB
-     - "ra" # RetroAchievements
-     - "hasheous" # Hasheous
+     - "hltb"       # HowLongToBeat
+     - "ss"         # Screenscraper
+   artwork:
+     - "gamelist"   # ES-DE gamelist.xml
+     - "igdb"       # IGDB
+     - "ra"         # RetroAchievements
+     - "hasheous"   # Hasheous
      - "flashpoint" # Flashpoint Project
-     - "hltb" # HowLongToBeat
-     - "ss" # Screenscraper
+     - "hltb"       # HowLongToBeat
+     - "ss"         # Screenscraper
+   media:
+     - "box2d"
+     - "screenshot"
+     - "manual"
+     - "title_screen"
+     - "marquee"
    region: # Cover art and game title (only used by Screenscraper)
      - "eu"
      - "us"

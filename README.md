@@ -172,8 +172,8 @@ container. For the following, use `source .env` to ensure the variables are load
 Take backup of the current database, then shut the Authelia containers down:
 
 ```bash
-docker compose exec authelia-db pg_dump -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME} -cC > backup_authelia.sql
-docker compose -f docker-compose-pi.yml down authelia authelia-cache authelia-db
+docker compose -f docker-compose-ser.yml exec authelia-db pg_dump -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME} -cC > backup_authelia.sql
+docker compose -f docker-compose-ser.yml down authelia authelia-cache authelia-db
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `authelia-db`.
@@ -182,9 +182,9 @@ Next, delete the storage for `authelia-db` (make sure to copy this directory/vol
 Finally, start up the new DB container, restore the backup, then start the remaining Authelia containers:
 
 ```bash
-docker compose -f docker-compose-pi.yml up --build -d authelia-db --wait
-cat backup_authelia.sql | docker compose -f docker-compose-pi.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER}
-docker compose -f docker-compose-pi.yml up --build -d authelia authelia-cache
+docker compose -f docker-compose-ser.yml up --build -d authelia-db --wait
+cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER}
+docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache
 ```
 
 ### Jellystat DB
@@ -232,8 +232,8 @@ docker compose up --build -d linkwarden
 Take backup of the current database, then shut the LLDAP containers down:
 
 ```bash
-docker compose -f docker-compose-pi.yml exec lldap-db pg_dump -U ${LLDAP_DB_USER} -d ${LLDAP_DB_NAME} -cC > backup_lldap.sql
-docker compose -f docker-compose-pi.yml down lldap lldap-db
+docker compose -f docker-compose-ser.yml exec lldap-db pg_dump -U ${LLDAP_DB_USER} -d ${LLDAP_DB_NAME} -cC > backup_lldap.sql
+docker compose -f docker-compose-ser.yml down lldap lldap-db
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `lldap-db`.
@@ -242,9 +242,9 @@ Next, delete the storage for `lldap-db` (make sure to copy this directory/volume
 Finally, start up the new DB container, restore the backup, then start the remaining LLDAP containers:
 
 ```bash
-docker compose -f docker-compose-pi.yml up --build -d lldap-db --wait
-cat backup_lldap.sql | docker compose -f docker-compose-pi.yml exec -T lldap-db psql -U ${LLDAP_DB_USER}
-docker compose -f docker-compose-pi.yml up --build -d lldap
+docker compose -f docker-compose-ser.yml up --build -d lldap-db --wait
+cat backup_lldap.sql | docker compose -f docker-compose-ser.yml exec -T lldap-db psql -U ${LLDAP_DB_USER}
+docker compose -f docker-compose-ser.yml up --build -d lldap
 ```
 
 ### RomM DB
@@ -252,29 +252,18 @@ docker compose -f docker-compose-pi.yml up --build -d lldap
 Take backup of the current database, then shut the RomM containers down:
 
 ```bash
-docker compose exec romm-db mariadb-dump --all-databases -uroot -p"${ROMM_DB_ROOT_PASSWORD}" > backup_romm.sql
+docker compose exec romm-db pg_dump -U ${ROMM_DB_USER} -d ${ROMM_DB_NAME} -cC > backup_romm.sql
 docker compose down romm romm-db
 ```
 
-Upgrade the version of [MariaDB](https://registry.hub.docker.com/_/mariadb) for `romm-db`.
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `romm-db`.
 Next, delete the storage for `romm-db` (make sure to copy this directory/volume first).
 
 Finally, start up the new DB container, restore the backup, then start the remaining RomM containers:
 
 ```bash
 docker compose up --build -d romm-db --wait
-cat backup_romm.sql | docker compose exec romm-db sh -c 'exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}"'
-docker compose up --build -d romm
-```
-
-Workaround for Windows, due to input device not being a TTY:
-
-```bash
-docker compose up --build -d romm-db
-docker cp backup_romm.sql romm-db:/
-winpty docker exec -it romm-db bash
-exec mariadb -uroot -p"${ROMM_DB_ROOT_PASSWORD}" < /backup_romm.sql
-exit
+cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER}
 docker compose up --build -d romm
 ```
 
@@ -303,8 +292,8 @@ docker compose up --build -d sonarqube
 Take backup of the current database, then shut the SpeedTest containers down:
 
 ```bash
-docker compose -f docker-compose-pi.yml exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
-docker compose -f docker-compose-pi.yml down speedtest speedtest-db
+docker compose -f docker-compose-ser.yml exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
+docker compose -f docker-compose-ser.yml down speedtest speedtest-db
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `speedtest-db`.
@@ -313,9 +302,9 @@ Next, delete the storage for `speedtest-db` (make sure to copy this directory/vo
 Finally, start up the new DB container, restore the backup, then start the remaining SpeedTest containers:
 
 ```bash
-docker compose -f docker-compose-pi.yml up --build -d speedtest-db --wait
-cat backup_speedtest.sql | docker compose -f docker-compose-pi.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
-docker compose -f docker-compose-pi.yml up --build -d speedtest
+docker compose -f docker-compose-ser.yml up --build -d speedtest-db --wait
+cat backup_speedtest.sql | docker compose -f docker-compose-ser.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
+docker compose -f docker-compose-ser.yml up --build -d speedtest
 ```
 
 ### Tandoor DB
@@ -337,6 +326,69 @@ docker compose up --build -d tandoor-db --wait
 cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
 docker compose up --build -d tandoor tandoor-ui
 ```
+
+### Combined
+
+#### Host
+```shell
+# Take backups
+docker compose exec jellystat-db pg_dump -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME} -cC > backup_jellystat.sql
+docker compose exec linkwarden-db pg_dump -U ${LINKWARDEN_DB_USER} -d ${LINKWARDEN_DB_NAME} -cC > backup_linkwarden.sql
+docker compose exec romm-db pg_dump -U ${ROMM_DB_USER} -d ${ROMM_DB_NAME} -cC > backup_romm.sql
+docker compose exec sonarqube-db pg_dump -U ${SONARQUBE_DB_USER} -d ${SONARQUBE_DB_NAME} -cC > backup_sonarqube.sql
+docker compose exec tandoor-db pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
+
+# Shut down all containers
+docker compose down jellystat jellystat-db linkwarden linkwarden-db romm romm-db sonarqube sonarqube-db tandoor tandoor-ui tandoor-db
+
+# Update for new PostgreSQL version
+sudo rm -rf ./storage/jellystat-db/ ./storage/linkwarden-db/ ./storage/romm-db/ ./storage/sonarqube-db/ ./storage/tandoor-db/
+docker compose pull
+
+# Start DB containers
+docker compose up --build -d jellystat-db linkwarden-db romm-db sonarqube-db tandoor-db --wait
+
+# Restore backups
+cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
+cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
+cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER}
+cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SONARQUBE_DB_USER}
+cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
+
+# Start services
+docker compose up --build -d jellystat linkwarden romm sonarqube tandoor tandoor-ui
+```
+
+#### SER
+```shell
+# Take backups
+docker compose -f docker-compose-ser.yml exec authelia-db pg_dump -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME} -cC > backup_authelia.sql
+docker compose -f docker-compose-ser.yml exec lldap-db pg_dump -U ${LLDAP_DB_USER} -d ${LLDAP_DB_NAME} -cC > backup_lldap.sql
+docker compose -f docker-compose-ser.yml exec speedtest-db pg_dump -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME} -cC > backup_speedtest.sql
+
+# Shut down all containers
+docker compose -f docker-compose-ser.yml down authelia authelia-cache authelia-db lldap lldap-db speedtest speedtest-db
+
+# Update for new PostgreSQL version
+sudo rm -rf ./storage/authelia-db/ ./storage/lldap-db/ ./storage/speedtest-db/
+docker compose -f docker-compose-ser.yml pull
+
+# Start DB containers
+docker compose -f docker-compose-ser.yml up --build -d authelia-db lldap-db speedtest-db --wait
+
+# Restore backups
+cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER}
+cat backup_lldap.sql | docker compose -f docker-compose-ser.yml exec -T lldap-db psql -U ${LLDAP_DB_USER}
+cat backup_speedtest.sql | docker compose -f docker-compose-ser.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
+
+# Start services
+docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache lldap speedtest
+
+```
+
+
+
+
 
 ## Misc Info
 
@@ -445,7 +497,7 @@ configuration file, and then restart the `netalert` container.
 cp /app/config/app.conf /app/config/app.conf.bak
 cp -f /app.conf.new /app/config/app.conf
 exit
-docker compose -f docker-compose-pi.yml restart netalert
+docker compose -f docker-compose-ser.yml restart netalert
 ```
 
 **NOTE:** This isn't robust to version upgrades, a fresh installation with new config entries needs to be compared.

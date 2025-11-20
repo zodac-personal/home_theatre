@@ -254,7 +254,7 @@ services:
       - ./storage/authelia/data:/var/lib/authelia
 
   authelia-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: authelia-db
     hostname: authelia-db
     environment:
@@ -347,7 +347,7 @@ services:
       - ./storage/lldap/:/data
 
   lldap-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: lldap-db
     hostname: lldap-db
     environment:
@@ -512,7 +512,7 @@ services:
 
   # Database for SpeedTest
   speedtest-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: speedtest-db
     hostname: speedtest-db
     environment:

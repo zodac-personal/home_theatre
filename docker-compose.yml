@@ -1083,7 +1083,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:
@@ -1386,7 +1386,7 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:
@@ -1478,7 +1478,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: jellystat-db
     hostname: jellystat-db
     deploy:
@@ -1573,7 +1573,7 @@ services:
 
   # Database for Linkwarden
   linkwarden-db:
-    image: postgres:17.6-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:

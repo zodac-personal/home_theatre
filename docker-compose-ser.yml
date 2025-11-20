@@ -83,7 +83,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v8.13.12  # https://github.com/amir20/dozzle/releases
+    image: amir20/dozzle:v8.14.9  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle
     environment:
@@ -91,6 +91,7 @@ services:
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
       DOZZLE_AUTH_PROVIDER: "forward-proxy"
+      DOZZLE_AUTH_LOGOUT_URL: "${DOZZLE_LOGOUT_URL}"
       # Hosts config
       DOZZLE_HOSTNAME: "${REVERSE_PROXY_HOST_NAME:?[dozzle] Hostname missing}"
       DOZZLE_REMOTE_HOST: "${DOZZLE_REMOTE_HOSTS}"
@@ -133,7 +134,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/homarr-labs/homarr:v1.37.0  # https://github.com/homarr-labs/homarr/releases
+    image: ghcr.io/homarr-labs/homarr:v1.43.3  # https://github.com/homarr-labs/homarr/releases
     container_name: homarr
     hostname: homarr
     environment:
@@ -186,7 +187,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authelia:
-    image: authelia/authelia:4.39.9  # https://github.com/authelia/authelia/releases
+    image: authelia/authelia:4.39.14  # https://github.com/authelia/authelia/releases
     container_name: authelia
     hostname: authelia
     depends_on:
@@ -253,6 +254,26 @@ services:
       - ./storage/authelia/assets/:/assets
       - ./storage/authelia/data:/var/lib/authelia
 
+  authelia-cache:
+    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    container_name: authelia-cache
+    hostname: authelia-cache
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "valkey-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - home_ser
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/authelia-cache/data/:/data
+
   authelia-db:
     image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
     container_name: authelia-db
@@ -285,29 +306,9 @@ services:
       # Persistent volumes
       - ./storage/authelia-db/data/:/var/lib/postgresql/data
 
-  authelia-cache:
-    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
-    container_name: authelia-cache
-    hostname: authelia-cache
-    environment:
-      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "valkey-cli", "ping" ]
-      timeout: 5s
-    networks:
-      - home_ser
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      # Persistent volumes
-      - ./storage/authelia-cache/data/:/data
-
   # LDAP User-store
   lldap:
-    image: lldap/lldap:2025-08-31-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    image: lldap/lldap:2025-11-17-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
     depends_on:
@@ -423,7 +424,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "25.8.6" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
+        NETALERT_VERSION: "25.10.1" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -462,7 +463,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:1.6.6  # https://github.com/alexjustesen/speedtest-tracker/releases
+    image: linuxserver/speedtest-tracker:1.8.0  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -544,7 +545,7 @@ services:
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v0.4.1  # https://github.com/arabcoders/watchstate/releases
+    image: ghcr.io/arabcoders/watchstate:v1.0.2  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
     environment:
@@ -556,7 +557,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/v1/api/system/healthcheck" ]
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8080/v1/api/system/healthcheck" ] # wget not installed
       timeout: 5s
     networks:
       - home_ser

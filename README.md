@@ -330,6 +330,7 @@ docker compose up --build -d tandoor tandoor-ui
 ### Combined
 
 #### Host
+
 ```shell
 # Take backups
 docker compose exec jellystat-db pg_dump -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME} -cC > backup_jellystat.sql
@@ -360,6 +361,7 @@ docker compose up --build -d jellystat linkwarden romm sonarqube tandoor tandoor
 ```
 
 #### SER
+
 ```shell
 # Take backups
 docker compose -f docker-compose-ser.yml exec authelia-db pg_dump -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME} -cC > backup_authelia.sql
@@ -385,10 +387,6 @@ cat backup_speedtest.sql | docker compose -f docker-compose-ser.yml exec -T spee
 docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache lldap speedtest
 
 ```
-
-
-
-
 
 ## Misc Info
 

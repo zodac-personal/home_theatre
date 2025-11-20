@@ -6,7 +6,6 @@ on:
     paths:
       - '.github/workflows/docker.yml'
       - 'doc/.hadolint.yaml'
-      - 'docker/apache/**'
       - 'docker/autokuma/**'
       - 'docker/netalert/**'
 

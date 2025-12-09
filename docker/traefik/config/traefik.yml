@@ -74,7 +74,7 @@ entryPoints:
         - "104.24.0.0/14"
         - "172.64.0.0/13"
         - "131.0.72.0/22"
-        - # Cloudflare IPv6 (https://www.cloudflare.com/ips-v6)
+        # Cloudflare IPv6 (https://www.cloudflare.com/ips-v6)
         - "2400:cb00::/32"
         - "2606:4700::/32"
         - "2803:f800::/32"

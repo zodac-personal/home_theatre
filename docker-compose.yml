@@ -314,6 +314,7 @@ services:
     volumes:
       # Volume mounts from host system
       - "${MUSIC_DIRECTORY}:/music:ro"
+      - "${MUSIC_DIRECTORY_OTHER}:/other_music:ro"
       - "${PODCAST_DIRECTORY}:/podcast:ro"
       # Persistent volumes
       - ./storage/navidrome/:/data

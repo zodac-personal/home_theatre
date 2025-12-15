@@ -880,11 +880,11 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
-  tandoor-new:
-    # TODO: Waiting for iOS app to be ready: https://github.com/aimok04/kitshn/issues/95
-    image: vabene1111/recipes:2.3.5  # https://github.com/TandoorRecipes/recipes/releases
-    container_name: tandoor-new
-    hostname: tandoor-new
+  # Recipe manager
+  tandoor:
+    image: vabene1111/recipes:2.3.6  # https://github.com/TandoorRecipes/recipes/releases
+    container_name: tandoor
+    hostname: tandoor
     depends_on:
       tandoor-db:
         condition: service_healthy
@@ -939,14 +939,14 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.tandoor-new.rule: "Host(`recipe-new.${DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor-new.rule: "Host(`recipe.${DOMAIN_NAME}`)"
       traefik.http.routers.tandoor-new.entrypoints: "websecure"
       traefik.http.routers.tandoor-new.tls: "true"
       traefik.http.routers.tandoor-new.middlewares: "no-forward-auth@file"
       traefik.http.services.tandoor-new.loadbalancer.server.port: "4014"
-#      # Monitor config
-#      kuma.tandoor.http.name: "Tandoor (Recipes)"
-#      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+      # Monitor config
+      kuma.tandoor.http.name: "Tandoor (Recipes)"
+      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
     networks:
       - home
     ports:
@@ -957,129 +957,6 @@ services:
       - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
       - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
       - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles
-
-  # Recipe manager
-  tandoor:
-    image: vabene1111/recipes:1.5.35
-    container_name: tandoor
-    hostname: tandoor
-    depends_on:
-      tandoor-db:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1024M"
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-      # Authentication config
-      REMOTE_USER_AUTH: "1"
-      SOCIAL_DEFAULT_ACCESS: "1"
-      SOCIAL_DEFAULT_GROUP: "guest"
-      SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
-      SOCIALACCOUNT_PROVIDERS: |
-        {
-          "openid_connect": {
-            "SERVERS": [
-              {
-                "id": "authelia",
-                "name": "Authelia",
-                "server_url": "${TANDOOR_OIDC_WELLKNOWN_URL:?[tandoor] OIDC URL missing}",
-                "token_auth_method": "client_secret_basic",
-                "APP": {
-                  "client_id": "${TANDOOR_OIDC_CLIENT_ID:?[tandoor] OIDC client ID missing}",
-                  "secret": "${TANDOOR_OIDC_CLIENT_SECRET:?[tandoor] OIDC client secret missing}"
-                }
-              }
-            ]
-          }
-        }
-      # Database config
-      DB_ENGINE: "django.db.backends.postgresql"
-      POSTGRES_HOST: "tandoor-db"
-      POSTGRES_PORT: "${TANDOOR_DB_PORT:?[tandoor] Database port missing}"
-      POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor] Database name missing}"
-      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor] Database password missing}"
-      POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor] Database user missing}"
-      # Secrets config
-      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
-      # System config
-      ENABLE_PDF_EXPORT: "1"
-      DEBUG: "0"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/openapi/" ]
-      timeout: 5s
-    networks:
-      - home
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
-      - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
-      - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles
-
-  # Recipe manager reverse-proxy/UI
-  tandoor-ui:
-    image: nginx:1.29.3-alpine  # https://hub.docker.com/_/nginx
-    container_name: tandoor-ui
-    hostname: tandoor-ui
-#    depends_on:
-#      tandoor:
-#        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: "1024M"
-    environment:
-      # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
-      # Secrets config
-      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor-ui] Tandoor secret key missing}"
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "curl", "-f", "http://127.0.0.1" ]  # wget fails, but curl is installed
-      timeout: 5s
-    labels:
-      # Reverse proxy config
-      traefik.enable: "true"
-      traefik.http.routers.tandoor.rule: "Host(`recipe.${DOMAIN_NAME}`)"
-      traefik.http.routers.tandoor.entrypoints: "websecure"
-      traefik.http.routers.tandoor.tls: "true"
-      traefik.http.routers.tandoor.middlewares: "no-forward-auth@file,redirect-tandoor-login@redis"
-      traefik.http.services.tandoor.loadbalancer.server.port: "4010"
-      # Redirect from 'recipes' subdomain to 'recipe' subdomain
-      traefik.http.routers.tandoor-redirect.rule: "Host(`recipes.${DOMAIN_NAME}`)"
-      traefik.http.routers.tandoor-redirect.entryPoints: "websecure"
-      traefik.http.routers.tandoor-redirect.tls: "true"
-      traefik.http.routers.tandoor-redirect.middlewares: "tandoor-redirect-regex"
-      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.regex: "^https://recipes.${DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.replacement: "https://recipe.${DOMAIN_NAME}$${1}"
-      traefik.http.middlewares.tandoor-redirect-regex.redirectregex.permanent: "true"
-      # Redirect login page to IdP login
-      traefik.http.middlewares.redirect-tandoor-login.redirectregex.regex: "/accounts/login(?:/.*)?$"
-      traefik.http.middlewares.redirect-tandoor-login.redirectregex.replacement: "/accounts/oidc/authelia/login/?process=login"
-      traefik.http.middlewares.redirect-tandoor-login.redirectregex.permanent: "true"
-      # Monitor config
-      kuma.tandoor.http.name: "Tandoor (Recipes)"
-      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
-    networks:
-      - home
-    ports:
-      - "4010:80"
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      - ./storage/tandoor/nginx/conf.d/:/etc/nginx/conf.d:ro
-      - ./storage/tandoor/mediafiles/:/media:ro
-      - ./storage/tandoor/staticfiles/:/static:ro
 
   # Database for Tandoor
   tandoor-db:

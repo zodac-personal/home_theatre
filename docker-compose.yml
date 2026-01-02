@@ -996,9 +996,8 @@ services:
       - ./storage/tandoor-db/data/:/var/lib/postgresql/data
 
   # Inventory management
-  # TODO: Manual upgrade to v0.22.3 for OIDC
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.21.0  # https://github.com/sysadminsmedia/homebox/releases
+    image: ghcr.io/sysadminsmedia/homebox:0.22.3  # https://github.com/sysadminsmedia/homebox/releases
     container_name: homebox
     hostname: homebox
     deploy:
@@ -1009,6 +1008,14 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      HBOX_OIDC_ENABLED: "true"
+      HBOX_OIDC_ISSUER_URL: "${HOMEBOX_OIDC_URI:?[homebox] OIDC URL missing}"
+      HBOX_OIDC_CLIENT_ID: "${HOMEBOX_OIDC_CLIENT_ID:?[homebox] OIDC client ID missing}"
+      HBOX_OIDC_CLIENT_SECRET: "${HOMEBOX_OIDC_CLIENT_SECRET:?[homebox] OIDC client secret missing}"
+      HBOX_OPTIONS_TRUST_PROXY: "true"
+      HBOX_OIDC_AUTO_REDIRECT: "false"
+      HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: "false"
       # Logging config
       HBOX_LOG_FORMAT: "text"
       HBOX_LOG_LEVEL: "info"

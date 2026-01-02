@@ -419,14 +419,13 @@ services:
       - ./storage/uptime-kuma/:/app/data
 
   # WiFi/LAN network scanner
-  # TODO: Manual migration to 25.11.29 needed
   netalert:
     build:
       context: .
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "25.10.1" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
+        NETALERT_VERSION: "25.11.29" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -438,9 +437,16 @@ services:
         DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
     container_name: netalert
     hostname: netalert
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
     environment:
       # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      LOG_LEVEL: "minimal"
       # UI config
       PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
     labels:
@@ -456,12 +462,15 @@ services:
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
+    read_only: true
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    tmpfs:
+      # All writable runtime state resides under /tmp; comment out to persist logs between restarts
+      - "/tmp:uid=20211,gid=20211,mode=1700,rw,noexec,nosuid,nodev,async,noatime,nodiratime"
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       # Persistent volumes
-      - ./storage/netalert/config/:/app/config
-      - ./storage/netalert/db/:/app/db
+      - ./storage/netalert/:/data
 
   # Automated SpeedTest runner with graphs
   # TODO: Move notifications from Discord to Apprise

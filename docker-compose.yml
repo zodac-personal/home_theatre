@@ -1043,9 +1043,8 @@ services:
       - ./storage/homebox/:/data/
 
   # Daily journal
-  # TODO: Manual upgrade to v2.2.0
   dailytxt:
-    image: phitux/dailytxt:1.0.15  # https://hub.docker.com/r/phitux/dailytxt/tags
+    image: phitux/dailytxt:2.2.0  # https://hub.docker.com/r/phitux/dailytxt/tags
     container_name: dailytxt
     hostname: dailytxt
     deploy:
@@ -1062,10 +1061,8 @@ services:
       SECRET_KEY: "${DAILYTXT_SECRET_KEY:?[dailytxt] Secret key missing}"
       # UI config
       ALLOW_REGISTRATION: "false"
-      DATA_INDENT: "2"
       ENABLE_UPDATE_CHECK: "false"
-      JWT_EXP_DAYS: "60"
-      PORT: "8765"
+      LOGOUT_AFTER_DAYS: "365"
     healthcheck:
       interval: 30s
       retries: 3
@@ -1086,10 +1083,10 @@ services:
     networks:
       - home
     ports:
-      - "4015:8765"
+      - "4015:80"
     restart: unless-stopped
     volumes:
-      - ./storage/dailytxt/:/app/data/
+      - ./storage/dailytxt/:/data/
 
   # Documents file browser
   filebrowser:

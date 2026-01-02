@@ -70,8 +70,8 @@ scan:
      - "marquee"
    region: # Cover art and game title (only used by Screenscraper)
      - "eu"
-     - "us"
      - "wor"
+     - "us"
      - "ss"
      - "jp"
    language: # Cover art and game title (only used by Screenscraper)

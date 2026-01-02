@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.6.2  # https://github.com/traefik/traefik/releases
+    image: traefik:v3.6.6  # https://github.com/traefik/traefik/releases
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -60,7 +60,7 @@ services:
 
   # Reverse proxy connector for external hosts
   traefik-provider:
-    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: traefik-provider
     hostname: traefik-provider
     environment:
@@ -83,7 +83,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v8.14.9  # https://github.com/amir20/dozzle/releases
+    image: amir20/dozzle:v8.14.12  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle
     environment:
@@ -134,7 +134,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/homarr-labs/homarr:v1.43.3  # https://github.com/homarr-labs/homarr/releases
+    image: ghcr.io/homarr-labs/homarr:v1.48.0  # https://github.com/homarr-labs/homarr/releases
     container_name: homarr
     hostname: homarr
     environment:
@@ -187,7 +187,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authelia:
-    image: authelia/authelia:4.39.14  # https://github.com/authelia/authelia/releases
+    image: authelia/authelia:4.39.15  # https://github.com/authelia/authelia/releases
     container_name: authelia
     hostname: authelia
     depends_on:
@@ -255,7 +255,7 @@ services:
       - ./storage/authelia/data:/var/lib/authelia
 
   authelia-cache:
-    image: valkey/valkey:9.0.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: authelia-cache
     hostname: authelia-cache
     environment:
@@ -308,7 +308,7 @@ services:
 
   # LDAP User-store
   lldap:
-    image: lldap/lldap:2025-11-17-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    image: lldap/lldap:2025-12-24-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
     depends_on:
@@ -379,6 +379,7 @@ services:
       - ./storage/lldap-db/data/:/var/lib/postgresql/data
 
   # Monitoring and alerting
+  # Manual migration to v2 needed
   uptime-kuma:
     image: louislam/uptime-kuma:1.23.16-alpine  # https://github.com/louislam/uptime-kuma/releases
     container_name: uptime-kuma
@@ -418,6 +419,7 @@ services:
       - ./storage/uptime-kuma/:/app/data
 
   # WiFi/LAN network scanner
+  # TODO: Manual migration to 25.11.29 needed
   netalert:
     build:
       context: .
@@ -462,8 +464,9 @@ services:
       - ./storage/netalert/db/:/app/db
 
   # Automated SpeedTest runner with graphs
+  # TODO: Move notifications from Discord to Apprise
   speedtest:
-    image: linuxserver/speedtest-tracker:1.8.0  # https://github.com/alexjustesen/speedtest-tracker/releases
+    image: linuxserver/speedtest-tracker:1.13.4  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
     hostname: speedtest
     depends_on:
@@ -544,8 +547,9 @@ services:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
+  # TODO: Migrate to single API key for all users, instead of one per user
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v1.0.2  # https://github.com/arabcoders/watchstate/releases
+    image: ghcr.io/arabcoders/watchstate:v1.0.5  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
     environment:

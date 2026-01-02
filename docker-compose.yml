@@ -879,6 +879,9 @@ services:
       - home
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/flaresolverr/:/config
 
   # Recipe manager
   tandoor:
@@ -954,6 +957,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
       - ./storage/tandoor/mediafiles/:/opt/recipes/mediafiles
       - ./storage/tandoor/staticfiles/:/opt/recipes/staticfiles

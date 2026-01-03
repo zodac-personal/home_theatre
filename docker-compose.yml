@@ -1188,47 +1188,6 @@ services:
       - ./storage/filebrowser-ftp/database/:/database
       - ./storage/filebrowser-ftp/config/:/config
 
-  # Large Language Model with ChatGPT-style UI
-  ollama:
-    image: ghcr.io/open-webui/open-webui:v0.6.43-ollama  # https://github.com/open-webui/open-webui/releases/
-    container_name: ollama
-    hostname: ollama
-    deploy:
-      resources:
-        limits:
-          cpus: "8"
-          memory: "8192M"
-    environment:
-      # Base config
-      TZ: "${TIMEZONE:?Timezone missing}"
-      # UI config
-      OLLAMA_BASE_URL: "https://ai.${DOMAIN_NAME}"
-      ENABLE_COMMUNITY_SHARING: "false"
-      ENABLE_SIGNUP: "false"
-      WEBUI_AUTH_TRUSTED_EMAIL_HEADER: "X-Authentik-Email"
-      WEBUI_NAME: "${DOMAIN_NAME:?[ollama] Domain name missing} LLM"
-      WEBUI_SECRET_KEY: "${OLLAMA_SECRET_KEY:?[ollama] Secret key missing}"
-    labels:
-      # Reverse proxy config
-      traefik.enable: "true"
-      traefik.http.routers.ollama.rule: "Host(`ai.${DOMAIN_NAME}`)"
-      traefik.http.routers.ollama.entrypoints: "websecure"
-      traefik.http.routers.ollama.tls: "true"
-      traefik.http.routers.ollama.middlewares: "authelia-forward-auth@file"
-      traefik.http.services.ollama.loadbalancer.server.port: "4012"
-      # Monitor config
-      kuma.{{container_name}}.http.name: "Ollama (LLM)"
-      kuma.{{container_name}}.http.url: "${OLLAMA_MONITOR_URL:?[ollama] Monitor URL missing}"
-    networks:
-      - home
-    ports:
-      - "4012:8080"
-    restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-    volumes:
-      # Persistent volumes
-      - ./storage/ollama/open-webui:/app/backend/data
-
   # Static code analysis tool
   sonarqube:
     image: sonarqube:25.12.0.117093-community  # https://hub.docker.com/_/sonarqube

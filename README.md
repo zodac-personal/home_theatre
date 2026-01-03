@@ -44,12 +44,6 @@ The following services allow you to login/create an account using the IdP:
 - SonarQube
 - Tandoor
 
-### X-Authentik-* Headers (TBC)
-
-The following services can't be logged in using the local URL, as they require X-Authentik-* headers to be forwarded:
-
-- Ollama
-
 ### No Internal Auth
 
 The following services don't have any authentication of their own (or it is disabled), so the IdP is the only authentication:
@@ -500,31 +494,6 @@ docker compose -f docker-compose-ser.yml restart netalert
 
 **NOTE:** This isn't robust to version upgrades, a fresh installation with new config entries needs to be compared.
 An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
-
-### Ollama (TBC)
-
-#### Initial Setup
-
-The container first comes up with no users and no models. Neither of these can be set programatically, so on the first start-up some actions must be
-performed.
-
-##### Create Admin User
-
-In order to create the admin user, the `ENABLE_SIGNUP` environment variable must be set to **true**. Log in through the URL configured by the IdP,
-which will pass the **X-Authentik-Email** header value. This will create an admin account for your email address.
-
-Once created, update `ENABLE_SIGNUP` variable to **false**. Then perform a `docker compose down ollama` and `docker compose up --build -d ollama` to
-rebuild the container with the updated value.
-
-##### Download Models
-
-Next the [models](https://ollama.com/library) need to be downloaded. This can be done through the UI itself, or you can `docker exec` into the
-container and run the following commands:
-
-```bash
-ollama pull llama3.1:8b         # Main model
-ollama pull llama2-uncensored   # Older version of the model, but with no filters
-```
 
 ### RomM
 

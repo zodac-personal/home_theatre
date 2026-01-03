@@ -33,9 +33,8 @@ services:
       kuma.{{container_name}}.http.name: "Emby (Media Server)"
       kuma.{{container_name}}.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
       kuma.{{container_name}}.http.max_retries: "3"
-      # TODO: Below are not working
-      #      kuma.{{container_name}}.http.notification_id_list: '{ "1": true }'
-      #      kuma.{{container_name}}.http.tags: '[{"tag_id": 2}]'
+      kuma.{{container_name}}.http.notification_name_list: '["emby_discord"]'
+      kuma.{{container_name}}.http.tag_names: '[{"name": "alertable"}]'
     networks:
       - home
     ports:
@@ -208,8 +207,10 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
-      - ./storage/recyclarr:/config
+      # Volume mounts from host system
       - ./docker/recyclarr/config/recyclarr.yml:/config/recyclarr.yml
+      # Persistent volumes
+      - ./storage/recyclarr:/config
 
   # Music manager
   lidarr:
@@ -719,6 +720,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/romm-db/data/:/var/lib/postgresql/data
 
   # Indexer (Torrents + Usenet)
@@ -997,6 +999,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/tandoor-db/data/:/var/lib/postgresql/data
 
   # Inventory management
@@ -1044,6 +1047,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/homebox/:/data/
 
   # Daily journal
@@ -1090,6 +1094,7 @@ services:
       - "4015:80"
     restart: unless-stopped
     volumes:
+      # Persistent volumes
       - ./storage/dailytxt/:/data/
 
   # Documents file browser
@@ -1266,6 +1271,7 @@ services:
     restart: unless-stopped
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/sonarqube/data/:/opt/sonarqube/data
       - ./storage/sonarqube/extensions/:/opt/sonarqube/extensions
       - ./storage/sonarqube/logs/:/opt/sonarqube/logs
@@ -1306,6 +1312,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/sonarqube-db/data/:/var/lib/postgresql/data
 
   # Statistics for Emby
@@ -1361,6 +1368,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/jellystat/data/:/app/backend/backup-data
 
   # Database for Jellystat
@@ -1398,6 +1406,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/jellystat-db/data/:/var/lib/postgresql/data
 
   # Bookmark manager
@@ -1456,6 +1465,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/linkwarden/data/:/data/data
 
   # Database for Linkwarden
@@ -1493,108 +1503,64 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/linkwarden-db/data/:/var/lib/postgresql/data
 
-# TODO: Waiting for Uptime-Kuma v2 and AutoKuma v2
-#  # Automatic Uptime-Kuma monitor generator
-#  autokuma:
-#    build:
-#      context: .
-#      dockerfile: docker/autokuma/Dockerfile
-#      args:
-#        # Docker image versions
-#        AUTOKUMA_VERSION: "1.0.0" # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
-#        # Build arguments
-#        # Host Monitor URLs
-#        QBITTORRENT_MONITOR_URL: "${QBITTORRENT_NATIVE_MONITOR_URL:?[autokuma] qBittorrent static monitor URL missing}"
-#        # NAS URLs
-#        SYNOLOGY_MONITOR_URL: "${SYNOLOGY_MONITOR_URL:?[autokuma] Synology static monitor URL missing}"
-#    container_name: autokuma
-#    hostname: autokuma
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: "0.5"
-#          memory: "256M"
-#    environment:
-#      # Base config
-#      TZ: "${TIMEZONE:?Timezone missing}"
-#      # Monitor config
-#      AUTOKUMA__DEFAULT_SETTINGS: |-
-#        http.accepted_statuscodes:  [ "200" ]
-#        http.expiry_notification: true
-#        http.interval: 60
-#        http.max_redirects: 1
-#        http.max_retries: 5
-#        http.retry_interval: 60
-#        http.timeout: 30
-#      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-#      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
-#      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
-#      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-#      AUTOKUMA__SYNC_INTERVAL: 300 # Sync every 5 minutes
-#      AUTOKUMA__STATIC_MONITORS: "${AUTO_KUMA_STATIC_MONITOR_DIRECTORY:?[autokuma] Static monitor directory missing}"
-#      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
-#      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-#      # Status page environment variables
-#      STATUS_PAGE_SLUG: "main"
-#    healthcheck:
-#      interval: 30s
-#      retries: 3
-#      start_period: 30s
-#      test: [ "CMD", "pidof", "autokuma" ]
-#      timeout: 5s
-#    networks:
-#      - home
-#    restart: no
-#    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-#    volumes:
-#      # Docker socket mount from host system
-#      - "${DOCKER_SOCKET}:/var/run/docker.sock"
-#      - ./storage/autokuma/data:/data
-#
-#  # Automatic Uptime-Kuma monitor generator
-#  # This is a near-duplicate of the main one above, but connects to the RaspberryPi Docker host.
-#  # It also uses the published docker image, rather than building one for any static monitors.
-#  autokuma-pi:
-#    image: ghcr.io/bigboot/autokuma:1.0.0
-#    container_name: autokuma-pi
-#    hostname: autokuma-pi
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: "0.5"
-#          memory: "256M"
-#    environment:
-#      # Base config
-#      TZ: "${TIMEZONE:?Timezone missing}"
-#      # Monitor config
-#      AUTOKUMA__DEFAULT_SETTINGS: |-
-#        http.accepted_statuscodes:  [ "200" ]
-#        http.tags: [{"tag_id": 3 }]
-#        http.expiry_notification: true
-#        http.interval: 60
-#        http.max_redirects: 1
-#        http.max_retries: 5
-#        http.retry_interval: 60
-#        http.timeout: 30
-#      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-#      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:?[autokuma] UptimeKuma username missing}"
-#      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma password missing}"
-#      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-#      AUTOKUMA__SYNC_INTERVAL: 600 # Sync every 10 minutes
-#      AUTOKUMA__TAG_NAME: "${AUTO_KUMA_TAG_NAME:?[autokuma] Tag name missing}"
-#      AUTOKUMA__TAG_COLOR: "${AUTO_KUMA_TAG_COLOUR:?[autokuma] Tag colour missing}"
-#      DOCKER_HOST: "${AUTO_KUMA_REMOTE_HOST}"
-#    healthcheck:
-#      interval: 30s
-#      retries: 3
-#      start_period: 30s
-#      test: [ "CMD", "pidof", "autokuma" ]
-#      timeout: 5s
-#    networks:
-#      - home
-#    restart: no
-#    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-#    volumes:
-#      - ./storage/autokuma-pi/data:/data
+  # Automatic Uptime-Kuma monitor generator
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:2.0.0  # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+    container_name: autokuma
+    hostname: autokuma
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "128M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Monitor config
+      AUTOKUMA__DEFAULT_SETTINGS: |-
+        http.accepted_statuscodes:  [ "200" ]
+        http.expiry_notification: true
+        http.interval: 60
+        http.max_redirects: 1
+        http.max_retries: 5
+        http.retry_interval: 60
+        http.timeout: 30
+      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+      AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:-admin}"
+      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma admin password missing}"
+      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "autokuma" ]
+      timeout: 5s
+    labels:
+      # Metadata configuration to be used by monitors
+      # Notifications
+      kuma.emby_discord.notification.name: 'Emby Discord Alert'
+      kuma.emby_discord.notification.active: 'true'
+      kuma.emby_discord.notification.config: |
+        {
+          "type": "discord",
+          "disableUrl": false,
+          "discordWebhookUrl": "${UPTIME_KUMA_DISCORD_NOTIFICATION_CHANNEL:?[autokuma] Discord notification channel missing}",
+          "discordUsername": "emby-status",
+          "discordChannelType": "channel"
+        }
+      # Tags
+      kuma.alertable.tag.name: 'Alertable'
+      kuma.alertable.tag.color: '#FFA500'
+    networks:
+      - home
+    restart: no
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Docker socket mount from host system
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      # Persistent volumes
+      - ./storage/autokuma/data:/data

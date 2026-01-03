@@ -52,7 +52,9 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      # Volume mounts from host system
       - ./docker/traefik/config/traefik.yml:/config/traefik.yml:ro
       - ./docker/traefik/config/dynamic_configs/:/dynamic_configs:ro
       - ./docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
@@ -248,9 +250,10 @@ services:
     restart: unless-stopped
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
-      # Persistent volumes
+      # Volume mounts from host system
       - ./docker/authelia/config/configuration.yml:/config/configuration.yml:ro
       - ./docker/authelia/certs/authelia_private_key.pem:/etc/certs/authelia_private_key.pem:ro
+      # Persistent volumes
       - ./storage/authelia/assets/:/assets
       - ./storage/authelia/data:/var/lib/authelia
 
@@ -376,12 +379,12 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/lldap-db/data/:/var/lib/postgresql/data
 
   # Monitoring and alerting
-  # Manual migration to v2 needed
   uptime-kuma:
-    image: louislam/uptime-kuma:1.23.16-alpine  # https://github.com/louislam/uptime-kuma/releases
+    image: louislam/uptime-kuma:2.1.0-beta.0  # https://github.com/louislam/uptime-kuma/
     container_name: uptime-kuma
     hostname: uptime-kuma
     environment:
@@ -403,7 +406,7 @@ services:
       traefik.http.routers.uptime-kuma-redirect.tls: "true"
       traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/main"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
@@ -417,6 +420,55 @@ services:
     volumes:
       # Persistent volumes
       - ./storage/uptime-kuma/:/app/data
+
+  # Automatic Uptime-Kuma monitor generator
+  autokuma-ser:
+      image: ghcr.io/bigboot/autokuma:2.0.0  # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+      container_name: autokuma-ser
+      hostname: autokuma-ser
+      deploy:
+        resources:
+          limits:
+            cpus: "0.1"
+            memory: "128M"
+      environment:
+        # Base config
+        TZ: "${TIMEZONE:?Timezone missing}"
+        # Monitor config
+        AUTOKUMA__DEFAULT_SETTINGS: |-
+          http.accepted_statuscodes:  [ "200" ]
+          http.tag_names: [{"name": "ser" }]
+          http.expiry_notification: true
+          http.interval: 60
+          http.max_redirects: 1
+          http.max_retries: 5
+          http.retry_interval: 60
+          http.timeout: 30
+        AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+        AUTOKUMA__KUMA__USERNAME: "${ADMIN_USERNAME:-admin}"
+        AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] UptimeKuma admin password missing}"
+        AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+        AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
+      healthcheck:
+        interval: 30s
+        retries: 3
+        start_period: 30s
+        test: [ "CMD", "pidof", "autokuma" ]
+        timeout: 5s
+      labels:
+        # Metadata configuration to be used by monitors
+        # Tags
+        kuma.ser.tag.name: 'SER'
+        kuma.ser.tag.color: '#FF77FF'
+      networks:
+        - home_ser
+      restart: no
+      user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+      volumes:
+        # Docker socket mount from host system
+        - "${DOCKER_SOCKET}:/var/run/docker.sock"
+        # Persistent volumes
+        - ./storage/autokuma-pi/data:/data
 
   # WiFi/LAN network scanner
   netalert:
@@ -468,12 +520,12 @@ services:
       # All writable runtime state resides under /tmp; comment out to persist logs between restarts
       - "/tmp:uid=20211,gid=20211,mode=1700,rw,noexec,nosuid,nodev,async,noatime,nodiratime"
     volumes:
+      # Volume mounts from host system
       - /etc/localtime:/etc/localtime:ro
       # Persistent volumes
       - ./storage/netalert/:/data
 
   # Automated SpeedTest runner with graphs
-  # TODO: Move notifications from Discord to Apprise
   speedtest:
     image: linuxserver/speedtest-tracker:1.13.4  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
@@ -521,6 +573,7 @@ services:
       - "5004:80"
     restart: unless-stopped
     volumes:
+      # Persistent volumes
       - ./storage/speedtest/config/:/config
 
   # Database for SpeedTest
@@ -553,6 +606,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
@@ -579,4 +633,5 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Persistent volumes
       - ./storage/watchstate/data:/config

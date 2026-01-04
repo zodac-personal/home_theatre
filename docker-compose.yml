@@ -33,7 +33,7 @@ services:
       kuma.{{container_name}}.http.name: "Emby (Media Server)"
       kuma.{{container_name}}.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
       kuma.{{container_name}}.http.max_retries: "3"
-      kuma.{{container_name}}.http.notification_name_list: '["emby_discord"]'
+      kuma.{{container_name}}.http.notification_name_list: '["emby_status"]'
       kuma.{{container_name}}.http.tag_names: '[{"name": "alertable"}]'
     networks:
       - home
@@ -1501,15 +1501,13 @@ services:
     labels:
       # Metadata configuration to be used by monitors
       # Notifications
-      kuma.emby_discord.notification.name: 'Emby Discord Alert'
-      kuma.emby_discord.notification.active: 'true'
-      kuma.emby_discord.notification.config: |
+      kuma.emby_status.notification.name: 'Emby Status Alert'
+      kuma.emby_status.notification.active: 'true'
+      kuma.emby_status.notification.config: |
         {
-          "type": "discord",
-          "disableUrl": false,
-          "discordWebhookUrl": "${UPTIME_KUMA_DISCORD_NOTIFICATION_CHANNEL:?[autokuma] Discord notification channel missing}",
-          "discordUsername": "emby-status",
-          "discordChannelType": "channel"
+          "type": "apprise",
+          "title": "",
+          "appriseURL": "${UPTIME_KUMA_APPRISE_NOTIFICATION_CHANNEL:?[autokuma] Emby status notification channel missing}"
         }
       # Tags
       kuma.alertable.tag.name: 'Alertable'

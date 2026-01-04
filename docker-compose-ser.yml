@@ -510,7 +510,7 @@ services:
         # Docker socket mount from host system
         - "${DOCKER_SOCKET}:/var/run/docker.sock"
         # Persistent volumes
-        - ./storage/autokuma-pi/data:/data
+        - ./storage/autokuma-ser/data:/data
 
   # WiFi/LAN network scanner
   netalert:

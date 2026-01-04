@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1426" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1188" dy="624" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -72,19 +72,16 @@
           <mxGeometry height="40" width="120" x="600" y="840" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/home-assistant&quot;&gt;HomeAssistant&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Smart Home Manager&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1120" y="600" as="geometry" />
+          <mxGeometry height="40" width="120" x="960" y="640" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-16" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" value="SER Max 5" vertex="1">
           <mxGeometry height="30" width="90" x="200" y="160" as="geometry" />
-        </mxCell>
-        <mxCell id="m3TOI7ntmCoXaSSpGHYj-6" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="E4U7jJgjo-yncmPXJe4U-10">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-29" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;b&gt;&lt;u&gt;Home Network&lt;/u&gt;&lt;/b&gt;" vertex="1">
           <mxGeometry height="30" width="90" x="40" y="120" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-34" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/imagegenius/docker-immich&quot;&gt;Immich&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Photo/Video Gallery&lt;/i&gt;&lt;/sub&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="960" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="800" y="640" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-35" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="nFLrENYFJLQG_o7xyKyQ-7">
           <mxGeometry relative="1" as="geometry" />
@@ -129,7 +126,7 @@
           <mxGeometry height="30" width="120" x="880" y="1240" as="geometry" />
         </mxCell>
         <mxCell id="dgM-4BmzPYSXpo5_9bCQ-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/danielbrendel/hortusfox-web&quot;&gt;HortusFox&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Plant Management&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1120" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="1120" y="600" as="geometry" />
         </mxCell>
         <mxCell id="dgM-4BmzPYSXpo5_9bCQ-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/actualbudget/actual&quot;&gt;Actual Budget&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Home Budgeting&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="960" y="600" as="geometry" />
@@ -173,10 +170,10 @@
         <mxCell id="NsMB9uYr-3L7iLRaVMri-9" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;i&gt;&lt;u&gt;&lt;font color=&quot;#969696&quot;&gt;Legend&lt;/font&gt;&lt;/u&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="10" width="60" x="320" y="55" as="geometry" />
         </mxCell>
-        <mxCell id="n2UcIOqW1sy_Vd4esa-b-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/caronc/apprise&quot;&gt;Apprise&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Notification Forwarder&lt;/i&gt;&lt;/sub&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="800" y="600" as="geometry" />
+        <mxCell id="n2UcIOqW1sy_Vd4esa-b-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#cdcdcd, #1d293b);strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/caronc/apprise&quot;&gt;Apprise&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Notification Forwarder&lt;/i&gt;&lt;/sub&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="600" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="ROIVXRoGKlTalxw2WbaJ-3" edge="1" parent="1" source="ROIVXRoGKlTalxw2WbaJ-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-1">
+        <mxCell id="ROIVXRoGKlTalxw2WbaJ-3" edge="1" parent="1" source="ROIVXRoGKlTalxw2WbaJ-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points" />
           </mxGeometry>
@@ -207,16 +204,22 @@
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-19" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="160" x="400" y="280" as="geometry" />
+          <mxGeometry height="40" width="160" x="280" y="320" as="geometry" />
         </mxCell>
         <mxCell id="r-umOOk1T-VE_y2GGeU2-6" connectable="0" parent="ROIVXRoGKlTalxw2WbaJ-19" style="group" value="" vertex="1">
           <mxGeometry height="40" width="160" as="geometry" />
         </mxCell>
-        <mxCell id="E4U7jJgjo-yncmPXJe4U-10" parent="r-umOOk1T-VE_y2GGeU2-6" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/authelia/authelia&quot;&gt;Authelia&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Identity and Access Platform&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="160" as="geometry" />
+        <mxCell id="E4U7jJgjo-yncmPXJe4U-10" parent="r-umOOk1T-VE_y2GGeU2-6" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/authelia/authelia&quot;&gt;Authelia&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;IAM Platform&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-25" parent="r-umOOk1T-VE_y2GGeU2-6" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
-          <mxGeometry height="10" width="10" x="150" as="geometry" />
+          <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-7" parent="r-umOOk1T-VE_y2GGeU2-6" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-8" parent="r-umOOk1T-VE_y2GGeU2-6" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="30" y="20" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-21" connectable="0" parent="1" style="group;strokeColor=none;" value="" vertex="1">
           <mxGeometry height="40" width="120" x="400" y="200" as="geometry" />
@@ -266,11 +269,8 @@
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-13" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/TandoorRecipes/recipes&quot;&gt;Tandoor&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Recipe Cookbook&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
-        <mxCell id="ByP5D_G1rsHgrG0Wdw6j-17" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/nginx/nginx&quot;&gt;nginx&lt;/a&gt;" vertex="1">
-          <mxGeometry height="20" width="30" as="geometry" />
-        </mxCell>
         <mxCell id="KxSA5gZsJCGf5EhIG4f--3" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="20" width="30" y="20" as="geometry" />
+          <mxGeometry height="20" width="30" as="geometry" />
         </mxCell>
         <mxCell id="CjAK9aj9z9eyRUDpmc_b-1" parent="ROIVXRoGKlTalxw2WbaJ-25" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
@@ -278,7 +278,7 @@
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-26" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="320" y="680" as="geometry" />
         </mxCell>
-        <mxCell id="0rjydeuM3OXjqDoLz8A_-5" parent="ROIVXRoGKlTalxw2WbaJ-26" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/zurdi15/romm&quot;&gt;RomM&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Game Manager&lt;/i&gt;&lt;/sub&gt;" vertex="1">
+        <mxCell id="0rjydeuM3OXjqDoLz8A_-5" parent="ROIVXRoGKlTalxw2WbaJ-26" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/zurdi15/romm&quot;&gt;RomM&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Game Manager&lt;/i&gt;&lt;/sub&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="Q0VvJ70L2bGEV7D_ZZ47-1" parent="ROIVXRoGKlTalxw2WbaJ-26" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
@@ -286,6 +286,9 @@
         </mxCell>
         <mxCell id="E6sSIh_f2twZW30o5VuN-1" parent="ROIVXRoGKlTalxw2WbaJ-26" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="20" width="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-9" parent="ROIVXRoGKlTalxw2WbaJ-26" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="30" y="20" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-27" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="320" y="640" as="geometry" />
@@ -410,11 +413,14 @@
         <mxCell id="4llZug0oc3wIDcsTs2dC-1" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="480" y="600" as="geometry" />
         </mxCell>
-        <mxCell id="4llZug0oc3wIDcsTs2dC-2" parent="4llZug0oc3wIDcsTs2dC-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/SonarSource/sonarqube&quot;&gt;SonarQube&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;Code Quality Scanner&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="4llZug0oc3wIDcsTs2dC-2" parent="4llZug0oc3wIDcsTs2dC-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://github.com/SonarSource/sonarqube&quot;&gt;SonarQube&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;Code Quality Scanner&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="4llZug0oc3wIDcsTs2dC-3" parent="4llZug0oc3wIDcsTs2dC-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-12" parent="4llZug0oc3wIDcsTs2dC-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" as="geometry" />
         </mxCell>
         <mxCell id="lcRQkhD3couCPsEeO-z6-5" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="lcRQkhD3couCPsEeO-z6-1">
           <mxGeometry relative="1" as="geometry" />
@@ -487,23 +493,20 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" value="&lt;a href=&quot;https://github.com/BigBoot/AutoKuma/&quot;&gt;AutoKuma&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Monitor Generator (SER)&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="720" y="320" as="geometry" />
+          <mxGeometry height="40" width="120" x="720" y="360" as="geometry" />
         </mxCell>
         <mxCell id="n2uqNcOl2qhzvm0Dekme-20" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.043;entryY=0.998;entryDx=0;entryDy=0;entryPerimeter=0;" target="nFLrENYFJLQG_o7xyKyQ-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="zN0gOpbOC8JsBSWD8zve-2" edge="1" parent="1" source="ROIVXRoGKlTalxw2WbaJ-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-1">
+        <mxCell id="zN0gOpbOC8JsBSWD8zve-2" edge="1" parent="1" source="ROIVXRoGKlTalxw2WbaJ-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="780" y="660" />
-              <mxPoint x="780" y="400" />
-              <mxPoint x="860" y="400" />
-              <mxPoint x="860" y="300" />
+              <mxPoint x="860" y="310" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" value="&lt;a href=&quot;https://github.com/BigBoot/AutoKuma/&quot;&gt;AutoKuma&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Monitor Generator&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="800" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="800" y="600" as="geometry" />
         </mxCell>
         <mxCell id="n2uqNcOl2qhzvm0Dekme-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://nzb360.com/&quot;&gt;nzb360&lt;/a&gt;&lt;div&gt;&lt;i&gt;Admin Access&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="1040" y="1280" as="geometry" />
@@ -548,7 +551,12 @@
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="L6m80jQgylzgtWpYlu2N-4" edge="1" parent="1" source="L6m80jQgylzgtWpYlu2N-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="0rjydeuM3OXjqDoLz8A_-4">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="540" />
+              <mxPoint x="250" y="540" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-4" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="280" y="400" as="geometry" />
@@ -562,6 +570,9 @@
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-23" parent="i6Ztm92oaQVUvdZmO5BK-5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-6" parent="i6Ztm92oaQVUvdZmO5BK-5" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" as="geometry" />
+        </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-10" edge="1" parent="1" source="E4U7jJgjo-yncmPXJe4U-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="i6Ztm92oaQVUvdZmO5BK-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -573,11 +584,14 @@
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-14" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="720" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="lcRQkhD3couCPsEeO-z6-1" parent="i6Ztm92oaQVUvdZmO5BK-14" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/alexjustesen/speedtest-tracker&quot;&gt;Speedtest Tracker&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;Network Speed Test&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="lcRQkhD3couCPsEeO-z6-1" parent="i6Ztm92oaQVUvdZmO5BK-14" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/alexjustesen/speedtest-tracker&quot;&gt;Speedtest Tracker&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp;Speed Test&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="lcRQkhD3couCPsEeO-z6-2" parent="i6Ztm92oaQVUvdZmO5BK-14" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-10" parent="i6Ztm92oaQVUvdZmO5BK-14" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" y="20" as="geometry" />
         </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-17" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="920" y="240" as="geometry" />
@@ -594,11 +608,14 @@
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-18" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="640" y="600" as="geometry" />
         </mxCell>
-        <mxCell id="n2uqNcOl2qhzvm0Dekme-5" parent="i6Ztm92oaQVUvdZmO5BK-18" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;strokeColor=none;" value="&lt;a href=&quot;https://github.com/linkwarden/linkwarden&quot;&gt;Linkwarden&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Bookmark Manager&lt;/i&gt;&lt;/sub&gt;" vertex="1">
+        <mxCell id="n2uqNcOl2qhzvm0Dekme-5" parent="i6Ztm92oaQVUvdZmO5BK-18" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;strokeColor=none;" value="&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://github.com/linkwarden/linkwarden&quot;&gt;Linkwarden&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Bookmark Manager&lt;/i&gt;&lt;/sub&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="n2uqNcOl2qhzvm0Dekme-7" parent="i6Ztm92oaQVUvdZmO5BK-18" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-15" parent="i6Ztm92oaQVUvdZmO5BK-18" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" as="geometry" />
         </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-21" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="MZvt10MQMLPbu3KIxgem-8">
           <mxGeometry relative="1" as="geometry" />
@@ -620,11 +637,32 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/Freika/dawarich&quot;&gt;Dawarich&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Google Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/Freika/dawarich&quot;&gt;Dawarich&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="640" y="640" as="geometry" />
         </mxCell>
-        <mxCell id="zN0gOpbOC8JsBSWD8zve-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#fff2cc;strokeColor=#d6b656;" value="" vertex="1">
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="750" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="750" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-3" edge="1" parent="1" source="FYdWkUBb8k9048htAl1_-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-4" edge="1" parent="1" source="lcRQkhD3couCPsEeO-z6-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-5" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" x="640" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="30" x="640" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="rG_Ic8PODih25q6lFSle-1" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="E4U7jJgjo-yncmPXJe4U-10">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

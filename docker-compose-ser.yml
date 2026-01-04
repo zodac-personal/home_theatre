@@ -134,6 +134,48 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
 
+  # Centrallised notification manager
+  apprise:
+    image: caronc/apprise:1.3.0  # https://hub.docker.com/r/caronc/apprise/tags | https://github.com/caronc/apprise-api/releases
+    container_name: apprise
+    hostname: apprise
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    cap_drop:
+      - ALL
+    environment:
+      # Application configuration
+      APPRISE_ADMIN: "y"
+      APPRISE_STATEFUL_MODE: "simple"
+      APPRISE_WORKER_COUNT: "1"
+      # Logging configuration
+      DEBUG: "no"
+      LOG_LEVEL: "INFO"
+      # Secrets configuration
+      SECRET_KEY: "${APPRISE_SECRET_KEY:-[apprise] Secret key missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8000/status" ] # wget not installed
+      timeout: 5s
+    ports:
+      - "5007:8000"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ./storage/apprise/attach:/attach
+      - ./storage/apprise/config:/config
+      - ./storage/apprise/plugin:/plugin
+
   # Homepage
   homarr:
     image: ghcr.io/homarr-labs/homarr:v1.48.0  # https://github.com/homarr-labs/homarr/releases
@@ -610,7 +652,6 @@ services:
       - ./storage/speedtest-db/data/:/var/lib/postgresql/data
 
   # Tool to import/export played state of media in Emby, instead of using Trakt
-  # TODO: Migrate to single API key for all users, instead of one per user
   watchstate:
     image: ghcr.io/arabcoders/watchstate:v1.0.5  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate

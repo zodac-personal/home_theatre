@@ -1,0 +1,6 @@
+http:
+  middlewares:
+    status-page-on-error:
+      chain:
+        middlewares:
+          - redirect-on-error@file

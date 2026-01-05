@@ -1,36 +1,6 @@
 networks:
-  traefik:
-    name: traefik
-    driver: bridge
-  traefik-provider:
-    name: traefik-provider
-    driver: bridge
-  dozzle:
-    name: dozzle
-    driver: bridge
-  apprise:
-    name: apprise
-    driver: bridge
-  homarr:
-    name: homarr
-    driver: bridge
-  authelia:
-    name: authelia
-    driver: bridge
-  lldap:
-    name: lldap
-    driver: bridge
-  uptime-kuma:
-    name: uptime-kuma
-    driver: bridge
-  autokuma-ser:
-    name: autokuma-ser
-    driver: bridge
-  watchstate:
-    name: watchstate
-    driver: bridge
-  speedtest:
-    name: speedtest
+  home_ser:
+    name: home_ser
     driver: bridge
 
 services:
@@ -75,7 +45,7 @@ services:
       kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
       kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
-      - traefik
+      - home_ser
     ports:
       - "443:443"
       - "5555:8080"
@@ -104,7 +74,7 @@ services:
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
-      - traefik-provider
+      - home_ser
     ports:
       - "6379:6379"
     restart: unless-stopped
@@ -155,7 +125,7 @@ services:
       kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
       kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
     networks:
-      - dozzle
+      - home_ser
     ports:
       - "5005:8080"
     restart: unless-stopped
@@ -193,7 +163,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8000/status" ] # wget not installed
       timeout: 5s
     networks:
-      - apprise
+      - home_ser
     ports:
       - "5007:8000"
     read_only: true
@@ -252,7 +222,7 @@ services:
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
-      - homarr
+      - home_ser
     ports:
       - "5000:7575"
     restart: unless-stopped
@@ -318,8 +288,7 @@ services:
       kuma.{{container_name}}.http.name: "Authelia (Identity Platform)"
       kuma.{{container_name}}.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
     networks:
-      - authelia
-      - lldap
+      - home_ser
     ports:
       - "${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
     restart: unless-stopped
@@ -345,7 +314,7 @@ services:
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
-      - authelia
+      - home_ser
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -377,7 +346,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - authelia
+      - home_ser
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -415,7 +384,7 @@ services:
       kuma.{{container_name}}.http.name: "LLDAP (LDAP Server)"
       kuma.{{container_name}}.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
     networks:
-      - lldap
+      - home_ser
     ports:
       - "3890:3890"
       - "17170:17170"
@@ -450,7 +419,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - lldap
+      - home_ser
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -487,7 +456,7 @@ services:
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
-      - uptime-kuma
+      - home_ser
     ports:
       - "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     restart: unless-stopped
@@ -534,7 +503,7 @@ services:
       kuma.ser.tag.name: 'SER'
       kuma.ser.tag.color: '#FF77FF'
     networks:
-      - autokuma-ser
+      - home_ser
     restart: no
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -641,7 +610,7 @@ services:
       kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
-      - speedtest
+      - home_ser
     ports:
       - "5004:80"
     restart: unless-stopped
@@ -675,7 +644,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - speedtest
+      - home_ser
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -699,7 +668,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8080/v1/api/system/healthcheck" ] # wget not installed
       timeout: 5s
     networks:
-      - watchstate
+      - home_ser
     ports:
       - "5006:8080"
     restart: unless-stopped

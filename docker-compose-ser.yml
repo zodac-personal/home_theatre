@@ -1,6 +1,36 @@
 networks:
-  home_ser:
-    name: home_ser
+  traefik:
+    name: traefik
+    driver: bridge
+  traefik-provider:
+    name: traefik-provider
+    driver: bridge
+  dozzle:
+    name: dozzle
+    driver: bridge
+  apprise:
+    name: apprise
+    driver: bridge
+  homarr:
+    name: homarr
+    driver: bridge
+  authelia:
+    name: authelia
+    driver: bridge
+  lldap:
+    name: lldap
+    driver: bridge
+  uptime-kuma:
+    name: uptime-kuma
+    driver: bridge
+  autokuma-ser:
+    name: autokuma-ser
+    driver: bridge
+  watchstate:
+    name: watchstate
+    driver: bridge
+  speedtest:
+    name: speedtest
     driver: bridge
 
 services:
@@ -45,7 +75,7 @@ services:
       kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
       kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
-      - home_ser
+      - traefik
     ports:
       - "443:443"
       - "5555:8080"
@@ -74,7 +104,7 @@ services:
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
-      - home_ser
+      - traefik-provider
     ports:
       - "6379:6379"
     restart: unless-stopped
@@ -125,7 +155,7 @@ services:
       kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
       kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
     networks:
-      - home_ser
+      - dozzle
     ports:
       - "5005:8080"
     restart: unless-stopped
@@ -162,6 +192,8 @@ services:
       start_period: 30s
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8000/status" ] # wget not installed
       timeout: 5s
+    networks:
+      - apprise
     ports:
       - "5007:8000"
     read_only: true
@@ -220,7 +252,7 @@ services:
       kuma.{{container_name}}.http.name: "Homarr (HomePage)"
       kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
-      - home_ser
+      - homarr
     ports:
       - "5000:7575"
     restart: unless-stopped
@@ -286,7 +318,8 @@ services:
       kuma.{{container_name}}.http.name: "Authelia (Identity Platform)"
       kuma.{{container_name}}.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
     networks:
-      - home_ser
+      - authelia
+      - lldap
     ports:
       - "${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
     restart: unless-stopped
@@ -312,7 +345,7 @@ services:
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
-      - home_ser
+      - authelia
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -344,7 +377,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home_ser
+      - authelia
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -382,7 +415,7 @@ services:
       kuma.{{container_name}}.http.name: "LLDAP (LDAP Server)"
       kuma.{{container_name}}.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
     networks:
-      - home_ser
+      - lldap
     ports:
       - "3890:3890"
       - "17170:17170"
@@ -417,7 +450,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home_ser
+      - lldap
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -454,7 +487,7 @@ services:
       kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
       kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
-      - home_ser
+      - uptime-kuma
     ports:
       - "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     restart: unless-stopped
@@ -465,50 +498,50 @@ services:
 
   # Automatic Uptime-Kuma monitor generator
   autokuma-ser:
-      image: ghcr.io/bigboot/autokuma:2.0.0  # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
-      container_name: autokuma-ser
-      hostname: autokuma-ser
-      deploy:
-        resources:
-          limits:
-            cpus: "0.1"
-            memory: "128M"
-      environment:
-        # Base config
-        TZ: "${TIMEZONE:?Timezone missing}"
-        # Monitor config
-        AUTOKUMA__DEFAULT_SETTINGS: |-
-          http.accepted_statuscodes:  [ "200" ]
-          http.tag_names: [{"name": "ser" }]
-          http.expiry_notification: true
-          http.interval: 60
-          http.max_redirects: 1
-          http.max_retries: 5
-          http.retry_interval: 60
-          http.timeout: 30
-        AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
-        AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
-        AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
-      healthcheck:
-        interval: 30s
-        retries: 3
-        start_period: 30s
-        test: [ "CMD", "pidof", "autokuma" ]
-        timeout: 5s
-      labels:
-        # Metadata configuration to be used by monitors
-        # Tags
-        kuma.ser.tag.name: 'SER'
-        kuma.ser.tag.color: '#FF77FF'
-      networks:
-        - home_ser
-      restart: no
-      user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
-      volumes:
-        # Docker socket mount from host system
-        - "${DOCKER_SOCKET}:/var/run/docker.sock"
-        # Persistent volumes
-        - ./storage/autokuma-ser/data:/data
+    image: ghcr.io/bigboot/autokuma:2.0.0  # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
+    container_name: autokuma-ser
+    hostname: autokuma-ser
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "128M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Monitor config
+      AUTOKUMA__DEFAULT_SETTINGS: |-
+        http.accepted_statuscodes:  [ "200" ]
+        http.tag_names: [{"name": "ser" }]
+        http.expiry_notification: true
+        http.interval: 60
+        http.max_redirects: 1
+        http.max_retries: 5
+        http.retry_interval: 60
+        http.timeout: 30
+      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+      AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
+      AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "autokuma" ]
+      timeout: 5s
+    labels:
+      # Metadata configuration to be used by monitors
+      # Tags
+      kuma.ser.tag.name: 'SER'
+      kuma.ser.tag.color: '#FF77FF'
+    networks:
+      - autokuma-ser
+    restart: no
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Docker socket mount from host system
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      # Persistent volumes
+      - ./storage/autokuma-ser/data:/data
 
   # WiFi/LAN network scanner
   netalert:
@@ -608,7 +641,7 @@ services:
       kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
-      - home_ser
+      - speedtest
     ports:
       - "5004:80"
     restart: unless-stopped
@@ -642,7 +675,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home_ser
+      - speedtest
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -666,7 +699,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8080/v1/api/system/healthcheck" ] # wget not installed
       timeout: 5s
     networks:
-      - home_ser
+      - watchstate
     ports:
       - "5006:8080"
     restart: unless-stopped

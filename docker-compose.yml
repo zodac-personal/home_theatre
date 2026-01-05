@@ -1,6 +1,51 @@
 networks:
-  home:
-    name: home
+  emby:
+    name: emby
+    driver: bridge
+  traefik-kop:
+    name: traefik-kop
+    driver: bridge
+  servarr:
+    name: servarr
+    driver: bridge
+  qbittorrent:
+    name: qbittorrent
+    driver: bridge
+  navidrome:
+    name: navidrome
+    driver: bridge
+  audiobookshelf:
+    name: audiobookshelf
+    driver: bridge
+  romm:
+    name: romm
+    driver: bridge
+  tandoor:
+    name: tandoor
+    driver: bridge
+  homebox:
+    name: homebox
+    driver: bridge
+  sonarqube:
+    name: sonarqube
+    driver: bridge
+  jellystat:
+    name: jellystat
+    driver: bridge
+  linkwarden:
+    name: linkwarden
+    driver: bridge
+  autokuma:
+    name: autokuma
+    driver: bridge
+  dailytxt:
+    name: dailytxt
+    driver: bridge
+  filebrowser:
+    name: filebrowser
+    driver: bridge
+  filebrowser-ftp:
+    name: filebrowser-ftp
     driver: bridge
 
 services:
@@ -36,7 +81,7 @@ services:
       kuma.{{container_name}}.http.notification_name_list: '["emby_status"]'
       kuma.{{container_name}}.http.tag_names: '[{"name": "alertable"}]'
     networks:
-      - home
+      - emby
     ports:
       - "8096:8096"
     restart: unless-stopped
@@ -70,7 +115,7 @@ services:
       test: [ "CMD", "/traefik-kop", "-V" ]
       timeout: 5s
     networks:
-      - home
+      - traefik-kop
     restart: unless-stopped
     volumes:
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
@@ -109,7 +154,8 @@ services:
       kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
       kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
     networks:
-      - home
+      - qbittorrent
+      - servarr
     ports:
       - "4000:7878"
     restart: unless-stopped
@@ -155,7 +201,8 @@ services:
       kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
       kuma.{{container_name}}.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
     networks:
-      - home
+      - qbittorrent
+      - servarr
     ports:
       - "4001:8989"
     restart: unless-stopped
@@ -203,7 +250,7 @@ services:
       test: [ "CMD", "recyclarr", "-v" ]
       timeout: 5s
     networks:
-      - home
+      - servarr
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -246,7 +293,8 @@ services:
       kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
       kuma.{{container_name}}.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
     networks:
-      - home
+      - qbittorrent
+      - servarr
     ports:
       - "4002:8686"
     restart: unless-stopped
@@ -307,7 +355,7 @@ services:
       kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
       kuma.{{container_name}}.http.max_redirects: "0"
     networks:
-      - home
+      - navidrome
     ports:
       - "4003:4533"
     restart: unless-stopped
@@ -353,7 +401,8 @@ services:
       kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
       kuma.{{container_name}}.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
     networks:
-      - home
+      - qbittorrent
+      - servarr
     ports:
       - "4004:8787"
     restart: unless-stopped
@@ -404,7 +453,7 @@ services:
       kuma.{{container_name}}.http.name: "AudioBookShelf (eBook/Audiobook Reader)"
       kuma.{{container_name}}.http.url: "${AUDIOBOOKSHELF_MONITOR_URL:?[audiobookshelf] Monitor URL missing}"
     networks:
-      - home
+      - audiobookshelf
     ports:
       - "4005:80"
     restart: unless-stopped
@@ -467,7 +516,7 @@ services:
       test: [ "CMD", "/unpackerr", "-v" ]
       timeout: 5s
     networks:
-      - home
+      - servarr
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -512,7 +561,7 @@ services:
       kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
       kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
     networks:
-      - home
+      - servarr
     ports:
       - "4009:6767"
     restart: unless-stopped
@@ -548,7 +597,7 @@ services:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/docs" ]
       timeout: 15s
     networks:
-      - home
+      - servarr
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
 
@@ -645,7 +694,7 @@ services:
       kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
       kuma.{{container_name}}.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
     networks:
-      - home
+      - romm
     ports:
       - "4006:8080"
     restart: unless-stopped
@@ -678,7 +727,7 @@ services:
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
     networks:
-      - home
+      - romm
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -716,7 +765,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home
+      - romm
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -765,7 +814,7 @@ services:
       kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
       kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
     networks:
-      - home
+      - servarr
     ports:
       - "4016:9696"
     restart: unless-stopped
@@ -807,7 +856,7 @@ services:
       kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
       kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
     networks:
-      - home
+      - qbittorrent
     ports:
       - "9000:9000"
     restart: unless-stopped
@@ -849,7 +898,7 @@ services:
       test: [ "CMD", "pidof", "java" ]
       timeout: 5s
     networks:
-      - home
+      - servarr
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -878,7 +927,7 @@ services:
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8191/" ] # wget not installed
       timeout: 5s
     networks:
-      - home
+      - servarr
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -953,7 +1002,7 @@ services:
       kuma.tandoor.http.name: "Tandoor (Recipes)"
       kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
     networks:
-      - home
+      - tandoor
     ports:
       - "4014:80"
     restart: unless-stopped
@@ -995,7 +1044,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home
+      - tandoor
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -1041,7 +1090,7 @@ services:
       kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
       kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
     networks:
-      - home
+      - homebox
     ports:
       - "4011:7745"
     restart: unless-stopped
@@ -1089,7 +1138,7 @@ services:
       kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
       kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
     networks:
-      - home
+      - dailytxt
     ports:
       - "4015:80"
     restart: unless-stopped
@@ -1132,7 +1181,7 @@ services:
       kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
       kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
-      - home
+      - filebrowser
     ports:
       - "4007:80"
     restart: unless-stopped
@@ -1174,7 +1223,7 @@ services:
       kuma.{{container_name}}.http.name: "FileBrowser (FTP uploads)"
       kuma.{{container_name}}.http.url: "${FILEBROWSER_FTP_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
-      - home
+      - filebrowser-ftp
     ports:
       - "4018:80"
     restart: unless-stopped
@@ -1224,7 +1273,7 @@ services:
       kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
       kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
     networks:
-      - home
+      - sonarqube
     ports:
       - "4013:9000"
     restart: unless-stopped
@@ -1267,7 +1316,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home
+      - sonarqube
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -1321,7 +1370,7 @@ services:
       kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
       kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
     networks:
-      - home
+      - jellystat
     ports:
       - "4008:3000"
     restart: unless-stopped
@@ -1361,7 +1410,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home
+      - jellystat
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -1418,7 +1467,7 @@ services:
       kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
       kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
     networks:
-      - home
+      - linkwarden
     ports:
       - "4017:3000"
     restart: unless-stopped
@@ -1458,7 +1507,7 @@ services:
       test: [ "CMD", "pg_isready", "--host", "localhost" ]
       timeout: 5s
     networks:
-      - home
+      - linkwarden
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
@@ -1511,7 +1560,7 @@ services:
       kuma.alertable.tag.name: 'Alertable'
       kuma.alertable.tag.color: '#FFA500'
     networks:
-      - home
+      - autokuma
     restart: no
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:

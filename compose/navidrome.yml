@@ -1,0 +1,67 @@
+networks:
+  navidrome:
+    name: navidrome
+    driver: bridge
+
+services:
+
+  # Music Player
+  navidrome:
+    image: deluan/navidrome:0.59.0  # https://github.com/navidrome/navidrome/releases/
+    container_name: navidrome
+    hostname: navidrome
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      ND_REVERSEPROXYUSERHEADER: "Remote-User"
+      ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
+      # External services config
+      ND_LASTFM_APIKEY: "${LASTFM_API_KEY:?[navidrome] LastFM API key missing}"
+      ND_LASTFM_SECRET: "${LASTFM_SECRET:?[navidrome] LastFM secret missing}"
+      ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID:?[navidrome] Spotify Client ID missing}"
+      ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET:?[navidrome] Spotify Client secret missing}"
+      # Scheduling config
+      ND_SCANNER_SCHEDULE: "@every 24h"
+      # Metadata config
+      ND_ARTISTARTPRIORITY: "artist.*, external"
+      ND_COVERARTPRIORITY: "album.*, embedded, external"
+      # Logging config
+      ND_LOGLEVEL: "info"
+      # System config
+      ND_ENABLEINSIGHTSCOLLECTOR: "false"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:4533/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.navidrome.rule: "Host(`music.${DOMAIN_NAME}`)"
+      traefik.http.routers.navidrome.entrypoints: "websecure"
+      traefik.http.routers.navidrome.tls: "true"
+      traefik.http.routers.navidrome.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.navidrome.loadbalancer.server.port: "4003"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
+      kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: "0"
+    networks:
+      - navidrome
+    ports:
+      - "4003:4533"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${MUSIC_DIRECTORY}:/music:ro"
+      - "${PODCAST_DIRECTORY}:/podcast:ro"
+      # Persistent volumes
+      - ../storage/navidrome/:/data

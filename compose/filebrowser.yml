@@ -1,0 +1,100 @@
+networks:
+  filebrowser:
+    name: filebrowser
+    driver: bridge
+  filebrowser-ftp:
+    name: filebrowser-ftp
+    driver: bridge
+
+services:
+
+  # Documents file browser
+  filebrowser:
+    image: filebrowser/filebrowser:v2.53.0  # https://github.com/filebrowser/filebrowser/releases
+    container_name: filebrowser
+    hostname: filebrowser
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      FB_NOAUTH: noauth
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser.rule: "Host(`file.${DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser.entrypoints: "websecure"
+      traefik.http.routers.filebrowser.tls: "true"
+      traefik.http.routers.filebrowser.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.filebrowser.loadbalancer.server.port: "4007"
+      # Redirect from 'files' subdomain to 'file' subdomain
+      traefik.http.routers.filebrowser-redirect.rule: "Host(`files.${DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser-redirect.entryPoints: "websecure"
+      traefik.http.routers.filebrowser-redirect.tls: "true"
+      traefik.http.routers.filebrowser-redirect.middlewares: "filebrowser-redirect-regex"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
+      kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+    networks:
+      - filebrowser
+    ports:
+      - "4007:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOCUMENTS_DIRECTORY}:/doc:ro"
+      # Persistent volumes
+      - ../storage/filebrowser/database/:/database
+      - ../storage/filebrowser/config/:/config
+      # TODO: Missing /srv mount point
+
+  # FTP server
+  filebrowser-ftp:
+    image: filebrowser/filebrowser:v2.53.0  # https://github.com/filebrowser/filebrowser/releases
+    container_name: filebrowser-ftp
+    hostname: filebrowser-ftp
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      FB_NOAUTH: noauth
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser-ftp.rule: "Host(`ftp.${DOMAIN_NAME}`)"
+      traefik.http.routers.filebrowser-ftp.entrypoints: "websecure"
+      traefik.http.routers.filebrowser-ftp.tls: "true"
+      traefik.http.routers.filebrowser-ftp.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.filebrowser-ftp.loadbalancer.server.port: "4018"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "FileBrowser (FTP uploads)"
+      kuma.{{container_name}}.http.url: "${FILEBROWSER_FTP_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+    networks:
+      - filebrowser-ftp
+    ports:
+      - "4018:80"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${FTP_UPLOAD_DIRECTORY}:/ftp"
+      # Persistent volumes
+      - ../storage/filebrowser-ftp/database/:/database
+      - ../storage/filebrowser-ftp/config/:/config

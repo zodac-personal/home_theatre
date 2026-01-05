@@ -1,0 +1,299 @@
+networks:
+  servarr:
+    name: servarr
+    driver: bridge
+
+services:
+
+  # Movie Manager
+  radarr:
+    image: linuxserver/radarr:6.1.1-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
+    container_name: radarr
+    hostname: radarr
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7878/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.radarr.entrypoints: "websecure"
+      traefik.http.routers.radarr.tls: "true"
+      traefik.http.routers.radarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.radarr.loadbalancer.server.port: "4000"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Radarr (Movie Manager)"
+      kuma.{{container_name}}.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
+    networks:
+      - qbittorrent
+      - servarr
+    ports:
+      - "4000:7878"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${MOVIE_DIRECTORY}:/movies"
+      # Persistent volumes
+      - ../storage/radarr/:/config
+
+  # TV Show Manager
+  sonarr:
+    image: linuxserver/sonarr:4.0.16-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
+    container_name: sonarr
+    hostname: sonarr
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "2048M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8989/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.sonarr.entrypoints: "websecure"
+      traefik.http.routers.sonarr.tls: "true"
+      traefik.http.routers.sonarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.sonarr.loadbalancer.server.port: "4001"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Sonarr (TV Manager)"
+      kuma.{{container_name}}.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
+    networks:
+      - qbittorrent
+      - servarr
+    ports:
+      - "4001:8989"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${TV1_DIRECTORY}:/tv1"
+      - "${TV2_DIRECTORY}:/tv2"
+      - "${TV_TRASH_DIRECTORY}:/trash"
+      - "${TV_KIDS_DIRECTORY}:/kids"
+      # Persistent volumes
+      - ../storage/sonarr/:/config
+
+  # Quality profile manager for radarr/sonarr
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:7.5.2 # https://github.com/recyclarr/recyclarr/releases
+    container_name: recyclarr
+    hostname: recyclarr
+    depends_on:
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Scheduling config
+      CRON_SCHEDULE: "@daily"
+      # Radarr Config
+      RADARR_API_KEY: "${RADARR_API_KEY}"
+      RADARR_URL: "http://radarr:3000"
+      # Sonarr Config
+      SONARR_API_KEY: "${SONARR_API_KEY}"
+      SONARR_URL: "http://sonarr:3001"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "recyclarr", "-v" ]
+      timeout: 5s
+    networks:
+      - servarr
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "../docker/recyclarr/config/recyclarr.yml:/config/recyclarr.yml"
+      # Persistent volumes
+      - ../storage/recyclarr:/config
+
+  # Music manager
+  lidarr:
+    image: linuxserver/lidarr:3.1.2-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
+    container_name: lidarr
+    hostname: lidarr
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8686/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.lidarr.rule: "Host(`lidarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.lidarr.entrypoints: "websecure"
+      traefik.http.routers.lidarr.tls: "true"
+      traefik.http.routers.lidarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.lidarr.loadbalancer.server.port: "4002"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Lidarr (Music Manager)"
+      kuma.{{container_name}}.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
+    networks:
+      - qbittorrent
+      - servarr
+    ports:
+      - "4002:8686"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${MUSIC_DIRECTORY}:/music"
+      # Persistent volumes
+      - ../storage/lidarr/:/config
+
+  # eBook manager
+  readarr:
+    image: linuxserver/readarr:0.4.19-nightly  # https://hub.docker.com/r/linuxserver/readarr/tags?name=nightly
+    container_name: readarr
+    hostname: readarr
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8787/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.readarr.rule: "Host(`readarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.readarr.entrypoints: "websecure"
+      traefik.http.routers.readarr.tls: "true"
+      traefik.http.routers.readarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.readarr.loadbalancer.server.port: "4004"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Readarr (eBook Manager)"
+      kuma.{{container_name}}.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
+    networks:
+      - qbittorrent
+      - servarr
+    ports:
+      - "4004:8787"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${BOOKS_DIRECTORY}:/books"
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - ../storage/readarr/:/config
+
+  # Downloaded archive extractor
+  unpackerr:
+    image: golift/unpackerr:0.14.5  # https://hub.docker.com/r/golift/unpackerr/tags
+    container_name: unpackerr
+    hostname: unpackerr
+    depends_on:
+      lidarr:
+        condition: service_healthy
+      radarr:
+        condition: service_healthy
+      readarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "512M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Lidarr config
+      UN_LIDARR_0_API_KEY: "${LIDARR_API_KEY:?[unpackerr] Lidarr API key missing}"
+      UN_LIDARR_0_PATHS_0: "/downloads/complete/lidarr"
+      UN_LIDARR_0_PROTOCOLS: "torrent,usenet"
+      UN_LIDARR_0_URL: "http://lidarr:8686"
+      # Radarr config
+      UN_RADARR_0_API_KEY: "${RADARR_API_KEY:?[unpackerr] Radarr API key missing}"
+      UN_RADARR_0_PATHS_0: "/downloads/complete/radarr"
+      UN_RADARR_0_PROTOCOLS: "torrent,usenet"
+      UN_RADARR_0_URL: "http://radarr:7878"
+      # Readarr config
+      UN_READARR_0_API_KEY: "${READARR_API_KEY:?[unpackerr] Readarr API key missing}"
+      UN_READARR_0_PATHS_0: "/downloads/complete/readarr"
+      UN_READARR_0_PROTOCOLS: "torrent,usenet"
+      UN_READARR_0_URL: "http://readarr:8787"
+      # Sonarr config
+      UN_SONARR_0_API_KEY: "${SONARR_API_KEY:?[unpackerr] Sonarr API key missing}"
+      UN_SONARR_0_PATHS_0: "/downloads/complete/sonarr"
+      UN_SONARR_0_PROTOCOLS: "torrent,usenet"
+      UN_SONARR_0_URL: "http://sonarr:8989"
+      # Logging config
+      UN_LOG_FILE: "/config/unpackerr.log"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "/unpackerr", "-v" ]
+      timeout: 5s
+    networks:
+      - servarr
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - ../storage/unpackerr/:/config

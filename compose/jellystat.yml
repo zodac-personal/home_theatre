@@ -1,0 +1,100 @@
+networks:
+  jellystat:
+    name: jellystat
+    driver: bridge
+
+services:
+
+  # Statistics for Emby
+  jellystat:
+    image: cyfershepard/jellystat:1.1.7  # https://github.com/CyferShepard/Jellystat/releases
+    container_name: jellystat
+    hostname: jellystat
+    depends_on:
+      jellystat-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      POSTGRES_DATABASE: "${JELLYSTAT_DB_NAME:?[jellystat] Database name missing}"
+      POSTGRES_USER: "${JELLYSTAT_DB_USER:?[jellystat] Database user missing}"
+      POSTGRES_PASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat] Database password missing}"
+      POSTGRES_IP: "jellystat-db"
+      POSTGRES_PORT: "${JELLYSTAT_DB_PORT:?[jellystat] Database port missing}"
+      # Secrets config
+      JWT_SECRET: '${JELLYSTAT_SECRET_KEY:?[jellystat] Secret key missing}'
+      # System config
+      IS_EMBY_API: "true"
+      MINIMUM_SECONDS_TO_INCLUDE_PLAYBACK: "10"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.jellystat.rule: "Host(`stat.${DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat.entrypoints: "websecure"
+      traefik.http.routers.jellystat.tls: "true"
+      traefik.http.routers.jellystat.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.jellystat.loadbalancer.server.port: "4008"
+      # Redirect from 'stats' subdomain to 'stat' subdomain
+      traefik.http.routers.jellystat-redirect.rule: "Host(`stats.${DOMAIN_NAME}`)"
+      traefik.http.routers.jellystat-redirect.entryPoints: "websecure"
+      traefik.http.routers.jellystat-redirect.tls: "true"
+      traefik.http.routers.jellystat-redirect.middlewares: "jellystat-redirect-regex"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
+      kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
+    networks:
+      - jellystat
+    ports:
+      - "4008:3000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/jellystat/data/:/app/backend/backup-data
+
+  # Database for Jellystat
+  jellystat-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: jellystat-db
+    hostname: jellystat-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
+      POSTGRES_DB: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
+      POSTGRES_PASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
+      POSTGRES_USER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
+      PGPASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
+      PGUSER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
+    expose:
+      - "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - jellystat
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/jellystat-db/data/:/var/lib/postgresql/data

@@ -1,0 +1,83 @@
+networks:
+  bazarr:
+    name: bazarr
+    driver: bridge
+
+services:
+
+  # Subtitle downloader
+  bazarr:
+    image: linuxserver/bazarr:1.5.4-development  # https://hub.docker.com/r/linuxserver/bazarr/tags?name=development
+    container_name: bazarr
+    hostname: bazarr
+    depends_on:
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:6767/api/system/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.bazarr.rule: "Host(`bazarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.bazarr.entrypoints: "websecure"
+      traefik.http.routers.bazarr.tls: "true"
+      traefik.http.routers.bazarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.bazarr.loadbalancer.server.port: "4009"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
+      kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
+    networks:
+      - bazarr
+      - servarr
+    ports:
+      - "4009:6767"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${MOVIE_DIRECTORY}:/movies"
+      - "${TV1_DIRECTORY}:/tv1"
+      - "${TV2_DIRECTORY}:/tv2"
+      - "${TV_TRASH_DIRECTORY}:/trash"
+      - "${TV_KIDS_DIRECTORY}:/kids"
+      # Persistent volumes
+      - ../storage/bazarr/:/config
+
+  # Automated Speech Recognition tool for subtitles
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:v1.9.1  # https://github.com/ahmetoner/whisper-asr-webservice/releases
+    container_name: whisper
+    hostname: whisper
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "8192M"
+    environment:
+      # Model config
+      ASR_MODEL: "small.en"
+      ASR_ENGINE: "faster_whisper"
+    healthcheck:
+      interval: 60s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/docs" ]
+      timeout: 15s
+    networks:
+      - bazarr
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"

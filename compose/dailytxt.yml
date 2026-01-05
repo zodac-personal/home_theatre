@@ -1,0 +1,53 @@
+networks:
+  dailytxt:
+    name: dailytxt
+    driver: bridge
+
+services:
+
+  # Daily Journal
+  dailytxt:
+    image: phitux/dailytxt:2.2.0  # https://hub.docker.com/r/phitux/dailytxt/tags
+    container_name: dailytxt
+    hostname: dailytxt
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+    environment:
+      # Base config
+      USER_GID: "${PGID_ROOT:?Group ID missing}"
+      USER_UID: "${PUID_ROOT:?User ID missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Secrets config
+      SECRET_KEY: "${DAILYTXT_SECRET_KEY:?[dailytxt] Secret key missing}"
+      # UI config
+      ALLOW_REGISTRATION: "false"
+      ENABLE_UPDATE_CHECK: "false"
+      LOGOUT_AFTER_DAYS: "365"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.dailytxt.rule: "Host(`journal.${DOMAIN_NAME}`)"
+      traefik.http.routers.dailytxt.entrypoints: "websecure"
+      traefik.http.routers.dailytxt.tls: "true"
+      traefik.http.routers.dailytxt.middlewares: "no-forward-auth@file"
+      traefik.http.services.dailytxt.loadbalancer.server.port: "4015"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
+      kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
+    networks:
+      - dailytxt
+    ports:
+      - "4015:80"
+    restart: unless-stopped
+    volumes:
+      # Persistent volumes
+      - ../storage/dailytxt/:/data/

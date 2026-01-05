@@ -1,0 +1,54 @@
+networks:
+  homebox:
+    name: homebox
+    driver: bridge
+
+services:
+
+  # Inventory Management
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:0.22.3  # https://github.com/sysadminsmedia/homebox/releases
+    container_name: homebox
+    hostname: homebox
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      HBOX_OIDC_ENABLED: "true"
+      HBOX_OIDC_ISSUER_URL: "${HOMEBOX_OIDC_URI:?[homebox] OIDC URL missing}"
+      HBOX_OIDC_CLIENT_ID: "${HOMEBOX_OIDC_CLIENT_ID:?[homebox] OIDC client ID missing}"
+      HBOX_OIDC_CLIENT_SECRET: "${HOMEBOX_OIDC_CLIENT_SECRET:?[homebox] OIDC client secret missing}"
+      HBOX_OPTIONS_TRUST_PROXY: "true"
+      HBOX_OIDC_AUTO_REDIRECT: "false"
+      HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: "false"
+      # Logging config
+      HBOX_LOG_FORMAT: "text"
+      HBOX_LOG_LEVEL: "info"
+      # UI config
+      HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+      HBOX_WEB_MAX_UPLOAD_SIZE: "10"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.homebox.rule: "Host(`inventory.${DOMAIN_NAME}`)"
+      traefik.http.routers.homebox.entrypoints: "websecure"
+      traefik.http.routers.homebox.tls: "true"
+      traefik.http.routers.homebox.middlewares: "no-forward-auth@file"
+      traefik.http.services.homebox.loadbalancer.server.port: "4011"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
+      kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
+    networks:
+      - homebox
+    ports:
+      - "4011:7745"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/homebox/:/data/

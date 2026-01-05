@@ -1,0 +1,92 @@
+networks:
+  sonarqube:
+    name: sonarqube
+    driver: bridge
+
+services:
+
+  # Static code analysis tool
+  sonarqube:
+    image: sonarqube:25.12.0.117093-community  # https://hub.docker.com/_/sonarqube
+    container_name: sonarqube
+    hostname: sonarqube
+    depends_on:
+      sonarqube-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "4096M"
+    environment:
+      # Database config
+      SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
+      SONAR_JDBC_USERNAME: "${SONARQUBE_DB_USER:?[sonarqube] Database user missing}"
+      SONAR_JDBC_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube] Database password missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ] # '--spider' fails
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.sonarqube.rule: "Host(`sonarqube.${DOMAIN_NAME}`)"
+      traefik.http.routers.sonarqube.entrypoints: "websecure"
+      traefik.http.routers.sonarqube.tls: "true"
+      traefik.http.routers.sonarqube.middlewares: "no-forward-auth@file"
+      traefik.http.services.sonarqube.loadbalancer.server.port: "4013"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
+      kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
+    networks:
+      - sonarqube
+    ports:
+      - "4013:9000"
+    restart: unless-stopped
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/sonarqube/data/:/opt/sonarqube/data
+      - ../storage/sonarqube/extensions/:/opt/sonarqube/extensions
+      - ../storage/sonarqube/logs/:/opt/sonarqube/logs
+      - ../storage/sonarqube/temp/:/opt/sonarqube/temp
+
+  # Database for SonarQube
+  sonarqube-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: sonarqube-db
+    hostname: sonarqube-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
+      POSTGRES_DB: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}"
+      POSTGRES_USER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
+      POSTGRES_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database password missing}"
+      PGPASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database name missing}"
+      PGUSER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
+    expose:
+      - "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - sonarqube
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/sonarqube-db/data/:/var/lib/postgresql/data

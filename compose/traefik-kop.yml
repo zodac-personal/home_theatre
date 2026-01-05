@@ -1,0 +1,26 @@
+networks:
+  traefik-kop:
+    name: traefik-kop
+    driver: bridge
+
+services:
+
+  # Traefik connector
+  traefik-kop:
+    image: ghcr.io/jittering/traefik-kop:0.19.3  # https://github.com/jittering/traefik-kop/releases
+    container_name: traefik-kop
+    hostname: traefik-kop
+    environment:
+      BIND_IP: "${MAIN_HOST_IP}" # IP address of this host
+      REDIS_ADDR: "${REVERSE_PROXY_HOST_IP}:6379" # Port of the redis instance on the reverse proxy host
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "/traefik-kop", "-V" ]
+      timeout: 5s
+    networks:
+      - traefik-kop
+    restart: unless-stopped
+    volumes:
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"

@@ -1,0 +1,87 @@
+networks:
+  prowlarr:
+    name: prowlarr
+    driver: bridge
+
+services:
+
+  # Indexer (Torrents + Usenet)
+  prowlarr:
+    image: linuxserver/prowlarr:2.3.2-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
+    container_name: prowlarr
+    hostname: prowlarr
+    depends_on:
+      flaresolverr:
+        condition: service_healthy
+      lidarr:
+        condition: service_healthy
+      radarr:
+        condition: service_healthy
+      readarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M" # High memory resourcing to allow stats page to load
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9696/ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.prowlarr.entrypoints: "websecure"
+      traefik.http.routers.prowlarr.tls: "true"
+      traefik.http.routers.prowlarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "4016"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
+      kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
+    networks:
+      - prowlarr
+      - servarr
+    ports:
+      - "4016:9696"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/prowlarr/:/config
+
+  # Cloudflare rate-limiter solver
+  flaresolverr:
+    image: flaresolverr/flaresolverr:v3.4.6  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
+    container_name: flaresolverr
+    hostname: flaresolverr
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Logging config
+      LOG_LEVEL: "info"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8191/" ] # wget not installed
+      timeout: 5s
+    networks:
+      - prowlarr
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/flaresolverr/:/config

@@ -1,0 +1,56 @@
+networks:
+  emby:
+    name: emby
+    driver: bridge
+
+services:
+
+  # Media Server
+  emby:
+    image: emby/embyserver:4.9.4.1  # https://hub.docker.com/r/emby/embyserver/tags
+    container_name: emby
+    hostname: emby
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      UID: "${PUID_NON_ROOT:?User ID missing}"
+      GID: "${PGID_NON_ROOT:?Group ID missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8096/emby/system/info/public?format=json" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.emby.rule: "Host(`emby.${DOMAIN_NAME}`)"
+      traefik.http.routers.emby.entrypoints: "websecure"
+      traefik.http.routers.emby.tls: "true"
+      traefik.http.routers.emby.middlewares: "no-forward-auth@file"
+      traefik.http.services.emby.loadbalancer.server.port: "8096"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Emby (Media Server)"
+      kuma.{{container_name}}.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_retries: "3"
+      kuma.{{container_name}}.http.notification_name_list: '["emby_status"]'
+      kuma.{{container_name}}.http.tag_names: '[{"name": "alertable"}]'
+    networks:
+      - emby
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+    #    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
+    volumes:
+      # Volume mounts from host system
+      - "${AUDIO_DIRECTORY}:/media/audio"
+      - "${BOOKS_DIRECTORY}:/media/books"
+      - "${MOVIE_DIRECTORY}:/media/movies"
+      - "${RECORDINGS_DIRECTORY}:/media/recordings"
+      - "${TV1_DIRECTORY}:/media/tv1"
+      - "${TV2_DIRECTORY}:/media/tv2"
+      - "${TV_TRASH_DIRECTORY}:/media/trash"
+      - "${TV_KIDS_DIRECTORY}:/media/kids"
+      # Persistent volumes
+      - ../storage/emby/config/:/config
+      - ../storage/emby/backup/:/backup

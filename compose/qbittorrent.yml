@@ -1,0 +1,50 @@
+networks:
+  qbittorrent:
+    name: qbittorrent
+    driver: bridge
+
+services:
+
+  # Torrent Downloader
+  qbittorrent:
+    image: linuxserver/qbittorrent:5.1.4-libtorrentv1  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+    container_name: qbittorrent
+    hostname: qbittorrent
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: "4096M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # UI config
+      WEBUI_PORT: "9000"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/api/v2/app/version" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.${DOMAIN_NAME}`)"
+      traefik.http.routers.qbittorrent.entrypoints: "websecure"
+      traefik.http.routers.qbittorrent.tls: "true"
+      traefik.http.routers.qbittorrent.middlewares: "no-forward-auth@file"
+      traefik.http.services.qbittorrent.loadbalancer.server.port: "9000"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
+      kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
+    networks:
+      - qbittorrent
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      # Persistent volumes
+      - ../storage/qbittorrent/:/config

@@ -1,0 +1,103 @@
+networks:
+  linkwarden:
+    name: linkwarden
+    driver: bridge
+
+services:
+
+  # Bookmark Manager
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:v2.13.5  # https://github.com/linkwarden/linkwarden/releases
+    container_name: linkwarden
+    hostname: linkwarden
+    depends_on:
+      linkwarden-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+          memory: "1024M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Auth config
+      AUTHELIA_CLIENT_ID: "${LINKWARDEN_OIDC_CLIENT_ID:?[linkwarden] OIDC client ID missing}"
+      AUTHELIA_CLIENT_SECRET: "${LINKWARDEN_OIDC_CLIENT_SECRET:?[linkwarden] OIDC client secret missing}"
+      AUTHELIA_CUSTOM_NAME: "Authelia"
+      AUTHELIA_WELLKNOWN_URL: "${LINKWARDEN_OIDC_WELLKNOWN_URL:?[linkwarden] OIDC URL missing}"
+      NEXTAUTH_SECRET: "${LINKWARDEN_SECRET_KEY:?[linkwarden] Secret key missing}"
+      NEXTAUTH_URL: "${LINKWARDEN_PUBLIC_URL:?[linkwarden] Public URL missing}/api/v1/auth"
+      NEXT_PUBLIC_AUTHELIA_ENABLED: "true"
+      NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"
+      NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
+      DISABLE_NEW_SSO_USERS: "false"
+      # Database config
+      DATABASE_URL: "postgresql://${LINKWARDEN_DB_USER:?[linkwarden] Database user missing}:${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}@linkwarden-db:${LINKWARDEN_DB_PORT:?[linkwarden] Database port missing}/${LINKWARDEN_DB_NAME:?[linkwarden] Database name missing}"
+      POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden] Database password missing}"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.linkwarden.rule: "Host(`bookmark.${DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden.entrypoints: "websecure"
+      traefik.http.routers.linkwarden.tls: "true"
+      traefik.http.routers.linkwarden.middlewares: "no-forward-auth@file"
+      traefik.http.services.linkwarden.loadbalancer.server.port: "4017"
+      # Redirect from 'bookmarks' subdomain to 'bookmark' subdomain
+      traefik.http.routers.linkwarden-redirect.rule: "Host(`bookmarks.${DOMAIN_NAME}`)"
+      traefik.http.routers.linkwarden-redirect.entryPoints: "websecure"
+      traefik.http.routers.linkwarden-redirect.tls: "true"
+      traefik.http.routers.linkwarden-redirect.middlewares: "linkwarden-redirect-regex"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
+      kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
+    networks:
+      - linkwarden
+    ports:
+      - "4017:3000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/linkwarden/data/:/data/data
+
+  # Database for Linkwarden
+  linkwarden-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: linkwarden-db
+    hostname: linkwarden-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
+      POSTGRES_DB: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
+      POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
+      POSTGRES_USER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
+      PGPASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
+      PGUSER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
+    expose:
+      - "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - linkwarden
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/linkwarden-db/data/:/var/lib/postgresql/data

@@ -1,0 +1,57 @@
+networks:
+  audiobookshelf:
+    name: audiobookshelf
+    driver: bridge
+
+services:
+
+  # eBook & Audiobook management
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:2.32.1  # https://github.com/advplyr/audiobookshelf/releases
+    container_name: audiobookshelf
+    hostname: audiobookshelf
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "2048M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/healthcheck" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.audiobookshelf.rule: "Host(`book.${DOMAIN_NAME}`)"
+      traefik.http.routers.audiobookshelf.entrypoints: "websecure"
+      traefik.http.routers.audiobookshelf.tls: "true"
+      traefik.http.routers.audiobookshelf.middlewares: "no-forward-auth@file"
+      traefik.http.services.audiobookshelf.loadbalancer.server.port: "4005"
+      # Redirect from 'books' subdomain to 'book' subdomain
+      traefik.http.routers.audiobookshelf-redirect.rule: "Host(`books.${DOMAIN_NAME}`)"
+      traefik.http.routers.audiobookshelf-redirect.entryPoints: "websecure"
+      traefik.http.routers.audiobookshelf-redirect.tls: "true"
+      traefik.http.routers.audiobookshelf-redirect.middlewares: "audiobookshelf-redirect-regex"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.regex: "^https://books.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "AudioBookShelf (eBook/Audiobook Reader)"
+      kuma.{{container_name}}.http.url: "${AUDIOBOOKSHELF_MONITOR_URL:?[audiobookshelf] Monitor URL missing}"
+    networks:
+      - audiobookshelf
+    ports:
+      - "4005:80"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${BOOKS_DIRECTORY}:/ebooks:ro"
+      # Persistent volumes
+      - ../storage/audiobookshelf/config:/config
+      - ../storage/audiobookshelf/metadata:/metadata

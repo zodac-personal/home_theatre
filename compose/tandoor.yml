@@ -1,0 +1,123 @@
+networks:
+  tandoor:
+    name: tandoor
+    driver: bridge
+
+services:
+
+  # Recipe Manager
+  tandoor:
+    image: vabene1111/recipes:2.3.6  # https://github.com/TandoorRecipes/recipes/releases
+    container_name: tandoor
+    hostname: tandoor
+    depends_on:
+      tandoor-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      REMOTE_USER_AUTH: "1"
+      SOCIAL_DEFAULT_ACCESS: "1"
+      SOCIAL_DEFAULT_GROUP: "guest"
+      SOCIAL_PROVIDERS: "allauth.socialaccount.providers.openid_connect"
+      SOCIALACCOUNT_PROVIDERS: |
+        {
+          "openid_connect": {
+            "SERVERS": [
+              {
+                "id": "authelia",
+                "name": "Authelia",
+                "server_url": "${TANDOOR_OIDC_WELLKNOWN_URL:?[tandoor] OIDC URL missing}",
+                "token_auth_method": "client_secret_basic",
+                "APP": {
+                  "client_id": "${TANDOOR_OIDC_CLIENT_ID:?[tandoor] OIDC client ID missing}",
+                  "secret": "${TANDOOR_OIDC_CLIENT_SECRET:?[tandoor] OIDC client secret missing}"
+                }
+              }
+            ]
+          }
+        }
+      # Database config
+      DB_ENGINE: "django.db.backends.postgresql"
+      POSTGRES_HOST: "tandoor-db"
+      POSTGRES_PORT: "${TANDOOR_DB_PORT:?[tandoor] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor] Database user missing}"
+      # Secrets config
+      SECRET_KEY: "${TANDOOR_SECRET_KEY:?[tandoor] Tandoor secret key missing}"
+      # System config
+      ENABLE_PDF_EXPORT: "1"
+      DEBUG: "0"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/openapi/" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.tandoor-new.rule: "Host(`recipe.${DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor-new.entrypoints: "websecure"
+      traefik.http.routers.tandoor-new.tls: "true"
+      traefik.http.routers.tandoor-new.middlewares: "no-forward-auth@file"
+      traefik.http.services.tandoor-new.loadbalancer.server.port: "4014"
+      # Monitor config
+      kuma.tandoor.http.name: "Tandoor (Recipes)"
+      kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+    networks:
+      - tandoor
+    ports:
+      - "4014:80"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/tandoor/nginx/conf.d/:/opt/recipes/nginx/conf.d
+      - ../storage/tandoor/mediafiles/:/opt/recipes/mediafiles
+      - ../storage/tandoor/staticfiles/:/opt/recipes/staticfiles
+
+  # Database for Tandoor
+  tandoor-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: tandoor-db
+    hostname: tandoor-db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
+      POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
+      POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
+      POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
+      PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
+      PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
+    expose:
+      - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - tandoor
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/tandoor-db/data/:/var/lib/postgresql/data

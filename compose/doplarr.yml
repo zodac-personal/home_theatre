@@ -1,0 +1,39 @@
+services:
+
+  # Discord bot for requests
+  doplarr:
+    image: linuxserver/doplarr:3.7.0  # https://hub.docker.com/r/linuxserver/doplarr/tags
+    container_name: doplarr
+    hostname: doplarr
+    depends_on:
+      radarr:
+        condition: service_healthy
+      sonarr:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      # Integration configuration
+      RADARR__URL: "http://radarr:7878"
+      SONARR__URL: "http://sonarr:8989"
+      RADARR__API: "${RADARR_API_KEY:?[doplarr] Radarr API key missing}"
+      SONARR__API: "${SONARR_API_KEY:?[doplarr] Sonarr API key missing}"
+      # Discord configuration
+      DISCORD__MAX_RESULTS: "5"
+      DISCORD__TOKEN: "${DISCORD_BOT_TOKEN:?[doplarr] Discord bot token missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pidof", "java" ]
+      timeout: 5s
+    networks:
+      - servarr
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/doplarr/:/config

@@ -56,7 +56,6 @@ services:
       # Persistent volumes
       - ../storage/filebrowser/database/:/database
       - ../storage/filebrowser/config/:/config
-      # TODO: Missing /srv mount point
 
   # FTP server
   filebrowser-ftp:

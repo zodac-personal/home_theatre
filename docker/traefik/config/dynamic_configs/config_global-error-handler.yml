@@ -10,7 +10,8 @@
 http:
   routers:
     global-error-handler:
-      rule: "Host(`{{ env "DOMAIN_NAME" | trimAll "\"" }}`) || PathPrefix(`/`)" # Matches all paths on domain
+      # Matches all paths (except UptimeKuma routers)
+      rule: "!(Host(`monitor.{{ env "DOMAIN_NAME" | trimAll "\"" }}`) || Host(`status.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)) && PathPrefix(`/`)"
       priority: 1  # Lowest priority
       entryPoints:
         - websecure  # HTTPS entry point

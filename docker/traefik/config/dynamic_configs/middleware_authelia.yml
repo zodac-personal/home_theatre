@@ -4,8 +4,7 @@ http:
   middlewares:
     authelia:
       forwardAuth:
-        address: https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}/api/verify?rd=https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}
-#        address: http://authelia:9091/api/verify?rd=https://auth2.{{ env "DOMAIN_NAME" | trimAll "\"" }}  # TODO: Test with this once everything is on RPi
+        address: http://authelia:9091/api/verify?rd=https://auth.{{ env "DOMAIN_NAME" | trimAll "\"" }}
         trustForwardHeader: true
         authResponseHeaders:
           - Remote-Email

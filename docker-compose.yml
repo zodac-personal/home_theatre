@@ -835,8 +835,8 @@ services:
           memory: "512M"
     environment:
       # Integration configuration
-      RADARR__URL: "http://radarr:3000"
-      SONARR__URL: "http://sonarr:3001"
+      RADARR__URL: "http://radarr:7878"
+      SONARR__URL: "http://sonarr:8989"
       RADARR__API: "${RADARR_API_KEY:?[doplarr] Radarr API key missing}"
       SONARR__API: "${SONARR_API_KEY:?[doplarr] Sonarr API key missing}"
       # Discord configuration

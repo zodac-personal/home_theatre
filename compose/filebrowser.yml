@@ -52,7 +52,7 @@ services:
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
-      - "${DOCUMENTS_DIRECTORY}:/doc:ro"
+      - "${DOCUMENTS_DIRECTORY}:/srv:ro"
       # Persistent volumes
       - ../storage/filebrowser/database/:/database
       - ../storage/filebrowser/config/:/config
@@ -93,7 +93,7 @@ services:
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
-      - "${FTP_UPLOAD_DIRECTORY}:/ftp"
+      - "${FTP_UPLOAD_DIRECTORY}:/srv"
       # Persistent volumes
       - ../storage/filebrowser-ftp/database/:/database
       - ../storage/filebrowser-ftp/config/:/config

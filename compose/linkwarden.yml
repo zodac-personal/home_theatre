@@ -86,6 +86,7 @@ services:
       PGDATABASE: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
       PGPASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
       PGUSER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
+      PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
     healthcheck:
@@ -100,4 +101,4 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/linkwarden-db/data/:/var/lib/postgresql/data
+      - ../storage/linkwarden-db/:/var/lib/postgresql/

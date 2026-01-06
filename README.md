@@ -247,7 +247,7 @@ Take backup of the current database, then shut the RomM containers down:
 
 ```bash
 docker compose exec romm-db pg_dump -U ${ROMM_DB_USER} -d ${ROMM_DB_NAME} -cC > backup_romm.sql
-docker compose down romm romm-db
+docker compose down romm romm-db romm-cache
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `romm-db`.
@@ -258,7 +258,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 ```bash
 docker compose up --build -d romm-db --wait
 cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER}
-docker compose up --build -d romm
+docker compose up --build -d romm romm-cache
 ```
 
 ### SonarQube DB
@@ -307,7 +307,7 @@ Take backup of the current database, then shut the Tandoor containers down:
 
 ```bash
 docker compose exec tandoor-db pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
-docker compose down tandoor tandoor-ui tandoor-db
+docker compose down tandoor tandoor-db
 ```
 
 Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `tandoor-db`.
@@ -318,7 +318,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 ```bash
 docker compose up --build -d tandoor-db --wait
 cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
-docker compose up --build -d tandoor tandoor-ui
+docker compose up --build -d tandoor
 ```
 
 ### Combined

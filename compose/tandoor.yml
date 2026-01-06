@@ -106,6 +106,7 @@ services:
       PGDATABASE: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
       PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
       PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
+      PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
     healthcheck:
@@ -120,4 +121,4 @@ services:
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/tandoor-db/data/:/var/lib/postgresql/data
+      - ../storage/tandoor-db/:/var/lib/postgresql/

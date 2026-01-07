@@ -1,0 +1,39 @@
+networks:
+  dash:
+    name: dash
+    driver: bridge
+
+services:
+
+  # Server performance monitor
+  dash:
+    image: mauricenino/dashdot:6.2.4
+    container_name: dash
+    hostname: dash
+    environment:
+      # General
+      DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"
+      DASHDOT_PAGE_TITLE: "${DOMAIN_NAME:-dash.}"
+      DASHDOT_SHOW_DASH_VERSION: "bottom_right"
+      DASHDOT_WIDGET_LIST: 'os,cpu,storage,ram,network'
+      # CPU
+      DASHDOT_ENABLE_CPU_TEMPS: "true"
+      # OS
+      DASHDOT_SHOW_HOST: "true"
+      # Network
+      DASHDOT_ACCEPT_OOKLA_EULA: "true"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/info" ]
+      timeout: 5s
+    networks:
+      - dash
+    ports:
+      - '4012:3001'
+    privileged: true  # Needed to read RAM details
+    restart: unless-stopped
+    volumes:
+        # Volume mounts from host system
+        - "/:/mnt/host:ro"

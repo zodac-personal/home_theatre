@@ -2,6 +2,7 @@ include:
   - ./compose/apprise.yml
   - ./compose/authelia.yml
   - ./compose/autokuma-ser.yml
+  - ./compose/dash-ser.yml
   - ./compose/dozzle.yml
   - ./compose/homarr.yml
   - ./compose/lldap.yml

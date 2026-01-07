@@ -3,6 +3,7 @@ include:
   - ./compose/autokuma.yml
   - ./compose/bazarr.yml
   - ./compose/dailytxt.yml
+  - ./compose/dash.yml
   - ./compose/dawarich.yml
   - ./compose/doplarr.yml
   - ./compose/emby.yml

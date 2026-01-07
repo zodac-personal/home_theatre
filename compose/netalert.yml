@@ -3,7 +3,7 @@ services:
   # WiFi/LAN network scanner
   netalert:
     build:
-      context: .
+      context: ..
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions

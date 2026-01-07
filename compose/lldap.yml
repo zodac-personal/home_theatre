@@ -1,0 +1,80 @@
+networks:
+  lldap:
+    name: lldap
+    driver: bridge
+services:
+
+  # LDAP User-store
+  lldap:
+    image: lldap/lldap:2025-12-24-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    container_name: lldap
+    hostname: lldap
+    depends_on:
+      lldap-db:
+        condition: service_healthy
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # LDAP config
+      LLDAP_DATABASE_URL: "postgres://${LLDAP_DB_USER:?[lldap] Missing DB user}:${LLDAP_DB_PASSWORD:?[lldap] Missing DB password}@lldap-db:${LLDAP_DB_PORT:?[lldap] Missing DB port}/${LLDAP_DB_NAME:?[lldap] Missing DB name}"
+      LLDAP_LDAP_BASE_DN: "${LLDAP_BASE_DN:?[lldap] Missing base LDAP DN}"
+      LLDAP_LDAP_USER_PASS: "${LLDAP_ADMIN_PASSWORD:?[lldap] Missing LDAP admin password}"
+      # Secrets
+      LLDAP_JWT_SECRET: "${LLDAP_JWT_SECRET:?[lldap] Missing LDAP JWT secret}"
+      LLDAP_KEY_FILE: ""  # Empty on purpose so KEY_SEED is used
+      LLDAP_KEY_SEED: "${LLDAP_KEY_SEED:?[lldap] Missing LDAP key seed}"
+    labels:
+      # Reverse proxy config for Authelia UI and OIDC
+      traefik.enable: "true"
+      traefik.docker.network: "lldap"
+      traefik.http.routers.lldap.rule: "Host(`lldap.${DOMAIN_NAME}`)"
+      traefik.http.routers.lldap.entrypoints: "websecure"
+      traefik.http.routers.lldap.tls: "true"
+      traefik.http.routers.lldap.service: "lldap"
+      traefik.http.services.lldap.loadbalancer.server.port: "17170"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "LLDAP (LDAP Server)"
+      kuma.{{container_name}}.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
+    networks:
+      - lldap
+    ports:
+      - "3890:3890"
+      - "17170:17170"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/lldap/:/data
+
+  lldap-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: lldap-db
+    hostname: lldap-db
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${LLDAP_DB_PORT:?[lldap-db] Missing DB port}"
+      POSTGRES_DB: "${LLDAP_DB_NAME:?[lldap-db] Missing DB name}"
+      POSTGRES_PASSWORD: "${LLDAP_DB_PASSWORD:?[lldap-db] Missing DB password}"
+      POSTGRES_USER: "${LLDAP_DB_USER:?[lldap-db] Missing DB user}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${LLDAP_DB_NAME:?[lldap-db] Missing DB name}"
+      PGPASSWORD: "${LLDAP_DB_PASSWORD:?[lldap-db] Missing DB password}"
+      PGUSER: "${LLDAP_DB_USER:?[lldap-db] Missing DB user}"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    expose:
+      - "${LLDAP_DB_PORT:?[lldap-db] Missing DB port}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - lldap
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/lldap-db/:/var/lib/postgresql/

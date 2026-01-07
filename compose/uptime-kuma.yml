@@ -1,0 +1,46 @@
+networks:
+  uptime-kuma:
+    name: uptime-kuma
+    driver: bridge
+
+services:
+
+  # Monitoring and alerting
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.1.0-beta.0  # https://github.com/louislam/uptime-kuma/
+    container_name: uptime-kuma
+    hostname: uptime-kuma
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Port config
+      UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.docker.network: "uptime-kuma"
+      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
+      traefik.http.routers.uptime-kuma.entrypoints: "websecure"
+      traefik.http.routers.uptime-kuma.tls: "true"
+      traefik.http.routers.uptime-kuma.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+      # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
+      traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"
+      traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
+      traefik.http.routers.uptime-kuma-redirect.tls: "true"
+      traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
+      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+    networks:
+      - uptime-kuma
+    ports:
+      - "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/uptime-kuma/:/app/data

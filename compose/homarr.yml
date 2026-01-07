@@ -1,0 +1,60 @@
+networks:
+  homarr:
+    name: homarr
+    driver: bridge
+
+services:
+
+  # Homepage
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:v1.48.0  # https://github.com/homarr-labs/homarr/releases
+    container_name: homarr
+    hostname: homarr
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      # Authentication config
+      # AUTH_OIDC_ADMIN_GROUP: "homarr_admins" # Configured in UI at start-up
+      AUTH_LOGOUT_REDIRECT_URL: "${HOMARR_OIDC_LOGOUT_URI:?[homarr] OIDC logout URL missing}"
+      AUTH_PROVIDERS: "oidc"
+      AUTH_OIDC_AUTO_LOGIN: "true"
+      AUTH_OIDC_CLIENT_ID: "${HOMARR_OIDC_CLIENT_ID:?[homarr] OIDC client ID missing}"
+      AUTH_OIDC_CLIENT_NAME: "Authelia"
+      AUTH_OIDC_CLIENT_SECRET: "${HOMARR_OIDC_CLIENT_SECRET:?[homarr] OIDC client secret missing}"
+      AUTH_OIDC_FORCE_USERINFO: "true"
+      AUTH_OIDC_GROUPS_ATTRIBUTE: "groups"
+      AUTH_OIDC_ISSUER: "${HOMARR_OIDC_URI:?[homarr] OIDC URI missing}"
+      AUTH_OIDC_SCOPE_OVERWRITE: "openid email profile groups"
+      # For debugging auth issues:
+      # AUTH_PROVIDERS: "oidc,credentials"
+      # AUTH_OIDC_AUTO_LOGIN: "false"
+      BASE_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      NEXTAUTH_URL: "${HOMARR_BASE_URL:?[homarr] Base URL missing}"
+      # Secrets config
+      SECRET_ENCRYPTION_KEY: "${HOMARR_SECRET_KEY:?[homarr] Secret key missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7575/api/health/live" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.docker.network: "homarr"
+      traefik.http.routers.homarr.rule: "Host(`${DOMAIN_NAME}`)"
+      traefik.http.routers.homarr.entrypoints: "websecure"
+      traefik.http.routers.homarr.tls: "true"
+      traefik.http.routers.homarr.middlewares: "no-forward-auth@file"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Homarr (HomePage)"
+      kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
+    networks:
+      - homarr
+    ports:
+      - "5000:7575"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/homarr/data:/appdata

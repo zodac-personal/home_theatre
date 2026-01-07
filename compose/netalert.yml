@@ -1,0 +1,56 @@
+services:
+
+  # WiFi/LAN network scanner
+  netalert:
+    build:
+      context: .
+      dockerfile: docker/netalert/Dockerfile
+      args:
+        # Docker image versions
+        NETALERT_VERSION: "25.11.29" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
+        # Build arguments
+        # Internal config
+        TIMEZONE: "${TIMEZONE:?Timezone missing}"
+        # Notification config
+        DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL: "${DISCORD_NEW_NETWORK_DEVICE_WEBHOOK_URL:?[netalert] Discord webhook URL missing}"
+        # Scanning config
+        NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
+        # UI config
+        DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
+    container_name: netalert
+    hostname: netalert
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      LOG_LEVEL: "minimal"
+      # UI config
+      PORT: "${NETALERT_UI_PORT:?[netalert] Port missing}"
+    labels:
+      # Reverse proxy config
+      #   Because NetAlert uses `network_mode: host`, we cannot use docker labels to configure the service with Traefik
+      #   Instead, there is a dynamic config file netalert.yml to define this, and the home network IP address of this
+      #   service is passed in to the Traefik as an environment variable
+      #   We can configure the redirects here, but it makes sense to leave it all in the config file instead.
+      # Monitor config
+      kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
+      kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
+      kuma.{{container_name}}.http.max_redirects: "0"
+    network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
+    expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
+      - "${NETALERT_UI_PORT:?[netalert] Port missing}"
+    read_only: true
+    restart: unless-stopped
+    tmpfs:
+      # All writable runtime state resides under /tmp; comment out to persist logs between restarts
+      - "/tmp:uid=20211,gid=20211,mode=1700,rw,noexec,nosuid,nodev,async,noatime,nodiratime"
+    volumes:
+      # Volume mounts from host system
+      - /etc/localtime:/etc/localtime:ro
+      # Persistent volumes
+      - ../storage/netalert/:/data

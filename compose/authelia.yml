@@ -1,0 +1,131 @@
+networks:
+  authelia:
+    name: authelia
+    driver: bridge
+
+services:
+
+  # Identity platform (authentication and SSO)
+  authelia:
+    image: authelia/authelia:4.39.15  # https://github.com/authelia/authelia/releases
+    container_name: authelia
+    hostname: authelia
+    depends_on:
+      authelia-cache:
+        condition: service_healthy
+      authelia-db:
+        condition: service_healthy
+      lldap:
+        condition: service_healthy
+    environment:
+      # Logging config
+      LOG_LEVEL: "INFO"
+      # LDAP configuration
+      ADMIN_PASSWORD: "${LLDAP_ADMIN_PASSWORD:?[authelia] Missing LDAP admin password}"
+      BASE_DN: "${LLDAP_BASE_DN:?[authelia] Missing base LDAP DN}"
+      LDAP_HOSTNAME: "lldap"
+      LDAP_PORT: "${LLDAP_PORT:?[authelia] Missing LDAP port}"
+      LDAP_IMPL: "lldap"
+      # Basic configuration
+      DOMAIN_NAME: "${DOMAIN_NAME:?[authelia] Missing domain name}"
+      SERVER_PORT: "${AUTHELIA_INTERNAL_PORT:-9091}"
+      # Session configuration
+      REDIS_HOSTNAME: "authelia-cache"
+      REDIS_PORT: "6379"
+      # SMTP configuration
+      SMTP_EMAIL_ADDRESS: "${SMTP_EMAIL_ADDRESS:?[authelia] Missing SMTP email address}"
+      SMTP_APP_PASSWORD: "${SMTP_APP_PASSWORD:?[authelia] Missing SMTP app password}"
+      SMTP_FROM_EMAIL_ADDRESS: "${SMTP_EMAIL_ADDRESS:?[authelia] Missing SMTP from email address}"
+      # Backend configuration
+      BACKEND_HOSTNAME: "authelia-db"
+      BACKEND_NAME: "${AUTHELIA_DB_NAME:?[authelia] Database name missing}"
+      BACKEND_PASSWORD: "${AUTHELIA_DB_PASSWORD:?[authelia] Database password missing}"
+      BACKEND_PORT: "${AUTHELIA_DB_PORT:?[authelia] Database port missing}"
+      BACKEND_USER: "${AUTHELIA_DB_USER?[authelia] Database user missing}"
+      # Enable the template filter for substitutions in configuration.yml
+      X_AUTHELIA_CONFIG_FILTERS: "template"
+      # 2FA config
+      TOTP_DISABLE: "true"
+      WEBAUTHN_DISABLE: "true"
+      # Secrets
+      RESET_PASSWORD_SECRET: "${AUTHELIA_RESET_PASSWORD_SECRET:?[authelia] Missing reset password secret}"
+      OIDC_HMAC_SECRET: "${AUTHELIA_OIDC_HMAC_SECRET:?[authelia] Missing OIDC HMAC secret}"
+      SESSION_SECRET: "${AUTHELIA_SESSION_SECRET:?[authelia] Missing session secret}"
+      STORAGE_ENCRYPTION_KEY: "${AUTHELIA_STORAGE_ENCRYPTION_KEY:?[authelia] Missing storage encryption key}"
+    labels:
+      # Reverse proxy config for Authelia UI and OIDC
+      traefik.enable: "true"
+      traefik.docker.network: "authelia"
+      traefik.http.routers.authelia.rule: "Host(`auth.${DOMAIN_NAME}`)"
+      traefik.http.routers.authelia.entrypoints: "websecure"
+      traefik.http.routers.authelia.tls: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Authelia (Identity Platform)"
+      kuma.{{container_name}}.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
+    networks:
+      - authelia
+      - lldap
+    ports:
+      - "${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
+    restart: unless-stopped
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - ../docker/authelia/config/configuration.yml:/config/configuration.yml:ro
+      - ../docker/authelia/certs/authelia_private_key.pem:/etc/certs/authelia_private_key.pem:ro
+      # Persistent volumes
+      - ../storage/authelia/assets/:/assets
+      - ../storage/authelia/data:/var/lib/authelia
+
+  authelia-cache:
+    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    container_name: authelia-cache
+    hostname: authelia-cache
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "valkey-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - authelia
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/authelia-cache/data/:/data
+
+  authelia-db:
+    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    container_name: authelia-db
+    hostname: authelia-db
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Database config
+      PGPORT: "${AUTHELIA_DB_PORT:?[authentik-db] Database port missing}"
+      POSTGRES_DB: "${AUTHELIA_DB_NAME:?[authentik-db] Database name missing}"
+      POSTGRES_PASSWORD: "${AUTHELIA_DB_PASSWORD:?[authentik-db] Database password missing}"
+      POSTGRES_USER: "${AUTHELIA_DB_USER?[authentik-db] Database user missing}"
+      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
+      PGDATABASE: "${AUTHELIA_DB_NAME:?[authentik-db] Database name missing}"
+      PGPASSWORD: "${AUTHELIA_DB_PASSWORD:?[authentik-db] Database password missing}"
+      PGUSER: "${AUTHELIA_DB_USER?[authentik-db] Database user missing}"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    expose:
+      - "${AUTHELIA_DB_PORT:?[authentik-db] Database port missing}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      timeout: 5s
+    networks:
+      - authelia
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/authelia-db/:/var/lib/postgresql/

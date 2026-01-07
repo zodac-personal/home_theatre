@@ -1,0 +1,91 @@
+networks:
+  traefik:
+    name: traefik
+    driver: bridge
+
+services:
+
+  # Reverse proxy
+  traefik:
+    image: traefik:v3.6.6  # https://github.com/traefik/traefik/releases
+    container_name: traefik
+    hostname: traefik
+    command: --configFile=/config/traefik.yml
+    depends_on:
+      traefik-provider:
+        condition: service_healthy
+    environment:
+      # Variables used for Go template substitution in the config files
+      DOMAIN_NAME: "${DOMAIN_NAME}"
+      STATUS_URL: "${STATUS_URL}"
+      # Non-docker service IPs
+      NETALERT_URL: "${NETALERT_URL}"
+      TORRENT_URL: "${TORRENT_URL}"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.docker.network: "traefik"
+      traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAIN_NAME}`)"
+      traefik.http.routers.traefik.entrypoints: "websecure"
+      traefik.http.routers.traefik.tls: "true"
+      traefik.http.routers.traefik.middlewares: "authelia-forward-auth@file"
+      traefik.http.routers.traefik.service: "api@internal"
+      # Disable authentication for 'ping' path
+      traefik.http.routers.traefik-ping.rule: "Host(`traefik.${DOMAIN_NAME}`) && Path(`/ping`)"
+      traefik.http.routers.traefik-ping.entrypoints: "websecure"
+      traefik.http.routers.traefik-ping.tls: "true"
+      traefik.http.routers.traefik-ping.middlewares: "no-forward-auth@file"
+      traefik.http.services.traefik-ping.loadbalancer.server.port: "8080"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
+      kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
+    networks:
+      - authelia
+      - dozzle
+      - homarr
+      - lldap
+      - speedtest
+      - traefik
+      - uptime-kuma
+    ports:
+      - "443:443"
+      - "5555:8080"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Docker socket mount from host system
+      - "${DOCKER_SOCKET}:/var/run/docker.sock"
+      # Volume mounts from host system
+      - ../docker/traefik/config/traefik.yml:/config/traefik.yml:ro
+      - ../docker/traefik/config/dynamic_configs/:/dynamic_configs:ro
+      - ../docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
+      - ../docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
+
+  # Reverse proxy connector for external hosts
+  traefik-provider:
+    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    container_name: traefik-provider
+    hostname: traefik-provider
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "valkey-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - traefik
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/traefik-provider/data/:/data

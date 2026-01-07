@@ -1,0 +1,32 @@
+networks:
+  watchstate:
+    name: watchstate
+    driver: bridge
+
+services:
+
+  # Tool to import/export played state of media in Emby, instead of using Trakt
+  watchstate:
+    image: ghcr.io/arabcoders/watchstate:v1.0.5  # https://github.com/arabcoders/watchstate/releases
+    container_name: watchstate
+    hostname: watchstate
+    environment:
+      # Base config
+      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      # Logging config
+      WS_LOGGER_FILE_ENABLE: "false" # Disabled due to logs being too large, and not needing them
+    healthcheck: # Default healthcheck fails at the start, before eventually passing which breaks scripts
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8080/v1/api/system/healthcheck" ] # wget not installed
+      timeout: 5s
+    networks:
+      - watchstate
+    ports:
+      - "5006:8080"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/watchstate/data:/config

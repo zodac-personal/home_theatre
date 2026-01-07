@@ -181,6 +181,26 @@ cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authe
 docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache
 ```
 
+### Dawarich DB
+
+Take backup of the current database, then shut the Dawarich containers down:
+
+```bash
+docker compose exec dawarich-db pg_dump -U ${DAWARICH_DB_USER} -d ${DAWARICH_DB_NAME} -cC > backup_dawarich.sql
+docker compose down dawarich dawarich-sidekiq dawarich-cache dawarich-db photon
+```
+
+Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `dawarich-db`.
+Next, delete the storage for `dawarich-db` (make sure to copy this directory/volume first).
+
+Finally, start up the new DB container, restore the backup, then start the remaining Authelia containers:
+
+```bash
+docker compose up --build -d dawarich-db --wait
+cat backup_dawarich.sql | docker compose exec -T dawarich-db psql -U ${AUTHELIA_DB_USER}
+docker compose up --build -d dawarich dawarich-sidekiq dawarich-cache photon 
+```
+
 ### Jellystat DB
 
 Take backup of the current database, then shut the Jellystat containers down:

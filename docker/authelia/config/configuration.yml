@@ -328,6 +328,13 @@ identity_providers:
             subject:
               - [ "group:admin" ]
               - [ "group:user" ]
+      dawarich:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:dawarich_admins" ]
+              - [ "group:dawarich_users" ]
       homarr:
         default_policy: 'deny'
         rules:
@@ -400,6 +407,26 @@ identity_providers:
           - 'offline_access'
           - 'openid'
           - 'profile'
+      - client_name: 'Dawarich OIDC'
+        client_id: '1l1SLGQp6h0QeqvEO9IerJXhyo99KSqLTRBn0clz'
+        client_secret: '$pbkdf2-sha512$310000$BeYBOYmVe/MvWxI1/.SRfw$uU8VYu5.NTpjbZ9jUQCdQFLaHJJZ/iMZ1WZU8oAU720rIpXpQaLDjS2auJGjz5GJN5vCE7wDGHRPsrLEpoaOSw'
+        authorization_policy: 'dawarich'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://map.{{ env "DOMAIN_NAME" }}/users/auth/openid_connect/callback'
+        response_types:
+          - 'code'
+        scopes:
+          - 'openid'
+          - 'email'
+          - 'profile'
+          - 'groups'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
       - client_name: 'Homarr OIDC'
         client_id: 'XWHZppH34u95U2pJmTsDkQwrU5g8824h9PHICa9g'
         client_secret: '$pbkdf2-sha512$310000$qAmmI2bjStxuvvx0jkskWw$Nnqj2VcIhpKVRYvVmppKD4c4Zvv5DfJRj2jbv4M2Cdy8rynGcEco5LjlcVCkXnJUgTeIBhNCVsTBVB3xSkojZw'

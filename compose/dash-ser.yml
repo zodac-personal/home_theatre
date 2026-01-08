@@ -8,8 +8,8 @@ services:
   # Server performance monitor
   dash-ser:
     image: mauricenino/dashdot:6.2.4  # https://github.com/MauriceNino/dashdot/releases
-    container_name: dash
-    hostname: dash
+    container_name: dash-ser
+    hostname: dash-ser
     environment:
       # General
       DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"

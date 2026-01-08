@@ -78,7 +78,7 @@ access_control:
     - domain: 'dash.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
-        - '^/info'
+        - '^(.*)/info'
       policy: 'bypass'
       methods:
         - 'GET'

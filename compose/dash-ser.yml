@@ -14,6 +14,7 @@ services:
       # General
       DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"
       DASHDOT_PAGE_TITLE: "${DOMAIN_NAME:-dash.} [SER]"
+      DASHDOT_ROUTING_PATH: "/ser"
       DASHDOT_SHOW_DASH_VERSION: "bottom_right"
       DASHDOT_WIDGET_LIST: 'os,cpu,ram,storage,network'
       # CPU
@@ -30,8 +31,19 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/info" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/ser/info" ]
       timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.docker.network: "dash-ser"
+      traefik.http.routers.dash-ser.rule: "Host(`dash.${DOMAIN_NAME}`) && PathPrefix(`/ser`)"
+      traefik.http.routers.dash-ser.entrypoints: "websecure"
+      traefik.http.routers.dash-ser.tls: "true"
+      traefik.http.routers.dash-ser.middlewares: "authelia-forward-auth@file"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Dash [SER] (Server Monitor)"
+      kuma.{{container_name}}.http.url: "${DASH_SER_MONITOR_URL:?[dash-ser] Monitor URL missing}"
     networks:
       - dash-ser
     ports:

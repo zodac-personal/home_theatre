@@ -47,6 +47,7 @@ services:
       kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
       - authelia
+      - dash-ser
       - dozzle
       - homarr
       - lldap

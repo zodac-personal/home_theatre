@@ -74,6 +74,18 @@ authentication_backend:
 access_control:
   default_policy: 'deny'
   rules:
+    # Dash
+    - domain: 'dash.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/info'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'dash.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:dash_admins" ]
     # Dozzle
     - domain: 'log.{{ env "DOMAIN_NAME" }}'
       resources:

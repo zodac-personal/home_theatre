@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.10">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1188" dy="624" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -108,7 +108,7 @@
           <mxGeometry height="40" width="120" x="770" y="40" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/ZoneMinder&quot;&gt;Frigate&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Home Camera Streaming&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="800" y="680" as="geometry" />
+          <mxGeometry height="40" width="120" x="1120" y="680" as="geometry" />
         </mxCell>
         <mxCell id="L6m80jQgylzgtWpYlu2N-5" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="oyaQrTRKLkGkAWCvTF3D-5">
           <mxGeometry relative="1" as="geometry" />
@@ -271,7 +271,7 @@
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-25" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="160" y="680" as="geometry" />
         </mxCell>
-        <mxCell id="oyaQrTRKLkGkAWCvTF3D-13" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/TandoorRecipes/recipes&quot;&gt;Tandoor&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Recipe Cookbook&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="oyaQrTRKLkGkAWCvTF3D-13" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/TandoorRecipes/recipes&quot;&gt;Tandoor&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Recipe Cookbook&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="KxSA5gZsJCGf5EhIG4f--3" parent="ROIVXRoGKlTalxw2WbaJ-25" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
@@ -320,7 +320,7 @@
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-29" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="640" y="680" as="geometry" />
+          <mxGeometry height="40" width="120" x="800" y="680" as="geometry" />
         </mxCell>
         <mxCell id="L3N2BB-xulvQuJLPhwg5-2" parent="ROIVXRoGKlTalxw2WbaJ-29" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/PhiTux/DailyTxT&quot;&gt;DailyTxT&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Journal&lt;/i&gt;&lt;/sub&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -337,8 +337,11 @@
         <mxCell id="m3TOI7ntmCoXaSSpGHYj-2" parent="ROIVXRoGKlTalxw2WbaJ-30" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
+        <mxCell id="Tl25KXTgNwVIgyIWhWGG-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=30;container=0;" value="" vertex="1">
+          <mxGeometry height="240" width="200" x="880" y="200" as="geometry" />
+        </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-31" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="480" y="680" as="geometry" />
+          <mxGeometry height="40" width="120" x="640" y="680" as="geometry" />
         </mxCell>
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-14" parent="ROIVXRoGKlTalxw2WbaJ-31" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/hay-kot/homebox&quot;&gt;Homebox&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Inventory Manager&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -416,7 +419,7 @@
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
         <mxCell id="4llZug0oc3wIDcsTs2dC-1" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="480" y="600" as="geometry" />
+          <mxGeometry height="40" width="120" x="480" y="680" as="geometry" />
         </mxCell>
         <mxCell id="4llZug0oc3wIDcsTs2dC-2" parent="4llZug0oc3wIDcsTs2dC-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://github.com/SonarSource/sonarqube&quot;&gt;SonarQube&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;Code Quality Scanner&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -433,17 +436,11 @@
         <mxCell id="s6KsKlsxPxhYHKT-FHXf-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/pbogre/jetlog&quot;&gt;Jetlog&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;Personal Flight Tracker&lt;/i&gt;&lt;/span&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="1120" y="640" as="geometry" />
         </mxCell>
-        <mxCell id="Tl25KXTgNwVIgyIWhWGG-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=30;container=0;" value="" vertex="1">
-          <mxGeometry height="240" width="200" x="880" y="200" as="geometry" />
-        </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-5" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;container=0;" value="&lt;b&gt;&lt;u&gt;Security &amp;amp; Metrics&lt;/u&gt;&lt;/b&gt;" vertex="1">
           <mxGeometry height="26.79" width="111" x="880" y="200" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;container=0;" value="&lt;a href=&quot;https://github.com/crowdsecurity/crowdsec&quot;&gt;Crowdsec&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Host Blocker&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="920" y="320" as="geometry" />
-        </mxCell>
-        <mxCell id="HlaznDHf1Y8uNSB78Uza-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;container=0;" value="&lt;a href=&quot;https://github.com/grafana/grafana&quot;&gt;Grafana&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Observability&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="920" y="360" as="geometry" />
         </mxCell>
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=30;container=0;" value="" vertex="1">
           <mxGeometry height="160" width="360" x="80" y="1241" as="geometry" />
@@ -503,7 +500,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" value="&lt;a href=&quot;https://github.com/BigBoot/AutoKuma/&quot;&gt;AutoKuma&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Monitor Generator (SER)&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="720" y="360" as="geometry" />
+          <mxGeometry height="40" width="120" x="720" y="320" as="geometry" />
         </mxCell>
         <mxCell id="n2uqNcOl2qhzvm0Dekme-20" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.043;entryY=0.998;entryDx=0;entryDy=0;entryPerimeter=0;" target="nFLrENYFJLQG_o7xyKyQ-1">
           <mxGeometry relative="1" as="geometry" />
@@ -555,15 +552,15 @@
           <mxGeometry height="30" width="60" x="130.31" y="50" as="geometry" />
         </mxCell>
         <mxCell id="L6m80jQgylzgtWpYlu2N-1" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="440" y="400" as="geometry" />
+          <mxGeometry height="40" width="120" x="400.63" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-2" parent="L6m80jQgylzgtWpYlu2N-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" value="&lt;a href=&quot;https://github.com/arabcoders/watchstate&quot;&gt;WatchState&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Emby watched data&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-2" parent="L6m80jQgylzgtWpYlu2N-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;" value="&lt;a href=&quot;https://github.com/arabcoders/watchstate&quot;&gt;WatchState&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Emby Watched Data&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="L6m80jQgylzgtWpYlu2N-4" edge="1" parent="1" source="L6m80jQgylzgtWpYlu2N-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="0rjydeuM3OXjqDoLz8A_-4">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="500" y="540" />
+              <mxPoint x="461" y="540" />
               <mxPoint x="250" y="540" />
             </Array>
           </mxGeometry>
@@ -574,7 +571,7 @@
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-5" connectable="0" parent="i6Ztm92oaQVUvdZmO5BK-4" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
-        <mxCell id="i6Ztm92oaQVUvdZmO5BK-6" parent="i6Ztm92oaQVUvdZmO5BK-5" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/lldap/lldap&quot;&gt;LLDAP&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;LDAP server&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="i6Ztm92oaQVUvdZmO5BK-6" parent="i6Ztm92oaQVUvdZmO5BK-5" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/lldap/lldap&quot;&gt;LLDAP&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;LDAP Server&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-23" parent="i6Ztm92oaQVUvdZmO5BK-5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
@@ -594,7 +591,7 @@
         <mxCell id="i6Ztm92oaQVUvdZmO5BK-14" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="720" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="lcRQkhD3couCPsEeO-z6-1" parent="i6Ztm92oaQVUvdZmO5BK-14" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/alexjustesen/speedtest-tracker&quot;&gt;Speedtest Tracker&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp;Speed Test&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="lcRQkhD3couCPsEeO-z6-1" parent="i6Ztm92oaQVUvdZmO5BK-14" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/alexjustesen/speedtest-tracker&quot;&gt;Speedtest Tracker&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;SpeedTest History&lt;/sub&gt;&lt;/i&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="lcRQkhD3couCPsEeO-z6-2" parent="i6Ztm92oaQVUvdZmO5BK-14" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="" vertex="1">
@@ -680,6 +677,40 @@
         </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-4" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-5">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-1" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-2" parent="bDJwmYo4lkM-hA_jkZIx-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/MauriceNino/dashdot&quot;&gt;Dash.&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;Server Monitor&lt;/i&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-3" parent="bDJwmYo4lkM-hA_jkZIx-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-5" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="40" width="120" x="920" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-6" parent="bDJwmYo4lkM-hA_jkZIx-5" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/MauriceNino/dashdot&quot;&gt;Dash.&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;Server Monitor&lt;/i&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-7" parent="bDJwmYo4lkM-hA_jkZIx-5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-10" edge="1" parent="1" source="MZvt10MQMLPbu3KIxgem-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="bDJwmYo4lkM-hA_jkZIx-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="220" />
+              <mxPoint x="540" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bDJwmYo4lkM-hA_jkZIx-11" edge="1" parent="1" source="MZvt10MQMLPbu3KIxgem-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="bDJwmYo4lkM-hA_jkZIx-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="390" />
+              <mxPoint x="540" y="390" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

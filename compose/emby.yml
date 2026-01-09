@@ -54,3 +54,28 @@ services:
       # Persistent volumes
       - ../storage/emby/config/:/config
       - ../storage/emby/backup/:/backup
+
+  # Custom Emby Channel Creator
+  ersatztv:
+    image: ghcr.io/ersatztv/ersatztv:v26.1.1  # https://github.com/ErsatzTV/ErsatzTV/releases
+    container_name: ersatztv
+    hostname: ersatztv
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+    networks:
+      - emby
+    ports:
+      - "8409:8409"
+    restart: unless-stopped
+    tmpfs:
+      - /transcode
+    volumes:
+      # Volume mounts from host system
+      - "${MOVIE_DIRECTORY}:/media/movies:ro"
+      - "${TV1_DIRECTORY}:/media/tv1:ro"
+      - "${TV2_DIRECTORY}:/media/tv2:ro"
+      - "${TV_TRASH_DIRECTORY}:/media/trash:ro"
+      - "${TV_KIDS_DIRECTORY}:/media/kids:ro"
+      # Persistent volumes
+      - ../storage/ersatztv/config/:/config/

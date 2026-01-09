@@ -72,7 +72,7 @@
           <mxGeometry height="40" width="120" x="600" y="840" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/home-assistant&quot;&gt;HomeAssistant&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Smart Home Manager&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="960" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="1120" y="600" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-16" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" value="SER Max 5" vertex="1">
           <mxGeometry height="30" width="90" x="200" y="160" as="geometry" />
@@ -124,9 +124,6 @@
         </mxCell>
         <mxCell id="dgM-4BmzPYSXpo5_9bCQ-6" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;u&gt;&lt;b&gt;Mobile Apps&lt;/b&gt;&lt;/u&gt;" vertex="1">
           <mxGeometry height="30" width="120" x="880" y="1240" as="geometry" />
-        </mxCell>
-        <mxCell id="dgM-4BmzPYSXpo5_9bCQ-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/danielbrendel/hortusfox-web&quot;&gt;HortusFox&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Plant Management&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1120" y="600" as="geometry" />
         </mxCell>
         <mxCell id="dgM-4BmzPYSXpo5_9bCQ-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/actualbudget/actual&quot;&gt;Actual Budget&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Home Budgeting&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="960" y="680" as="geometry" />
@@ -296,7 +293,7 @@
           <mxGeometry height="20" width="30" y="20" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-27" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="320" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="480" y="640" as="geometry" />
         </mxCell>
         <mxCell id="0rjydeuM3OXjqDoLz8A_-3" parent="ROIVXRoGKlTalxw2WbaJ-27" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/advplyr/audiobookshelf&quot;&gt;AudioBookShelf&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;eBooks &amp;amp; Audiobooks&lt;/i&gt;&lt;/sub&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -322,14 +319,14 @@
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-29" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="800" y="680" as="geometry" />
         </mxCell>
-        <mxCell id="L3N2BB-xulvQuJLPhwg5-2" parent="ROIVXRoGKlTalxw2WbaJ-29" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/PhiTux/DailyTxT&quot;&gt;DailyTxT&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Journal&lt;/i&gt;&lt;/sub&gt;" vertex="1">
+        <mxCell id="L3N2BB-xulvQuJLPhwg5-2" parent="ROIVXRoGKlTalxw2WbaJ-29" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/PhiTux/DailyTxT&quot;&gt;DailyTxT&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Journal&lt;/i&gt;&lt;/sub&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="gErYVcJsU2c04pcpEg-A-22" parent="ROIVXRoGKlTalxw2WbaJ-29" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-30" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="480" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="640" y="640" as="geometry" />
         </mxCell>
         <mxCell id="m3TOI7ntmCoXaSSpGHYj-1" parent="ROIVXRoGKlTalxw2WbaJ-30" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/filebrowser/filebrowser&quot;&gt;File Browser&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;File&amp;nbsp;&lt;/i&gt;&lt;/span&gt;&lt;i style=&quot;font-size: 10px; background-color: initial;&quot;&gt;Viewer&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -645,14 +642,8 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/Freika/dawarich&quot;&gt;Dawarich&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="640" y="640" as="geometry" />
-        </mxCell>
         <mxCell id="IhNmxvIkTaH7KBJsD18b-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="750" y="600" as="geometry" />
-        </mxCell>
-        <mxCell id="IhNmxvIkTaH7KBJsD18b-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
-          <mxGeometry height="10" width="10" x="750" y="640" as="geometry" />
         </mxCell>
         <mxCell id="IhNmxvIkTaH7KBJsD18b-3" edge="1" parent="1" source="FYdWkUBb8k9048htAl1_-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
           <mxGeometry relative="1" as="geometry" />
@@ -663,17 +654,11 @@
         <mxCell id="IhNmxvIkTaH7KBJsD18b-5" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="IhNmxvIkTaH7KBJsD18b-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
-          <mxGeometry height="20" width="30" x="640" y="640" as="geometry" />
-        </mxCell>
-        <mxCell id="IhNmxvIkTaH7KBJsD18b-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="20" width="30" x="640" y="660" as="geometry" />
-        </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-2" edge="1" parent="1" source="YL5RblAow4cGirAIxByP-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="AQSvJnJNl6eQuiFYvKGu-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="&lt;a href=&quot;https://github.com/rtuszik/photon-docker&quot;&gt;Photon&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Geocoder&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="800" y="640" as="geometry" />
+          <mxGeometry height="40" width="120" x="960" y="640" as="geometry" />
         </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-4" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-5">
           <mxGeometry relative="1" as="geometry" />
@@ -711,6 +696,27 @@
               <mxPoint x="540" y="390" />
             </Array>
           </mxGeometry>
+        </mxCell>
+        <mxCell id="HCQHgh5ILe631yiaYYjY-1" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="40" width="120" x="800" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/Freika/dawarich&quot;&gt;Dawarich&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="40" width="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-2" parent="HCQHgh5ILe631yiaYYjY-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="110" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-13" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="20" width="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-14" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="HCQHgh5ILe631yiaYYjY-11" edge="1" parent="1" source="HCQHgh5ILe631yiaYYjY-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="0rjydeuM3OXjqDoLz8A_-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="HCQHgh5ILe631yiaYYjY-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="&lt;a href=&quot;https://github.com/ErsatzTV/ErsatzTV&quot;&gt;ErsatzTV&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Custom Emby Channels&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="320" y="640" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

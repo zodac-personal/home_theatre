@@ -308,8 +308,13 @@ access_control:
         - '^/api.*$'
       policy: 'bypass'
       methods:
-        - 'GET'
         - 'POST'
+    - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^(.*)/api(.*)$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
     - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
       policy: 'one_factor'
       subject:

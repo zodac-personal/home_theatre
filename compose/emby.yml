@@ -65,8 +65,8 @@ services:
       LOG_LEVEL: "INFO"
     networks:
       - emby
-    expose:
-      - "8000"
+    ports:
+      - "4019:8000"
     restart: unless-stopped
     volumes:
       # Volume mounts from host system

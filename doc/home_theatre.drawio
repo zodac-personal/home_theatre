@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.10">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.3.0">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1426" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="570" dy="300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -715,7 +715,7 @@
         <mxCell id="HCQHgh5ILe631yiaYYjY-11" edge="1" parent="1" source="HCQHgh5ILe631yiaYYjY-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="0rjydeuM3OXjqDoLz8A_-4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HCQHgh5ILe631yiaYYjY-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="&lt;a href=&quot;https://github.com/ErsatzTV/ErsatzTV&quot;&gt;ErsatzTV&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Custom Emby Channels&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="HCQHgh5ILe631yiaYYjY-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="&lt;a href=&quot;https://github.com/chrisbenincasa/tunarr&quot;&gt;Tunarr&lt;/a&gt;&lt;div&gt;&lt;i&gt;&lt;sub&gt;Custom Emby Channels&lt;/sub&gt;&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="320" y="640" as="geometry" />
         </mxCell>
       </root>

@@ -55,27 +55,24 @@ services:
       - ../storage/emby/config/:/config
       - ../storage/emby/backup/:/backup
 
-  # Custom Emby Channel Creator
-  ersatztv:
-    image: ghcr.io/ersatztv/ersatztv:v26.1.1  # https://github.com/ErsatzTV/ErsatzTV/releases
-    container_name: ersatztv
-    hostname: ersatztv
+  tunarr:
+    image: chrisbenincasa/tunarr:1.0.17  # https://github.com/chrisbenincasa/tunarr/releases
+    container_name: tunarr
+    hostname: tunarr
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      LOG_LEVEL: "INFO"
     networks:
       - emby
-    ports:
-      - "8409:8409"
+    expose:
+      - "8000"
     restart: unless-stopped
-    tmpfs:
-      - /transcode
     volumes:
       # Volume mounts from host system
-      - "${MOVIE_DIRECTORY}:/media/movies:ro"
       - "${TV1_DIRECTORY}:/media/tv1:ro"
       - "${TV2_DIRECTORY}:/media/tv2:ro"
       - "${TV_TRASH_DIRECTORY}:/media/trash:ro"
       - "${TV_KIDS_DIRECTORY}:/media/kids:ro"
       # Persistent volumes
-      - ../storage/ersatztv/config/:/config/
+      - ../storage/tunarr/config/:/config/tunarr

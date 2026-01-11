@@ -110,6 +110,17 @@ access_control:
       policy: 'one_factor'
       subject:
         - [ "group:traefik_admins" ]
+    # Traefik Dashboard
+    - domain: 'access.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'access.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:traefik_admins" ]
     # Filebrowser
     - domain: 'file.{{ env "DOMAIN_NAME" }}'
       resources:

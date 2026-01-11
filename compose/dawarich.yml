@@ -60,11 +60,11 @@ services:
     environment:
       <<: *dawarich-env
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
-      interval: 10s
-      retries: 30
+      interval: 30s
+      retries: 3
       start_period: 30s
-      timeout: 10s
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      timeout: 5s
     labels:
       # Reverse proxy config
       traefik.enable: "true"

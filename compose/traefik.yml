@@ -67,12 +67,19 @@ services:
       - ../docker/traefik/config/dynamic_configs/:/dynamic_configs:ro
       - ../docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
       - ../docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
+      # Persistent volumes
+      - ../storage/traefik/logs/access/:/var/log/traefik/access/
 
   # Reverse proxy connector for external hosts
   traefik-provider:
     image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: traefik-provider
     hostname: traefik-provider
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
     environment:
       VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
@@ -90,3 +97,86 @@ services:
     volumes:
       # Persistent volumes
       - ../storage/traefik-provider/data/:/data
+
+  # Traefik Log Dashboard Agent
+  traefik-agent:
+    image: hhftechnology/traefik-log-dashboard-agent:2.4.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
+    container_name: traefik-agent
+    hostname: traefik-agent
+    depends_on:
+      traefik:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+    environment:
+      TRAEFIK_LOG_DASHBOARD_ACCESS_PATH: "/logs/access.log"
+      TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-agent] Secret key missing}"
+      TRAEFIK_LOG_DASHBOARD_SYSTEM_MONITORING: "true"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:5000 | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      timeout: 5s
+    networks:
+      - traefik
+    expose:
+      - "5000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/traefik/logs/access:/logs:ro # Mount directory containing access.log
+      - ../storage/traefik-agent/data:/data
+
+  # Traefik Log Dashboard - Web UI
+  traefik-dashboard:
+    image: hhftechnology/traefik-log-dashboard:2.4.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
+    container_name: traefik-dashboard
+    hostname: traefik-dashboard
+    depends_on:
+      traefik-agent:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      AGENT_API_URL: "http://traefik-agent:5000"
+      AGENT_API_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-dashboard] Secret key missing}"
+      AGENT_NAME: "Main"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000" ]
+      timeout: 5s
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.docker.network: "traefik"
+      traefik.http.routers.traefik-dashboard.rule: "Host(`access.${DOMAIN_NAME}`)"
+      traefik.http.routers.traefik-dashboard.entrypoints: "websecure"
+      traefik.http.routers.traefik-dashboard.tls: "true"
+      traefik.http.routers.traefik-dashboard.middlewares: "authelia-forward-auth@file,root-to-dashboard@docker"
+      # Redirect from '/' path to '/dashboard'
+      traefik.http.middlewares.root-to-dashboard.redirectregex.regex: "^https?://access.${DOMAIN_NAME}/?$"
+      traefik.http.middlewares.root-to-dashboard.redirectregex.replacement: "https://access.${DOMAIN_NAME}/dashboard"
+      traefik.http.middlewares.root-to-dashboard.redirectregex.permanent: "true"
+      # Monitor config
+      kuma.{{container_name}}.http.name: "Traefik Dashboard (Access Dashboard)"
+      kuma.{{container_name}}.http.url: "${TRAEFIK_DASHBOARD_MONITOR_URL:?[traefik-dashboard] Monitor URL missing}"
+    networks:
+      - traefik
+    ports:
+      - "5009:3000"
+    restart: unless-stopped
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/traefik-dashboard/data:/app/data
+      - ../storage/traefik-agent/data:/data

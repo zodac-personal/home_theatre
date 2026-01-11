@@ -26,7 +26,9 @@ log:
   maxSize: 100 # In megabytes
   compress: true # gzip compression when rotating
 
-# accessLog: {} # Uncomment to enable access logging
+accessLog:
+  filePath: "/var/log/traefik/access/access.log"
+  format: json
 
 ################################################################
 # API and Dashboard

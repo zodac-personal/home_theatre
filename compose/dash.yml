@@ -36,10 +36,14 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.dash.rule: "Host(`dash.${DOMAIN_NAME}`) && PathPrefix(`/main`)"
+      traefik.http.routers.dash.rule: "Host(`dash.${DOMAIN_NAME}`)"
       traefik.http.routers.dash.entrypoints: "websecure"
       traefik.http.routers.dash.tls: "true"
-      traefik.http.routers.dash.middlewares: "authelia-forward-auth@file"
+      traefik.http.routers.dash.middlewares: "authelia-forward-auth@file,dash-root-to-main@redis"
+      # Redirect from '/' path to '/dashboard'
+      traefik.http.middlewares.dash-root-to-main.redirectregex.regex: "^https?://dash.${DOMAIN_NAME}/?$"
+      traefik.http.middlewares.dash-root-to-main.redirectregex.replacement: "https://dash.${DOMAIN_NAME}/main"
+      traefik.http.middlewares.dash-root-to-main.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Dash [Main] (Server Monitor)"
       kuma.{{container_name}}.http.url: "${DASH_MONITOR_URL:?[dash] Monitor URL missing}"

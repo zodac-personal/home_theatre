@@ -162,11 +162,11 @@ services:
       traefik.http.routers.traefik-dashboard.rule: "Host(`access.${DOMAIN_NAME}`)"
       traefik.http.routers.traefik-dashboard.entrypoints: "websecure"
       traefik.http.routers.traefik-dashboard.tls: "true"
-      traefik.http.routers.traefik-dashboard.middlewares: "authelia-forward-auth@file,root-to-dashboard@docker"
+      traefik.http.routers.traefik-dashboard.middlewares: "authelia-forward-auth@file,traefik-dashboard-root-to-dashboard@docker"
       # Redirect from '/' path to '/dashboard'
-      traefik.http.middlewares.root-to-dashboard.redirectregex.regex: "^https?://access.${DOMAIN_NAME}/?$"
-      traefik.http.middlewares.root-to-dashboard.redirectregex.replacement: "https://access.${DOMAIN_NAME}/dashboard"
-      traefik.http.middlewares.root-to-dashboard.redirectregex.permanent: "true"
+      traefik.http.middlewares.traefik-dashboard-root-to-dashboard.redirectregex.regex: "^https?://access.${DOMAIN_NAME}/?$"
+      traefik.http.middlewares.traefik-dashboard-root-to-dashboard.redirectregex.replacement: "https://access.${DOMAIN_NAME}/dashboard"
+      traefik.http.middlewares.traefik-dashboard-root-to-dashboard.redirectregex.permanent: "true"
       # Monitor config
       kuma.{{container_name}}.http.name: "Traefik Dashboard (Access Dashboard)"
       kuma.{{container_name}}.http.url: "${TRAEFIK_DASHBOARD_MONITOR_URL:?[traefik-dashboard] Monitor URL missing}"

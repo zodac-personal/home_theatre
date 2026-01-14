@@ -194,6 +194,7 @@ access_control:
         - '^/metrics'
         - '^/status'
         - '^/upload/.*'
+        - '^/manifest.json$'
       policy: 'bypass'
       methods:
         - 'GET'

@@ -153,7 +153,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000" ]
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/logs/status | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
       timeout: 5s
     labels:
       # Reverse proxy config

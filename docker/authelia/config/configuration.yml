@@ -114,6 +114,7 @@ access_control:
     - domain: 'access.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
+        - '^/api/logs/status?$'
       policy: 'bypass'
       methods:
         - 'GET'

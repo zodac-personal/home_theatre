@@ -191,10 +191,10 @@ access_control:
         - '^/assets'
         - '^/favicon\.ico$'
         - '^/icon.svg'
+        - '^/manifest.json$'
         - '^/metrics'
         - '^/status'
         - '^/upload/.*'
-        - '^/manifest.json$'
       policy: 'bypass'
       methods:
         - 'GET'

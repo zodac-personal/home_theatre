@@ -12,6 +12,8 @@ services:
     hostname: traefik
     command: --configFile=/config/traefik.yml
     depends_on:
+      authelia:
+        condition: service_healthy
       traefik-provider:
         condition: service_healthy
     environment:

@@ -59,10 +59,19 @@ services:
     image: chrisbenincasa/tunarr:1.0.17  # https://github.com/chrisbenincasa/tunarr/releases
     container_name: tunarr
     hostname: tunarr
+    depends_on:
+      emby:
+        condition: service_healthy
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       LOG_LEVEL: "INFO"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1:8000/api/system/health | jq -e '.BaseImageHealthCheck.type == \"healthy\"' > /dev/null" ]
+      timeout: 5s
     networks:
       - emby
     ports:

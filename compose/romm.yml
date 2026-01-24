@@ -150,16 +150,14 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${ROMM_DB_PORT:?[romm-db] Database port missing}"
       POSTGRES_DB: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
       POSTGRES_PASSWORD: "${ROMM_DB_PASSWORD:?[romm-db] Database password missing}"
       POSTGRES_USER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${ROMM_DB_NAME:?[romm-db] Database name missing}"
-      PGPASSWORD: "${ROMM_DB_PASSWORD:?[romm-db] Database password missing}"
-      PGUSER: "${ROMM_DB_USER:?[romm-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${ROMM_DB_PORT:?[romm-db] Database port missing}"
@@ -167,7 +165,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${ROMM_DB_USER:?[romm-db] Database user missing}", "-d", "${ROMM_DB_NAME:?[romm-db] Database name missing}", "-p", "${ROMM_DB_PORT:?[romm-db] Database port missing}" ]
       timeout: 5s
     networks:
       - romm

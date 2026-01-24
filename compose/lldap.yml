@@ -52,16 +52,14 @@ services:
     hostname: lldap-db
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${LLDAP_DB_PORT:?[lldap-db] Missing DB port}"
       POSTGRES_DB: "${LLDAP_DB_NAME:?[lldap-db] Missing DB name}"
       POSTGRES_PASSWORD: "${LLDAP_DB_PASSWORD:?[lldap-db] Missing DB password}"
       POSTGRES_USER: "${LLDAP_DB_USER:?[lldap-db] Missing DB user}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${LLDAP_DB_NAME:?[lldap-db] Missing DB name}"
-      PGPASSWORD: "${LLDAP_DB_PASSWORD:?[lldap-db] Missing DB password}"
-      PGUSER: "${LLDAP_DB_USER:?[lldap-db] Missing DB user}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${LLDAP_DB_PORT:?[lldap-db] Missing DB port}"
@@ -69,7 +67,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${LLDAP_DB_USER:?[lldap-db] Database user missing}", "-d", "${LLDAP_DB_NAME:?[lldap-db] Database name missing}", "-p", "${LLDAP_DB_PORT:?[lldap-db] Database port missing}" ]
       timeout: 5s
     networks:
       - lldap

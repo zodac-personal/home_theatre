@@ -65,16 +65,14 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
       POSTGRES_DB: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}"
       POSTGRES_USER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
       POSTGRES_PASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database password missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${SONARQUBE_DB_NAME:?[sonarqube-db] Database password missing}"
-      PGPASSWORD: "${SONARQUBE_DB_PASSWORD:?[sonarqube-db] Database name missing}"
-      PGUSER: "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}"
@@ -82,7 +80,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${SONARQUBE_DB_USER:?[sonarqube-db] Database user missing}", "-d", "${SONARQUBE_DB_NAME:?[sonarqube-db] Database name missing}", "-p", "${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}" ]
       timeout: 5s
     networks:
       - sonarqube

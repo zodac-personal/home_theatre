@@ -76,16 +76,14 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
       POSTGRES_DB: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
       POSTGRES_PASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
       POSTGRES_USER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}"
-      PGPASSWORD: "${LINKWARDEN_DB_PASSWORD:?[linkwarden-db] Database password missing}"
-      PGUSER: "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}"
@@ -93,7 +91,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}", "-d", "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}", "-p", "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}" ]
       timeout: 5s
     networks:
       - linkwarden

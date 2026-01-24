@@ -64,24 +64,22 @@ services:
     hostname: speedtest-db
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}"
       POSTGRES_DB: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
       POSTGRES_PASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
       POSTGRES_USER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}"
-      PGPASSWORD: "${SPEEDTEST_DB_PASSWORD:?[speedtest-db] Database password missing}"
-      PGUSER: "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
-      - 5432
+      - "${SPEEDTEST_DB_PORT:?[speedtest-db] Missing DB port}"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}", "-d", "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}", "-p", "${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}" ]
       timeout: 5s
     networks:
       - speedtest

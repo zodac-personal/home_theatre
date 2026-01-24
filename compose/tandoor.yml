@@ -95,16 +95,14 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
       POSTGRES_DB: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
       POSTGRES_PASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
       POSTGRES_USER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}"
-      PGPASSWORD: "${TANDOOR_DB_PASSWORD:?[tandoor-db] Database password missing}"
-      PGUSER: "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}"
@@ -112,7 +110,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}", "-d", "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}", "-p", "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}" ]
       timeout: 5s
     networks:
       - tandoor

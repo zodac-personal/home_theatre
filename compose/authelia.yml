@@ -103,24 +103,21 @@ services:
     hostname: authelia-db
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${AUTHELIA_DB_PORT:?[authentik-db] Database port missing}"
       POSTGRES_DB: "${AUTHELIA_DB_NAME:?[authentik-db] Database name missing}"
       POSTGRES_PASSWORD: "${AUTHELIA_DB_PASSWORD:?[authentik-db] Database password missing}"
       POSTGRES_USER: "${AUTHELIA_DB_USER?[authentik-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${AUTHELIA_DB_NAME:?[authentik-db] Database name missing}"
-      PGPASSWORD: "${AUTHELIA_DB_PASSWORD:?[authentik-db] Database password missing}"
-      PGUSER: "${AUTHELIA_DB_USER?[authentik-db] Database user missing}"
-      PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${AUTHELIA_DB_PORT:?[authentik-db] Database port missing}"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${AUTHELIA_DB_USER:?[authelia-db] Database user missing}", "-d", "${AUTHELIA_DB_NAME:?[authelia-db] Database name missing}", "-p", "${AUTHELIA_DB_PORT:?[authelia-db] Database port missing}" ]
       timeout: 5s
     networks:
       - authelia

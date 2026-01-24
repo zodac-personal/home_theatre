@@ -73,16 +73,14 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       PGPORT: "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
       POSTGRES_DB: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
       POSTGRES_PASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
       POSTGRES_USER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
-      # Next 3 variables needed to avoid "FATAL role 'root' does not exist" error
-      PGDATABASE: "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}"
-      PGPASSWORD: "${JELLYSTAT_DB_PASSWORD:?[jellystat-db] Database password missing}"
-      PGUSER: "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}"
       PGDATA: /var/lib/postgresql/data/pgdata
     expose:
       - "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}"
@@ -90,7 +88,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}", "-d", "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}", "-p", "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}" ]
       timeout: 5s
     networks:
       - jellystat

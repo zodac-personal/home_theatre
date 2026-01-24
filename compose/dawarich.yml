@@ -40,7 +40,7 @@ services:
 
   # Google Maps/Timeline Replacement
   dawarich:
-    image: freikin/dawarich:0.37.2  # https://github.com/Freika/dawarich/releases
+    image: freikin/dawarich:0.37.3  # https://github.com/Freika/dawarich/releases
     container_name: dawarich
     hostname: dawarich
     command: [ 'bin/rails', 'server', '-p', '3000', '-b', '::' ]
@@ -82,9 +82,9 @@ services:
         max-size: "100m"
         max-file: "5"
     networks:
-        - dawarich
+      - dawarich
     ports:
-        - "4010:3000"
+      - "4010:3000"
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -96,7 +96,7 @@ services:
       - ../storage/dawarich-db/data/:/dawarich_db_data
 
   dawarich-sidekiq:
-    image: freikin/dawarich:0.37.2  # https://github.com/Freika/dawarich/releases
+    image: freikin/dawarich:0.37.3  # https://github.com/Freika/dawarich/releases
     container_name: dawarich-sidekiq
     hostname: dawarich-sidekiq
     command: [ 'sidekiq' ]
@@ -176,7 +176,9 @@ services:
           memory: "512M"
     environment:
       # Base config
-      TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
       # Database config
       POSTGRES_USER: "${DAWARICH_DB_USER:?[dawarich-db] Database user missing}"
       POSTGRES_PASSWORD: "${DAWARICH_DB_PASSWORD:?[dawarich-db] Database password missing}"
@@ -186,10 +188,10 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pg_isready", "--host", "localhost" ]
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${DAWARICH_DB_USER:?[dawarich-db] Database user missing}", "-d", "${DAWARICH_DB_NAME:?[dawarich-db] Database name missing}", "-p", "${DAWARICH_DB_PORT:?[dawarich-db] Database port missing}" ]
       timeout: 5s
     networks:
-        - dawarich
+      - dawarich
     restart: unless-stopped
     shm_size: 1G
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"

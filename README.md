@@ -177,7 +177,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose -f docker-compose-ser.yml up --build -d authelia-db --wait
-cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER}
+cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authelia-db psql -U ${AUTHELIA_DB_USER} -d ${AUTHELIA_DB_NAME}
 docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache
 ```
 
@@ -197,7 +197,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d dawarich-db --wait
-cat backup_dawarich.sql | docker compose exec -T dawarich-db psql -U ${AUTHELIA_DB_USER}
+cat backup_dawarich.sql | docker compose exec -T dawarich-db psql -U ${AUTHELIA_DB_USER} -d ${DAWARICH_DB_NAME}
 docker compose up --build -d dawarich dawarich-sidekiq dawarich-cache photon 
 ```
 
@@ -217,7 +217,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d jellystat-db --wait
-cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
+cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME}
 docker compose up --build -d jellystat
 ```
 
@@ -237,7 +237,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d linkwarden-db --wait
-cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
+cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER} -d ${LINKWARDEN_DB_NAME}
 docker compose up --build -d linkwarden
 ```
 
@@ -257,7 +257,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose -f docker-compose-ser.yml up --build -d lldap-db --wait
-cat backup_lldap.sql | docker compose -f docker-compose-ser.yml exec -T lldap-db psql -U ${LLDAP_DB_USER}
+cat backup_lldap.sql | docker compose -f docker-compose-ser.yml exec -T lldap-db psql -U ${LLDAP_DB_USER} -d ${LLDAP_DB_NAME}
 docker compose -f docker-compose-ser.yml up --build -d lldap
 ```
 
@@ -277,7 +277,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d romm-db --wait
-cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER}
+cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER} -d ${ROMM_DB_NAME}
 docker compose up --build -d romm romm-cache
 ```
 
@@ -297,7 +297,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d sonarqube-db --wait
-cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SONARQUBE_DB_USER}
+cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SONARQUBE_DB_USER} -d ${SONARQUBE_DB_NAME}
 docker compose up --build -d sonarqube
 ```
 
@@ -317,7 +317,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose -f docker-compose-ser.yml up --build -d speedtest-db --wait
-cat backup_speedtest.sql | docker compose -f docker-compose-ser.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER}
+cat backup_speedtest.sql | docker compose -f docker-compose-ser.yml exec -T speedtest-db psql -U ${SPEEDTEST_DB_USER} -d ${SPEEDTEST_DB_NAME}
 docker compose -f docker-compose-ser.yml up --build -d speedtest
 ```
 
@@ -337,7 +337,7 @@ Finally, start up the new DB container, restore the backup, then start the remai
 
 ```bash
 docker compose up --build -d tandoor-db --wait
-cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
+cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME}
 docker compose up --build -d tandoor
 ```
 

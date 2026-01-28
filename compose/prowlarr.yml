@@ -65,8 +65,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: "1024M"
+          cpus: "0.25"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

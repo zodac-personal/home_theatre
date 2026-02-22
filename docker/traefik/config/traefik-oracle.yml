@@ -104,21 +104,22 @@ providers:
     exposedByDefault: false
     watch: true
 
-  file:
-    directory: /dynamic_configs
-    watch: true
-
-  redis:
-    endpoints:
-      - traefik-provider:6379
-
-################################################################
-# Plugins - https://plugins.traefik.io/plugins
-################################################################
-
-experimental:
-  plugins:
-    # Used to redirect when services are down
-    traefik-plugin-redirect-on-status:
-      moduleName: "github.com/m-riedel/traefik-plugin-redirect-on-status"
-      version: "v1.0.1"
+# Following are not needed for oracle deployment
+#  file:
+#    directory: /dynamic_configs
+#    watch: true
+#
+#  redis:
+#    endpoints:
+#      - traefik-provider:6379
+#
+#################################################################
+## Plugins - https://plugins.traefik.io/plugins
+#################################################################
+#
+#experimental:
+#  plugins:
+#    # Used to redirect when services are down
+#    traefik-plugin-redirect-on-status:
+#      moduleName: "github.com/m-riedel/traefik-plugin-redirect-on-status"
+#      version: "v1.0.1"

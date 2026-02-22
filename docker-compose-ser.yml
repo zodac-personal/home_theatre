@@ -9,5 +9,4 @@ include:
   - ./compose/netalert.yml
   - ./compose/speedtest.yml
   - ./compose/traefik.yml
-  - ./compose/uptime-kuma.yml
   - ./compose/watchstate.yml

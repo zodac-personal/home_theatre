@@ -40,7 +40,7 @@ services:
 
   # Google Maps/Timeline Replacement
   dawarich:
-    image: freikin/dawarich:0.37.3  # https://github.com/Freika/dawarich/releases
+    image: freikin/dawarich:1.1.0  # https://github.com/Freika/dawarich/releases
     container_name: dawarich
     hostname: dawarich
     command: [ 'bin/rails', 'server', '-p', '3000', '-b', '::' ]
@@ -96,7 +96,7 @@ services:
       - ../storage/dawarich-db/data/:/dawarich_db_data
 
   dawarich-sidekiq:
-    image: freikin/dawarich:0.37.3  # https://github.com/Freika/dawarich/releases
+    image: freikin/dawarich:1.1.0  # https://github.com/Freika/dawarich/releases
     container_name: dawarich-sidekiq
     hostname: dawarich-sidekiq
     command: [ 'sidekiq' ]
@@ -140,7 +140,7 @@ services:
       - ../storage/dawarich/watched/:/var/app/tmp/imports/watched
 
   dawarich-cache:
-    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.2-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: dawarich-cache
     hostname: dawarich-cache
     command: redis-server
@@ -202,7 +202,7 @@ services:
 
   # Reverse geo lookups
   photon:
-    image: rtuszik/photon-docker:1.3.0  # https://github.com/rtuszik/photon-docker/releases
+    image: rtuszik/photon-docker:1.3.1  # https://github.com/rtuszik/photon-docker/releases
     container_name: photon
     hostname: photon
     deploy:

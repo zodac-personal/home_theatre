@@ -33,6 +33,16 @@ services:
       start_period: 30s
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8000/status" ] # wget not installed
       timeout: 5s
+      # Currently all integrations are on same host, no need to expose
+#    labels:
+#      # Reverse proxy config
+#      traefik.enable: "true"
+#      traefik.docker.network: "apprise"
+#      traefik.http.routers.apprise.rule: "Host(`apprise.${DOMAIN_NAME}`)"
+#      traefik.http.routers.apprise.entrypoints: "websecure"
+#      traefik.http.routers.apprise.tls: "true"
+#       # Add Authelia for /cfg URL
+#      traefik.http.routers.apprise.middlewares: "no-forward-auth@file"
     networks:
       - apprise
     ports:

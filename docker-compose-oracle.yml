@@ -1,0 +1,3 @@
+include:
+  - ./compose/traefik-oracle.yml
+  - ./compose/uptime-kuma.yml

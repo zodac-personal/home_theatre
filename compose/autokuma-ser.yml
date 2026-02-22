@@ -28,7 +28,9 @@ services:
         http.max_retries: 5
         http.retry_interval: 60
         http.timeout: 30
-      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] UptimeKuma URL missing}"
+      AUTOKUMA__KUMA__URL: "${UPTIME_KUMA_URL:?[autokuma] uptime-kuma URL missing}"
+      AUTOKUMA__KUMA__USERNAME: "${UPTIME_KUMA_USERNAME:?[autokuma] uptime-kuma username missing}"
+      AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] uptime-kuma password missing}"
       AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
       AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
     healthcheck:

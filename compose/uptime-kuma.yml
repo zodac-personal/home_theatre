@@ -22,7 +22,6 @@ services:
       traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
-      traefik.http.routers.uptime-kuma.middlewares: "authelia-forward-auth@file"
       traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
       traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"

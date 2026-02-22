@@ -29,7 +29,7 @@ services:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
       # Volume mounts from host system
-      - ../docker/traefik/config/traefikoracle.yml:/config/traefikoracle.yml:ro
+      - ../docker/traefik/config/traefik-oracle.yml:/config/traefik-oracle.yml:ro
       - ../docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
       - ../docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
       # Persistent volumes

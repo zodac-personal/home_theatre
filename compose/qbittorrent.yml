@@ -35,8 +35,8 @@ services:
       traefik.http.routers.qbittorrent.middlewares: "no-forward-auth@file"
       traefik.http.services.qbittorrent.loadbalancer.server.port: "9000"
       # Monitor config
-      kuma.{{container_name}}.http.name: "qBittorrent (Torrent Downloader)"
-      kuma.{{container_name}}.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
+      kuma.qbittorrent.http.name: "qBittorrent (Torrent Downloader)"
+      kuma.qbittorrent.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
     networks:
       - qbittorrent
     ports:

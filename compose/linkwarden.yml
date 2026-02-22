@@ -52,8 +52,8 @@ services:
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Linkwarden (Bookmarks)"
-      kuma.{{container_name}}.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
+      kuma.linkwarden.http.name: "Linkwarden (Bookmarks)"
+      kuma.linkwarden.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
     networks:
       - linkwarden
     ports:

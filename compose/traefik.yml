@@ -45,8 +45,8 @@ services:
       traefik.http.routers.traefik-ping.middlewares: "no-forward-auth@file"
       traefik.http.services.traefik-ping.loadbalancer.server.port: "8080"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Traefik (Reverse Proxy)"
-      kuma.{{container_name}}.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
+      kuma.traefik.http.name: "Traefik (Reverse Proxy)"
+      kuma.traefik.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
 #      - apprise
       - authelia
@@ -171,8 +171,8 @@ services:
       traefik.http.middlewares.traefik-dashboard-root-to-dashboard.redirectregex.replacement: "https://access.${DOMAIN_NAME}/dashboard"
       traefik.http.middlewares.traefik-dashboard-root-to-dashboard.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Traefik Dashboard (Access Dashboard)"
-      kuma.{{container_name}}.http.url: "${TRAEFIK_DASHBOARD_MONITOR_URL:?[traefik-dashboard] Monitor URL missing}"
+      kuma.traefik-dashboard.http.name: "Traefik Dashboard (Access Dashboard)"
+      kuma.traefik-dashboard.http.url: "${TRAEFIK_DASHBOARD_MONITOR_URL:?[traefik-dashboard] Monitor URL missing}"
     networks:
       - traefik
     ports:

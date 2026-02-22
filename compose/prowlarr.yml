@@ -44,8 +44,8 @@ services:
       traefik.http.routers.prowlarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.prowlarr.loadbalancer.server.port: "4016"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Prowlarr (Torrent Indexer)"
-      kuma.{{container_name}}.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
+      kuma.prowlarr.http.name: "Prowlarr (Torrent Indexer)"
+      kuma.prowlarr.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
     networks:
       - prowlarr
       - servarr

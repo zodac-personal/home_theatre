@@ -50,9 +50,9 @@ services:
       traefik.http.routers.navidrome.middlewares: "authelia-forward-auth@file"
       traefik.http.services.navidrome.loadbalancer.server.port: "4003"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Navidrome (Music Player)"
-      kuma.{{container_name}}.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: "0"
+      kuma.navidrome.http.name: "Navidrome (Music Player)"
+      kuma.navidrome.http.url: "${NAVIDROME_MONITOR_URL:?[navidrome] Monitor URL missing}"
+      kuma.navidrome.http.max_redirects: "0"
     networks:
       - navidrome
     ports:

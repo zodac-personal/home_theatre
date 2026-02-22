@@ -41,8 +41,8 @@ services:
       traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "AudioBookShelf (eBook/Audiobook Reader)"
-      kuma.{{container_name}}.http.url: "${AUDIOBOOKSHELF_MONITOR_URL:?[audiobookshelf] Monitor URL missing}"
+      kuma.audiobookshelf.http.name: "AudioBookShelf (eBook/Audiobook Reader)"
+      kuma.audiobookshelf.http.url: "${AUDIOBOOKSHELF_MONITOR_URL:?[audiobookshelf] Monitor URL missing}"
     networks:
       - audiobookshelf
     ports:

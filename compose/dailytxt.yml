@@ -41,8 +41,8 @@ services:
       traefik.http.routers.dailytxt.middlewares: "no-forward-auth@file"
       traefik.http.services.dailytxt.loadbalancer.server.port: "4015"
       # Monitor config
-      kuma.{{container_name}}.http.name: "DailyTxt (Daily Journal)"
-      kuma.{{container_name}}.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
+      kuma.dailytxt.http.name: "DailyTxt (Daily Journal)"
+      kuma.dailytxt.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
     networks:
       - dailytxt
     ports:

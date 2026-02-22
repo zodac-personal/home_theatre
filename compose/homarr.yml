@@ -47,8 +47,8 @@ services:
       traefik.http.routers.homarr.tls: "true"
       traefik.http.routers.homarr.middlewares: "no-forward-auth@file"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Homarr (HomePage)"
-      kuma.{{container_name}}.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
+      kuma.homarr.http.name: "Homarr (HomePage)"
+      kuma.homarr.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
     networks:
       - homarr
     ports:

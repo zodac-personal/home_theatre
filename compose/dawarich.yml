@@ -74,8 +74,8 @@ services:
       traefik.http.routers.dawarich.middlewares: "no-forward-auth@file"
       traefik.http.services.dawarich.loadbalancer.server.port: "4010"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Dawarich (Maps Timeline)"
-      kuma.{{container_name}}.http.url: "${DAWARICH_MONITOR_URL:?[dawarich] Monitor URL missing}"
+      kuma.dawarich.http.name: "Dawarich (Maps Timeline)"
+      kuma.dawarich.http.url: "${DAWARICH_MONITOR_URL:?[dawarich] Monitor URL missing}"
     logging:
       driver: "json-file"
       options:

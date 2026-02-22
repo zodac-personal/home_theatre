@@ -49,8 +49,8 @@ services:
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Jellystat (Emby Statistics)"
-      kuma.{{container_name}}.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
+      kuma.jellystat.http.name: "Jellystat (Emby Statistics)"
+      kuma.jellystat.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
     networks:
       - jellystat
     ports:

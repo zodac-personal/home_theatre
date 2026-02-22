@@ -32,8 +32,8 @@ services:
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Uptime Kuma (Status Page)"
-      kuma.{{container_name}}.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+      kuma.uptime-kuma.http.name: "Uptime Kuma (Status Page)"
+      kuma.uptime-kuma.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
     networks:
       - uptime-kuma
     ports:

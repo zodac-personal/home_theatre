@@ -45,8 +45,8 @@ services:
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Dozzle (Docker Log Viewer)"
-      kuma.{{container_name}}.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
+      kuma.dozzle.http.name: "Dozzle (Docker Log Viewer)"
+      kuma.dozzle.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
     networks:
       - dozzle
     ports:

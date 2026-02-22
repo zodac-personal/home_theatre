@@ -41,8 +41,8 @@ services:
       traefik.http.routers.homebox.middlewares: "no-forward-auth@file"
       traefik.http.services.homebox.loadbalancer.server.port: "4011"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Homebox (House Inventory)"
-      kuma.{{container_name}}.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
+      kuma.homebox.http.name: "Homebox (House Inventory)"
+      kuma.homebox.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
     networks:
       - homebox
     ports:

@@ -60,9 +60,8 @@ services:
       traefik.http.routers.authelia.entrypoints: "websecure"
       traefik.http.routers.authelia.tls: "true"
       # Monitor config
-      # TODO: Remove {{container_name}}
-      kuma.{{container_name}}.http.name: "Authelia (Identity Platform)"
-      kuma.{{container_name}}.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
+      kuma.authelia.http.name: "Authelia (Identity Platform)"
+      kuma.authelia.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
     networks:
       - authelia
       - lldap

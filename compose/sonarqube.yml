@@ -38,8 +38,8 @@ services:
       traefik.http.routers.sonarqube.middlewares: "no-forward-auth@file"
       traefik.http.services.sonarqube.loadbalancer.server.port: "4013"
       # Monitor config
-      kuma.{{container_name}}.http.name: "SonarQube (Code Analysis)"
-      kuma.{{container_name}}.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
+      kuma.sonarqube.http.name: "SonarQube (Code Analysis)"
+      kuma.sonarqube.http.url: "${SONARQUBE_MONITOR_URL:?[sonarqube] Monitor URL missing}"
     networks:
       - sonarqube
     ports:

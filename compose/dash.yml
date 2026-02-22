@@ -45,8 +45,8 @@ services:
       traefik.http.middlewares.dash-root-to-main.redirectregex.replacement: "https://dash.${DOMAIN_NAME}/main"
       traefik.http.middlewares.dash-root-to-main.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Dash [Main] (Server Monitor)"
-      kuma.{{container_name}}.http.url: "${DASH_MONITOR_URL:?[dash] Monitor URL missing}"
+      kuma.dash.http.name: "Dash [Main] (Server Monitor)"
+      kuma.dash.http.url: "${DASH_MONITOR_URL:?[dash] Monitor URL missing}"
     networks:
       - dash
     ports:

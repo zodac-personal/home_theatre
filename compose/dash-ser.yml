@@ -42,8 +42,8 @@ services:
       traefik.http.routers.dash-ser.tls: "true"
       traefik.http.routers.dash-ser.middlewares: "authelia-forward-auth@file"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Dash [SER] (Server Monitor)"
-      kuma.{{container_name}}.http.url: "${DASH_SER_MONITOR_URL:?[dash-ser] Monitor URL missing}"
+      kuma.dash-ser.http.name: "Dash [SER] (Server Monitor)"
+      kuma.dash-ser.http.url: "${DASH_SER_MONITOR_URL:?[dash-ser] Monitor URL missing}"
     networks:
       - dash-ser
     ports:

@@ -38,9 +38,9 @@ services:
       #   service is passed in to the Traefik as an environment variable
       #   We can configure the redirects here, but it makes sense to leave it all in the config file instead.
       # Monitor config
-      kuma.{{container_name}}.http.name: "NetAlert (Network Scanner)"
-      kuma.{{container_name}}.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_redirects: "0"
+      kuma.netalert.http.name: "NetAlert (Network Scanner)"
+      kuma.netalert.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
+      kuma.netalert.http.max_redirects: "0"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"

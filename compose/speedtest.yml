@@ -46,8 +46,8 @@ services:
       traefik.http.routers.speedtest.tls: "true"
       traefik.http.routers.speedtest.middlewares: "no-forward-auth@file"
       # Monitor config
-      kuma.{{container_name}}.http.name: "SpeedTest Tracker (Network Speed Test)"
-      kuma.{{container_name}}.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
+      kuma.speedtest.http.name: "SpeedTest Tracker (Network Speed Test)"
+      kuma.speedtest.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
     networks:
       - speedtest
     ports:

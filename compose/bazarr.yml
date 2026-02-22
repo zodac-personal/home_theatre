@@ -38,8 +38,8 @@ services:
       traefik.http.routers.bazarr.middlewares: "authelia-forward-auth@file"
       traefik.http.services.bazarr.loadbalancer.server.port: "4009"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Bazarr (Subtitle Manager)"
-      kuma.{{container_name}}.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
+      kuma.bazarr.http.name: "Bazarr (Subtitle Manager)"
+      kuma.bazarr.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
     networks:
       - bazarr
       - servarr

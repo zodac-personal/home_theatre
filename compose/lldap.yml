@@ -33,8 +33,8 @@ services:
       traefik.http.routers.lldap.service: "lldap"
       traefik.http.services.lldap.loadbalancer.server.port: "17170"
       # Monitor config
-      kuma.{{container_name}}.http.name: "LLDAP (LDAP Server)"
-      kuma.{{container_name}}.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
+      kuma.lldap.http.name: "LLDAP (LDAP Server)"
+      kuma.lldap.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
     networks:
       - lldap
     ports:

@@ -40,8 +40,8 @@ services:
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "FileBrowser (Document Viewer)"
-      kuma.{{container_name}}.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+      kuma.filebrowser.http.name: "FileBrowser (Document Viewer)"
+      kuma.filebrowser.http.url: "${FILEBROWSER_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
       - filebrowser
     ports:
@@ -81,8 +81,8 @@ services:
       traefik.http.routers.filebrowser-ftp.middlewares: "authelia-forward-auth@file"
       traefik.http.services.filebrowser-ftp.loadbalancer.server.port: "4018"
       # Monitor config
-      kuma.{{container_name}}.http.name: "FileBrowser (FTP uploads)"
-      kuma.{{container_name}}.http.url: "${FILEBROWSER_FTP_MONITOR_URL:?[filebrowser] Monitor URL missing}"
+      kuma.filebrowser-ftp.http.name: "FileBrowser (FTP uploads)"
+      kuma.filebrowser-ftp.http.url: "${FILEBROWSER_FTP_MONITOR_URL:?[filebrowser] Monitor URL missing}"
     networks:
       - filebrowser-ftp
     ports:

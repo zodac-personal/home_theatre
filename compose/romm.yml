@@ -95,8 +95,8 @@ services:
       traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.permanent: "true"
       # Monitor config
-      kuma.{{container_name}}.http.name: "RomM (Game ROM Manager)"
-      kuma.{{container_name}}.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
+      kuma.romm.http.name: "RomM (Game ROM Manager)"
+      kuma.romm.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
     networks:
       - romm
     ports:

@@ -30,11 +30,11 @@ services:
       traefik.http.routers.emby.middlewares: "no-forward-auth@file"
       traefik.http.services.emby.loadbalancer.server.port: "8096"
       # Monitor config
-      kuma.{{container_name}}.http.name: "Emby (Media Server)"
-      kuma.{{container_name}}.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
-      kuma.{{container_name}}.http.max_retries: "3"
-      kuma.{{container_name}}.http.notification_name_list: '["emby_status"]'
-      kuma.{{container_name}}.http.tag_names: '[{"name": "alertable"}]'
+      kuma.emby.http.name: "Emby (Media Server)"
+      kuma.emby.http.url: "${EMBY_MONITOR_URL:?[emby] Monitor URL missing}"
+      kuma.emby.http.max_retries: "3"
+      kuma.emby.http.notification_name_list: '["emby_status"]'
+      kuma.emby.http.tag_names: '[{"name": "alertable"}]'
     networks:
       - emby
     ports:

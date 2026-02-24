@@ -74,6 +74,25 @@ authentication_backend:
 access_control:
   default_policy: 'deny'
   rules:
+    # Apprise
+    - domain: 'apprise.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/api/system/ping'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    # Supported client updates
+    - domain: 'apprise.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/notify/(.*)$'
+      policy: 'bypass'
+      methods:
+        - 'POST'
+    - domain: 'apprise.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:apprise_admins" ]
     # Dash
     - domain: 'dash.{{ env "DOMAIN_NAME" }}'
       resources:

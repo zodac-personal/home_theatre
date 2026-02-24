@@ -48,7 +48,7 @@ services:
       kuma.traefik.http.name: "Traefik (Reverse Proxy)"
       kuma.traefik.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
     networks:
-#      - apprise
+      - apprise
       - authelia
       - dash-ser
       - dozzle

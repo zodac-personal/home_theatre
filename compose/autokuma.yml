@@ -47,7 +47,7 @@ services:
         {
           "type": "discord",
           "disableUrl": false,
-          "discordWebhookUrl": "${UPTIME_KUMA_DISCORD_NOTIFICATION_CHANNEL:?[autokuma] Discord notification channel missing}",
+          "discordWebhookUrl": "${UPTIME_KUMA_NOTIFICATION_CHANNEL:?[autokuma] Notification channel missing}",
           "discordUsername": "emby-status",
           "discordChannelType": "channel"
         }

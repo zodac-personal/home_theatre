@@ -7,7 +7,7 @@ services:
 
   # Media Server
   emby:
-    image: emby/embyserver:4.9.4.1  # https://hub.docker.com/r/emby/embyserver/tags
+    image: emby/embyserver:4.10.0.6  # https://hub.docker.com/r/emby/embyserver/tags
     container_name: emby
     hostname: emby
     environment:
@@ -55,8 +55,9 @@ services:
       - ../storage/emby/config/:/config
       - ../storage/emby/backup/:/backup
 
+  # Custom channel maker
   tunarr:
-    image: chrisbenincasa/tunarr:1.0.17  # https://github.com/chrisbenincasa/tunarr/releases
+    image: chrisbenincasa/tunarr:1.2.2  # https://github.com/chrisbenincasa/tunarr/releases
     container_name: tunarr
     hostname: tunarr
     depends_on:

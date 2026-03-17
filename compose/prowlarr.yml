@@ -7,7 +7,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:2.3.2-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
+    image: linuxserver/prowlarr:2.3.4-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
     container_name: prowlarr
     hostname: prowlarr
     depends_on:

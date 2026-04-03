@@ -7,7 +7,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.59.0  # https://github.com/navidrome/navidrome/releases/
+    image: deluan/navidrome:0.61.0  # https://github.com/navidrome/navidrome/releases/
     container_name: navidrome
     hostname: navidrome
     deploy:
@@ -19,13 +19,12 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      ND_REVERSEPROXYUSERHEADER: "Remote-User"
-      ND_REVERSEPROXYWHITELIST: "0.0.0.0/0"
+      ND_EXTAUTH_TRUSTEDSOURCES: "0.0.0.0/0"
+      ND_EXTAUTH_USERHEADER: "Remote-User"
+      ND_EXTAUTH_LOGOUTURL: "${NAVIDROME_OIDC_LOGOUT_URL?:[navidrome] OIDC logout URL missing}"
       # External services config
       ND_LASTFM_APIKEY: "${LASTFM_API_KEY:?[navidrome] LastFM API key missing}"
       ND_LASTFM_SECRET: "${LASTFM_SECRET:?[navidrome] LastFM secret missing}"
-      ND_SPOTIFY_ID: "${SPOTIFY_CLIENT_ID:?[navidrome] Spotify Client ID missing}"
-      ND_SPOTIFY_SECRET: "${SPOTIFY_CLIENT_SECRET:?[navidrome] Spotify Client secret missing}"
       # Scheduling config
       ND_SCANNER_SCHEDULE: "@every 24h"
       # Metadata config
@@ -33,6 +32,9 @@ services:
       ND_COVERARTPRIORITY: "album.*, embedded, external"
       # Logging config
       ND_LOGLEVEL: "info"
+      # Plugins
+      ND_PLUGINS_ENABLED: "false"
+      ND_PLUGINS_AUTORELOAD: "false"
       # System config
       ND_ENABLEINSIGHTSCOLLECTOR: "false"
     healthcheck:

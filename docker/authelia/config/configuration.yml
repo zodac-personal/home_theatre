@@ -78,7 +78,7 @@ access_control:
     - domain: 'apprise.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
-        - '^/api/system/ping'
+        - '^/status'
       policy: 'bypass'
       methods:
         - 'GET'

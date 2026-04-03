@@ -7,7 +7,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "25.11.29" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
+        NETALERT_VERSION: "26.3.15" # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -17,14 +17,20 @@ services:
         NETALERT_PRIMARY_SUBNET: "${NETALERT_PRIMARY_SUBNET:?[netalert] Primary subnet missing}"
         # UI config
         DOMAIN_NAME: "${DOMAIN_NAME:?[netalert] Domain name missing}"
+        # User config (user: doesn't work, values must match tmpfs below)
+        PUID: "20211"
+        PGID: "20211"
     container_name: netalert
     hostname: netalert
     cap_drop:
       - ALL
     cap_add:
+      - CHOWN
       - NET_ADMIN
       - NET_BIND_SERVICE
       - NET_RAW
+      - SETGID
+      - SETUID
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"

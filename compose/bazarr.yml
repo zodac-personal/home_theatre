@@ -7,7 +7,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.5.4-development  # https://hub.docker.com/r/linuxserver/bazarr/tags?name=development
+    image: linuxserver/bazarr:1.5.7-development  # https://hub.docker.com/r/linuxserver/bazarr/tags?name=development
     container_name: bazarr
     hostname: bazarr
     depends_on:

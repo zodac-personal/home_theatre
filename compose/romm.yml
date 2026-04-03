@@ -7,7 +7,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:4.5.0  # https://github.com/rommapp/romm/releases
+    image: rommapp/romm:4.8.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
     depends_on:
@@ -26,15 +26,17 @@ services:
       # Authentication config
       DISABLE_SETUP_WIZARD: "true"  # Set to 'true' for initial set-up
       DISABLE_USERPASS_LOGIN: "true"  # Set to 'true' for initial set-up
+      OIDC_AUTOLOGIN: "true"
+      OIDC_CLAIM_ROLES: "groups"
       OIDC_CLIENT_ID: "${ROMM_OIDC_CLIENT_ID:?[romm] OIDC client ID missing}"
       OIDC_CLIENT_SECRET: "${ROMM_OIDC_CLIENT_SECRET:?[romm] OIDC client secret missing}"
       OIDC_ENABLED: "true"
+      OIDC_END_SESSION_ENDPOINT: "${ROMM_OIDC_LOGOUT_URL:?[romm] RomM logout URL missing}"
       OIDC_PROVIDER: "Authelia"
       OIDC_REDIRECT_URI: "${ROMM_OIDC_REDIRECT_URL:?[romm] RomM redirect URL missing}"
-      OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
       OIDC_ROLE_ADMIN: "romm_admins"
       OIDC_ROLE_VIEWER: "romm_users"
-      OIDC_CLAIM_ROLES: "groups"
+      OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
       # Task config
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
       ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP: "true"
@@ -114,7 +116,7 @@ services:
 
   # External cache for RomM (used due to an issue with the internal valkey)
   romm-cache:
-    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: romm-cache
     hostname: romm-cache
     deploy:
@@ -140,7 +142,7 @@ services:
 
   # Database for RomM
   romm-db:
-    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: romm-db
     hostname: romm-db
     deploy:

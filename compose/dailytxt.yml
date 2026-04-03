@@ -7,7 +7,7 @@ services:
 
   # Daily Journal
   dailytxt:
-    image: phitux/dailytxt:2.4.0-testing.1  # https://hub.docker.com/r/phitux/dailytxt/tags
+    image: phitux/dailytxt:2.4.4  # https://hub.docker.com/r/phitux/dailytxt/tags
     container_name: dailytxt
     hostname: dailytxt
     deploy:

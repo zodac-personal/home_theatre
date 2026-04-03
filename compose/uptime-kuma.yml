@@ -7,7 +7,7 @@ services:
 
   # Monitoring and alerting
   uptime-kuma:
-    image: louislam/uptime-kuma:2.1.0-beta.0  # https://github.com/louislam/uptime-kuma/
+    image: louislam/uptime-kuma:2.2.1  # https://github.com/louislam/uptime-kuma/releases
     container_name: uptime-kuma
     hostname: uptime-kuma
     environment:

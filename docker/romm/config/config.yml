@@ -1,20 +1,20 @@
 exclude:
-  platforms: []
+  platforms: [ ]
   roms:
     multi_file:
       names:
         - ".Trash*"
       parts:
-        extensions: []
-        names: []
+        extensions: [ ]
+        names: [ ]
     single_file:
       extensions:
-      - jpg
-      - jpeg
-      - png
-      - webp
-      - xml
-      names: []
+        - jpg
+        - jpeg
+        - png
+        - webp
+        - xml
+      names: [ ]
 
 filesystem:
   firmware_folder: bios
@@ -41,38 +41,43 @@ system:
     Windows: win
     XBox: xbox
     XBox360: xbox360
-  versions: {}
+  versions: { }
+
+gamelist:
+  export:
+    local_video: true
 
 # Metadata priority during scans
 scan:
- priority:
-   metadata:
-     - "gamelist"   # ES-DE gamelist.xml
-     - "igdb"       # IGDB
-     - "ra"         # RetroAchievements
-     - "hasheous"   # Hasheous
-     - "flashpoint" # Flashpoint Project
-     - "hltb"       # HowLongToBeat
-     - "ss"         # Screenscraper
-   artwork:
-     - "gamelist"   # ES-DE gamelist.xml
-     - "igdb"       # IGDB
-     - "ra"         # RetroAchievements
-     - "hasheous"   # Hasheous
-     - "flashpoint" # Flashpoint Project
-     - "hltb"       # HowLongToBeat
-     - "ss"         # Screenscraper
-   media:
-     - "box2d"
-     - "screenshot"
-     - "manual"
-     - "title_screen"
-     - "marquee"
-   region: # Cover art and game title (only used by Screenscraper)
-     - "eu"
-     - "wor"
-     - "us"
-     - "ss"
-     - "jp"
-   language: # Cover art and game title (only used by Screenscraper)
-     - "en"
+  export_gamelist: true
+  priority:
+    metadata:
+      - "gamelist"   # ES-DE gamelist.xml
+      - "igdb"       # IGDB
+      - "ra"         # RetroAchievements
+      - "hasheous"   # Hasheous
+      - "flashpoint" # Flashpoint Project
+      - "hltb"       # HowLongToBeat
+      - "ss"         # Screenscraper
+    artwork:
+      - "gamelist"   # ES-DE gamelist.xml
+      - "igdb"       # IGDB
+      - "ra"         # RetroAchievements
+      - "hasheous"   # Hasheous
+      - "flashpoint" # Flashpoint Project
+      - "hltb"       # HowLongToBeat
+      - "ss"         # Screenscraper
+    media:
+      - "box2d"
+      - "screenshot"
+      - "manual"
+      - "title_screen"
+      - "marquee"
+    region: # Cover art and game title (only used by Screenscraper)
+      - "eu"
+      - "wor"
+      - "us"
+      - "ss"
+      - "jp"
+    language: # Cover art and game title (only used by Screenscraper)
+      - "en"

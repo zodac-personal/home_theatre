@@ -7,7 +7,7 @@ services:
 
   # Recipe Manager
   tandoor:
-    image: vabene1111/recipes:2.3.6  # https://github.com/TandoorRecipes/recipes/releases
+    image: vabene1111/recipes:2.5.3  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor
     hostname: tandoor
     depends_on:
@@ -77,6 +77,7 @@ services:
     ports:
       - "4014:80"
     restart: unless-stopped
+    # TODO: https://github.com/TandoorRecipes/recipes/pull/4042
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
@@ -85,7 +86,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
     deploy:

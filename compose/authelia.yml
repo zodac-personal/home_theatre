@@ -7,7 +7,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authelia:
-    image: authelia/authelia:4.39.15  # https://github.com/authelia/authelia/releases
+    image: authelia/authelia:4.39.16  # https://github.com/authelia/authelia/releases
     container_name: authelia
     hostname: authelia
     depends_on:
@@ -78,7 +78,7 @@ services:
       - ../storage/authelia/data:/var/lib/authelia
 
   authelia-cache:
-    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: authelia-cache
     hostname: authelia-cache
     environment:
@@ -98,7 +98,7 @@ services:
       - ../storage/authelia-cache/data/:/data
 
   authelia-db:
-    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: authelia-db
     hostname: authelia-db
     environment:

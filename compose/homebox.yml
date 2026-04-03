@@ -7,7 +7,7 @@ services:
 
   # Inventory Management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.22.3  # https://github.com/sysadminsmedia/homebox/releases
+    image: ghcr.io/sysadminsmedia/homebox:0.24.2  # https://github.com/sysadminsmedia/homebox/releases
     container_name: homebox
     hostname: homebox
     deploy:

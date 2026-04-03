@@ -64,9 +64,9 @@ services:
       # Persistent volumes
       - ../storage/linkwarden/data/:/data/data
 
-  # Database for Linkwarden
+  # Database for LinkWarden
   linkwarden-db:
-    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: linkwarden-db
     hostname: linkwarden-db
     deploy:

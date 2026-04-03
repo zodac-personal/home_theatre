@@ -7,7 +7,7 @@ services:
 
   # Homepage
   homarr:
-    image: ghcr.io/homarr-labs/homarr:v1.48.0  # https://github.com/homarr-labs/homarr/releases
+    image: ghcr.io/homarr-labs/homarr:v1.56.0  # https://github.com/homarr-labs/homarr/releases
     container_name: homarr
     hostname: homarr
     environment:

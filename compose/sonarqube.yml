@@ -7,7 +7,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:25.12.0.117093-community  # https://hub.docker.com/_/sonarqube
+    image: sonarqube:26.3.0.120487-community  # https://hub.docker.com/_/sonarqube
     container_name: sonarqube
     hostname: sonarqube
     depends_on:
@@ -55,7 +55,8 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    image: postgres:18.1-alpine  # https://hub.docker.com/_/postgres
+    # TODO: PSQL 18 not supported yet
+    image: postgres:17.9-alpine  # https://hub.docker.com/_/postgres
     container_name: sonarqube-db
     hostname: sonarqube-db
     deploy:

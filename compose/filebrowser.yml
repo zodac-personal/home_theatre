@@ -10,7 +10,7 @@ services:
 
   # Documents file browser
   filebrowser:
-    image: filebrowser/filebrowser:v2.53.0  # https://github.com/filebrowser/filebrowser/releases
+    image: filebrowser/filebrowser:v2.62.1  # https://github.com/filebrowser/filebrowser/releases
     container_name: filebrowser
     hostname: filebrowser
     deploy:
@@ -59,7 +59,7 @@ services:
 
   # FTP server
   filebrowser-ftp:
-    image: filebrowser/filebrowser:v2.53.0  # https://github.com/filebrowser/filebrowser/releases
+    image: filebrowser/filebrowser:v2.62.1  # https://github.com/filebrowser/filebrowser/releases
     container_name: filebrowser-ftp
     hostname: filebrowser-ftp
     deploy:

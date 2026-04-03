@@ -11,6 +11,7 @@ http:
           - Remote-Groups
           - Remote-Name
           - Remote-User
+        maxResponseBodySize: 1048576  # 1 MB
 
     authelia-error-redirect:
       errors:

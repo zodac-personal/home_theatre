@@ -54,7 +54,7 @@ services:
 
   # TV Show Manager
   sonarr:
-    image: linuxserver/sonarr:4.0.16-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
+    image: linuxserver/sonarr:4.0.17-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
     depends_on:
@@ -104,7 +104,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:7.5.2 # https://github.com/recyclarr/recyclarr/releases
+    image: ghcr.io/recyclarr/recyclarr:8.5.1 # https://github.com/recyclarr/recyclarr/releases
     container_name: recyclarr
     hostname: recyclarr
     depends_on:
@@ -240,7 +240,7 @@ services:
 
   # Downloaded archive extractor
   unpackerr:
-    image: golift/unpackerr:0.14.5  # https://hub.docker.com/r/golift/unpackerr/tags
+    image: golift/unpackerr:0.15.2  # https://hub.docker.com/r/golift/unpackerr/tags
     container_name: unpackerr
     hostname: unpackerr
     depends_on:

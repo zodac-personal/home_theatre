@@ -7,7 +7,7 @@ services:
 
   # Reverse proxy
   traefik:
-    image: traefik:v3.6.6  # https://github.com/traefik/traefik/releases
+    image: traefik:v3.6.11  # https://github.com/traefik/traefik/releases
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
@@ -74,7 +74,7 @@ services:
 
   # Reverse proxy connector for external hosts
   traefik-provider:
-    image: valkey/valkey:9.0.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: traefik-provider
     hostname: traefik-provider
     deploy:
@@ -102,7 +102,7 @@ services:
 
   # Traefik Log Dashboard Agent
   traefik-agent:
-    image: hhftechnology/traefik-log-dashboard-agent:2.4.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
+    image: hhftechnology/traefik-log-dashboard-agent:3.0.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
     container_name: traefik-agent
     hostname: traefik-agent
     depends_on:
@@ -116,6 +116,7 @@ services:
     environment:
       TRAEFIK_LOG_DASHBOARD_ACCESS_PATH: "/logs/access.log"
       TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-agent] Secret key missing}"
+      TRAEFIK_LOG_DASHBOARD_ERROR_PATH: "/logs/access.log"
       TRAEFIK_LOG_DASHBOARD_SYSTEM_MONITORING: "true"
     healthcheck:
       interval: 30s
@@ -136,7 +137,7 @@ services:
 
   # Traefik Log Dashboard - Web UI
   traefik-dashboard:
-    image: hhftechnology/traefik-log-dashboard:2.4.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
+    image: hhftechnology/traefik-log-dashboard:3.0.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
     container_name: traefik-dashboard
     hostname: traefik-dashboard
     depends_on:
@@ -151,11 +152,14 @@ services:
       AGENT_API_URL: "http://traefik-agent:5000"
       AGENT_API_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-dashboard] Secret key missing}"
       AGENT_NAME: "Main"
+      GEOIP_LOOKUP_ENABLED: "true"
+      GEOIP_LOCAL_DB_PATH: "/geoip/GeoLite2-City.mmdb"
+      SHOW_DEMO_PAGE: "false"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/logs/status | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      test: [ "CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -179,6 +183,9 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      # Volume mounts from host system
+      - ../docker/traefik/dashboard/GeoLite2-City.mmdb:/geoip/GeoLite2-City.mmdb:ro
       # Persistent volumes
       - ../storage/traefik-dashboard/data:/app/data
+      - ../storage/traefik-dashboard/geoip:/geoip
       - ../storage/traefik-agent/data:/data

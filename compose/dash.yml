@@ -7,7 +7,7 @@ services:
 
   # Server performance monitor
   dash:
-    image: mauricenino/dashdot:6.2.4  # https://github.com/MauriceNino/dashdot/releases
+    image: mauricenino/dashdot:6.3.4  # https://github.com/MauriceNino/dashdot/releases
     container_name: dash
     hostname: dash
     environment:

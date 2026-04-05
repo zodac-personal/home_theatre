@@ -90,3 +90,5 @@ services:
     volumes:
       # Persistent volumes
       - ../storage/sonarqube-db/:/var/lib/postgresql/
+      # Legacy compatibility with PSQL 17
+      - ../storage/sonarqube-db/legacy/:/var/lib/postgresql/data

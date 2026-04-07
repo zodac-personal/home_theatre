@@ -415,11 +415,14 @@ docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache l
 
 ### Dozzle
 
-In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP.
+In order for Dozzle to connect to another host, the docker socket needs to be exposed over TCP with TLS enabled. We
+generate the certs with [gen-docker-certs.sh](docker/dozzle/gen-docker-certs.sh). Copying the certs can be done manually
+or with [deploy-docker-certs.sh](docker/dozzle/deploy-docker-certs.sh).
 
-#### Linux
+If done manually, ensure all certs for the target systems are stored in `/etc/docker/certs`. Then the following update
+needs to be made to each docker service.
 
-For a Linux-based host, first we must find the service:
+First we must find the service:
 
 ```shell
 systemctl status docker | grep "Loaded:"
@@ -432,55 +435,17 @@ systemctl status docker | grep "Loaded:"
 ```conf
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd -H fd:// -H tcp://<lan_ip_address_of_host>:2375 --containerd=/run/containerd/containerd.sock
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2376 --tlsverify --tlscacert=/etc/docker/certs/ca.pem --tlscert=/etc/docker/certs/server-cert.pem --tlskey=/etc/docker/certs/server-key.pem --containerd=/run/containerd/containerd.sock
 ```
 
 - Reload the daemon: `sudo systemctl daemon-reload`
 - Restart the docker service `sudo systemctl restart docker.service`
-- Confirm the port is in LISTEN state with the LAN IP address:
+- Confirm the port is in LISTEN state:
 
 ```shell
 sudo netstat -lntp | grep dockerd
-tcp        0      0 <lan_ip_address_of_host>:2375      0.0.0.0:*               LISTEN      1234/dockerd
+tcp6       0      0 :::2376                 :::*                    LISTEN      1234/dockerd 
 ```
-
-#### Windows
-
-For a Window-based host using Docker Desktop, the following needs to be done:
-
-- Open Docker Desktop
-- Navigate to **Settings** > **General**
-- Check the box for "Expose daemon on tcp://localhost:2375 without TLS"
-- Restart
-
-Next, open a PowerShell terminal as admin, and allow binding to 0.0.0.0:
-
-```bash
-netsh interface portproxy add v4tov4 listenport=2375 listenaddress=0.0.0.0 connectport=2375 connectaddress=127.0.0.1
-```
-
-Confirm this has been applied:
-
-```bash
-netsh interface portproxy show v4tov4
-
-Listen on ipv4:             Connect to ipv4:
-
-Address         Port        Address         Port
---------------- ----------  --------------- ----------
-0.0.0.0         2375        127.0.0.1       2375
-```
-
-Finally, allow inbound connections to this port through the Windows Firewall:
-
-- Open Windows Firewall settings
-- Navigate to **Advanced Settings** > **Inbound Rules**
-- Add a new rule:
-    - Rule Type: Select **Port** as the rule type
-    - Protocol and Ports: **TCP** on port **2375**
-    - Action: **Allow the connection**
-    - Profile: Apply the rule to the appropriate profiles for your machine
-    - Name: Any free-text. For example, "Docker TCP"
 
 ### Homarr
 

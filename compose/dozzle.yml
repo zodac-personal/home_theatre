@@ -54,5 +54,7 @@ services:
     restart: unless-stopped
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
+      - # Volume mounts from host system
+      - "${DOZZLE_DOCKER_CERTS_DIRECTORY}:/certs:ro"
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

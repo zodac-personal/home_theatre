@@ -57,16 +57,24 @@ services:
 
   # Custom channel maker
   tunarr:
-    image: chrisbenincasa/tunarr:1.2.2  # https://github.com/chrisbenincasa/tunarr/releases
+    image: chrisbenincasa/tunarr:1.2.10  # https://github.com/chrisbenincasa/tunarr/releases
     container_name: tunarr
     hostname: tunarr
     depends_on:
       emby:
         condition: service_healthy
+    devices:
+      - /dev/dri:/dev/dri
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       LOG_LEVEL: "INFO"
+      # Hardware Acceleration
+      LIBVA_DRIVER_NAME: "radeonsi"
+      LIBVA_DRIVERS_PATH: "/usr/lib/x86_64-linux-gnu/dri"
+    group_add:
+      - "44"   # video
+      - "105"  # render
     healthcheck:
       interval: 30s
       retries: 3

@@ -51,7 +51,6 @@ services:
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
     read_only: true
-    privileged: true  # Needed to run sysctls commands
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

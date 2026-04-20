@@ -10,6 +10,11 @@ services:
     image: mauricenino/dashdot:6.3.4  # https://github.com/MauriceNino/dashdot/releases
     container_name: dash
     hostname: dash
+    cap_add:
+      - DAC_READ_SEARCH
+      - SYS_PTRACE
+    cap_drop:
+      - ALL
     environment:
       # General
       DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"
@@ -53,6 +58,11 @@ services:
       - '4012:3001'
     privileged: true  # Needed to read RAM details
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "/:/mnt/host:ro"

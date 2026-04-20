@@ -10,6 +10,12 @@ services:
     image: linuxserver/prowlarr:2.3.4-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
     container_name: prowlarr
     hostname: prowlarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       flaresolverr:
         condition: service_healthy
@@ -52,16 +58,23 @@ services:
     ports:
       - "4016:9696"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/prowlarr/:/config
+      - ../storage/prowlarr/config/:/config/
+      - ../storage/prowlarr/run/:/run/
 
   # Cloudflare rate-limiter solver
   flaresolverr:
     image: flaresolverr/flaresolverr:v3.4.6  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
     container_name: flaresolverr
     hostname: flaresolverr
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -81,7 +94,11 @@ services:
     networks:
       - prowlarr
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/flaresolverr/:/config
+      - ../storage/flaresolverr/config/:/config/

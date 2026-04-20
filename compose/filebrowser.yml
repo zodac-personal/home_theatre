@@ -13,6 +13,8 @@ services:
     image: filebrowser/filebrowser:v2.62.1  # https://github.com/filebrowser/filebrowser/releases
     container_name: filebrowser
     hostname: filebrowser
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -49,10 +51,12 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOCUMENTS_DIRECTORY}:/srv:ro"
       # Persistent volumes
-      - ../storage/filebrowser/database/:/database
-      - ../storage/filebrowser/config/:/config
+      - ../storage/filebrowser/database/:/database/
+      - ../storage/filebrowser/config/:/config/

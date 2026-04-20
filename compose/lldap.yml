@@ -9,6 +9,12 @@ services:
     image: lldap/lldap:2026-03-04-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       lldap-db:
         condition: service_healthy
@@ -41,15 +47,21 @@ services:
       - "3890:3890"
       - "17170:17170"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/lldap/:/data
+      - ../storage/lldap/data/:/data/
 
   lldap-db:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: lldap-db
     hostname: lldap-db
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -72,7 +84,12 @@ services:
     networks:
       - lldap
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/lldap-db/:/var/lib/postgresql/

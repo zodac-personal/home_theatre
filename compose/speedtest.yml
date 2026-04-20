@@ -10,6 +10,14 @@ services:
     image: linuxserver/speedtest-tracker:1.13.11  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
     hostname: speedtest
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       speedtest-db:
         condition: service_healthy
@@ -53,15 +61,22 @@ services:
     ports:
       - "5004:80"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Persistent volumes
-      - ../storage/speedtest/config/:/config
+      - ../storage/speedtest/config/:/config/
 
   # Database for SpeedTest
   speedtest-db:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: speedtest-db
     hostname: speedtest-db
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -84,7 +99,12 @@ services:
     networks:
       - speedtest
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/speedtest-db/:/var/lib/postgresql/

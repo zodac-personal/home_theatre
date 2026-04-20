@@ -10,9 +10,13 @@ services:
     image: ghcr.io/jittering/traefik-kop:0.19.4  # https://github.com/jittering/traefik-kop/releases
     container_name: traefik-kop
     hostname: traefik-kop
+    cap_drop:
+      - ALL
     environment:
       BIND_IP: "${MAIN_HOST_IP}" # IP address of this host
       REDIS_ADDR: "${REVERSE_PROXY_HOST_IP}:6379" # Port of the redis instance on the reverse proxy host
+    group_add:
+      - "994"  # `getent group docker`
     healthcheck:
       interval: 30s
       retries: 3
@@ -22,5 +26,11 @@ services:
     networks:
       - traefik-kop
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
+      # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

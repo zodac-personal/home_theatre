@@ -10,6 +10,8 @@ services:
     image: ghcr.io/arabcoders/watchstate:v1.0.8  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -26,7 +28,11 @@ services:
     ports:
       - "5006:8080"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/watchstate/data:/config
+      - ../storage/watchstate/data:/config/

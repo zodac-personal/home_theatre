@@ -13,6 +13,8 @@ services:
     depends_on:
       linkwarden-db:
         condition: service_healthy
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -59,7 +61,10 @@ services:
     ports:
       - "4017:3000"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    # tmpfs: '/tmp' used by container for dotenv
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"  # root needed for Playwright
     volumes:
       # Persistent volumes
       - ../storage/linkwarden/data/:/data/data
@@ -69,6 +74,8 @@ services:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: linkwarden-db
     hostname: linkwarden-db
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -96,7 +103,12 @@ services:
     networks:
       - linkwarden
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/linkwarden-db/:/var/lib/postgresql/

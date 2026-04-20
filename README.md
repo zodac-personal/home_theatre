@@ -363,7 +363,7 @@ docker compose exec sonarqube-db pg_dump -U ${SONARQUBE_DB_USER} -d ${SONARQUBE_
 docker compose exec tandoor-db pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
 
 # Shut down all containers
-docker compose down jellystat jellystat-db linkwarden linkwarden-db romm romm-db sonarqube sonarqube-db tandoor tandoor-ui tandoor-db
+docker compose down jellystat jellystat-db linkwarden linkwarden-db romm romm-cache romm-db sonarqube sonarqube-db tandoor tandoor-db
 
 # Update for new PostgreSQL version
 sudo rm -rf ./storage/jellystat-db/ ./storage/linkwarden-db/ ./storage/romm-db/ ./storage/sonarqube-db/ ./storage/tandoor-db/

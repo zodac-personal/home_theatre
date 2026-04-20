@@ -7,9 +7,11 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v10.1.2  # https://github.com/amir20/dozzle/releases
+    image: amir20/dozzle:v10.4.1  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -22,6 +24,8 @@ services:
       # UI config
       DOZZLE_ENABLE_ACTIONS: "true"
       DOZZLE_NO_ANALYTICS: "true"
+    group_add:
+      - "989"  # `getent group docker`
     healthcheck:
       interval: 30s
       retries: 3
@@ -52,9 +56,13 @@ services:
     ports:
       - "5005:8080"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
-      - # Volume mounts from host system
+      # Volume mounts from host system
       - "${DOZZLE_DOCKER_CERTS_DIRECTORY}:/certs:ro"
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

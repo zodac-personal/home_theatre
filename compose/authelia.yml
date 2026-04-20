@@ -7,9 +7,11 @@ services:
 
   # Identity platform (authentication and SSO)
   authelia:
-    image: authelia/authelia:4.39.16  # https://github.com/authelia/authelia/releases
+    image: authelia/authelia:4.39.19  # https://github.com/authelia/authelia/releases
     container_name: authelia
     hostname: authelia
+    cap_drop:
+      - ALL
     depends_on:
       authelia-cache:
         condition: service_healthy
@@ -68,19 +70,30 @@ services:
     ports:
       - "${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - ../docker/authelia/config/configuration.yml:/config/configuration.yml:ro
       - ../docker/authelia/certs/authelia_private_key.pem:/etc/certs/authelia_private_key.pem:ro
       # Persistent volumes
-      - ../storage/authelia/assets/:/assets
-      - ../storage/authelia/data:/var/lib/authelia
+      - ../storage/authelia/assets/:/assets/
+      - ../storage/authelia/data/:/var/lib/authelia/
 
   authelia-cache:
     image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: authelia-cache
     hostname: authelia-cache
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
     environment:
       VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
@@ -92,7 +105,11 @@ services:
     networks:
       - authelia
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "999:1000"  # valkey user
     volumes:
       # Persistent volumes
       - ../storage/authelia-cache/data/:/data
@@ -101,6 +118,13 @@ services:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: authelia-db
     hostname: authelia-db
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -122,7 +146,12 @@ services:
     networks:
       - authelia
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/authelia-db/:/var/lib/postgresql/

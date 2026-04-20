@@ -10,9 +10,18 @@ services:
     image: ghcr.io/homarr-labs/homarr:v1.56.0  # https://github.com/homarr-labs/homarr/releases
     container_name: homarr
     hostname: homarr
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_ROOT:?User ID missing}"
+      PGID: "${PGID_ROOT:?Group ID missing}"
       # Authentication config
       # AUTH_OIDC_ADMIN_GROUP: "homarr_admins" # Configured in UI at start-up
       AUTH_LOGOUT_REDIRECT_URL: "${HOMARR_OIDC_LOGOUT_URI:?[homarr] OIDC logout URL missing}"
@@ -54,7 +63,11 @@ services:
     ports:
       - "5000:7575"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Persistent volumes
-      - ../storage/homarr/data:/appdata
+      - ../storage/homarr/data/:/appdata/

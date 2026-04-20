@@ -11,6 +11,10 @@ services:
     container_name: traefik-oracle
     hostname: traefik-oracle
     command: --configFile=/config/traefik-oracle.yml
+    cap_drop:
+      - ALL
+    group_add:
+      - "988"  # `getent group docker`
     healthcheck:
       interval: 30s
       retries: 3
@@ -24,7 +28,11 @@ services:
       - "443:443"
       - "5555:8080"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT_ORACLE:?User ID missing}:${PGID_NON_ROOT_ORACLE:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

@@ -10,6 +10,12 @@ services:
     image: vabene1111/recipes:2.5.3  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor
     hostname: tandoor
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       tandoor-db:
         condition: service_healthy
@@ -59,7 +65,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/openapi/" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/" ]
       timeout: 5s
     labels:
       # Reverse proxy config
@@ -77,18 +83,24 @@ services:
     ports:
       - "4014:80"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     # TODO: https://github.com/TandoorRecipes/recipes/pull/4042
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/tandoor/mediafiles/:/opt/recipes/mediafiles
-      - ../storage/tandoor/staticfiles/:/opt/recipes/staticfiles
+      - ../storage/tandoor/mediafiles/:/opt/recipes/mediafiles/
+      - ../storage/tandoor/staticfiles/:/opt/recipes/staticfiles/
 
   # Database for Tandoor
   tandoor-db:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -116,7 +128,12 @@ services:
     networks:
       - tandoor
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/tandoor-db/:/var/lib/postgresql/

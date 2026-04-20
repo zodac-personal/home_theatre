@@ -5,6 +5,10 @@ services:
     image: linuxserver/doplarr:3.7.0  # https://hub.docker.com/r/linuxserver/doplarr/tags
     container_name: doplarr
     hostname: doplarr
+    cap_add:
+      - CHOWN
+    cap_drop:
+      - ALL
     depends_on:
       radarr:
         condition: service_healthy
@@ -33,7 +37,12 @@ services:
     networks:
       - servarr
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/doplarr/:/config
+      - ../storage/doplarr/config/:/config/
+      - ../storage/doplarr/run/:/run/

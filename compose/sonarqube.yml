@@ -10,6 +10,8 @@ services:
     image: sonarqube:26.3.0.120487-community  # https://hub.docker.com/_/sonarqube
     container_name: sonarqube
     hostname: sonarqube
+    cap_drop:
+      - ALL
     depends_on:
       sonarqube-db:
         condition: service_healthy
@@ -45,13 +47,17 @@ services:
     ports:
       - "4013:9000"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/sonarqube/data/:/opt/sonarqube/data
-      - ../storage/sonarqube/extensions/:/opt/sonarqube/extensions
-      - ../storage/sonarqube/logs/:/opt/sonarqube/logs
-      - ../storage/sonarqube/temp/:/opt/sonarqube/temp
+      - ../storage/sonarqube/data/:/opt/sonarqube/data/
+      - ../storage/sonarqube/extensions/:/opt/sonarqube/extensions/
+      - ../storage/sonarqube/logs/:/opt/sonarqube/logs/
+      - ../storage/sonarqube/temp/:/opt/sonarqube/temp/
 
   # Database for SonarQube
   sonarqube-db:
@@ -59,6 +65,8 @@ services:
     image: postgres:17.9-alpine  # https://hub.docker.com/_/postgres
     container_name: sonarqube-db
     hostname: sonarqube-db
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -86,7 +94,12 @@ services:
     networks:
       - sonarqube
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/sonarqube-db/:/var/lib/postgresql/

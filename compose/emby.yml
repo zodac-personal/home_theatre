@@ -10,6 +10,17 @@ services:
     image: emby/embyserver:4.10.0.8  # https://hub.docker.com/r/emby/embyserver/tags
     container_name: emby
     hostname: emby
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "8"
+          memory: "4096M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -40,7 +51,10 @@ services:
     ports:
       - "8096:8096"
     restart: unless-stopped
-    #    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
+    security_opt:
+      - no-new-privileges=true
+    # tmpfs: '/tmp' used by container for transcoding, I think
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${AUDIO_DIRECTORY}:/media/audio"
@@ -52,17 +66,26 @@ services:
       - "${TV_TRASH_DIRECTORY}:/media/trash"
       - "${TV_KIDS_DIRECTORY}:/media/kids"
       # Persistent volumes
-      - ../storage/emby/config/:/config
-      - ../storage/emby/backup/:/backup
+      - ../storage/emby/config/:/config/
+      - ../storage/emby/backup/:/backup/
 
   # Custom channel maker
   tunarr:
     image: chrisbenincasa/tunarr:1.2.10  # https://github.com/chrisbenincasa/tunarr/releases
     container_name: tunarr
     hostname: tunarr
+    cap_add:
+      - DAC_OVERRIDE
+    cap_drop:
+      - ALL
     depends_on:
       emby:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "2048M"
     devices:
       - /dev/dri:/dev/dri
     environment:
@@ -73,8 +96,8 @@ services:
       LIBVA_DRIVER_NAME: "radeonsi"
       LIBVA_DRIVERS_PATH: "/usr/lib/x86_64-linux-gnu/dri"
     group_add:
-      - "44"   # video
-      - "105"  # render
+      - "44"   # `getent group video`
+      - "105"  # `getent group render`
     healthcheck:
       interval: 30s
       retries: 3
@@ -86,6 +109,11 @@ services:
     ports:
       - "4019:8000"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"  # root needed for MeiliSearch DB
     volumes:
       # Volume mounts from host system
       - "${TV1_DIRECTORY}:/media/tv1:ro"
@@ -93,4 +121,4 @@ services:
       - "${TV_TRASH_DIRECTORY}:/media/trash:ro"
       - "${TV_KIDS_DIRECTORY}:/media/kids:ro"
       # Persistent volumes
-      - ../storage/tunarr/config/:/config/tunarr
+      - ../storage/tunarr/config/:/config/tunarr/

@@ -10,6 +10,12 @@ services:
     image: louislam/uptime-kuma:2.2.1  # https://github.com/louislam/uptime-kuma/releases
     container_name: uptime-kuma
     hostname: uptime-kuma
+    cap_add:
+      - FOWNER
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -22,6 +28,7 @@ services:
       traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
       traefik.http.routers.uptime-kuma.entrypoints: "websecure"
       traefik.http.routers.uptime-kuma.tls: "true"
+      # traefik.http.routers.uptime-kuma.middlewares: "N/A"  # No auth as we don't want Oracle reliant on SER
       traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
       # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
       traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"
@@ -39,7 +46,11 @@ services:
     ports:
       - "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}:${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/uptime-kuma/:/app/data
+      - ../storage/uptime-kuma/data/:/app/data/

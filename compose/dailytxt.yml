@@ -10,6 +10,12 @@ services:
     image: phitux/dailytxt:2.4.4  # https://hub.docker.com/r/phitux/dailytxt/tags
     container_name: dailytxt
     hostname: dailytxt
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -47,7 +53,12 @@ services:
       - dailytxt
     ports:
       - "4015:80"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     restart: unless-stopped
     volumes:
       # Persistent volumes
-      - ../storage/dailytxt/:/data/
+      - ../storage/dailytxt/data/:/data/

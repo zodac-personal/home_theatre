@@ -10,6 +10,8 @@ services:
     image: ghcr.io/advplyr/audiobookshelf:2.33.1  # https://github.com/advplyr/audiobookshelf/releases
     container_name: audiobookshelf
     hostname: audiobookshelf
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -48,10 +50,14 @@ services:
     ports:
       - "4005:80"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${BOOKS_DIRECTORY}:/ebooks:ro"
       # Persistent volumes
-      - ../storage/audiobookshelf/config:/config
-      - ../storage/audiobookshelf/metadata:/metadata
+      - ../storage/audiobookshelf/config/:/config/
+      - ../storage/audiobookshelf/metadata/:/metadata/

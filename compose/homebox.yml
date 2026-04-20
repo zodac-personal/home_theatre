@@ -10,6 +10,8 @@ services:
     image: ghcr.io/sysadminsmedia/homebox:0.24.2  # https://github.com/sysadminsmedia/homebox/releases
     container_name: homebox
     hostname: homebox
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -48,7 +50,11 @@ services:
     ports:
       - "4011:7745"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/homebox/:/data/
+      - ../storage/homebox/data/:/data/

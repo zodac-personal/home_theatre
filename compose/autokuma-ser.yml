@@ -10,6 +10,8 @@ services:
     image: ghcr.io/bigboot/autokuma:2.0.0  # https://github.com/BigBoot/AutoKuma/pkgs/container/autokuma
     container_name: autokuma-ser
     hostname: autokuma-ser
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -33,6 +35,8 @@ services:
       AUTOKUMA__KUMA__PASSWORD: "${UPTIME_KUMA_PASSWORD:?[autokuma] uptime-kuma password missing}"
       AUTOKUMA__ON_DELETE: "keep" # Keep monitors even if the service goes down
       AUTOKUMA__SYNC_INTERVAL: "3600" # Sync every 1 hour
+    group_add:
+      - "989"  # `getent group docker`
     healthcheck:
       interval: 30s
       retries: 3
@@ -47,9 +51,13 @@ services:
     networks:
       - autokuma-ser
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
       # Persistent volumes
-      - ../storage/autokuma-ser/data:/data
+      - ../storage/autokuma-ser/data/:/data/

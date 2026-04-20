@@ -11,6 +11,8 @@ services:
     container_name: traefik
     hostname: traefik
     command: --configFile=/config/traefik.yml
+    cap_drop:
+      - ALL
     depends_on:
       authelia:
         condition: service_healthy
@@ -23,6 +25,8 @@ services:
       # Non-docker service IPs
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
+    group_add:
+      - "989"  # `getent group docker`
     healthcheck:
       interval: 30s
       retries: 3
@@ -60,7 +64,11 @@ services:
       - "443:443"
       - "5555:8080"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"
@@ -77,6 +85,8 @@ services:
     image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: traefik-provider
     hostname: traefik-provider
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -95,16 +105,22 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "999:1000"  # valkey user
     volumes:
       # Persistent volumes
-      - ../storage/traefik-provider/data/:/data
+      - ../storage/traefik-provider/data/:/data/
 
   # Traefik Log Dashboard Agent
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:2.4.0  # https://github.com/hhftechnology/traefik-log-dashboard/releases
     container_name: traefik-agent
     hostname: traefik-agent
+    cap_drop:
+      - ALL
     depends_on:
       traefik:
         condition: service_healthy
@@ -129,17 +145,23 @@ services:
     expose:
       - "5000"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ../storage/traefik/logs/access:/logs:ro # Mount directory containing access.log
-      - ../storage/traefik-agent/data:/data
+      - ../storage/traefik-agent/data/:/data/
 
   # Traefik Log Dashboard - Web UI
   traefik-dashboard:
     image: hhftechnology/traefik-log-dashboard:2.4.0 # https://github.com/hhftechnology/traefik-log-dashboard/releases
     container_name: traefik-dashboard
     hostname: traefik-dashboard
+    cap_drop:
+      - ALL
     depends_on:
       traefik-agent:
         condition: service_healthy
@@ -181,11 +203,15 @@ services:
     ports:
       - "5009:3000"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - ../docker/traefik/dashboard/GeoLite2-City.mmdb:/geoip/GeoLite2-City.mmdb:ro
       # Persistent volumes
-      - ../storage/traefik-dashboard/data:/app/data
-      - ../storage/traefik-dashboard/geoip:/geoip
-      - ../storage/traefik-agent/data:/data
+      - ../storage/traefik-dashboard/data/:/app/data/
+      - ../storage/traefik-dashboard/geoip/:/geoip/
+      - ../storage/traefik-agent/data/:/data/

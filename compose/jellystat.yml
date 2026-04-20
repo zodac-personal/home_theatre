@@ -10,6 +10,8 @@ services:
     image: cyfershepard/jellystat:1.1.8  # https://github.com/CyferShepard/Jellystat/releases
     container_name: jellystat
     hostname: jellystat
+    cap_drop:
+      - ALL
     depends_on:
       jellystat-db:
         condition: service_healthy
@@ -56,7 +58,11 @@ services:
     ports:
       - "4008:3000"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
       - ../storage/jellystat/data/:/app/backend/backup-data
@@ -66,6 +72,8 @@ services:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: jellystat-db
     hostname: jellystat-db
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -93,7 +101,12 @@ services:
     networks:
       - jellystat
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/jellystat-db/:/var/lib/postgresql/

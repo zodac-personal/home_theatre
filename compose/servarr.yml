@@ -10,6 +10,12 @@ services:
     image: linuxserver/radarr:6.1.1-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -21,6 +27,8 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -44,19 +52,29 @@ services:
     ports:
       - "4000:7878"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MOVIE_DIRECTORY}:/movies"
       # Persistent volumes
-      - ../storage/radarr/:/config
+      - ../storage/radarr/config/:/config/
 
   # TV Show Manager
   sonarr:
     image: linuxserver/sonarr:4.0.17-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -68,6 +86,8 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -91,7 +111,11 @@ services:
     ports:
       - "4001:8989"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
@@ -100,13 +124,15 @@ services:
       - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
       # Persistent volumes
-      - ../storage/sonarr/:/config
+      - ../storage/sonarr/config/:/config/
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:8.5.1 # https://github.com/recyclarr/recyclarr/releases
     container_name: recyclarr
     hostname: recyclarr
+    cap_drop:
+      - ALL
     depends_on:
       radarr:
         condition: service_healthy
@@ -124,10 +150,10 @@ services:
       CRON_SCHEDULE: "@daily"
       # Radarr Config
       RADARR_API_KEY: "${RADARR_API_KEY}"
-      RADARR_URL: "http://radarr:3000"
+      RADARR_URL: "http://radarr:7878"
       # Sonarr Config
       SONARR_API_KEY: "${SONARR_API_KEY}"
-      SONARR_URL: "http://sonarr:3001"
+      SONARR_URL: "http://sonarr:8989"
     healthcheck:
       interval: 30s
       retries: 3
@@ -137,18 +163,28 @@ services:
     networks:
       - servarr
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "../docker/recyclarr/config/recyclarr.yml:/config/recyclarr.yml"
       # Persistent volumes
-      - ../storage/recyclarr:/config
+      - ../storage/recyclarr/config/:/config/
 
   # Music manager
   lidarr:
     image: linuxserver/lidarr:3.1.2-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
     container_name: lidarr
     hostname: lidarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -160,6 +196,8 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -183,19 +221,29 @@ services:
     ports:
       - "4002:8686"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       - "${MUSIC_DIRECTORY}:/music"
       # Persistent volumes
-      - ../storage/lidarr/:/config
+      - ../storage/lidarr/config/:/config/
 
   # eBook manager
   readarr:
     image: linuxserver/readarr:0.4.19-nightly  # https://hub.docker.com/r/linuxserver/readarr/tags?name=nightly
     container_name: readarr
     hostname: readarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -207,6 +255,8 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -230,19 +280,25 @@ services:
     ports:
       - "4004:8787"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Volume mounts from host system
       - "${BOOKS_DIRECTORY}:/books"
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       # Persistent volumes
-      - ../storage/readarr/:/config
+      - ../storage/readarr/config/:/config/
 
   # Downloaded archive extractor
   unpackerr:
     image: golift/unpackerr:0.15.2  # https://hub.docker.com/r/golift/unpackerr/tags
     container_name: unpackerr
     hostname: unpackerr
+    cap_drop:
+      - ALL
     depends_on:
       lidarr:
         condition: service_healthy
@@ -291,9 +347,13 @@ services:
     networks:
       - servarr
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
       # Persistent volumes
-      - ../storage/unpackerr/:/config
+      - ../storage/unpackerr/config/:/config/

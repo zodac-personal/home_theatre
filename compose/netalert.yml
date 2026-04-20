@@ -22,8 +22,6 @@ services:
         PGID: "20211"
     container_name: netalert
     hostname: netalert
-    cap_drop:
-      - ALL
     cap_add:
       - CHOWN
       - NET_ADMIN
@@ -31,6 +29,8 @@ services:
       - NET_RAW
       - SETGID
       - SETUID
+    cap_drop:
+      - ALL
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -51,7 +51,13 @@ services:
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"
     read_only: true
+    privileged: true  # Needed to run sysctls commands
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    sysctls:
+      net.ipv4.conf.all.arp_ignore: 1
+      net.ipv4.conf.all.arp_announce: 2
     tmpfs:
       # All writable runtime state resides under /tmp; comment out to persist logs between restarts
       - "/tmp:uid=20211,gid=20211,mode=1700,rw,noexec,nosuid,nodev,async,noatime,nodiratime"
@@ -59,4 +65,4 @@ services:
       # Volume mounts from host system
       - /etc/localtime:/etc/localtime:ro
       # Persistent volumes
-      - ../storage/netalert/:/data
+      - ../storage/netalert/data/:/data/

@@ -10,6 +10,8 @@ services:
     image: rommapp/romm:4.8.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
+    cap_drop:
+      - ALL
     depends_on:
       romm-cache:
         condition: service_healthy
@@ -104,21 +106,27 @@ services:
     ports:
       - "4006:8080"
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Volume mounts from host system
       - "${ROM_GAMES_AND_BIOS_PARENT_DIRECTORY}:/romm/library:ro"
       - "${ROM_SAVES_DIRECTORY}:/romm/assets"
       - "../docker/romm/config/:/romm/config"
       # Persistent volumes
-      - ../storage/romm/resources:/romm/resources  # Resources (covers, screenshots, etc.) that are fetched externally
-      - ../storage/romm/redis:/redis-data          # Cached data for background tasks
+      - ../storage/romm/resources/:/romm/resources/  # Resources (covers, screenshots, etc.) that are fetched externally
+      - ../storage/romm/redis/:/redis-data/          # Cached data for background tasks
 
   # External cache for RomM (used due to an issue with the internal valkey)
   romm-cache:
     image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: romm-cache
     hostname: romm-cache
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -135,7 +143,11 @@ services:
     networks:
       - romm
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "999:1000"  # valkey user
     volumes:
       # Persistent volumes
       - ../storage/romm-cache/data/:/data
@@ -145,6 +157,8 @@ services:
     image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
     container_name: romm-db
     hostname: romm-db
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
@@ -172,7 +186,12 @@ services:
     networks:
       - romm
     restart: unless-stopped
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+      - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution
+    user: "999:999"  # postgres user
     volumes:
       # Persistent volumes
       - ../storage/romm-db/:/var/lib/postgresql/

@@ -16,6 +16,11 @@ services:
       - SETUID
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

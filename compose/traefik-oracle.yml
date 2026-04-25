@@ -13,6 +13,11 @@ services:
     command: --configFile=/config/traefik-oracle.yml
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256M"
     group_add:
       - "988"  # `getent group docker`
     healthcheck:

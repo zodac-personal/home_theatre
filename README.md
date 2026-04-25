@@ -190,24 +190,24 @@ cat backup_authelia.sql | docker compose -f docker-compose-ser.yml exec -T authe
 docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache
 ```
 
-### Dawarich DB
+### Reitti DB
 
-Take backup of the current database, then shut the Dawarich containers down:
+Take backup of the current database, then shut the Reitti containers down:
 
 ```bash
-docker compose exec dawarich-db pg_dump -U ${DAWARICH_DB_USER} -d ${DAWARICH_DB_NAME} -cC > backup_dawarich.sql
-docker compose down dawarich dawarich-sidekiq dawarich-cache dawarich-db photon
+docker compose exec reitti-db pg_dump -U ${REITTI_DB_USER} -d ${REITTI_DB_NAME} -cC > backup_reitti.sql
+docker compose down reitti reitti-db reitti-cache reitti-tile-cache
 ```
 
-Upgrade the version of [PostgreSQL](https://registry.hub.docker.com/_/postgres) for `dawarich-db`.
-Next, delete the storage for `dawarich-db` (make sure to copy this directory/volume first).
+Upgrade the version of [PostGIS](https://hub.docker.com/r/postgis/) for `reitti-db`.
+Next, delete the storage for `reitti-db` (make sure to copy this directory/volume first).
 
-Finally, start up the new DB container, restore the backup, then start the remaining Authelia containers:
+Finally, start up the new DB container, restore the backup, then start the remaining Reitti containers:
 
 ```bash
-docker compose up --build -d dawarich-db --wait
-cat backup_dawarich.sql | docker compose exec -T dawarich-db psql -U ${AUTHELIA_DB_USER} -d ${DAWARICH_DB_NAME}
-docker compose up --build -d dawarich dawarich-sidekiq dawarich-cache photon 
+docker compose up --build -d reitti-db --wait
+cat backup_reitti.sql | docker compose exec -T reitti-db psql -U ${REITTI_DB_USER} -d ${REITTI_DB_NAME}
+docker compose up --build -d reitti reitti-cache reitti-tile-cache
 ```
 
 ### Jellystat DB
@@ -358,29 +358,31 @@ docker compose up --build -d tandoor
 # Take backups
 docker compose exec jellystat-db pg_dump -U ${JELLYSTAT_DB_USER} -d ${JELLYSTAT_DB_NAME} -cC > backup_jellystat.sql
 docker compose exec linkwarden-db pg_dump -U ${LINKWARDEN_DB_USER} -d ${LINKWARDEN_DB_NAME} -cC > backup_linkwarden.sql
+docker compose exec reitti-db pg_dump -U ${REITTI_DB_USER} -d ${REITTI_DB_NAME} -cC > backup_reitti.sql
 docker compose exec romm-db pg_dump -U ${ROMM_DB_USER} -d ${ROMM_DB_NAME} -cC > backup_romm.sql
 docker compose exec sonarqube-db pg_dump -U ${SONARQUBE_DB_USER} -d ${SONARQUBE_DB_NAME} -cC > backup_sonarqube.sql
 docker compose exec tandoor-db pg_dump -U ${TANDOOR_DB_USER} -d ${TANDOOR_DB_NAME} -cC > backup_tandoor.sql
 
 # Shut down all containers
-docker compose down jellystat jellystat-db linkwarden linkwarden-db romm romm-cache romm-db sonarqube sonarqube-db tandoor tandoor-db
+docker compose down jellystat jellystat-db linkwarden linkwarden-db reitti reitti-db reitti-cache reitti-tile-cache romm romm-cache romm-db sonarqube sonarqube-db tandoor tandoor-db
 
 # Update for new PostgreSQL version
-sudo rm -rf ./storage/jellystat-db/ ./storage/linkwarden-db/ ./storage/romm-db/ ./storage/sonarqube-db/ ./storage/tandoor-db/
+sudo rm -rf ./storage/jellystat-db/ ./storage/linkwarden-db/ ./storage/reitti-db/ ./storage/romm-db/ ./storage/sonarqube-db/ ./storage/tandoor-db/
 docker compose pull
 
 # Start DB containers
-docker compose up --build -d jellystat-db linkwarden-db romm-db sonarqube-db tandoor-db --wait
+docker compose up --build -d jellystat-db linkwarden-db reitti-db romm-db sonarqube-db tandoor-db --wait
 
 # Restore backups
 cat backup_jellystat.sql | docker compose exec -T jellystat-db psql -U ${JELLYSTAT_DB_USER}
 cat backup_linkwarden.sql | docker compose exec -T linkwarden-db psql -U ${LINKWARDEN_DB_USER}
+cat backup_reitti.sql | docker compose exec -T reitti-db psql -U ${REITTI_DB_USER}
 cat backup_romm.sql | docker compose exec -T romm-db psql -U ${ROMM_DB_USER}
 cat backup_sonarqube.sql | docker compose exec -T sonarqube-db psql -U ${SONARQUBE_DB_USER}
 cat backup_tandoor.sql | docker compose exec -T tandoor-db psql -U ${TANDOOR_DB_USER}
 
 # Start services
-docker compose up --build -d jellystat linkwarden romm sonarqube tandoor tandoor-ui
+docker compose up --build -d jellystat linkwarden reitti reitti-cache reitti-tile-cache romm romm-cache sonarqube tandoor
 ```
 
 #### SER

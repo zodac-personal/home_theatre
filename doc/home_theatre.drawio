@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.3.0">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.5.2">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="2081" dy="936" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="792" dy="416" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -592,12 +592,6 @@
         <mxCell id="IhNmxvIkTaH7KBJsD18b-4" edge="1" parent="1" source="lcRQkhD3couCPsEeO-z6-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="n2UcIOqW1sy_Vd4esa-b-6">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="YL5RblAow4cGirAIxByP-2" edge="1" parent="1" source="YL5RblAow4cGirAIxByP-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="AQSvJnJNl6eQuiFYvKGu-1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="YL5RblAow4cGirAIxByP-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cdcdcd;strokeColor=#666666;fontColor=#333333;" value="&lt;a href=&quot;https://github.com/rtuszik/photon-docker&quot;&gt;Photon&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Geocoder&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="960" y="720" as="geometry" />
-        </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-4" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="Tl25KXTgNwVIgyIWhWGG-5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -622,13 +616,13 @@
         <mxCell id="HCQHgh5ILe631yiaYYjY-1" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="800" y="720" as="geometry" />
         </mxCell>
-        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/Freika/dawarich&quot;&gt;Dawarich&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="AQSvJnJNl6eQuiFYvKGu-1" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/dedicatedcode/reitti/&quot;&gt;Reitti&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; Maps Timeline&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="IhNmxvIkTaH7KBJsD18b-2" parent="HCQHgh5ILe631yiaYYjY-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="110" as="geometry" />
         </mxCell>
-        <mxCell id="IhNmxvIkTaH7KBJsD18b-13" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PSQL&lt;/a&gt;&lt;/font&gt;" vertex="1">
+        <mxCell id="IhNmxvIkTaH7KBJsD18b-13" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/postgres/postgres&quot;&gt;PGIS&lt;/a&gt;&lt;/font&gt;" vertex="1">
           <mxGeometry height="20" width="30" as="geometry" />
         </mxCell>
         <mxCell id="IhNmxvIkTaH7KBJsD18b-14" parent="HCQHgh5ILe631yiaYYjY-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=12 12;" value="&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;a href=&quot;https://github.com/valkey-io/valkey&quot;&gt;Valkey&lt;/a&gt;&lt;/span&gt;" vertex="1">
@@ -641,7 +635,7 @@
           <mxGeometry height="40" width="120" x="320" y="720" as="geometry" />
         </mxCell>
         <mxCell id="PuI25buu_hDiTpB9Viq5-1" connectable="0" parent="1" style="group" value="" vertex="1">
-          <mxGeometry height="40" width="120" x="400" y="400" as="geometry" />
+          <mxGeometry height="40" width="120" x="400" y="320" as="geometry" />
         </mxCell>
         <mxCell id="PuI25buu_hDiTpB9Viq5-3" parent="PuI25buu_hDiTpB9Viq5-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;http://192.168.178.74:5009/dashboard&quot;&gt;Traefik&amp;nbsp;Dashboard&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Access Logs&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
@@ -652,8 +646,13 @@
         <mxCell id="PuI25buu_hDiTpB9Viq5-5" edge="1" parent="1" source="PuI25buu_hDiTpB9Viq5-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="ByP5D_G1rsHgrG0Wdw6j-18">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="YQBcX_Swvy8vor0Dy6dl-1" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-34" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/imagegenius/docker-immich&quot;&gt;Immich&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Photo/Video Gallery&lt;/i&gt;&lt;/sub&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1120" y="680" as="geometry" />
+          <mxGeometry height="40" width="120" x="960" y="720" as="geometry" />
         </mxCell>
         <mxCell id="YL5RblAow4cGirAIxByP-5" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="E4U7jJgjo-yncmPXJe4U-10">
           <mxGeometry relative="1" as="geometry">
@@ -752,6 +751,9 @@
         </mxCell>
         <mxCell id="UYMDBSI0UF6C3ezeTIK2-17" connectable="0" parent="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="port 443" vertex="1">
           <mxGeometry x="1620" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="YQBcX_Swvy8vor0Dy6dl-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/Kozea/Radicale&quot;&gt;Radicale&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;CalDAV/CardDAV Server&lt;/i&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="1120" y="680" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -1,0 +1,183 @@
+networks:
+  reitti:
+    name: reitti
+    driver: bridge
+
+services:
+
+  # Google Maps/Timeline Replacement
+  reitti:
+    image: dedicatedcode/reitti:4.0.4  # https://github.com/dedicatedcode/reitti/releases
+    container_name: reitti
+    hostname: reitti
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
+    depends_on:
+      reitti-db:
+        condition: service_healthy
+      reitti-cache:
+        condition: service_healthy
+      reitti-tile-cache:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "4G"
+    environment:
+      # Base config
+      APP_UID: "${PUID_NON_ROOT:?User ID missing}"
+      APP_GID: "${PGID_NON_ROOT:?Group ID missing}"
+      # Application config
+      ADVERTISE_URI: "reitti.${DOMAIN_NAME}"
+      # Authentication config
+      OIDC_ENABLED: "true"
+      OIDC_CLIENT_ID: "${REITTI_OIDC_CLIENT_ID:?[reitti] OIDC client ID missing}"
+      OIDC_CLIENT_SECRET: "${REITTI_OIDC_CLIENT_SECRET:?[reitti] OIDC client secret missing}"
+      OIDC_ISSUER_URI: "${REITTI_OIDC_ISSUER_URI:?[reitti] OIDC issuer URI missing}"
+      OIDC_SCOPE: "openid,profile"
+      # Cache config
+      REDIS_HOST: reitti-cache
+      REDIS_PORT: 6379
+      TILES_CACHE: "http://reitti-tile-cache"
+      # Database config
+      POSTGIS_USER: "${REITTI_DB_USER:?[reitti-db] Database user missing}"
+      POSTGIS_PASSWORD: "${REITTI_DB_PASSWORD:?[reitti-db] Database password missing}"
+      POSTGIS_DB: "${REITTI_DB_NAME:?[reitti-db] Database name missing}"
+      POSTGIS_HOST: reitti-db
+      # Logging config
+      LOGGING_LEVEL: "INFO"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.reitti.rule: "Host(`map.${DOMAIN_NAME}`)"
+      traefik.http.routers.reitti.entrypoints: "websecure"
+      traefik.http.routers.reitti.tls: "true"
+      traefik.http.routers.reitti.middlewares: "no-forward-auth@file"
+      traefik.http.services.reitti.loadbalancer.server.port: "4010"
+    networks:
+      - reitti
+    ports:
+      - "4010:8080"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    # tmpfs:  # tmpfs used by Spring Boot for start-up
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
+    volumes:
+      # Persistent volumes
+      - ../storage/reitti/data/:/data/
+
+  reitti-cache:
+    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
+    container_name: reitti-cache
+    hostname: reitti-cache
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    environment:
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "valkey-cli", "ping" ]
+      timeout: 5s
+    networks:
+      - reitti
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "999:1000"  # valkey user
+    volumes:
+      # Persistent volumes
+      - ../storage/reitti-cache/data/:/data/
+
+  reitti-db:
+    image: postgis/postgis:18-3.6-alpine  # https://hub.docker.com/r/postgis/postgis
+    container_name: reitti-db
+    hostname: reitti-db
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1G"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGTZ: "${TIMEZONE:?Timezone missing}"
+      POSTGRES_INITDB_ARGS: "--set=log_timezone=${TIMEZONE:?Timezone missing}"
+      # Database config
+      POSTGRES_USER: "${REITTI_DB_USER:?[reitti-db] Database user missing}"
+      POSTGRES_PASSWORD: "${REITTI_DB_PASSWORD:?[reitti-db] Database password missing}"
+      POSTGRES_DB: "${REITTI_DB_NAME:?[reitti-db] Database name missing}"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${REITTI_DB_USER:?[reitti-db] Database user missing}", "-d", "${REITTI_DB_NAME:?[reitti-db] Database name missing}", "-p", "${REITTI_DB_PORT:?[reitti-db] Database port missing}" ]
+      timeout: 5s
+    networks:
+      - reitti
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    shm_size: 1G
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/reitti-db/data/:/var/lib/postgresql/
+
+  reitti-tile-cache:
+    image: dedicatedcode/reitti-tile-cache:4.0.4  # https://github.com/dedicatedcode/reitti/releases
+    container_name: reitti-tile-cache
+    hostname: reitti-tile-cache
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 30s
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/osm/0/0/0.png"]
+      timeout: 5s
+    networks:
+      - reitti
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    volumes:
+      # Persistent volumes
+      - ../storage/reitti-tile-cache/nginx/:/var/cache/nginx/

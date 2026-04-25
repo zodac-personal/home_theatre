@@ -4,7 +4,6 @@ include:
   - ./compose/bazarr.yml
   - ./compose/dailytxt.yml
   - ./compose/dash.yml
-  - ./compose/dawarich.yml
   - ./compose/doplarr.yml
   - ./compose/emby.yml
   - ./compose/filebrowser.yml
@@ -14,6 +13,7 @@ include:
   - ./compose/navidrome.yml
   - ./compose/prowlarr.yml
   - ./compose/qbittorrent.yml
+  - ./compose/reitti.yml
   - ./compose/romm.yml
   - ./compose/servarr.yml
   - ./compose/sonarqube.yml

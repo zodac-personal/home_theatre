@@ -12,6 +12,11 @@ services:
     hostname: traefik-kop
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "512M"
     environment:
       BIND_IP: "${MAIN_HOST_IP}" # IP address of this host
       REDIS_ADDR: "${REVERSE_PROXY_HOST_IP}:6379" # Port of the redis instance on the reverse proxy host

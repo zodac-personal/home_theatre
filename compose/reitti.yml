@@ -59,6 +59,9 @@ services:
       traefik.http.routers.reitti.tls: "true"
       traefik.http.routers.reitti.middlewares: "no-forward-auth@file"
       traefik.http.services.reitti.loadbalancer.server.port: "4010"
+      # Monitor config
+      kuma.reitti.http.name: "Reitti (Maps Timeline)"
+      kuma.reitti.http.url: "${REITTI_MONITOR_URL:?[reitti] Monitor URL missing}"
     networks:
       - reitti
     ports:
@@ -168,7 +171,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/osm/0/0/0.png"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/osm/0/0/0.png" ]
       timeout: 5s
     networks:
       - reitti

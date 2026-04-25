@@ -15,6 +15,11 @@ services:
       - SYS_PTRACE
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # General
       DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"

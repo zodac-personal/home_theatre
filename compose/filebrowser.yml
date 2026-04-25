@@ -2,9 +2,6 @@ networks:
   filebrowser:
     name: filebrowser
     driver: bridge
-  filebrowser-ftp:
-    name: filebrowser-ftp
-    driver: bridge
 
 services:
 

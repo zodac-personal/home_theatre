@@ -18,6 +18,11 @@ services:
         condition: service_healthy
       traefik-provider:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       # Variables used for Go template substitution in the config files
       DOMAIN_NAME: "${DOMAIN_NAME}"

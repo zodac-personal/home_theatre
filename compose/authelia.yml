@@ -19,6 +19,11 @@ services:
         condition: service_healthy
       lldap:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     environment:
       # Logging config
       LOG_LEVEL: "INFO"

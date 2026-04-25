@@ -119,7 +119,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1G"
+          memory: "1024M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

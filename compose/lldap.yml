@@ -18,6 +18,11 @@ services:
     depends_on:
       lldap-db:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -64,6 +69,11 @@ services:
     hostname: lldap-db
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

@@ -1,5 +1,4 @@
 include:
-  # TODO: Add limits to these
   - ./compose/apprise.yml
   - ./compose/authelia.yml
   - ./compose/autokuma-ser.yml

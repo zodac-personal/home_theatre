@@ -21,6 +21,11 @@ services:
     depends_on:
       speedtest-db:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512M"
     environment:
       # Base config
       APP_TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -77,6 +82,11 @@ services:
     hostname: speedtest-db
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

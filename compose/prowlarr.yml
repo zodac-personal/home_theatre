@@ -27,6 +27,8 @@ services:
         condition: service_healthy
       sonarr:
         condition: service_healthy
+      sportarr:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -55,6 +57,7 @@ services:
     networks:
       - prowlarr
       - servarr
+      - sportarr
     ports:
       - "4016:9696"
     restart: unless-stopped

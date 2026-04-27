@@ -1,0 +1,56 @@
+networks:
+  sportarr:
+    name: sportarr
+    driver: bridge
+
+services:
+
+  sportarr:
+    image: sportarr/sportarr:4.0.994.363-dev  # https://hub.docker.com/r/sportarr/sportarr/tags?name=-dev
+    container_name: sportarr
+    hostname: sportarr
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.sportarr.rule: "Host(`sportarr.${DOMAIN_NAME}`)"
+      traefik.http.routers.sportarr.entrypoints: "websecure"
+      traefik.http.routers.sportarr.tls: "true"
+      traefik.http.routers.sportarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.services.sportarr.loadbalancer.server.port: "4018"
+      # Monitor config
+      kuma.sportarr.http.name: "Sportarr (Sports Manager)"
+      kuma.sportarr.http.url: "${SPORTARR_MONITOR_URL:?[sportarr] Monitor URL missing}"
+    networks:
+      - qbittorrent
+      - sportarr
+    ports:
+      - "4018:1867"
+    security_opt:
+      - no-new-privileges=true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    restart: unless-stopped
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
+    volumes:
+      # Volume mounts from host system
+      - "${DOWNLOADS_DIRECTORY}:/downloads"
+      - "${SPORTS_DIRECTORY}:/sports"
+      # Persistent volumes
+      - ../storage/sportarr/config/:/config/
+      - ../storage/sportarr/data/:/data/

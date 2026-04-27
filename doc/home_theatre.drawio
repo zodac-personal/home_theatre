@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.5.2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="792" dy="416" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1571" dy="713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -22,15 +22,16 @@
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;opacity=40;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="360" width="760" x="200" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="Tl25KXTgNwVIgyIWhWGG-37" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.999;exitY=0.339;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;" target="nFLrENYFJLQG_o7xyKyQ-12">
+        <mxCell id="Tl25KXTgNwVIgyIWhWGG-37" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="nFLrENYFJLQG_o7xyKyQ-12">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="820" y="1041" />
+              <mxPoint x="685" y="980" />
+              <mxPoint x="820" y="980" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=30;" value="" vertex="1">
-          <mxGeometry height="120" width="440" x="280" y="1000" as="geometry" />
+          <mxGeometry height="120" width="540" x="280" y="1000" as="geometry" />
         </mxCell>
         <mxCell id="nFLrENYFJLQG_o7xyKyQ-4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;u&gt;&lt;b&gt;Services&lt;/b&gt;&lt;/u&gt;" vertex="1">
           <mxGeometry height="30" width="120" x="120.63" y="640" as="geometry" />
@@ -107,7 +108,7 @@
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/ZoneMinder&quot;&gt;Frigate&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Home Camera Streaming&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="1120" y="760" as="geometry" />
         </mxCell>
-        <mxCell id="L6m80jQgylzgtWpYlu2N-5" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="oyaQrTRKLkGkAWCvTF3D-5">
+        <mxCell id="L6m80jQgylzgtWpYlu2N-5" edge="1" parent="1" source="Tl25KXTgNwVIgyIWhWGG-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.408;entryY=1.007;entryDx=0;entryDy=0;entryPerimeter=0;" target="oyaQrTRKLkGkAWCvTF3D-5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;a href=&quot;https://github.com/kiranshila/Doplarr&quot;&gt;Doplarr&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Discord Request Bot&lt;br&gt;&lt;/sub&gt;&lt;/i&gt;" vertex="1">
@@ -116,7 +117,7 @@
         <mxCell id="oyaQrTRKLkGkAWCvTF3D-7" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" value="Managers" vertex="1">
           <mxGeometry height="30" width="60" x="280" y="997" as="geometry" />
         </mxCell>
-        <mxCell id="Tl25KXTgNwVIgyIWhWGG-42" edge="1" parent="1" source="beeUFlDvooX-L1BY4JcO-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.773;entryY=1.002;entryDx=0;entryDy=0;entryPerimeter=0;" target="oyaQrTRKLkGkAWCvTF3D-5">
+        <mxCell id="Tl25KXTgNwVIgyIWhWGG-42" edge="1" parent="1" source="beeUFlDvooX-L1BY4JcO-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.631;entryY=0.998;entryDx=0;entryDy=0;entryPerimeter=0;" target="oyaQrTRKLkGkAWCvTF3D-5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="dgM-4BmzPYSXpo5_9bCQ-6" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="&lt;u&gt;&lt;b&gt;Mobile Apps&lt;/b&gt;&lt;/u&gt;" vertex="1">
@@ -393,7 +394,7 @@
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-38" connectable="0" parent="1" style="group" value="" vertex="1">
           <mxGeometry height="40" width="120" x="560" y="1160" as="geometry" />
         </mxCell>
-        <mxCell id="beeUFlDvooX-L1BY4JcO-1" parent="ROIVXRoGKlTalxw2WbaJ-38" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;fillStyle=solid;" value="&lt;a href=&quot;https://github.com/Fallenbagel/jellyseerr&quot;&gt;Jellyseer&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Media Request Bot&lt;/sub&gt;&lt;/i&gt;" vertex="1">
+        <mxCell id="beeUFlDvooX-L1BY4JcO-1" parent="ROIVXRoGKlTalxw2WbaJ-38" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;fillStyle=solid;" value="&lt;a href=&quot;https://github.com/seerr-team/seerr&quot;&gt;Seerr&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Media Request Bot&lt;/sub&gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="120" as="geometry" />
         </mxCell>
         <mxCell id="ROIVXRoGKlTalxw2WbaJ-39" connectable="0" parent="1" style="group" value="" vertex="1">
@@ -502,13 +503,6 @@
         </mxCell>
         <mxCell id="Q6Jxrl3DY5_jXdF7SZNn-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://github.com/aimok04/kitshn&quot;&gt;kitshn&lt;/a&gt;&lt;br&gt;&lt;div&gt;&lt;i&gt;Recipe App&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="920" y="1361" as="geometry" />
-        </mxCell>
-        <mxCell id="Q6Jxrl3DY5_jXdF7SZNn-5" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.059;exitY=0.999;exitDx=0;exitDy=0;entryX=0.629;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" target="oyaQrTRKLkGkAWCvTF3D-21">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="306" y="1120" />
-            </Array>
-          </mxGeometry>
         </mxCell>
         <mxCell id="ZHVau_gpumx4E9w_0-pG-4" edge="1" parent="1" source="ZHVau_gpumx4E9w_0-pG-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="ByP5D_G1rsHgrG0Wdw6j-18">
           <mxGeometry relative="1" as="geometry" />
@@ -754,6 +748,22 @@
         </mxCell>
         <mxCell id="YQBcX_Swvy8vor0Dy6dl-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/Kozea/Radicale&quot;&gt;Radicale&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;CalDAV/CardDAV Server&lt;/i&gt;&lt;/span&gt;" vertex="1">
           <mxGeometry height="40" width="120" x="1120" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="Djf9BEhXH1LE4xuSKx_J-1" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="40" width="90" x="680" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="Djf9BEhXH1LE4xuSKx_J-2" parent="Djf9BEhXH1LE4xuSKx_J-1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;a href=&quot;https://sportarr.net/&quot;&gt;Sportarr&lt;/a&gt;&lt;br&gt;&lt;sub&gt;&lt;i&gt;Sports&lt;/i&gt;&lt;/sub&gt;" vertex="1">
+          <mxGeometry height="40" width="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Djf9BEhXH1LE4xuSKx_J-3" parent="Djf9BEhXH1LE4xuSKx_J-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Djf9BEhXH1LE4xuSKx_J-5" edge="1" parent="1" source="oyaQrTRKLkGkAWCvTF3D-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.604;entryY=0.005;entryDx=0;entryDy=0;entryPerimeter=0;" target="oyaQrTRKLkGkAWCvTF3D-21">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="297" y="1221" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

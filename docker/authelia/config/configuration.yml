@@ -350,6 +350,24 @@ access_control:
       policy: 'one_factor'
       subject:
         - [ "group:servarr_admins" ]
+    - domain: 'sportarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/favicon\.ico$'
+        - '^/ping$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+    - domain: 'sportarr.{{ env "DOMAIN_NAME" }}'
+      resources:
+        - '^/api.*$'
+      policy: 'bypass'
+      methods:
+        - 'GET'
+        - 'POST'
+    - domain: 'sportarr.{{ env "DOMAIN_NAME" }}'
+      policy: 'one_factor'
+      subject:
+        - [ "group:servarr_admins" ]
 
 notifier:
   smtp:

@@ -61,6 +61,7 @@ services:
       - "${BOOKS_DIRECTORY}:/media/books"
       - "${MOVIE_DIRECTORY}:/media/movies"
       - "${RECORDINGS_DIRECTORY}:/media/recordings"
+      - "${SPORTS_DIRECTORY}:/media/sports"
       - "${TV1_DIRECTORY}:/media/tv1"
       - "${TV2_DIRECTORY}:/media/tv2"
       - "${TV_TRASH_DIRECTORY}:/media/trash"

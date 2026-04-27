@@ -17,5 +17,6 @@ include:
   - ./compose/romm.yml
   - ./compose/servarr.yml
   - ./compose/sonarqube.yml
+  - ./compose/sportarr.yml
   - ./compose/tandoor.yml
   - ./compose/traefik-kop.yml

@@ -6,7 +6,7 @@ networks:
 services:
 
   sportarr:
-    image: sportarr/sportarr:4.0.994.363-dev  # https://hub.docker.com/r/sportarr/sportarr/tags?name=-dev
+    image: sportarr/sportarr:4.0.997.391-dev  # https://hub.docker.com/r/sportarr/sportarr/tags?name=-dev
     container_name: sportarr
     hostname: sportarr
     cap_add:

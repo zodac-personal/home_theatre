@@ -7,7 +7,7 @@ services:
 
   # eBook & Audiobook management
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.33.1  # https://github.com/advplyr/audiobookshelf/releases
+    image: ghcr.io/advplyr/audiobookshelf:2.34.0  # https://github.com/advplyr/audiobookshelf/releases
     container_name: audiobookshelf
     hostname: audiobookshelf
     cap_drop:

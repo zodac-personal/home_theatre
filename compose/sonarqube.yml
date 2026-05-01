@@ -7,7 +7,7 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:26.3.0.120487-community  # https://hub.docker.com/_/sonarqube
+    image: sonarqube:26.4.0.121862-community  # https://hub.docker.com/_/sonarqube
     container_name: sonarqube
     hostname: sonarqube
     cap_drop:
@@ -29,7 +29,7 @@ services:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "-O", "-", "http://127.0.0.1:9000/api/system/status" ] # '--spider' fails
+      test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:9000/api/system/status" ] # wget not installed
       timeout: 5s
     labels:
       # Reverse proxy config

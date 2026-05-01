@@ -7,7 +7,7 @@ services:
 
   # Bookmark Manager
   linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:v2.13.5  # https://github.com/linkwarden/linkwarden/releases
+    image: ghcr.io/linkwarden/linkwarden:v2.14.1  # https://github.com/linkwarden/linkwarden/releases
     container_name: linkwarden
     hostname: linkwarden
     depends_on:

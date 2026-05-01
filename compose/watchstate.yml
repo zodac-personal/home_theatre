@@ -5,9 +5,9 @@ networks:
 
 services:
 
-  # Tool to import/export played state of media in Emby, instead of using Trakt
+  # Tool to import/export played state of media in Emby
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v1.0.8  # https://github.com/arabcoders/watchstate/releases
+    image: ghcr.io/arabcoders/watchstate:v1.7.0  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
     cap_drop:

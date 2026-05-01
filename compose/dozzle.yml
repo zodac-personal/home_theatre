@@ -7,7 +7,7 @@ services:
 
   # Docker log viewer
   dozzle:
-    image: amir20/dozzle:v10.4.1  # https://github.com/amir20/dozzle/releases
+    image: amir20/dozzle:v10.5.1  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle
     cap_drop:

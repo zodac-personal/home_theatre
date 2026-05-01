@@ -7,7 +7,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.61.0  # https://github.com/navidrome/navidrome/releases/
+    image: deluan/navidrome:0.61.2  # https://github.com/navidrome/navidrome/releases/
     container_name: navidrome
     hostname: navidrome
     cap_drop:

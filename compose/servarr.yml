@@ -7,7 +7,7 @@ services:
 
   # Movie Manager
   radarr:
-    image: linuxserver/radarr:6.1.1-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
+    image: linuxserver/radarr:6.2.0-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
     cap_add:
@@ -128,7 +128,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:8.5.1 # https://github.com/recyclarr/recyclarr/releases
+    image: ghcr.io/recyclarr/recyclarr:8.6.0 # https://github.com/recyclarr/recyclarr/releases
     container_name: recyclarr
     hostname: recyclarr
     cap_drop:

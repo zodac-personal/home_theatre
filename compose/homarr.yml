@@ -63,6 +63,11 @@ services:
       # Monitor config
       kuma.homarr.http.name: "Homarr (HomePage)"
       kuma.homarr.http.url: "${HOMARR_MONITOR_URL:?[homarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - homarr
     ports:

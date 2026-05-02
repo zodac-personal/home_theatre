@@ -46,6 +46,11 @@ services:
       # Monitor config
       kuma.radarr.http.name: "Radarr (Movie Manager)"
       kuma.radarr.http.url: "${RADARR_MONITOR_URL:?[radarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - qbittorrent
       - servarr
@@ -105,6 +110,11 @@ services:
       # Monitor config
       kuma.sonarr.http.name: "Sonarr (TV Manager)"
       kuma.sonarr.http.url: "${SONARR_MONITOR_URL:?[sonarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - qbittorrent
       - servarr
@@ -160,6 +170,11 @@ services:
       start_period: 30s
       test: [ "CMD", "recyclarr", "-v" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - servarr
     restart: unless-stopped
@@ -215,6 +230,11 @@ services:
       # Monitor config
       kuma.lidarr.http.name: "Lidarr (Music Manager)"
       kuma.lidarr.http.url: "${LIDARR_MONITOR_URL:?[lidarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - qbittorrent
       - servarr
@@ -274,6 +294,11 @@ services:
       # Monitor config
       kuma.readarr.http.name: "Readarr (eBook Manager)"
       kuma.readarr.http.url: "${READARR_MONITOR_URL:?[readarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - qbittorrent
       - servarr
@@ -344,6 +369,11 @@ services:
       start_period: 30s
       test: [ "CMD", "/unpackerr", "-v" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - servarr
     restart: unless-stopped

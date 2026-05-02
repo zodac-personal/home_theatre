@@ -44,6 +44,11 @@ services:
       # Monitor config
       kuma.apprise.http.name: "Apprise (Centralised Notifications)"
       kuma.apprise.http.url: "${APPRISE_MONITOR_URL:?[apprise] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - apprise
     ports:

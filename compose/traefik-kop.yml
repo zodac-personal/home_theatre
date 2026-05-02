@@ -28,6 +28,11 @@ services:
       start_period: 30s
       test: [ "CMD", "/traefik-kop", "-V" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik-kop
     restart: unless-stopped

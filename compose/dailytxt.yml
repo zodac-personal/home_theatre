@@ -49,6 +49,11 @@ services:
       # Monitor config
       kuma.dailytxt.http.name: "DailyTxt (Daily Journal)"
       kuma.dailytxt.http.url: "${DAILYTXT_MONITOR_URL:?[dailytxt] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - dailytxt
     ports:

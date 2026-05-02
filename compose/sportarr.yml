@@ -36,6 +36,11 @@ services:
       # Monitor config
       kuma.sportarr.http.name: "Sportarr (Sports Manager)"
       kuma.sportarr.http.url: "${SPORTARR_MONITOR_URL:?[sportarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - qbittorrent
       - sportarr

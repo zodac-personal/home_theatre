@@ -45,6 +45,11 @@ services:
       # Monitor config
       kuma.homebox.http.name: "Homebox (House Inventory)"
       kuma.homebox.http.url: "${HOMEBOX_MONITOR_URL:?[homebox] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - homebox
     ports:

@@ -69,6 +69,11 @@ services:
       # Monitor config
       kuma.authelia.http.name: "Authelia (Identity Platform)"
       kuma.authelia.http.url: "${AUTHELIA_MONITOR_URL:?[authelia] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - authelia
       - lldap
@@ -107,6 +112,11 @@ services:
       start_period: 30s
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - authelia
     restart: unless-stopped
@@ -148,6 +158,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${AUTHELIA_DB_USER:?[authelia-db] Database user missing}", "-d", "${AUTHELIA_DB_NAME:?[authelia-db] Database name missing}", "-p", "${AUTHELIA_DB_PORT:?[authelia-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - authelia
     restart: unless-stopped

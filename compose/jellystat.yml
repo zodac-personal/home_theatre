@@ -53,6 +53,11 @@ services:
       # Monitor config
       kuma.jellystat.http.name: "Jellystat (Emby Statistics)"
       kuma.jellystat.http.url: "${JELLYSTAT_MONITOR_URL:?[jellystat] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - jellystat
     ports:
@@ -98,6 +103,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${JELLYSTAT_DB_USER:?[jellystat-db] Database user missing}", "-d", "${JELLYSTAT_DB_NAME:?[jellystat-db] Database name missing}", "-p", "${JELLYSTAT_DB_PORT:?[jellystat-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - jellystat
     restart: unless-stopped

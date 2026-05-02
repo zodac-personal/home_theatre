@@ -48,6 +48,11 @@ services:
       # Monitor config
       kuma.lldap.http.name: "LLDAP (LDAP Server)"
       kuma.lldap.http.url: "${LLDAP_MONITOR_URL:?[lldap] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - lldap
     ports:
@@ -93,6 +98,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${LLDAP_DB_USER:?[lldap-db] Database user missing}", "-d", "${LLDAP_DB_NAME:?[lldap-db] Database name missing}", "-p", "${LLDAP_DB_PORT:?[lldap-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - lldap
     restart: unless-stopped

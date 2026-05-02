@@ -58,6 +58,11 @@ services:
       # Tags
       kuma.alertable.tag.name: 'Alertable'
       kuma.alertable.tag.color: '#FFA500'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - autokuma
     restart: unless-stopped

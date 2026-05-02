@@ -45,6 +45,11 @@ services:
       # Monitor config
       kuma.qbittorrent.http.name: "qBittorrent (Torrent Downloader)"
       kuma.qbittorrent.http.url: "${QBITTORRENT_MONITOR_URL:?[qbittorrent] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - qbittorrent
     ports:

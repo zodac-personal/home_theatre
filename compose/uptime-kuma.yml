@@ -46,6 +46,11 @@ services:
       # Monitor config
       kuma.uptime-kuma.http.name: "Uptime Kuma (Status Page)"
       kuma.uptime-kuma.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - uptime-kuma
     ports:

@@ -61,6 +61,11 @@ services:
       # Monitor config
       kuma.speedtest.http.name: "SpeedTest Tracker (Network Speed Test)"
       kuma.speedtest.http.url: "${SPEEDTEST_MONITOR_URL:?[speedtest] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - speedtest
     ports:
@@ -106,6 +111,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${SPEEDTEST_DB_USER:?[speedtest-db] Database user missing}", "-d", "${SPEEDTEST_DB_NAME:?[speedtest-db] Database name missing}", "-p", "${SPEEDTEST_DB_PORT:?[speedtest-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - speedtest
     restart: unless-stopped

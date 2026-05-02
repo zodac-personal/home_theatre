@@ -56,6 +56,11 @@ services:
       # Monitor config
       kuma.dozzle.http.name: "Dozzle (Docker Log Viewer)"
       kuma.dozzle.http.url: "${DOZZLE_MONITOR_URL:?[dozzle] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - dozzle
     ports:

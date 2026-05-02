@@ -101,6 +101,11 @@ services:
       # Monitor config
       kuma.romm.http.name: "RomM (Game ROM Manager)"
       kuma.romm.http.url: "${ROMM_MONITOR_URL:?[romm] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - romm
     ports:
@@ -140,6 +145,11 @@ services:
       start_period: 30s
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - romm
     restart: unless-stopped
@@ -183,6 +193,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${ROMM_DB_USER:?[romm-db] Database user missing}", "-d", "${ROMM_DB_NAME:?[romm-db] Database name missing}", "-p", "${ROMM_DB_PORT:?[romm-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - romm
     restart: unless-stopped

@@ -34,6 +34,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pidof", "java" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - servarr
     restart: unless-stopped

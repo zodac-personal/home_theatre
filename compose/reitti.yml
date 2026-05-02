@@ -70,6 +70,11 @@ services:
       # Monitor config
       kuma.reitti.http.name: "Reitti (Maps Timeline)"
       kuma.reitti.http.url: "${REITTI_MONITOR_URL:?[reitti] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - reitti
     ports:
@@ -102,6 +107,11 @@ services:
       start_period: 30s
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - reitti
     restart: unless-stopped
@@ -147,6 +157,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${REITTI_DB_USER:?[reitti-db] Database user missing}", "-d", "${REITTI_DB_NAME:?[reitti-db] Database name missing}", "-p", "${REITTI_DB_PORT:?[reitti-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - reitti
     restart: unless-stopped
@@ -181,6 +196,11 @@ services:
       start_period: 30s
       test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/osm/0/0/0.png" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - reitti
     restart: unless-stopped

@@ -54,6 +54,11 @@ services:
       # Monitor config
       kuma.prowlarr.http.name: "Prowlarr (Torrent Indexer)"
       kuma.prowlarr.http.url: "${PROWLARR_MONITOR_URL:?[prowlarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - prowlarr
       - servarr
@@ -94,6 +99,11 @@ services:
       start_period: 30s
       test: [ "CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8191/" ] # wget not installed
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - prowlarr
     restart: unless-stopped

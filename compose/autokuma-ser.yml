@@ -48,6 +48,11 @@ services:
       # Tags
       kuma.ser.tag.name: 'SER'
       kuma.ser.tag.color: '#FF77FF'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - autokuma-ser
     restart: unless-stopped

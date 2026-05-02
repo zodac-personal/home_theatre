@@ -46,6 +46,11 @@ services:
       kuma.emby.http.max_retries: "3"
       kuma.emby.http.notification_name_list: '["emby_status"]'
       kuma.emby.http.tag_names: '[{"name": "alertable"}]'
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - emby
     ports:
@@ -105,6 +110,11 @@ services:
       start_period: 30s
       test: [ "CMD-SHELL", "wget -qO- http://127.0.0.1:8000/api/system/health | jq -e '.BaseImageHealthCheck.type == \"healthy\"' > /dev/null" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - emby
     ports:

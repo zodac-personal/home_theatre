@@ -47,6 +47,11 @@ services:
       kuma.netalert.http.name: "NetAlert (Network Scanner)"
       kuma.netalert.http.url: "${NETALERT_MONITOR_URL:?[netalert] Monitor URL missing}"
       kuma.netalert.http.max_redirects: "0"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     network_mode: host # Cannot be run in bridged mode, as it needs visibility of the network
     expose: # When using 'host' network_mode, published ports using 'ports' are discarded. We just 'expose' the new port in case we change the default
       - "${NETALERT_UI_PORT:?[netalert] Port missing}"

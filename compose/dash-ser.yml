@@ -54,6 +54,11 @@ services:
       # Monitor config
       kuma.dash-ser.http.name: "Dash [SER] (Server Monitor)"
       kuma.dash-ser.http.url: "${DASH_SER_MONITOR_URL:?[dash-ser] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - dash-ser
     ports:

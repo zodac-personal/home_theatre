@@ -79,6 +79,11 @@ services:
       # Monitor config
       kuma.tandoor.http.name: "Tandoor (Recipes)"
       kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - tandoor
     ports:
@@ -126,6 +131,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${TANDOOR_DB_USER:?[tandoor-db] Database user missing}", "-d", "${TANDOOR_DB_NAME:?[tandoor-db] Database name missing}", "-p", "${TANDOOR_DB_PORT:?[tandoor-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - tandoor
     restart: unless-stopped

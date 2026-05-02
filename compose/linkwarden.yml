@@ -56,6 +56,11 @@ services:
       # Monitor config
       kuma.linkwarden.http.name: "Linkwarden (Bookmarks)"
       kuma.linkwarden.http.url: "${LINKWARDEN_MONITOR_URL:?[linkwarden] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - linkwarden
     ports:
@@ -100,6 +105,11 @@ services:
       start_period: 30s
       test: [ "CMD", "pg_isready", "--host", "localhost", "-U", "${LINKWARDEN_DB_USER:?[linkwarden-db] Database user missing}", "-d", "${LINKWARDEN_DB_NAME:?[linkwarden-db] Database name missing}", "-p", "${LINKWARDEN_DB_PORT:?[linkwarden-db] Database port missing}" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - linkwarden
     restart: unless-stopped

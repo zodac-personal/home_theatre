@@ -42,6 +42,11 @@ services:
       # Monitor config
       kuma.bazarr.http.name: "Bazarr (Subtitle Manager)"
       kuma.bazarr.http.url: "${BAZARR_MONITOR_URL:?[bazarr] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - bazarr
       - servarr
@@ -86,6 +91,11 @@ services:
       start_period: 30s
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9000/docs" ]
       timeout: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - bazarr
     restart: unless-stopped

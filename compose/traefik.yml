@@ -56,6 +56,11 @@ services:
       # Monitor config
       kuma.traefik.http.name: "Traefik (Reverse Proxy)"
       kuma.traefik.http.url: "${TRAEFIK_MONITOR_URL:?[traefik] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - apprise
       - authelia
@@ -105,6 +110,11 @@ services:
       start_period: 30s
       test: [ "CMD", "valkey-cli", "ping" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     networks:
       - traefik
     ports:
@@ -145,6 +155,11 @@ services:
       start_period: 30s
       test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:5000 | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
       timeout: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik
     expose:
@@ -203,6 +218,11 @@ services:
       # Monitor config
       kuma.traefik-dashboard.http.name: "Traefik Dashboard (Access Dashboard)"
       kuma.traefik-dashboard.http.url: "${TRAEFIK_DASHBOARD_MONITOR_URL:?[traefik-dashboard] Monitor URL missing}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik
     ports:

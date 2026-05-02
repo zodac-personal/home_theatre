@@ -28,6 +28,7 @@ services:
         limits:
           cpus: "1"
           memory: "4G"
+          pids: 512
     environment:
       # Base config
       APP_UID: "${PUID_NON_ROOT:?User ID missing}"
@@ -99,6 +100,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
+          pids: 128
     environment:
       VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
@@ -141,6 +143,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 256
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -190,6 +193,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
+          pids: 128
     healthcheck:
       interval: 30s
       retries: 3

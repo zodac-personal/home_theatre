@@ -26,6 +26,7 @@ services:
         limits:
           cpus: "1"
           memory: "512M"
+          pids: 512
     environment:
       # Base config
       APP_TIMEZONE: "${TIMEZONE:?Timezone missing}"
@@ -92,6 +93,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 256
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

@@ -23,6 +23,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 256
     environment:
       # Variables used for Go template substitution in the config files
       DOMAIN_NAME: "${DOMAIN_NAME}"
@@ -102,6 +103,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
+          pids: 128
     environment:
       VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
@@ -144,6 +146,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 128
     environment:
       TRAEFIK_LOG_DASHBOARD_ACCESS_PATH: "/logs/access.log"
       TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-agent] Secret key missing}"
@@ -190,6 +193,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
+          pids: 256
     environment:
       AGENT_API_URL: "http://traefik-agent:5000"
       AGENT_API_TOKEN: "${TRAEFIK_AGENT_SECRET_KEY:?[traefik-dashboard] Secret key missing}"

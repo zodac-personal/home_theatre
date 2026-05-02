@@ -19,6 +19,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 512
     environment:
       # Integration configuration
       RADARR__URL: "http://radarr:7878"

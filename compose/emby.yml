@@ -21,6 +21,7 @@ services:
         limits:
           cpus: "8"
           memory: "4096M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -92,6 +93,7 @@ services:
         limits:
           cpus: "1"
           memory: "2048M"
+          pids: 512
     devices:
       - /dev/dri:/dev/dri
     environment:

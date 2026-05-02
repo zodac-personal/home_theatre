@@ -20,6 +20,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

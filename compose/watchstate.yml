@@ -12,6 +12,12 @@ services:
     hostname: watchstate
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+          pids: 256
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"

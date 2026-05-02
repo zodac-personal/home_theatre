@@ -20,6 +20,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 256
     environment:
       # General
       DASHDOT_ALWAYS_SHOW_PERCENTAGES: "true"

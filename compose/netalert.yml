@@ -31,6 +31,12 @@ services:
       - SETUID
     cap_drop:
       - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+          pids: 512
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"

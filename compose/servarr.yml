@@ -24,6 +24,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -88,6 +89,7 @@ services:
         limits:
           cpus: "2"
           memory: "2048M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -153,6 +155,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 128
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -208,6 +211,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -272,6 +276,7 @@ services:
         limits:
           cpus: "1"
           memory: "512M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -338,6 +343,7 @@ services:
         limits:
           cpus: "2"
           memory: "512M"
+          pids: 128
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

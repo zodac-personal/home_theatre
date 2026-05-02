@@ -33,7 +33,8 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M" # High memory resourcing to allow stats page to load
+          memory: "1024M"
+          pids: 512 # High memory resourcing to allow stats page to load
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
@@ -88,6 +89,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "512M"
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

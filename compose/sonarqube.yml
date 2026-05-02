@@ -20,6 +20,7 @@ services:
         limits:
           cpus: "1"
           memory: "4096M"
+          pids: 1024
     environment:
       # Database config
       SONAR_JDBC_URL: "jdbc:postgresql://sonarqube-db:${SONARQUBE_DB_PORT:?[sonarqube-db] Database port missing}/${SONARQUBE_DB_NAME:?[sonarqube] Database name missing}"
@@ -77,6 +78,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 256
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

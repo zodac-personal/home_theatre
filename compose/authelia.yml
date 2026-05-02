@@ -24,6 +24,7 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
+          pids: 128
     environment:
       # Logging config
       LOG_LEVEL: "INFO"
@@ -104,6 +105,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
+          pids: 128
     environment:
       VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
     healthcheck:
@@ -140,6 +142,7 @@ services:
         limits:
           cpus: "0.5"
           memory: "512M"
+          pids: 256
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"

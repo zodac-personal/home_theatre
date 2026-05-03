@@ -22,10 +22,12 @@ services:
         limits:
           cpus: "1"
           memory: "1024M"
-          pids: 256
+          pids: 512
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
     healthcheck:
       interval: 30s
       retries: 3

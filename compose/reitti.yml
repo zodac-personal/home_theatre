@@ -193,7 +193,7 @@ services:
         limits:
           cpus: "0.25"
           memory: "256M"
-          pids: 128
+          pids: 1024
     healthcheck:
       interval: 30s
       retries: 3

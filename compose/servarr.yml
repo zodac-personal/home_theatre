@@ -131,10 +131,9 @@ services:
     volumes:
       # Volume mounts from host system
       - "${DOWNLOADS_DIRECTORY}:/downloads"
-      - "${TV1_DIRECTORY}:/tv1"
-      - "${TV2_DIRECTORY}:/tv2"
-      - "${TV_TRASH_DIRECTORY}:/trash"
       - "${TV_KIDS_DIRECTORY}:/kids"
+      - "${TV_SHOWS_DIRECTORY}:/shows/"
+      - "${TV_TRASH_DIRECTORY}:/trash"
       # Persistent volumes
       - ../storage/sonarr/config/:/config/
 

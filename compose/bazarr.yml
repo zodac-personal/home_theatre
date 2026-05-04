@@ -64,10 +64,9 @@ services:
     volumes:
       # Volume mounts from host system
       - "${MOVIE_DIRECTORY}:/movies"
-      - "${TV1_DIRECTORY}:/tv1"
-      - "${TV2_DIRECTORY}:/tv2"
-      - "${TV_TRASH_DIRECTORY}:/trash"
+      - "${TV_SHOWS_DIRECTORY}:/shows/"
       - "${TV_KIDS_DIRECTORY}:/kids"
+      - "${TV_TRASH_DIRECTORY}:/trash"
       # Persistent volumes
       - ../storage/bazarr/config/:/config/
       - ../storage/bazarr/run/:/run/

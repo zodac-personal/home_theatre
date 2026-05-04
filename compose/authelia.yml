@@ -60,6 +60,8 @@ services:
       OIDC_HMAC_SECRET: "${AUTHELIA_OIDC_HMAC_SECRET:?[authelia] Missing OIDC HMAC secret}"
       SESSION_SECRET: "${AUTHELIA_SESSION_SECRET:?[authelia] Missing session secret}"
       STORAGE_ENCRYPTION_KEY: "${AUTHELIA_STORAGE_ENCRYPTION_KEY:?[authelia] Missing storage encryption key}"
+      # URIs
+      SYNOLOGY_DSM_REDIRECT_URI: "${SYNOLOGY_DSM_REDIRECT_URI:?[authelia] Missing Synology DSM redirect URI}"
     labels:
       # Reverse proxy config for Authelia UI and OIDC
       traefik.enable: "true"

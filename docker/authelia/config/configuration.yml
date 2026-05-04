@@ -434,6 +434,12 @@ identity_providers:
             subject:
               - [ "group:sonarqube_admins" ]
               - [ "group:sonarqube_users" ]
+      synology:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:synology_admins" ]
       tandoor:
         default_policy: 'deny'
         rules:
@@ -616,3 +622,23 @@ identity_providers:
         access_token_signed_response_alg: 'none'
         userinfo_signed_response_alg: 'none'
         token_endpoint_auth_method: "client_secret_basic"
+      - client_name: 'Synology DSM OIDC'
+        client_id: 'aF3w7bmBPDYUI6UJVLATZF0n3H2eEZtD0hKEZIvd'
+        client_secret: '$pbkdf2-sha512$310000$PZDDO2zJWpNqxsXv5VtJdw$NAZnAkjuvKJUy/8ndzjQgqbqNyWMq5HJCxTHxTzYHuBU/EL.8r6zh7z8qUrUuGiU39IFayHbfj5DPcu74zQqHQ'
+        authorization_policy: 'synology'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - '{{ env "SYNOLOGY_DSM_REDIRECT_URI" }}'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'

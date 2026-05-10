@@ -11,6 +11,7 @@ include:
   - ./compose/jellystat.yml
   - ./compose/linkwarden.yml
   - ./compose/navidrome.yml
+  - ./compose/ottrbox.yml
   - ./compose/prowlarr.yml
   - ./compose/qbittorrent.yml
   - ./compose/reitti.yml

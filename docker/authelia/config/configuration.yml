@@ -440,6 +440,12 @@ identity_providers:
           - policy: 'one_factor'
             subject:
               - [ "group:synology_admins" ]
+      ottrbox:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:ftp_users" ]
       tandoor:
         default_policy: 'deny'
         rules:
@@ -449,6 +455,15 @@ identity_providers:
               - [ "group:tandoor_users" ]
     claims_policies:
       romm:
+        id_token: [
+          'alt_emails',
+          'email',
+          'email_verified',
+          'groups',
+          'name',
+          'preferred_username'
+        ]
+      ottrbox:
         id_token: [
           'alt_emails',
           'email',
@@ -632,6 +647,27 @@ identity_providers:
           - 'authorization_code'
         redirect_uris:
           - '{{ env "SYNOLOGY_DSM_REDIRECT_URI" }}'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'groups'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'
+      - client_name: 'Otrrbox OIDC'
+        client_id: 'CMXz13NBisCExVKUs0C6BDaXneTOi593zk62sz1i'
+        client_secret: '$pbkdf2-sha512$310000$mVqpoHnMJ3Xdaymu6SP0fA$xp4DCry7VWou.S7JXks5Ok6L6Jf/d70pNQ7Dq07KzBTt7RRb2uvcDQJUuRPAKufrQPk.UUsEUBhZbdWYnGqDrg'
+        authorization_policy: 'ottrbox'
+        claims_policy: 'ottrbox'
+        jwks_uri: 'https://auth.{{ env "DOMAIN_NAME" }}/jwks.json'
+        public: 'false'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://ftp.{{ env "DOMAIN_NAME" }}/api/oauth/callback/oidc'
         response_types:
           - 'code'
         scopes:

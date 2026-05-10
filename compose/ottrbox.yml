@@ -1,0 +1,60 @@
+networks:
+  ottrbox:
+    name: ottrbox
+    driver: bridge
+
+services:
+
+  # FTP Server
+  ottrbox:
+    image: ghcr.io/aottr/ottrbox
+    container_name: ottrbox
+    hostname: ottrbox
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1024M"
+          pids: 1024
+    cap_drop:
+      - ALL
+    environment:
+      # Base config
+      TZ: "${TIMEZONE:?Timezone missing}"
+      PUID: "${PUID_NON_ROOT:?User ID missing}"
+      PGID: "${PGID_NON_ROOT:?Group ID missing}"
+      # Authentication config
+      TRUST_PROXY: true
+      # Frontend config
+      API_URL: "https://ftp.${DOMAIN_NAME}"
+    labels:
+      # Reverse proxy config
+      traefik.enable: "true"
+      traefik.http.routers.ottrbox.rule: "Host(`ftp.${DOMAIN_NAME}`)"
+      traefik.http.routers.ottrbox.entrypoints: "websecure"
+      traefik.http.routers.ottrbox.tls: "true"
+      traefik.http.routers.ottrbox.middlewares: "no-forward-auth@file"
+      traefik.http.services.ottrbox.loadbalancer.server.port: "4020"
+      # Monitor config
+      kuma.ottrbox.http.name: "Ottrbox (File Share)"
+      kuma.ottrbox.http.url: "${OTTRBOX_MONITOR_URL:?[ottrbox] Monitor URL missing}"
+      kuma.ottrbox.http.max_redirects: "0"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - ottrbox
+    ports:
+      - "4020:3000"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
+    volumes:
+      # Volume mounts from host system
+      - "${FTP_DIRECTORY}:/opt/app/backend/data"
+      - ../storage/ottrbox/images/:/opt/app/frontend/public/img

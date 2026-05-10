@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36">
   <diagram name="Page-1" id="pc7IyndSCSYQQamvQ25E">
-    <mxGraphModel dx="1571" dy="713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1322" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -73,7 +73,7 @@
           <mxGeometry height="40" width="120" x="600" y="920" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/home-assistant&quot;&gt;HomeAssistant&lt;/a&gt;&lt;br&gt;&lt;i&gt;&lt;sub&gt;Smart Home Manager&lt;/sub&gt;&lt;/i&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="800" y="760" as="geometry" />
+          <mxGeometry height="40" width="120" x="1120" y="720" as="geometry" />
         </mxCell>
         <mxCell id="ByP5D_G1rsHgrG0Wdw6j-16" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=5" value="SER Max 5" vertex="1">
           <mxGeometry height="30" width="90" x="200" y="200" as="geometry" />
@@ -430,8 +430,8 @@
         <mxCell id="lcRQkhD3couCPsEeO-z6-5" edge="1" parent="1" source="ByP5D_G1rsHgrG0Wdw6j-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="lcRQkhD3couCPsEeO-z6-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s6KsKlsxPxhYHKT-FHXf-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;a href=&quot;https://github.com/pbogre/jetlog&quot;&gt;Jetlog&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;Personal Flight Tracker&lt;/i&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="40" width="120" x="1120" y="720" as="geometry" />
+        <mxCell id="s6KsKlsxPxhYHKT-FHXf-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=12 12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;a href=&quot;https://github.com/aottr/ottrbox&quot;&gt;Ottrbox&lt;/a&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;i&gt;File Sharing&lt;/i&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="800" y="760" as="geometry" />
         </mxCell>
         <mxCell id="Tl25KXTgNwVIgyIWhWGG-5" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;container=0;" value="&lt;b&gt;&lt;u&gt;Security &amp;amp; Metrics&lt;/u&gt;&lt;/b&gt;" vertex="1">
           <mxGeometry height="26.79" width="111" x="760" y="240" as="geometry" />
@@ -764,6 +764,9 @@
               <mxPoint x="297" y="1221" />
             </Array>
           </mxGeometry>
+        </mxCell>
+        <mxCell id="i72JaBLE-EwLKDdhpeG7-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#00ff00;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="10" width="10" x="910" y="760" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -53,7 +53,7 @@ services:
       - "4007:80"
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"

@@ -122,7 +122,7 @@ services:
       - speedtest
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
       - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution

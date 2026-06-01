@@ -54,7 +54,7 @@ services:
       - "4013:9000"
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
@@ -107,7 +107,7 @@ services:
       - sonarqube
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
       - /var/run/postgresql:uid=999,gid=999,mode=775  # Giving access to startup root execution

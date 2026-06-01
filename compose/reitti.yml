@@ -169,7 +169,7 @@ services:
       - reitti
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     shm_size: 1G
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev

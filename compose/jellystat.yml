@@ -7,7 +7,7 @@ services:
 
   # Statistics for Emby
   jellystat:
-    image: cyfershepard/jellystat:1.1.10  # https://github.com/CyferShepard/Jellystat/releases
+    image: cyfershepard/jellystat:1.1.11  # https://github.com/CyferShepard/Jellystat/releases
     container_name: jellystat
     hostname: jellystat
     cap_drop:
@@ -75,7 +75,7 @@ services:
 
   # Database for Jellystat
   jellystat-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: jellystat-db
     hostname: jellystat-db
     cap_drop:

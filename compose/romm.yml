@@ -7,7 +7,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:4.8.1  # https://github.com/rommapp/romm/releases
+    image: rommapp/romm:4.9.2  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
     cap_drop:
@@ -128,7 +128,7 @@ services:
 
   # External cache for RomM (used due to an issue with the internal valkey)
   romm-cache:
-    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.1.0-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: romm-cache
     hostname: romm-cache
     cap_drop:
@@ -166,7 +166,7 @@ services:
 
   # Database for RomM
   romm-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: romm-db
     hostname: romm-db
     cap_drop:

@@ -49,7 +49,8 @@ gamelist:
 
 # Metadata priority during scans
 scan:
-  export_gamelist: true
+  export:
+    gamelist_xml: true
   priority:
     metadata:
       - "gamelist"   # ES-DE gamelist.xml

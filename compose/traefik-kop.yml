@@ -7,7 +7,7 @@ services:
 
   # Traefik connector
   traefik-kop:
-    image: ghcr.io/jittering/traefik-kop:0.19.4  # https://github.com/jittering/traefik-kop/releases
+    image: ghcr.io/jittering/traefik-kop:0.20.1  # https://github.com/jittering/traefik-kop/releases
     container_name: traefik-kop
     hostname: traefik-kop
     cap_drop:

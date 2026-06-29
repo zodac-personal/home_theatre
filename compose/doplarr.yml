@@ -2,7 +2,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr:3.7.0  # https://hub.docker.com/r/linuxserver/doplarr/tags
+    image: linuxserver/doplarr:3.8.0  # https://hub.docker.com/r/linuxserver/doplarr/tags
     container_name: doplarr
     hostname: doplarr
     cap_add:

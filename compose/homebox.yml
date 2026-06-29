@@ -7,7 +7,7 @@ services:
 
   # Inventory Management
   homebox:
-    image: ghcr.io/sysadminsmedia/homebox:0.25.0  # https://github.com/sysadminsmedia/homebox/releases
+    image: ghcr.io/sysadminsmedia/homebox:0.26.2  # https://github.com/sysadminsmedia/homebox/releases
     container_name: homebox
     hostname: homebox
     cap_drop:
@@ -22,6 +22,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
+      HBOX_AUTH_API_KEY_PEPPER: "${HOMEBOX_SECRET_KEY:?[homebox] Secret key missing}"
       HBOX_OIDC_ENABLED: "true"
       HBOX_OIDC_ISSUER_URL: "${HOMEBOX_OIDC_URI:?[homebox] OIDC URL missing}"
       HBOX_OIDC_CLIENT_ID: "${HOMEBOX_OIDC_CLIENT_ID:?[homebox] OIDC client ID missing}"

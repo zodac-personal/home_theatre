@@ -7,7 +7,7 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:2.3.6-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
+    image: linuxserver/prowlarr:2.5.0-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
     container_name: prowlarr
     hostname: prowlarr
     cap_add:
@@ -79,7 +79,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v3.4.6  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
+    image: flaresolverr/flaresolverr:v3.5.0  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
     container_name: flaresolverr
     hostname: flaresolverr
     cap_drop:

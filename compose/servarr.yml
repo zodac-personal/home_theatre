@@ -7,7 +7,7 @@ services:
 
   # Movie Manager
   radarr:
-    image: linuxserver/radarr:6.2.0-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
+    image: linuxserver/radarr:6.2.1-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
     cap_add:
@@ -72,7 +72,7 @@ services:
 
   # TV Show Manager
   sonarr:
-    image: linuxserver/sonarr:4.0.17-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
+    image: linuxserver/sonarr:4.0.18-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
     cap_add:
@@ -193,7 +193,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:3.1.2-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
+    image: linuxserver/lidarr:3.1.3-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
     container_name: lidarr
     hostname: lidarr
     cap_add:

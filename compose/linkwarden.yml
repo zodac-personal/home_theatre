@@ -77,7 +77,7 @@ services:
 
   # Database for LinkWarden
   linkwarden-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: linkwarden-db
     hostname: linkwarden-db
     cap_drop:

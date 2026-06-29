@@ -7,7 +7,7 @@ services:
 
   # Torrent Downloader
   qbittorrent:
-    image: linuxserver/qbittorrent:5.1.4-libtorrentv1  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
+    image: linuxserver/qbittorrent:5.2.2-libtorrentv1  # https://hub.docker.com/r/linuxserver/qbittorrent/tags
     container_name: qbittorrent
     hostname: qbittorrent
     cap_add:

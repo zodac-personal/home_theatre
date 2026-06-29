@@ -103,7 +103,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
     cap_drop:

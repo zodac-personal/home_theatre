@@ -7,7 +7,8 @@ services:
 
   # Static code analysis tool
   sonarqube:
-    image: sonarqube:26.4.0.121862-community  # https://hub.docker.com/_/sonarqube
+    # Don't jump to latest version, must upgrade incrementally
+    image: sonarqube:26.6.0.123539-community  # https://hub.docker.com/_/sonarqube/tags?name=-community
     container_name: sonarqube
     hostname: sonarqube
     cap_drop:
@@ -67,8 +68,7 @@ services:
 
   # Database for SonarQube
   sonarqube-db:
-    # TODO: PSQL 18 not supported yet
-    image: postgres:17.9-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: sonarqube-db
     hostname: sonarqube-db
     cap_drop:

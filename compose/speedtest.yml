@@ -7,7 +7,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:1.14.0  # https://github.com/alexjustesen/speedtest-tracker/releases
+    image: linuxserver/speedtest-tracker:1.14.4  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
     hostname: speedtest
     cap_add:
@@ -83,7 +83,7 @@ services:
 
   # Database for SpeedTest
   speedtest-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: speedtest-db
     hostname: speedtest-db
     cap_drop:

@@ -6,7 +6,7 @@ services:
 
   # LDAP User-store
   lldap:
-    image: lldap/lldap:2026-04-30-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    image: lldap/lldap:2026-05-26-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
     cap_add:
@@ -70,7 +70,7 @@ services:
       - ../storage/lldap/data/:/data/
 
   lldap-db:
-    image: postgres:18.3-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
     container_name: lldap-db
     hostname: lldap-db
     cap_drop:

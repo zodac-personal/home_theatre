@@ -125,6 +125,7 @@ services:
       # Persistent volumes
       - ../storage/romm/resources/:/romm/resources/  # Resources (covers, screenshots, etc.) that are fetched externally
       - ../storage/romm/redis/:/redis-data/          # Cached data for background tasks
+      - ../storage/romm/data/:/romm/          # Cached data for background tasks
 
   # External cache for RomM (used due to an issue with the internal valkey)
   romm-cache:

@@ -7,7 +7,7 @@ services:
 
   # FTP Server
   ottrbox:
-    image: ghcr.io/aottr/ottrbox:v1.15.0
+    image: ghcr.io/aottr/ottrbox:v1.15.0  # https://github.com/aottr/ottrbox/releases
     container_name: ottrbox
     hostname: ottrbox
     deploy:

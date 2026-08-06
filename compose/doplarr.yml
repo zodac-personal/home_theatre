@@ -2,7 +2,7 @@ services:
 
   # Discord bot for requests
   doplarr:
-    image: linuxserver/doplarr:3.8.0  # https://hub.docker.com/r/linuxserver/doplarr/tags
+    image: ghcr.io/activexray/doplarr_rs:v4.6.0  # https://github.com/activexray/doplarr_rs/releases
     container_name: doplarr
     hostname: doplarr
     cap_add:
@@ -20,20 +20,11 @@ services:
           cpus: "0.5"
           memory: "512M"
           pids: 512
-    environment:
-      # Integration configuration
-      RADARR__URL: "http://radarr:7878"
-      SONARR__URL: "http://sonarr:8989"
-      RADARR__API: "${RADARR_API_KEY:?[doplarr] Radarr API key missing}"
-      SONARR__API: "${SONARR_API_KEY:?[doplarr] Sonarr API key missing}"
-      # Discord configuration
-      DISCORD__MAX_RESULTS: "5"
-      DISCORD__TOKEN: "${DISCORD_BOT_TOKEN:?[doplarr] Discord bot token missing}"
     healthcheck:
       interval: 30s
       retries: 3
       start_period: 30s
-      test: [ "CMD", "pidof", "java" ]
+      test: ["CMD", "doplarr", "--help"]  # Dummy healthcheck since it can't check the status of the process
       timeout: 5s
     logging:
       driver: json-file
@@ -50,5 +41,4 @@ services:
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes
-      - ../storage/doplarr/config/:/config/
-      - ../storage/doplarr/run/:/run/
+      - ../storage/doplarr/config.toml:/config.toml:ro

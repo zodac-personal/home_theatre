@@ -21,4 +21,4 @@ http:
         referrerPolicy: "same-origin"
         stsSeconds: 63072000
         stsIncludeSubdomains: true
-        stsPreload: true
+        stsPreload: false  # Only enable if registered at https://hstspreload.org/

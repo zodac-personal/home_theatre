@@ -97,7 +97,7 @@ services:
       - ../storage/authelia/data/:/var/lib/authelia/
 
   authelia-cache:
-    image: valkey/valkey:9.1.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.1.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: authelia-cache
     hostname: authelia-cache
     cap_drop:

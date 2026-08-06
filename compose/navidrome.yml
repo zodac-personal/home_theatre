@@ -7,7 +7,7 @@ services:
 
   # Music Player
   navidrome:
-    image: deluan/navidrome:0.62.0  # https://github.com/navidrome/navidrome/releases/
+    image: deluan/navidrome:0.63.2  # https://github.com/navidrome/navidrome/releases/
     container_name: navidrome
     hostname: navidrome
     cap_drop:
@@ -41,6 +41,7 @@ services:
       ND_PLUGINS_AUTORELOAD: "false"
       # System config
       ND_ENABLEINSIGHTSCOLLECTOR: "false"
+      ND_ENABLESHARING: "false"
     healthcheck:
       interval: 30s
       retries: 3

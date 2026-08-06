@@ -6,7 +6,8 @@ services:
 
   # LDAP User-store
   lldap:
-    image: lldap/lldap:2026-05-26-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    # TODO: Try lldap/lldap:2026-07-19-alpine-rootless
+    image: lldap/lldap:2026-07-19-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
     cap_add:

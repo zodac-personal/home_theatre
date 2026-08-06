@@ -129,7 +129,7 @@ services:
 
   # External cache for RomM (used due to an issue with the internal valkey)
   romm-cache:
-    image: valkey/valkey:9.1.0-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.1.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: romm-cache
     hostname: romm-cache
     cap_drop:

@@ -7,7 +7,7 @@ services:
       dockerfile: docker/netalert/Dockerfile
       args:
         # Docker image versions
-        NETALERT_VERSION: "26.6.3"  # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
+        NETALERT_VERSION: "26.7.1"  # https://registry.hub.docker.com/r/jokobsk/netalertx/tags | https://github.com/jokob-sk/NetAlertX/releases
         # Build arguments
         # Internal config
         TIMEZONE: "${TIMEZONE:?Timezone missing}"

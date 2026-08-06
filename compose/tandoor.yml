@@ -7,7 +7,7 @@ services:
 
   # Recipe Manager
   tandoor:
-    image: vabene1111/recipes:2.6.9  # https://github.com/TandoorRecipes/recipes/releases
+    image: vabene1111/recipes:2.6.13  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor
     hostname: tandoor
     cap_add:

@@ -7,7 +7,7 @@ services:
 
   # Google Maps/Timeline Replacement
   reitti:
-    image: dedicatedcode/reitti:4.0.4  # https://github.com/dedicatedcode/reitti/releases
+    image: dedicatedcode/reitti:5.1.0  # https://github.com/dedicatedcode/reitti/releases
     container_name: reitti
     hostname: reitti
     cap_add:
@@ -90,7 +90,7 @@ services:
       - ../storage/reitti/data/:/data/
 
   reitti-cache:
-    image: valkey/valkey:9.0.3-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.1.1-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: reitti-cache
     hostname: reitti-cache
     cap_drop:
@@ -179,7 +179,7 @@ services:
       - ../storage/reitti-db/data/:/var/lib/postgresql/
 
   reitti-tile-cache:
-    image: dedicatedcode/reitti-tile-cache:4.0.4  # https://github.com/dedicatedcode/reitti/releases
+    image: dedicatedcode/reitti-tile-cache:5.1.0  # https://github.com/dedicatedcode/reitti/releases
     container_name: reitti-tile-cache
     hostname: reitti-tile-cache
     cap_add:
@@ -194,12 +194,6 @@ services:
           cpus: "0.25"
           memory: "256M"
           pids: 1024
-    healthcheck:
-      interval: 30s
-      retries: 3
-      start_period: 30s
-      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/osm/0/0/0.png" ]
-      timeout: 5s
     logging:
       driver: json-file
       options:

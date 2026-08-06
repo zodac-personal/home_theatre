@@ -32,8 +32,9 @@ services:
       # Scheduling config
       ND_SCANNER_SCHEDULE: "@every 24h"
       # Metadata config
-      ND_ARTISTARTPRIORITY: "artist.*, external"
-      ND_COVERARTPRIORITY: "album.*, embedded, external"
+      ND_ARTISTARTPRIORITY: "artist.*,external"
+      ND_COVERARTPRIORITY: "album.*,embedded,external"
+      ND_LYRICSPRIORITY: ".lrc,.txt,.elrc,embedded"
       # Logging config
       ND_LOGLEVEL: "info"
       # Plugins

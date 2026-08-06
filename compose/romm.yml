@@ -7,7 +7,7 @@ services:
 
   # Video Game ROM Manager
   romm:
-    image: rommapp/romm:4.9.2  # https://github.com/rommapp/romm/releases
+    image: rommapp/romm:5.1.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm
     cap_drop:
@@ -40,6 +40,7 @@ services:
       OIDC_ROLE_ADMIN: "romm_admins"
       OIDC_ROLE_VIEWER: "romm_users"
       OIDC_SERVER_APPLICATION_URL: "${ROMM_OIDC_URL:?[romm] OIDC URL missing}"
+      ROMM_SESSION_SECURE_COOKIE: "true"
       # Task config
       ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: "true"
       ENABLE_SCHEDULED_CONVERT_IMAGES_TO_WEBP: "true"

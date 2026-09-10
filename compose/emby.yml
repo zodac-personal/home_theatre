@@ -55,7 +55,7 @@ services:
     networks:
       - emby
     ports:
-      - "8096:8096"
+      - "${MAIN_HOST_IP}:8096:8096"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -119,7 +119,7 @@ services:
     networks:
       - emby
     ports:
-      - "4019:8000"
+      - "${MAIN_HOST_IP}:4019:8000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

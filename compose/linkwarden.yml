@@ -2,6 +2,10 @@ networks:
   linkwarden:
     name: linkwarden
     driver: bridge
+  linkwarden-internal:
+    name: linkwarden-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -64,8 +68,9 @@ services:
         max-file: "3"
     networks:
       - linkwarden
+      - linkwarden-internal
     ports:
-      - "4017:3000"
+      - "${MAIN_HOST_IP}:4017:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -113,7 +118,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - linkwarden
+      - linkwarden-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

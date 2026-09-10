@@ -2,6 +2,10 @@ networks:
   romm:
     name: romm
     driver: bridge
+  romm-internal:
+    name: romm-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -110,8 +114,9 @@ services:
         max-file: "3"
     networks:
       - romm
+      - romm-internal
     ports:
-      - "4006:8080"
+      - "${MAIN_HOST_IP}:4006:8080"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -155,7 +160,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - romm
+      - romm-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -204,7 +209,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - romm
+      - romm-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

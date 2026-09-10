@@ -2,6 +2,10 @@ networks:
   sonarqube:
     name: sonarqube
     driver: bridge
+  sonarqube-internal:
+    name: sonarqube-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -51,8 +55,9 @@ services:
         max-file: "3"
     networks:
       - sonarqube
+      - sonarqube-internal
     ports:
-      - "4013:9000"
+      - "${MAIN_HOST_IP}:4013:9000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -104,7 +109,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - sonarqube
+      - sonarqube-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

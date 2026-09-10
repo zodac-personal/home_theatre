@@ -54,7 +54,7 @@ services:
     networks:
       - audiobookshelf
     ports:
-      - "4005:80"
+      - "${MAIN_HOST_IP}:4005:80"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

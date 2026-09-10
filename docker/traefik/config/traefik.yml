@@ -36,7 +36,7 @@ accessLog:
 
 api:
   dashboard: true
-  insecure: true
+  insecure: false  # Dashboard/API is exposed via the 'api@internal' router, behind auth
 ping: { }
 
 ################################################################
@@ -44,6 +44,12 @@ ping: { }
 ################################################################
 
 entryPoints:
+  # No longer published to the host, so it is reachable only from the Docker network:
+  # used by `traefik healthcheck --ping` and the '/ping' router. Replaces the implicit
+  # entrypoint that 'api.insecure' previously created.
+  traefik:
+    address: ":8080"
+
   web:
     address: ":80"
     http:

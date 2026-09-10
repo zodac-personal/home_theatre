@@ -56,7 +56,7 @@ services:
       - qbittorrent
       - servarr
     ports:
-      - "4000:7878"
+      - "${MAIN_HOST_IP}:4000:7878"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -121,7 +121,7 @@ services:
       - qbittorrent
       - servarr
     ports:
-      - "4001:8989"
+      - "${MAIN_HOST_IP}:4001:8989"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -242,7 +242,7 @@ services:
       - qbittorrent
       - servarr
     ports:
-      - "4002:8686"
+      - "${MAIN_HOST_IP}:4002:8686"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -307,7 +307,7 @@ services:
       - qbittorrent
       - servarr
     ports:
-      - "4004:8787"
+      - "${MAIN_HOST_IP}:4004:8787"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

@@ -55,7 +55,7 @@ services:
     networks:
       - homebox
     ports:
-      - "4011:7745"
+      - "${MAIN_HOST_IP}:4011:7745"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

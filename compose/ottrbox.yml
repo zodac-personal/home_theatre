@@ -47,7 +47,7 @@ services:
     networks:
       - ottrbox
     ports:
-      - "4020:3000"
+      - "${MAIN_HOST_IP}:4020:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

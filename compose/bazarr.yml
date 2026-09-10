@@ -56,7 +56,7 @@ services:
       - bazarr
       - servarr
     ports:
-      - "4009:6767"
+      - "${MAIN_HOST_IP}:4009:6767"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

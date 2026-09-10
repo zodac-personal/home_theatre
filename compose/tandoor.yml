@@ -2,6 +2,10 @@ networks:
   tandoor:
     name: tandoor
     driver: bridge
+  tandoor-internal:
+    name: tandoor-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -87,8 +91,9 @@ services:
         max-file: "3"
     networks:
       - tandoor
+      - tandoor-internal
     ports:
-      - "4014:80"
+      - "${MAIN_HOST_IP}:4014:80"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -139,7 +144,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - tandoor
+      - tandoor-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

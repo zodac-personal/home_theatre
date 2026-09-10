@@ -2,6 +2,10 @@ networks:
   jellystat:
     name: jellystat
     driver: bridge
+  jellystat-internal:
+    name: jellystat-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -61,8 +65,9 @@ services:
         max-file: "3"
     networks:
       - jellystat
+      - jellystat-internal
     ports:
-      - "4008:3000"
+      - "${MAIN_HOST_IP}:4008:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -111,7 +116,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - jellystat
+      - jellystat-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

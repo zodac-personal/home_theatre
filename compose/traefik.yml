@@ -73,7 +73,6 @@ services:
       - traefik
     ports:
       - "443:443"
-      - "5555:8080"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -120,7 +119,10 @@ services:
     networks:
       - traefik
     ports:
-      - "6379:6379"
+      # Bound to the LAN IP rather than 0.0.0.0: traefik-kop on the main host reads this
+      # remotely, so it cannot be container-only. No requirepass is set, so anything on
+      # the LAN can write Traefik routers here - keep the interface binding.
+      - "${REVERSE_PROXY_HOST_IP}:6379:6379"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -230,7 +232,7 @@ services:
     networks:
       - traefik
     ports:
-      - "5009:3000"
+      - "127.0.0.1:5009:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

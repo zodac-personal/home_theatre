@@ -2,6 +2,10 @@ networks:
   reitti:
     name: reitti
     driver: bridge
+  reitti-internal:
+    name: reitti-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -78,8 +82,9 @@ services:
         max-file: "3"
     networks:
       - reitti
+      - reitti-internal
     ports:
-      - "4010:8080"
+      - "${MAIN_HOST_IP}:4010:8080"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -115,7 +120,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - reitti
+      - reitti-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -166,7 +171,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - reitti
+      - reitti-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

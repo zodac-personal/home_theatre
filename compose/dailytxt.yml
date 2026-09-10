@@ -58,7 +58,7 @@ services:
     networks:
       - dailytxt
     ports:
-      - "4015:80"
+      - "${MAIN_HOST_IP}:4015:80"
     security_opt:
       - no-new-privileges=true
     tmpfs:

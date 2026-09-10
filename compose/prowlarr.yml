@@ -65,7 +65,7 @@ services:
       - servarr
       - sportarr
     ports:
-      - "4016:9696"
+      - "${MAIN_HOST_IP}:4016:9696"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

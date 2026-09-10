@@ -72,7 +72,7 @@ services:
     networks:
       - homarr
     ports:
-      - "5000:7575"
+      - "127.0.0.1:5000:7575"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

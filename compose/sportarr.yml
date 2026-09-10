@@ -46,7 +46,7 @@ services:
       - qbittorrent
       - sportarr
     ports:
-      - "4018:1867"
+      - "${MAIN_HOST_IP}:4018:1867"
     security_opt:
       - no-new-privileges=true
     tmpfs:

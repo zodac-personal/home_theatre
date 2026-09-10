@@ -2,6 +2,10 @@ networks:
   speedtest:
     name: speedtest
     driver: bridge
+  speedtest-internal:
+    name: speedtest-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
 
 services:
 
@@ -69,8 +73,9 @@ services:
         max-file: "3"
     networks:
       - speedtest
+      - speedtest-internal
     ports:
-      - "5004:80"
+      - "127.0.0.1:5004:80"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -119,7 +124,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - speedtest
+      - speedtest-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

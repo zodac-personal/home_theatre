@@ -2,6 +2,11 @@ networks:
   lldap:
     name: lldap
     driver: bridge
+  lldap-internal:
+    name: lldap-internal
+    driver: bridge
+    internal: true  # No egress: backing services talk only to their application
+
 services:
 
   # LDAP User-store
@@ -57,9 +62,10 @@ services:
         max-file: "3"
     networks:
       - lldap
+      - lldap-internal
     ports:
-      - "3890:3890"
-      - "17170:17170"
+      - "${REVERSE_PROXY_HOST_IP}:3890:3890"
+      - "127.0.0.1:17170:17170"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -107,7 +113,7 @@ services:
         max-size: "10m"
         max-file: "3"
     networks:
-      - lldap
+      - lldap-internal
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

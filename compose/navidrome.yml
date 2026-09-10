@@ -69,7 +69,7 @@ services:
     networks:
       - navidrome
     ports:
-      - "4003:4533"
+      - "${MAIN_HOST_IP}:4003:4533"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

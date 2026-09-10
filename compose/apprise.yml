@@ -53,7 +53,7 @@ services:
     networks:
       - apprise
     ports:
-      - "127.0.0.1:5007:8000"
+      - "${REVERSE_PROXY_HOST_IP}:5007:8000"
     read_only: true
     restart: unless-stopped
     security_opt:

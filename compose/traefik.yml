@@ -232,7 +232,7 @@ services:
     networks:
       - traefik
     ports:
-      - "127.0.0.1:5009:3000"
+      - "${REVERSE_PROXY_HOST_IP}:5009:3000"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

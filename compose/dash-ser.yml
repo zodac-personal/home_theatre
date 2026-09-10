@@ -63,7 +63,7 @@ services:
     networks:
       - dash-ser
     ports:
-      - '127.0.0.1:5008:3001'
+      - '${REVERSE_PROXY_HOST_IP}:5008:3001'
     privileged: true  # Needed to read RAM details
     restart: unless-stopped
     security_opt:

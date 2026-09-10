@@ -75,7 +75,7 @@ services:
       - speedtest
       - speedtest-internal
     ports:
-      - "127.0.0.1:5004:80"
+      - "${REVERSE_PROXY_HOST_IP}:5004:80"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

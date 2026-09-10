@@ -86,7 +86,7 @@ services:
       - authelia-internal
       - lldap
     ports:
-      - "127.0.0.1:${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
+      - "${REVERSE_PROXY_HOST_IP}:${AUTHELIA_EXTERNAL_PORT:-9091}:${AUTHELIA_INTERNAL_PORT:-9091}"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

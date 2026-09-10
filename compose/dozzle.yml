@@ -65,7 +65,7 @@ services:
     networks:
       - dozzle
     ports:
-      - "127.0.0.1:5005:8080"
+      - "${REVERSE_PROXY_HOST_IP}:5005:8080"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

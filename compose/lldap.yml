@@ -65,7 +65,7 @@ services:
       - lldap-internal
     ports:
       - "${REVERSE_PROXY_HOST_IP}:3890:3890"
-      - "127.0.0.1:17170:17170"
+      - "${REVERSE_PROXY_HOST_IP}:17170:17170"
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

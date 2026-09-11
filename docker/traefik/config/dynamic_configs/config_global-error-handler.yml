@@ -23,7 +23,7 @@ http:
   middlewares:
     redirect-to-status:
       redirectRegex:
-        permanent: true  # Set to true for a permanent redirect (301)
+        permanent: false  # 302, not 301: browsers cache a 301 per-URL, so a brief service outage would leave clients redirecting to the status page
         regex: ".*"  # Match all
         replacement: "{{ env "STATUS_URL" | trimAll "\"" }}"  # Redirect URL
 

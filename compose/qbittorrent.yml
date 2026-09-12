@@ -55,7 +55,7 @@ services:
       - qbittorrent
     ports:
       - "${MAIN_HOST_IP}:9000:9000"
-      - "9001:9001"  # BitTorrent listen port: must accept inbound peers on all interfaces
+      - "${MAIN_HOST_IP}:9001:9001"  # BitTorrent listen port: must accept inbound peers on all interfaces
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true

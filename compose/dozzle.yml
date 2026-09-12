@@ -6,8 +6,9 @@ networks:
 services:
 
   # Docker log viewer
+  # TODO: Test alpine version, `amir20/dozzle:v10.10.0-alpine`
   dozzle:
-    image: amir20/dozzle:v10.6.14  # https://github.com/amir20/dozzle/releases
+    image: amir20/dozzle:v10.10.0  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle
     cap_drop:

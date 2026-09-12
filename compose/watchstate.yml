@@ -7,7 +7,7 @@ services:
 
   # Tool to import/export played state of media in Emby
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v1.10.1  # https://github.com/arabcoders/watchstate/releases
+    image: ghcr.io/arabcoders/watchstate:v1.10.5  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
     cap_drop:
@@ -21,6 +21,7 @@ services:
     environment:
       # Base config
       TIMEZONE: "${TIMEZONE:?Timezone missing}"
+      WS_TZ: "${TIMEZONE:?Timezone missing}"
       # Logging config
       WS_LOGGER_FILE_ENABLE: "false" # Disabled due to logs being too large, and not needing them
     healthcheck: # Default healthcheck fails at the start, before eventually passing which breaks scripts

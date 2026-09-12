@@ -7,7 +7,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.6.0  # https://hub.docker.com/r/linuxserver/bazarr/tags?name=development
+    image: linuxserver/bazarr:1.6.0  # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     cap_drop:
@@ -75,7 +75,7 @@ services:
 
   # Automated Speech Recognition tool for subtitles
   whisper:
-    image: onerahmet/openai-whisper-asr-webservice:v1.9.1  # https://github.com/ahmetoner/whisper-asr-webservice/releases
+    image: onerahmet/openai-whisper-asr-webservice:v1.10.0  # https://github.com/ahmetoner/whisper-asr-webservice/releases
     container_name: whisper
     hostname: whisper
     cap_drop:

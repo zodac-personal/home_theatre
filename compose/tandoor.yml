@@ -11,7 +11,7 @@ services:
 
   # Recipe Manager
   tandoor:
-    image: vabene1111/recipes:2.6.13  # https://github.com/TandoorRecipes/recipes/releases
+    image: vabene1111/recipes:2.6.15  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor
     hostname: tandoor
     cap_add:
@@ -108,7 +108,7 @@ services:
 
   # Database for Tandoor
   tandoor-db:
-    image: postgres:18.4-alpine  # https://hub.docker.com/_/postgres
+    image: postgres:18.6-alpine  # https://hub.docker.com/_/postgres
     container_name: tandoor-db
     hostname: tandoor-db
     cap_drop:

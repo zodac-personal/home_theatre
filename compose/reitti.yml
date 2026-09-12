@@ -11,7 +11,7 @@ services:
 
   # Google Maps/Timeline Replacement
   reitti:
-    image: dedicatedcode/reitti:5.1.0  # https://github.com/dedicatedcode/reitti/releases
+    image: dedicatedcode/reitti:5.4.0  # https://github.com/dedicatedcode/reitti/releases
     container_name: reitti
     hostname: reitti
     cap_add:
@@ -95,7 +95,7 @@ services:
       - ../storage/reitti/data/:/data/
 
   reitti-cache:
-    image: valkey/valkey:9.1.1-alpine  # https://hub.docker.com/r/valkey/valkey
+    image: valkey/valkey:9.1.2-alpine  # https://hub.docker.com/r/valkey/valkey
     container_name: reitti-cache
     hostname: reitti-cache
     cap_drop:
@@ -184,7 +184,7 @@ services:
       - ../storage/reitti-db/data/:/var/lib/postgresql/
 
   reitti-tile-cache:
-    image: dedicatedcode/reitti-tile-cache:5.1.0  # https://github.com/dedicatedcode/reitti/releases
+    image: dedicatedcode/reitti-tile-cache:5.4.0  # https://github.com/dedicatedcode/reitti/releases
     container_name: reitti-tile-cache
     hostname: reitti-tile-cache
     cap_add:

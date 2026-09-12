@@ -6,6 +6,7 @@ networks:
 services:
 
   # Documents file browser
+  # TODO: Migrate to https://github.com/gtsteffaniak/filebrowser
   filebrowser:
     image: filebrowser/filebrowser:v2.63.23  # https://github.com/filebrowser/filebrowser/releases
     container_name: filebrowser

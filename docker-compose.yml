@@ -4,6 +4,7 @@ include:
   - ./compose/bazarr.yml
   - ./compose/dailytxt.yml
   - ./compose/dash.yml
+  - ./compose/diurnal.yml
   - ./compose/doplarr.yml
   - ./compose/emby.yml
   - ./compose/filebrowser.yml

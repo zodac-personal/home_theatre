@@ -35,6 +35,11 @@ http:
           - url: "http://127.0.0.1:1"
 
   middlewares:
+    # NOTE: dots in the rendered regex are written \\. here, not \. - this file is rendered as a Go
+    # template FIRST and parsed as YAML second, so an escape has to survive both passes. The template emits
+    # \. per dot, then YAML's double-quoted scalar collapses that to the \. the regex engine needs. A single
+    # \. renders as a bare \. which YAML rejects outright as an unknown escape character.
+    #
     # NOTE: the capture group is written ${1}, NOT $${1}. The $$ form seen on the redirectRegex middlewares in
     # compose/*.yml is a docker-compose escape that compose itself unescapes before Traefik sees the label.
     # This file is read straight off disk by the file provider, so no unescaping happens: Go's regexp expander
@@ -42,6 +47,6 @@ http:
     # dropping the path entirely.
     netalert-redirect-regex:
       redirectRegex:
-        regex: "^https://netalertx\\.{{ env "DOMAIN_NAME" | trimAll "\"" }}(.*)"
+        regex: "^https://netalertx\\.{{ env "DOMAIN_NAME" | trimAll "\"" | replace "." "\\\\." }}(.*)"
         replacement: "https://netalert.{{ env "DOMAIN_NAME" | trimAll "\"" }}${1}"
         permanent: true

@@ -11,9 +11,11 @@
 # cannot know it: HSTS (the app sets none, so this is additive rather than a replacement), nosniff, frame
 # options, and the robots tag.
 #
-# SCOPE. Attach this only to routers whose application ships its own CSP - currently diurnal-test alone. Every
-# other router keeps secure-headers@file untouched, which is why this is a sibling middleware rather than an edit
-# to that one.
+# SCOPE. Attach this only to routers whose application ships its own CSP. Currently that is the production
+# 'diurnal' router alone (compose/diurnal.yml), reached via the no-forward-auth-app-policy@file chain. Every
+# other router keeps secure-headers@file untouched, which is why this is a sibling middleware rather than an
+# edit to that one. Before adding a router here, confirm the application actually sends a CSP covering
+# script-src and object-src - dropping the proxy CSP for an app that sends none is a downgrade, not a fix.
 http:
   middlewares:
     secure-headers-app-policy:

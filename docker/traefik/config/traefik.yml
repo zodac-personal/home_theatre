@@ -20,11 +20,12 @@ serversTransport:
 # Logs - https://doc.traefik.io/traefik/observability/logs/
 ################################################################
 
+# No filePath, so Traefik logs to stdout and the container's json-file driver (see compose/traefik.yml)
+# owns rotation. maxSize/maxAge/maxBackups/compress are lumberjack settings that only take effect when
+# filePath is set, so they are omitted here rather than left in place doing nothing.
 log:
   level: INFO # Options: DEBUG, INFO, WARN, ERROR (Default), PANIC, FATAL
   noColor: false # Set to 'true' if format is 'json'
-  maxSize: 100 # In megabytes
-  compress: true # gzip compression when rotating
 
 accessLog:
   filePath: "/var/log/traefik/access/access.log"
@@ -50,14 +51,10 @@ entryPoints:
   traefik:
     address: ":8080"
 
-  web:
-    address: ":80"
-    http:
-      # Global HTTP to HTTPS redirection      
-      redirections:
-        entrypoint:
-          to: websecure
-          scheme: https
+  # No 'web' entrypoint is defined. compose/traefik.yml publishes 443 only, so nothing off-host can reach
+  # port 80 and a redirections block here would never fire: plaintext requests are redirected at the
+  # Cloudflare edge instead ("Always Use HTTPS", which is what emits the 301 + cache-control: max-age=14400
+  # seen on those redirects). If port 80 is ever published, re-add the entrypoint with its redirection.
 
   websecure:
     address: ":443"

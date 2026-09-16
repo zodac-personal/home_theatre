@@ -1,6 +1,19 @@
+# Rate limiting, keyed on the real client IP.
+#
+# Traefik's default sourceCriterion is the TCP peer address, which behind Cloudflare is always a Cloudflare
+# edge IP - entryPoints.websecure.forwardedHeaders.trustedIPs governs header *trust*, not RemoteAddr. That
+# bucketed every real client into a handful of edge-IP buckets: it throttled legitimate traffic collectively
+# while never actually limiting a single abuser. Cf-Connecting-Ip is set by Cloudflare and cannot be spoofed
+# through it, so it is the correct key for a proxy that is only ever reached via Cloudflare.
+#
+# Caveat: a request that reaches the origin without going through Cloudflare carries no Cf-Connecting-Ip and
+# so shares the empty-string bucket with every other such request. That path is LAN-only today; closing it
+# properly is Cloudflare Authenticated Origin Pulls, not a rate limiter.
 http:
   middlewares:
     rate-limit:
       rateLimit:
         average: 100
         burst: 50
+        sourceCriterion:
+          requestHeaderName: Cf-Connecting-Ip

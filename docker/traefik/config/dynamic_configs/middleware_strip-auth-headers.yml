@@ -1,0 +1,20 @@
+# Clears the identity headers that authelia@file is authoritative for, so a client can never supply its own.
+#
+# WHY IT EXISTS. authelia@file declares Remote-User, Remote-Email, Remote-Groups and Remote-Name as
+# authResponseHeaders, and Traefik's forwardAuth deletes then re-sets exactly those from the auth response -
+# so routers behind authelia-forward-auth@file are already safe. Routers behind no-forward-auth@file are not:
+# nothing in that chain touches request headers, so a client-supplied 'Remote-User: someone' travels
+# untouched to the application. Any app that trusts those headers for authentication is then trivially
+# bypassable (Tandoor's REMOTE_USER_AUTH was exactly this, removed in 6dbf5f5).
+#
+# This middleware makes that fail-safe rather than dependent on every unauthenticated app's configuration.
+# An empty customRequestHeaders value removes the header rather than setting it blank.
+http:
+  middlewares:
+    strip-auth-headers:
+      headers:
+        customRequestHeaders:
+          Remote-User: ""
+          Remote-Email: ""
+          Remote-Groups: ""
+          Remote-Name: ""

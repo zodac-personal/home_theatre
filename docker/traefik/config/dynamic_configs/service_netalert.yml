@@ -31,8 +31,13 @@ http:
           - url: "http://0.0.0.0"  # Dummy service, won't actually be used
 
   middlewares:
+    # NOTE: the capture group is written ${1}, NOT $${1}. The $$ form seen on the redirectRegex middlewares in
+    # compose/*.yml is a docker-compose escape that compose itself unescapes before Traefik sees the label.
+    # This file is read straight off disk by the file provider, so no unescaping happens: Go's regexp expander
+    # reads $$ as a literal '$' and then emits '{1}' verbatim, producing https://netalert.<domain>${1} and
+    # dropping the path entirely.
     netalert-redirect-regex:
       redirectRegex:
-        regex: "^https://netalertx.{{ env "DOMAIN_NAME" | trimAll "\"" }}(.*)"
-        replacement: "https://netalert.{{ env "DOMAIN_NAME" | trimAll "\"" }}$${1}"
+        regex: "^https://netalertx\\.{{ env "DOMAIN_NAME" | trimAll "\"" }}(.*)"
+        replacement: "https://netalert.{{ env "DOMAIN_NAME" | trimAll "\"" }}${1}"
         permanent: true

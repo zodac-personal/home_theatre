@@ -3,5 +3,6 @@ http:
     no-forward-auth:
       chain:
         middlewares:
+          - strip-auth-headers@file
           - rate-limit@file
           - secure-headers@file

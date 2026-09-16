@@ -67,6 +67,8 @@ entryPoints:
   # entrypoint that 'api.insecure' previously created.
   traefik:
     address: ":8080"
+    http:
+      aliasHeadersStrategy: delete  # see websecure below
 
   # No 'web' entrypoint is defined. compose/traefik.yml publishes 443 only, so nothing off-host can reach
   # port 80 and a redirections block here would never fire: plaintext requests are redirected at the
@@ -76,6 +78,13 @@ entryPoints:
   websecure:
     address: ":443"
     http:
+      # A header whose name ALIASES another - Remote_User, or Remote.User, for Remote-User - is a distinct
+      # header to Traefik and to any Go backend, but CGI/WSGI/PHP backends derive variable names by mapping
+      # both '-' and '_' to '_', so they read it as the header it aliases. That makes strip-auth-headers@file
+      # bypassable on those backends: it removes Remote-User, the client resends it as Remote_User, and
+      # Django reads both as HTTP_REMOTE_USER. Tandoor (Django) and NetAlertX (PHP) are both such backends.
+      # 'delete' drops the aliasing header; 'reject' would 400 the request instead.
+      aliasHeadersStrategy: delete
       tls:
         options: default
     forwardedHeaders:

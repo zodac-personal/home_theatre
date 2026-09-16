@@ -87,6 +87,9 @@ services:
       - ../docker/traefik/config/dynamic_configs/:/dynamic_configs:ro
       - ../docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
       - ../docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
+      # CA for Authenticated Origin Pulls - see config_tls.yml. Not in git (certs/ is gitignored); fetch with:
+      #   curl -o docker/traefik/certs/cloudflare_origin_pull_ca.pem  https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem
+      - ../docker/traefik/certs/cloudflare_origin_pull_ca.pem:/etc/certs/cloudflare_origin_pull_ca.pem:ro
       # Persistent volumes
       - ../storage/traefik/logs/access/:/var/log/traefik/access/
 
@@ -120,8 +123,8 @@ services:
       - traefik
     ports:
       # Bound to the LAN IP rather than 0.0.0.0: traefik-kop on the main host reads this
-      # remotely, so it cannot be container-only. No requirepass is set, so anything on
-      # the LAN can write Traefik routers here - keep the interface binding.
+      # remotely, so it cannot be container-only. requirepass is now set (see VALKEY_EXTRA_FLAGS
+      # above), but keep the interface binding regardless - it is the second of the two locks.
       - "${REVERSE_PROXY_HOST_IP}:6379:6379"
     restart: unless-stopped
     security_opt:

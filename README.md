@@ -524,6 +524,28 @@ docker compose -f docker-compose-ser.yml restart netalert
 **NOTE:** This isn't robust to version upgrades, a fresh installation with new config entries needs to be compared.
 An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), but no ETA on if/when it might be done.
 
+## Reverse Proxy Security
+
+### Authenticated Origin Pulls
+
+Without it, everything Cloudflare provides - WAF, the rate limiting keyed on `Cf-Connecting-Ip`, DDoS
+handling - is bypassed by anyone who learns the origin IP and connects directly with the right SNI.
+`config_tls.yml` requires a client certificate signed by Cloudflare's origin-pull CA. Fetch the CA on the
+reverse proxy host (it is not in git, as `certs/` is gitignored):
+
+```bash
+curl -o docker/traefik/certs/cloudflare_origin_pull_ca.pem \
+  https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem
+```
+
+**Order matters.** Turn Authenticated Origin Pulls on in the Cloudflare dashboard *first*
+(SSL/TLS → Origin Server → Authenticated Origin Pulls), confirm it is active, and only then deploy this
+config. The other way round, Cloudflare presents no client certificate, every handshake fails, and every
+site behind the proxy goes down at once. To roll back, comment out the `clientAuth` block in
+`config_tls.yml` and restart Traefik.
+
+----
+
 ### RomM
 
 #### Logging

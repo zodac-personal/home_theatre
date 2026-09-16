@@ -2,7 +2,28 @@
 # (they are fixed by the standard and negotiated by the runtime), so any cipherSuites list here would apply
 # only to TLS 1.2 and below - which minVersion has already ruled out. A list that looks like a policy but
 # enforces nothing is worse than no list.
+#
+# clientAuth below is Cloudflare Authenticated Origin Pulls. Without it, everything the edge provides -
+# the WAF, the rate limiting keyed on Cf-Connecting-Ip, the DDoS handling - is bypassed by anyone who
+# learns the origin IP and connects directly with the right SNI. With it, the origin refuses any TLS
+# handshake that does not present a certificate signed by Cloudflare's origin-pull CA.
+#
+# !! ORDER MATTERS. Enable Authenticated Origin Pulls in the Cloudflare dashboard FIRST
+# !! (SSL/TLS -> Origin Server -> Authenticated Origin Pulls), confirm it is on, and only then deploy
+# !! this. Enabling it here first means Cloudflare presents no client certificate, every handshake
+# !! fails, and EVERY site behind this proxy goes down at once. To roll back, comment out the
+# !! clientAuth block and restart Traefik - nothing else depends on it.
+#
+# LIMITATION. Zone-level Authenticated Origin Pulls uses one certificate shared by all Cloudflare
+# customers, so this proves "arrived via Cloudflare", not "arrived via our zone". It stops internet-wide
+# scanners and direct-to-IP probing; it does not stop someone with their own Cloudflare account pointing
+# their zone at this origin. Per-hostname AOP with a custom uploaded certificate closes that, at the cost
+# of managing the certificate and its expiry.
 tls:
   options:
     default:
       minVersion: VersionTLS13
+      clientAuth:
+        caFiles:
+          - /etc/certs/cloudflare_origin_pull_ca.pem
+        clientAuthType: RequireAndVerifyClientCert

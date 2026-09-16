@@ -52,7 +52,7 @@ services:
       traefik.http.routers.dash.tls: "true"
       traefik.http.routers.dash.middlewares: "authelia-forward-auth@file,dash-root-to-main@redis"
       # Redirect from '/' path to '/dashboard'
-      traefik.http.middlewares.dash-root-to-main.redirectregex.regex: "^https?://dash.${DOMAIN_NAME}/?$"
+      traefik.http.middlewares.dash-root-to-main.redirectregex.regex: "^https?://dash\\.${DOMAIN_NAME}/?$"
       traefik.http.middlewares.dash-root-to-main.redirectregex.replacement: "https://dash.${DOMAIN_NAME}/main"
       traefik.http.middlewares.dash-root-to-main.redirectregex.permanent: "true"
       # Monitor config

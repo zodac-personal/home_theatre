@@ -42,7 +42,7 @@ services:
       traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
       traefik.http.routers.uptime-kuma-redirect.tls: "true"
       traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/"
       traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
       # Monitor config

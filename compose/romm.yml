@@ -101,7 +101,7 @@ services:
       traefik.http.routers.romm-redirect.entryPoints: "websecure"
       traefik.http.routers.romm-redirect.tls: "true"
       traefik.http.routers.romm-redirect.middlewares: "romm-redirect-regex"
-      traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.romm-redirect-regex.redirectregex.regex: "^https://games\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.replacement: "https://game.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.romm-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

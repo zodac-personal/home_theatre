@@ -52,7 +52,7 @@ services:
       traefik.http.routers.jellystat-redirect.entryPoints: "websecure"
       traefik.http.routers.jellystat-redirect.tls: "true"
       traefik.http.routers.jellystat-redirect.middlewares: "jellystat-redirect-regex"
-      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.jellystat-redirect-regex.redirectregex.regex: "^https://stats\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.replacement: "https://stat.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.jellystat-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

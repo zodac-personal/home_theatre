@@ -55,7 +55,7 @@ services:
       traefik.http.routers.linkwarden-redirect.entryPoints: "websecure"
       traefik.http.routers.linkwarden-redirect.tls: "true"
       traefik.http.routers.linkwarden-redirect.middlewares: "linkwarden-redirect-regex"
-      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.regex: "^https://bookmarks\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.replacement: "https://bookmark.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.linkwarden-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

@@ -37,7 +37,7 @@ services:
       traefik.http.routers.filebrowser-redirect.entryPoints: "websecure"
       traefik.http.routers.filebrowser-redirect.tls: "true"
       traefik.http.routers.filebrowser-redirect.middlewares: "filebrowser-redirect-regex"
-      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.regex: "^https://files\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.replacement: "https://file.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.filebrowser-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

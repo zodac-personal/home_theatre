@@ -52,7 +52,7 @@ services:
       traefik.http.routers.dozzle-redirect.entryPoints: "websecure"
       traefik.http.routers.dozzle-redirect.tls: "true"
       traefik.http.routers.dozzle-redirect.middlewares: "dozzle-redirect-regex"
-      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.dozzle-redirect-regex.redirectregex.regex: "^https://logs\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.replacement: "https://log.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.dozzle-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

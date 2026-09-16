@@ -40,7 +40,7 @@ services:
       traefik.http.routers.audiobookshelf-redirect.entryPoints: "websecure"
       traefik.http.routers.audiobookshelf-redirect.tls: "true"
       traefik.http.routers.audiobookshelf-redirect.middlewares: "audiobookshelf-redirect-regex"
-      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.regex: "^https://books.${DOMAIN_NAME}(.*)"
+      traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.regex: "^https://books\\.${DOMAIN_NAME}(.*)"
       traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.replacement: "https://book.${DOMAIN_NAME}$${1}"
       traefik.http.middlewares.audiobookshelf-redirect-regex.redirectregex.permanent: "true"
       # Monitor config

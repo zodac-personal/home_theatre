@@ -97,7 +97,7 @@ access_control:
     - domain: 'dash.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
-        - '^(.*)/info'
+        - '^/(main|ser)/info'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -146,9 +146,9 @@ access_control:
       resources:
         - '^/favicon\.ico$'
         - '^/health'
-        - '^(.*)?/api/public/(.*)$'
-        - '^(.*)?/share/(.*)?$'
-        - '^(.*)?/static/(.*)?$'
+        - '^/api/public/(.*)$'
+        - '^/share/(.*)?$'
+        - '^/static/(.*)?$'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -161,9 +161,9 @@ access_control:
       resources:
         - '^/favicon\.ico$'
         - '^/health'
-        - '^(.*)?/api/public/(.*)$'
-        - '^(.*)?/share/(.*)?$'
-        - '^(.*)?/static/(.*)?$'
+        - '^/api/public/(.*)$'
+        - '^/share/(.*)?$'
+        - '^/static/(.*)?$'
       policy: 'bypass'
       methods:
         - 'GET'
@@ -342,7 +342,8 @@ access_control:
         - 'POST'
     - domain: 'prowlarr.{{ env "DOMAIN_NAME" }}'
       resources:
-        - '^(.*)/api(.*)$'
+        - '^/api(.*)$'
+        - '^/[0-9]+/api(.*)$'
       policy: 'bypass'
       methods:
         - 'GET'

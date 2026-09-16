@@ -9,11 +9,27 @@ global:
   checkNewVersion: false
   sendAnonymousUsage: false
 
+# Default timeouts for connections to a backend service. These map straight onto Go's http.Transport, so
+# read them with those semantics:
+#
+#   dialTimeout           - TCP connect only. A backend that is down fails fast; it has no bearing on how
+#                           long a request may then take.
+#   responseHeaderTimeout - how long to wait for the backend's response HEADERS after the request has been
+#                           fully written. It does NOT limit the response body, so streaming responses,
+#                           large downloads and websockets are unaffected once the first byte arrives - but
+#                           a slow-to-first-byte endpoint hits it and the client gets a 504. SonarQube's
+#                           analysis report submission and Emby's transcode startup are both capable of
+#                           exceeding 30s, which is why this is no longer set that low. Traefik's own
+#                           default is 0 (wait forever); 90s is a deliberate middle ground, chosen to sit
+#                           just under Cloudflare's 100s origin timeout so a genuinely hung backend still
+#                           surfaces as our 504 rather than Cloudflare's 524.
+#   idleConnTimeout       - how long an IDLE pooled keep-alive connection is held before being closed. It
+#                           does not apply to active connections of any kind, websockets included, so it is
+#                           purely a connection-churn tradeoff. Left at 1m, below Go's 90s default.
 serversTransport:
   forwardingTimeouts:
-    # Default timeouts to connect to a backend service
     dialTimeout: 20s
-    responseHeaderTimeout: 30s
+    responseHeaderTimeout: 90s
     idleConnTimeout: 1m
 
 ################################################################

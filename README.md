@@ -526,6 +526,24 @@ An [issue has been raised](https://github.com/jokob-sk/NetAlertX/issues/687), bu
 
 ## Reverse Proxy Security
 
+### Valkey (traefik-provider) authentication
+
+`traefik-kop` on the main host writes router definitions into the Valkey instance on the reverse proxy
+host, so that port cannot be container-only and is bound to the LAN IP. Anything on the LAN that can reach
+it could otherwise write a router for an existing hostname pointing at a backend of its choice - silent
+interception on a legitimate TLS name. It is therefore password-protected via `TRAEFIK_PROVIDER_PASSWORD`
+in `.env` (never committed; `.env.template` carries only a placeholder). Generate one with
+`openssl rand -hex 32`, and keep it alphanumeric - it is word-split into `valkey-server`'s arguments and
+`sed`-substituted into the Traefik config, so spaces and `| & \` would break one or the other.
+
+The same value is consumed in three places and all three must match: `traefik-provider`'s
+`VALKEY_EXTRA_FLAGS`, `traefik`'s rendered static config, and `traefik-kop`'s `REDIS_PASS`.
+
+Traefik ignores environment variables entirely when `--configFile` is used, and `providers.redis.password`
+only exists in the static config, so `docker/traefik/config/traefik.yml` carries a `__REDIS_PASSWORD__`
+placeholder that is substituted into a tmpfs copy at container start. The secret never touches disk and
+never enters the repo.
+
 ### Authenticated Origin Pulls
 
 Without it, everything Cloudflare provides - WAF, the rate limiting keyed on `Cf-Connecting-Ip`, DDoS

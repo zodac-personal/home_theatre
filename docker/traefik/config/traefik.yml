@@ -131,6 +131,10 @@ providers:
   redis:
     endpoints:
       - traefik-provider:6379
+    # Placeholder, NOT a secret. compose/traefik.yml renders this file into tmpfs at boot, substituting the
+    # real value from TRAEFIK_PROVIDER_PASSWORD (.env, gitignored). Traefik ignores environment variables
+    # when --configFile is used, so this indirection is the only way to keep the secret out of the repo.
+    password: "__REDIS_PASSWORD__"
 
 ################################################################
 # Plugins - https://plugins.traefik.io/plugins

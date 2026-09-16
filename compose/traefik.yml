@@ -10,7 +10,18 @@ services:
     image: traefik:v3.7.13  # https://github.com/traefik/traefik/releases
     container_name: traefik
     hostname: traefik
-    command: --configFile=/config/traefik.yml
+    # The static config is rendered into tmpfs before Traefik starts, because Traefik ignores environment
+    # variables entirely when --configFile is given (verified: file wins over both env and CLI), and
+    # providers.redis.password can only live in the static config. So the committed traefik.yml carries a
+    # __REDIS_PASSWORD__ placeholder and the real value is substituted at boot from the environment.
+    # $$ keeps the expansion in the container's shell rather than compose, so the secret stays out of
+    # `docker inspect`'s command string. /tmp is tmpfs, so the rendered file never reaches disk.
+    entrypoint: [ "/bin/sh", "-c" ]
+    command:
+      - |
+        set -eu
+        sed "s|__REDIS_PASSWORD__|$$TRAEFIK_PROVIDER_PASSWORD|" /config/traefik.yml > /tmp/traefik.yml
+        exec traefik --configFile=/tmp/traefik.yml
     cap_drop:
       - ALL
     depends_on:
@@ -28,6 +39,8 @@ services:
       # Variables used for Go template substitution in the config files
       DOMAIN_NAME: "${DOMAIN_NAME}"
       STATUS_URL: "${STATUS_URL}"
+      # Substituted into the static config at boot - see the command above
+      TRAEFIK_PROVIDER_PASSWORD: "${TRAEFIK_PROVIDER_PASSWORD:?[traefik] Provider password missing}"
       # Non-docker service IPs
       NETALERT_URL: "${NETALERT_URL}"
       TORRENT_URL: "${TORRENT_URL}"
@@ -107,7 +120,7 @@ services:
           memory: "256M"
           pids: 128
     environment:
-      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning"
+      VALKEY_EXTRA_FLAGS: "--save 60 1 --loglevel warning --requirepass ${TRAEFIK_PROVIDER_PASSWORD:?[traefik-provider] Provider password missing}"
     healthcheck:
       interval: 30s
       retries: 3

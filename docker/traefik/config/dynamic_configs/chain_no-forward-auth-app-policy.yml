@@ -1,0 +1,10 @@
+# As no-forward-auth@file, but leaving the application's own Content-Security-Policy, Permissions-Policy and
+# Referrer-Policy intact - see middleware_secure-headers-app-policy.yml. For unauthenticated services that ship a
+# considered policy of their own.
+http:
+  middlewares:
+    no-forward-auth-app-policy:
+      chain:
+        middlewares:
+          - rate-limit@file
+          - secure-headers-app-policy@file

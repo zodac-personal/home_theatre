@@ -1,0 +1,36 @@
+# As secure-headers@file, minus the three headers an application can express better than the proxy can:
+# Content-Security-Policy, Permissions-Policy and Referrer-Policy.
+#
+# WHY IT EXISTS. Traefik's customResponseHeaders SETS a header rather than adding to it, so a proxy-wide CSP
+# silently replaces whatever the application sent. For an app that ships a considered policy that is a downgrade,
+# not a hardening: Diurnal sends default-src/script-src/object-src/base-uri/form-action with pinned inline-script
+# hashes, and secure-headers@file was replacing all of it with "frame-ancestors 'self'; upgrade-insecure-requests;"
+# - leaving the browser with no script controls at all.
+#
+# WHAT IS DELIBERATELY KEPT. Everything transport-level, because that IS the proxy's business and the origin
+# cannot know it: HSTS (the app sets none, so this is additive rather than a replacement), nosniff, frame
+# options, and the robots tag.
+#
+# SCOPE. Attach this only to routers whose application ships its own CSP - currently diurnal-test alone. Every
+# other router keeps secure-headers@file untouched, which is why this is a sibling middleware rather than an edit
+# to that one.
+http:
+  middlewares:
+    secure-headers-app-policy:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+        accessControlMaxAge: 100
+        browserXssFilter: true
+        contentTypeNosniff: true
+        customFrameOptionsValue: SAMEORIGIN # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+        forceSTSHeader: true
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: false  # Only enable if registered at https://hstspreload.org/

@@ -56,7 +56,7 @@ services:
       traefik.http.routers.diurnal.rule: "Host(`diurnal.${DOMAIN_NAME}`)"
       traefik.http.routers.diurnal.entrypoints: "websecure"
       traefik.http.routers.diurnal.tls: "true"
-      traefik.http.routers.diurnal.middlewares: "no-forward-auth@file"
+      traefik.http.routers.diurnal.middlewares: "no-forward-auth-app-policy@file"
       traefik.http.services.diurnal.loadbalancer.server.port: "4021"
       # Monitor config
       kuma.diurnal.http.name: "Diurnal (Habit Tracker)"

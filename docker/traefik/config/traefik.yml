@@ -46,6 +46,7 @@ log:
 accessLog:
   filePath: "/var/log/traefik/access/access.log"
   format: json
+  bufferingSize: 100  # Trades a small number of lost lines on an unclean shutdown for far fewer syscalls
 
 ################################################################
 # API and Dashboard

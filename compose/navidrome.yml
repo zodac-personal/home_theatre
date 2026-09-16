@@ -22,7 +22,7 @@ services:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
       # Authentication config
-      ND_EXTAUTH_TRUSTEDSOURCES: "0.0.0.0/0"
+      ND_EXTAUTH_TRUSTEDSOURCES: "${REVERSE_PROXY_HOST_IP}/0"
       ND_EXTAUTH_USERHEADER: "Remote-User"
       ND_EXTAUTH_LOGOUTURL: "${NAVIDROME_OIDC_LOGOUT_URL?:[navidrome] OIDC logout URL missing}"
       ND_SESSIONTIMEOUT: "672h"  # 4 weeks

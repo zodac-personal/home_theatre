@@ -31,4 +31,8 @@ http:
     dummy-service-global-handler:
       loadBalancer:
         servers:
-          - url: "http://0.0.0.0"  # Dummy service, won't actually be used
+          # Never reached: the redirect middleware short-circuits every request before the service is
+          # invoked. It is a guaranteed-refused dead end rather than 0.0.0.0, which Linux resolves to
+          # localhost - so a reordered or removed middleware would send the request back into Traefik
+          # itself instead of failing loudly. Nothing listens on port 1.
+          - url: "http://127.0.0.1:1"

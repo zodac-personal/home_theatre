@@ -75,11 +75,11 @@ services:
     labels:
       # Reverse proxy config
       traefik.enable: "true"
-      traefik.http.routers.tandoor-new.rule: "Host(`recipe.${DOMAIN_NAME}`)"
-      traefik.http.routers.tandoor-new.entrypoints: "websecure"
-      traefik.http.routers.tandoor-new.tls: "true"
-      traefik.http.routers.tandoor-new.middlewares: "no-forward-auth@file"
-      traefik.http.services.tandoor-new.loadbalancer.server.port: "4014"
+      traefik.http.routers.tandoor.rule: "Host(`recipe.${DOMAIN_NAME}`)"
+      traefik.http.routers.tandoor.entrypoints: "websecure"
+      traefik.http.routers.tandoor.tls: "true"
+      traefik.http.routers.tandoor.middlewares: "no-forward-auth@file"
+      traefik.http.services.tandoor.loadbalancer.server.port: "4014"
       # Monitor config
       kuma.tandoor.http.name: "Tandoor (Recipes)"
       kuma.tandoor.http.url: "${TANDOOR_MONITOR_URL:?[tandoor] Monitor URL missing}"

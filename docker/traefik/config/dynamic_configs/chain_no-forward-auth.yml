@@ -3,6 +3,7 @@ http:
     no-forward-auth:
       chain:
         middlewares:
+          - redirect-on-gateway-error@file
           - strip-auth-headers@file
           - rate-limit@file
           - secure-headers@file

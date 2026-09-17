@@ -6,6 +6,7 @@ http:
     no-forward-auth-app-policy:
       chain:
         middlewares:
+          - redirect-on-gateway-error@file
           - strip-auth-headers@file
           - rate-limit@file
           - secure-headers-app-policy@file

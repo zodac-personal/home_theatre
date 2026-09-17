@@ -3,6 +3,7 @@ http:
     authelia-forward-auth:
       chain:
         middlewares:
+          - redirect-on-gateway-error@file
           - authelia@file
           - authelia-error-redirect@file
           - rate-limit@file

@@ -12,8 +12,12 @@ global:
 # Default timeouts for connections to a backend service. These map straight onto Go's http.Transport, so
 # read them with those semantics:
 #
-#   dialTimeout           - TCP connect only. A backend that is down fails fast; it has no bearing on how
-#                           long a request may then take.
+#   dialTimeout           - TCP connect only; it has no bearing on how long a request may then take. Kept
+#                           short because it is the floor on failing over to the status page: a host that
+#                           is powered off drops packets rather than refusing, so Traefik waits out this
+#                           timeout before the 502 that redirect-on-gateway-error@file turns into a 307.
+#                           Every backend is on the LAN, where a TCP connect is single-digit milliseconds,
+#                           so 10s is already generous.
 #   responseHeaderTimeout - how long to wait for the backend's response HEADERS after the request has been
 #                           fully written. It does NOT limit the response body, so streaming responses,
 #                           large downloads and websockets are unaffected once the first byte arrives - but
@@ -28,7 +32,7 @@ global:
 #                           purely a connection-churn tradeoff. Left at 1m, below Go's 90s default.
 serversTransport:
   forwardingTimeouts:
-    dialTimeout: 20s
+    dialTimeout: 10s
     responseHeaderTimeout: 90s
     idleConnTimeout: 1m
 

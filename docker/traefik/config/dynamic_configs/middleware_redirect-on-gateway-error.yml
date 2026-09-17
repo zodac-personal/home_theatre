@@ -1,0 +1,27 @@
+# Redirects to the status page when a backend cannot be reached.
+#
+# WHY IT EXISTS. When a container stops, traefik-kop removes its entry from the redis provider, the router
+# disappears, and the catch-all in config_global-error-handler.yml serves the 302 to the status page. That
+# covers the common case. It does NOT cover the whole main host, its docker daemon, or traefik-kop itself
+# going down: nothing is left to delete the redis entries, so the routers survive pointing at an
+# unreachable backend and users get a bare 502.
+#
+# Verified: setting REDIS_TTL on traefik-kop does not help. kop does refresh the TTL every poll, and the
+# keys do expire once it dies, but Traefik's redis provider only reacts to explicit deletes - it ignores
+# expiry, even with valkey started with 'notify-keyspace-events KEA'. The stale router keeps serving 502s.
+#
+# WHY 502-504 AND NOT 400-599. This replaces the previous redirect-on-error@file, which matched 400-599 and
+# so bounced users to the status page on any ordinary 404 or 401 from a healthy application. 502/503/504 are
+# the statuses that mean "the proxy could not get a usable response from the backend", which is exactly the
+# condition the status page is for. An application's own 4xx now passes through to the user untouched.
+#
+# The plugin replies 307, so nothing is cached: when the service returns, the original URL works again. Same
+# reasoning as permanent:false on the catch-all redirect.
+http:
+  middlewares:
+    redirect-on-gateway-error:
+      plugin:
+        traefik-plugin-redirect-on-status:
+          redirectUri: "{{ env "STATUS_URL" | trimAll "\"" }}"
+          status:
+            - "502-504"

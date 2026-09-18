@@ -201,7 +201,7 @@ docker compose -f docker-compose-ser.yml up --build -d authelia authelia-cache
 Take backup of the current database, then shut the Authelia containers down:
 
 ```bash
-docker compose exec diurnal-db pg_dump -U ${DIURNAL_DB_USER} -d ${DIURNAL_DB_NAME} -cC > backup_diurnal.dump
+docker compose exec -T diurnal-db pg_dump -U ${DIURNAL_DB_USER} -d ${DIURNAL_DB_NAME} -Fc > backup_diurnal.dump
 docker compose down diurnal diurnal-db
 ```
 

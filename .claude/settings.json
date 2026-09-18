@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/check-no-personal-info.sh",
+            "statusMessage": "Checking for personal info leaks..."
+          }
+        ]
+      }
+    ]
+  }
+}

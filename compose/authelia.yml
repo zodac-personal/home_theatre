@@ -11,7 +11,7 @@ services:
 
   # Identity platform (authentication and SSO)
   authelia:
-    image: authelia/authelia:4.39.25  # https://github.com/authelia/authelia/releases
+    image: authelia/authelia:4.39.28  # https://github.com/authelia/authelia/releases
     container_name: authelia
     hostname: authelia
     cap_drop:

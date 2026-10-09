@@ -7,7 +7,7 @@ services:
 
   # Subtitle downloader
   bazarr:
-    image: linuxserver/bazarr:1.6.0  # https://hub.docker.com/r/linuxserver/bazarr/tags
+    image: linuxserver/bazarr:1.6.2  # https://hub.docker.com/r/linuxserver/bazarr/tags
     container_name: bazarr
     hostname: bazarr
     cap_drop:

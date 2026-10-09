@@ -11,7 +11,7 @@ networks:
 services:
 
   diurnal:
-    image: zodac/diurnal:1.0.0  # https://github.com/zodac/diurnal/releases
+    image: zodac/diurnal:2.0.0  # https://github.com/zodac/diurnal/releases
     container_name: diurnal
     hostname: diurnal
     cap_drop:
@@ -33,6 +33,7 @@ services:
       DB_USER: "${DIURNAL_DB_USER:?[diurnal] Database user missing}"
       DB_PASSWORD: "${DIURNAL_DB_PASSWORD:?[diurnal] Database password missing}"
       # Application configuration
+      APP_UPDATE_CHECK_ENABLED: "true"
       EXPORT_CSV_BOM: "false"
       LOG_LEVEL: "INFO"
       NOTE_ENCRYPTION_KEY: "${DIURNAL_NOTE_ENCRYPTION_KEY:?[diurnal] Note encryption key missing}"

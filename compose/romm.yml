@@ -11,6 +11,8 @@ services:
 
   # Video Game ROM Manager
   romm:
+    # TODO: Implement emulator streaming: https://docs.romm.app/latest/using/emulator-streaming/
+    # TODO: v5.3.0 changes config file: https://github.com/rommapp/romm/releases#release-5.3.0
     image: rommapp/romm:5.2.0  # https://github.com/rommapp/romm/releases
     container_name: romm
     hostname: romm

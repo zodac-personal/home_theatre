@@ -193,7 +193,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:3.1.5-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
+    image: linuxserver/lidarr:3.1.6-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
     container_name: lidarr
     hostname: lidarr
     cap_add:

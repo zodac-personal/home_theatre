@@ -6,6 +6,7 @@ networks:
 services:
 
   # Centralised notification manager
+  # TODO: Deprecate - used by speedtest-tracker (connection broken) and NetAlertX (app notifications broken)
   apprise:
     image: caronc/apprise:v1.5.4  # https://hub.docker.com/r/caronc/apprise/tags | https://github.com/caronc/apprise-api/releases
     container_name: apprise

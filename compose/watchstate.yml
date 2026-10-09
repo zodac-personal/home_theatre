@@ -7,7 +7,8 @@ services:
 
   # Tool to import/export played state of media in Emby
   watchstate:
-    image: ghcr.io/arabcoders/watchstate:v1.10.5  # https://github.com/arabcoders/watchstate/releases
+    # TODO: https://github.com/arabcoders/watchstate/blob/master/guides/authentication.md
+    image: ghcr.io/arabcoders/watchstate:v1.10.7  # https://github.com/arabcoders/watchstate/releases
     container_name: watchstate
     hostname: watchstate
     cap_drop:

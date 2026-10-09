@@ -8,6 +8,7 @@ services:
   # Docker log viewer
   # TODO: Test alpine version, `amir20/dozzle:v10.10.0-alpine`
   dozzle:
+    # TODO: Next upgrade adds OIDC, verify this https://dozzle.dev/guide/authentication/oauth
     image: amir20/dozzle:v10.10.0  # https://github.com/amir20/dozzle/releases
     container_name: dozzle
     hostname: dozzle

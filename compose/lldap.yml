@@ -11,8 +11,7 @@ services:
 
   # LDAP User-store
   lldap:
-    # TODO: Try lldap/lldap:2026-09-22-alpine-rootless
-    image: lldap/lldap:2026-09-22-alpine  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
+    image: lldap/lldap:2026-09-22-alpine-rootless  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
     cap_add:
@@ -33,8 +32,8 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
-      UID: "${PUID_ROOT:?User ID missing}"
-      GID: "${PGID_ROOT:?Group ID missing}"
+      UID: "${PUID_NON_ROOT:?User ID missing}"
+      GID: "${PGID_NON_ROOT:?Group ID missing}"
       # LDAP config
       LLDAP_DATABASE_URL: "postgres://${LLDAP_DB_USER:?[lldap] Missing DB user}:${LLDAP_DB_PASSWORD:?[lldap] Missing DB password}@lldap-db:${LLDAP_DB_PORT:?[lldap] Missing DB port}/${LLDAP_DB_NAME:?[lldap] Missing DB name}"
       LLDAP_LDAP_BASE_DN: "${LLDAP_BASE_DN:?[lldap] Missing base LDAP DN}"
@@ -71,7 +70,7 @@ services:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
-    # user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
+    # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Persistent volumes
       - ../storage/lldap/data/:/data/

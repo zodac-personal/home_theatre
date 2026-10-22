@@ -11,7 +11,7 @@ services:
 
   # Automated SpeedTest runner with graphs
   speedtest:
-    image: linuxserver/speedtest-tracker:1.15.0  # https://github.com/alexjustesen/speedtest-tracker/releases
+    image: linuxserver/speedtest-tracker:1.15.1  # https://github.com/alexjustesen/speedtest-tracker/releases
     container_name: speedtest
     hostname: speedtest
     cap_add:

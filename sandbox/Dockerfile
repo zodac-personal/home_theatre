@@ -10,9 +10,11 @@
 # throwaway container, never touching the host daemon) and the system libraries
 # Playwright's Chromium needs.
 #
-# NOTE: every version below is pinned BY HAND in this repo. This image was copied
-# from a project that bumped its pins from CI; there is no such job here, so a
-# build that fails on a version Debian has since dropped means a pin needs moving.
+# NOTE: every FROM tag and every DEBIAN PACKAGES pin is bumped by
+# `sandbox/update_versions.sh` (run by hand - there is no CI job for it here). A build
+# that fails on a version Debian has since dropped means it is time to run it. The
+# Playwright pin is NOT covered (this repo does not use Playwright - see
+# sandbox/README.md), so it is moved by hand, if at all.
 #
 # The nested Docker engine is the one toolchain NOT copied from an image: the
 # binaries in the official `docker`/`docker:dind` images are musl-linked (Alpine),
@@ -57,12 +59,12 @@
 #   Maven   — pure Java + shell under /usr/share/maven; the image's own JDK is unused.
 #   Node 26 — installed under /usr/local; the prebuilt binaries are glibc-portable
 #             (the -trixie tag matches this base's glibc exactly).
-FROM eclipse-temurin:26.0.2_10-jdk AS jdk
-FROM maven:3.9.16-eclipse-temurin-26 AS maven
-FROM node:26.8.2-trixie AS node
+FROM eclipse-temurin:26.0.2.1_1-jdk AS jdk
+FROM maven:3.10.0-eclipse-temurin-26 AS maven
+FROM node:26.12.1-trixie AS node
 
 # ── Runtime base ─────────────────────────────────────────────────────────────
-FROM debian:13.6
+FROM debian:13.7
 
 ARG UID=1000
 ARG GID=1000
@@ -134,8 +136,8 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean \
 # BEGIN DEBIAN PACKAGES
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -yqq --no-install-recommends \
-        ca-certificates="20250419" \
-        curl="8.14.1-2+deb13u5" \
+        ca-certificates="20250419+deb13u1" \
+        curl="8.14.1-2+deb13u7" \
         gnupg="2.4.7-21+deb13u1" \
         libatomic1="14.2.0-19"
 # END DEBIAN PACKAGES
@@ -166,11 +168,11 @@ RUN install -m 0755 -d /etc/apt/keyrings \
 # BEGIN DEBIAN PACKAGES
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -yqq --no-install-recommends \
-        docker-ce="5:29.7.2-1~debian.13~trixie" \
-        docker-ce-cli="5:29.7.2-1~debian.13~trixie" \
-        containerd.io="2.3.3-1~debian.13~trixie" \
-        docker-buildx-plugin="0.36.1-1~debian.13~trixie" \
-        docker-compose-plugin="5.5.0-1~debian.13~trixie"
+        docker-ce="5:29.9.2-1~debian.13~trixie" \
+        docker-ce-cli="5:29.9.2-1~debian.13~trixie" \
+        containerd.io="2.4.2-3~debian.13~trixie" \
+        docker-buildx-plugin="0.38.1-1~debian.13~trixie" \
+        docker-compose-plugin="5.6.1-1~debian.13~trixie"
 # END DEBIAN PACKAGES
 
 # ── JDK 26 / Maven / Node (copied from the toolchain stages above) ───────────
@@ -262,8 +264,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,t
         git="1:2.47.3-0+deb13u1" \
         imagemagick="8:7.1.1.43+dfsg1-1+deb13u12" \
         iproute2="6.15.0-1" \
-        jq="1.7.1-6+deb13u3" \
-        librsvg2-bin="2.60.0+dfsg-1" \
+        jq="1.7.1-6+deb13u4" \
+        librsvg2-bin="2.60.0+dfsg-1+deb13u1" \
         lsof="4.99.4+dfsg-2" \
         optipng="0.7.8+ds-1+b1" \
         python3="3.13.5-1" \
@@ -289,7 +291,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,t
 # BINARY itself stays out of the image (persisted in the ms-playwright volume via
 # setup.sh) to avoid baking ~150MB of Chromium into every layer.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    npx --yes playwright@1.62.0 install-deps chromium
+    npx --yes playwright@1.64.1 install-deps chromium
 
 # ── Claude Code CLI into a dev-owned npm prefix ──────────────────────────────
 # Installing `-g` into npm's default /usr prefix makes the package and the

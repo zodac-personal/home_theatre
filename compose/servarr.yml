@@ -7,6 +7,7 @@ services:
 
   # Movie Manager
   radarr:
+    # TODO: nightly-version-7.0.1.10833 supports OIDC
     image: linuxserver/radarr:6.4.4-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
@@ -72,6 +73,7 @@ services:
 
   # TV Show Manager
   sonarr:
+    # TODO: develop-version-5.0.0.2838 supports OIDC
     image: linuxserver/sonarr:4.0.20-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
@@ -139,7 +141,7 @@ services:
 
   # Quality profile manager for radarr/sonarr
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:8.7.2 # https://github.com/recyclarr/recyclarr/releases
+    image: ghcr.io/recyclarr/recyclarr:8.8.1 # https://github.com/recyclarr/recyclarr/releases
     container_name: recyclarr
     hostname: recyclarr
     cap_drop:
@@ -193,7 +195,7 @@ services:
 
   # Music manager
   lidarr:
-    image: linuxserver/lidarr:3.1.6-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
+    image: linuxserver/lidarr:3.2.0-nightly  # https://hub.docker.com/r/linuxserver/lidarr/tags?name=nightly
     container_name: lidarr
     hostname: lidarr
     cap_add:
@@ -323,6 +325,7 @@ services:
 
   # Downloaded archive extractor
   unpackerr:
+    # TODO: Upgrade to 1.0.0+: https://unpackerr.zip/docs/install/upgrading/
     image: golift/unpackerr:0.16.1  # https://hub.docker.com/r/golift/unpackerr/tags
     container_name: unpackerr
     hostname: unpackerr

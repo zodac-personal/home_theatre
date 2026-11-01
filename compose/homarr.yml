@@ -7,6 +7,7 @@ services:
 
   # Homepage
   homarr:
+    # TODO: Upgrade to v2.0.0+
     image: ghcr.io/homarr-labs/homarr:v1.77.2  # https://github.com/homarr-labs/homarr/releases
     container_name: homarr
     hostname: homarr

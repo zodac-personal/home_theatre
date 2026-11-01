@@ -12,7 +12,7 @@ services:
   # Static code analysis tool
   sonarqube:
     # Don't jump to latest version, must upgrade incrementally
-    image: sonarqube:26.9.0.129388-community  # https://hub.docker.com/_/sonarqube/tags?name=-community
+    image: sonarqube:26.10.0.133078-community  # https://hub.docker.com/_/sonarqube/tags?name=-community
     container_name: sonarqube
     hostname: sonarqube
     cap_drop:

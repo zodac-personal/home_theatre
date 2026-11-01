@@ -8,7 +8,7 @@ services:
   # Music Player
   navidrome:
     # TODO: v0.64.0 breaks offline downloads, be ready to do a clean wipe before upgrading
-    image: deluan/navidrome:0.63.2  # https://github.com/navidrome/navidrome/releases/
+    image: deluan/navidrome:0.64.2  # https://github.com/navidrome/navidrome/releases/
     container_name: navidrome
     hostname: navidrome
     cap_drop:

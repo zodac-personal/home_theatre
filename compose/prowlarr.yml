@@ -7,7 +7,8 @@ services:
 
   # Indexer (Torrents + Usenet)
   prowlarr:
-    image: linuxserver/prowlarr:2.6.5-nightly  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
+    # TODO: Wait for v3 release notes before going back to nightly builds
+    image: linuxserver/prowlarr:2.7.0  # https://hub.docker.com/r/linuxserver/prowlarr/tags?name=nightly
     container_name: prowlarr
     hostname: prowlarr
     cap_add:
@@ -79,7 +80,7 @@ services:
 
   # Cloudflare rate-limiter solver
   flaresolverr:
-    image: flaresolverr/flaresolverr:v3.5.0  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
+    image: flaresolverr/flaresolverr:v3.5.2  # https://hub.docker.com/r/flaresolverr/flaresolverr/tags
     container_name: flaresolverr
     hostname: flaresolverr
     cap_drop:

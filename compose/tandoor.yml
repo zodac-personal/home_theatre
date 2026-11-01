@@ -11,6 +11,7 @@ services:
 
   # Recipe Manager
   tandoor:
+    # TODO: Change to Auth flow: https://github.com/TandoorRecipes/recipes/releases#release-2.7.0
     image: vabene1111/recipes:2.6.15  # https://github.com/TandoorRecipes/recipes/releases
     container_name: tandoor
     hostname: tandoor

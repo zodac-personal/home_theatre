@@ -273,7 +273,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,t
         python3-pip="25.1.1+dfsg-1" \
         python3-venv="3.13.5-1" \
         sudo="1.9.16p2-3+deb13u2" \
-        tzdata="2026c-0+deb13u1" \
+        tzdata="2026e-0+deb13u1" \
         unzip="6.0-29+deb13u1"
 # END DEBIAN PACKAGES
 

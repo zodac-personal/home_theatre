@@ -1,5 +1,7 @@
 # home_theatre
 
+@../ai-sandbox/rules/CLAUDE.md
+
 A self-hosted homelab: Docker Compose stacks for media (`*arr` suite, Emby, Navidrome, AudiobookShelf, RomM,
 ...), household apps (Tandoor recipes, Homebox, DailyTxT, Linkwarden, ...), and the platform services that
 tie them together (Traefik, Authelia, LLDAP, monitoring), spread across three hosts. `README.md` has the full
@@ -62,8 +64,10 @@ now, weigh it against this list rather than treating every open item as equally 
 
 ## Not covered here
 
-- `sandbox/` (repo root) is a disposable Docker sandbox for running Claude Code itself against this repo —
-  tooling for working on the repo, not part of the deployed stack. See `sandbox/README.md`.
+- `ai-sandbox/` (a git submodule, never edited here) + `ai-sandbox-configuration/` (this repo's settings for
+  it) are a disposable Docker sandbox for running Claude Code itself against this repo — tooling for working
+  on the repo, not part of the deployed stack. See `ai-sandbox/README.md`. Its pins (and the submodule tag)
+  are bumped by `.github/scripts/update_dependency_versions.sh`, which never touches `compose/`.
 - Backup procedures and per-service DB upgrade runbooks live in `README.md`, not duplicated here (except a
   short cross-host summary in [`upgrades.md`](reference/upgrades.md)) — due for the reorganisation above,
   so don't be surprised if their exact location/structure has moved.

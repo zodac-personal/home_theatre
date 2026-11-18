@@ -22,15 +22,16 @@ contains:
   `HOST_USERNAME` — the guard reads these from the gitignored `.env` at check time, so it always tracks
   whatever your real values currently are without them being written down anywhere else.
 - An absolute path under `/home/<name>/` or `/Users/<name>/`, unless `<name>` is `dev` (the sandbox's fixed,
-  documented, non-personal user — see `sandbox/README.md`) or the path follows this repo's own
+  documented, non-personal user — see `ai-sandbox/README.md`) or the path follows this repo's own
   `/path/to/...` placeholder convention (see `secrets-and-env.md`).
 
 When it blocks something, the reason names *which* `.env` variable or path pattern matched — deliberately
 never the matched value itself, so the guard's own messages don't leak the secret into the transcript/logs
 it's trying to keep the secret out of.
 
-Self-test: `.claude/hooks/tests/run-hook-tests.sh` (also run automatically by `sandbox/setup.sh`, step 4)
-exercises the guard against a fixture `.env`, never the real one. Run it after editing the hook.
+Self-test: `.claude/hooks/tests/run-hook-tests.sh` (also run automatically on every sandbox open by
+`ai-sandbox`'s `setup.sh`) exercises the guard against a fixture `.env`, never the real one. Run it after
+editing the hook.
 
 ## What the guard does NOT catch
 

@@ -13,3 +13,7 @@ backup_*
 docker/test/
 docker-compose-test.yml
 tmp_backup/
+
+# The AI sandbox's Claude Code state (login, transcripts, memory) - see ai-sandbox/README.md#persistence.
+# Holds OAuth tokens, so must never be committed (the directory also ignores itself).
+.claude-history/

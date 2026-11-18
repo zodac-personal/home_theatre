@@ -57,9 +57,10 @@ health/logs on Main before assuming the label is wrong.
 - `doc/` — architecture diagram (`home_theatre.drawio`/`.png`) and CI lint configs.
 - `.claude/` — AI-facing material: `CLAUDE.md` (index), `reference/` (this directory), `SECURITY_TODO.md`
   (live security backlog).
-- `sandbox/` (repo root, not under `.claude/`) — a disposable Docker sandbox for running Claude Code itself
-  against this repo with `--dangerously-skip-permissions`. It's tooling for working on the repo, not part of
-  the deployed stack; see `sandbox/README.md`.
+- `ai-sandbox/` (git submodule) + `ai-sandbox-configuration/` (repo root, not under `.claude/`) — a disposable
+  Docker sandbox for running Claude Code itself against this repo with `--dangerously-skip-permissions`. It's
+  tooling for working on the repo, not part of the deployed stack; see `ai-sandbox/README.md`.
+  `.github/scripts/update_dependency_versions.sh` bumps the sandbox's pins only — never `compose/`.
 
 For the actual service catalogue, auth-integration matrix (which services use OIDC vs basic-auth vs no
 internal auth), and backup/DB-upgrade runbooks, see `README.md` — this doc is about structure, not the

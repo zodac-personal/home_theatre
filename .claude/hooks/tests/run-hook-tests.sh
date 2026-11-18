@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Self-test for check-no-personal-info.sh - proves the personal-info guard
 # actually blocks/allows as intended, using a fixture .env so the REAL .env
-# is never read or touched. Run via sandbox/setup.sh step 4, or manually
+# is never read or touched. Run on every ai-sandbox open (its setup.sh), or manually
 # after editing the hook. Exits non-zero if any case fails.
 set -uo pipefail
 
@@ -56,7 +56,7 @@ run_case "blocks a generic personal home path even without a known username" \
   "deny"
 
 run_case "allows the sandbox generic dev user path" \
-  '{"tool_name":"Write","tool_input":{"file_path":"sandbox/README.md","content":"mounted at /home/dev/.claude"}}' \
+  '{"tool_name":"Write","tool_input":{"file_path":"ai-sandbox-configuration/sandbox.conf","content":"mounted at /home/dev/.claude"}}' \
   "allow"
 
 run_case "allows the documented /path/to placeholder convention" \

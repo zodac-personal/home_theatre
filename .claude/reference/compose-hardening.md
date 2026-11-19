@@ -34,18 +34,21 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
   `reitti-tile-cache`, `traefik-agent`, `traefik-dashboard`) — that may be because the image genuinely
   requires it, or may just be undocumented; don't treat "this existing service runs as root" as proof it's
   necessary when copying a pattern to a new service.
-  A third pattern, distinct from both: `homarr` and `lldap` have their `user:` line present but
-  **commented out**, with `# Doesn't work, must use environment variables` — those images take `PUID`/`PGID`
-  as environment variables instead of accepting a Compose `user:` override, so privilege-dropping happens
+  A third pattern, distinct from both: `homarr` has its `user:` line present but **commented out**, with
+  `# Doesn't work, must use environment variables` — that image takes `PUID`/`PGID` as environment variables instead of accepting a Compose `user:` override, so privilege-dropping happens
   inside the container rather than via Compose. If a new service's `user:` override causes startup failures,
-  check whether its image expects `PUID`/`PGID` env vars instead before assuming it needs root.
+  check whether its image expects `PUID`/`PGID` env vars instead before assuming it needs root — and check
+  for a `-rootless` image variant, which usually removes the problem entirely (`lldap` used to follow this
+  pattern; its `-alpine-rootless` image runs as a fixed non-root user with no chown step, so a plain `user:`
+  override now works and the `PUID`/`PGID` env vars and `CHOWN`/`SETGID`/`SETUID` caps were dropped).
 - **Healthcheck** — a `CMD`/`CMD-SHELL` check appropriate to the service, with `interval`/`retries`/
   `start_period`/`timeout`. This is the intent, not the current reality: `authelia`, `diurnal`, `filebrowser`,
-  `homebox`, `jellystat`, `linkwarden`, `lldap`, `netalert`, `ottrbox`, `sportarr`, and `uptime-kuma` currently
-  have none. `lldap` is the one tracked case (`.claude/SECURITY_TODO.md` #12) because `authelia` depends on
-  it with `condition: service_healthy` — a `depends_on` health condition on a service with no healthcheck
-  will simply never become "healthy" per Compose, so check for that combination before assuming a new
-  `depends_on` will work as written.
+  `homebox`, `jellystat`, `linkwarden`, `netalert`, `ottrbox`, `sportarr`, and `uptime-kuma` have none in
+  Compose (some, like `authelia`, inherit a `HEALTHCHECK` baked into the image). A `depends_on` health
+  condition on a service with no healthcheck at all will simply never become "healthy" per Compose, so check
+  for that combination (`docker image inspect --format '{{json .Config.Healthcheck}}' <image>`) before
+  assuming a new `depends_on` will work as written. `lldap` relies on its image-baked check for `authelia`'s
+  `service_healthy` dependency, so confirm it still exists when bumping that image.
 
 ## Networking
 
@@ -70,7 +73,7 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
 
 ## Read-only root filesystem
 
-`read_only: true` is used exactly once so far (NetAlertX) but works well for any stateless service (Traefik,
+`read_only: true` is used on NetAlertX and LLDAP so far, and works well for any stateless service (Traefik,
 Traefik-kop, Authelia, Dozzle, Apprise, Whisper, FlareSolverr are flagged as easy candidates in
 `.claude/SECURITY_TODO.md`). If you're adding a new stateless service, consider setting it there rather than
 waiting for a follow-up pass.

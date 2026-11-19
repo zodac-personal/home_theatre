@@ -167,7 +167,7 @@ Authelia.
   confidential clients so it is defence-in-depth, but Homarr already has `require_pkce: 'true'`; extend it to the
   clients whose software supports it.
 - [ ] **`read_only: true` appears exactly once**, on `netalert` (`compose/netalert.yml:64`) — which proves the
-  pattern works here. The stateless services (traefik, traefik-kop, authelia, dozzle, apprise, whisper,
+  pattern works here. (Since added to `lldap` too, 2026-11-19.) The stateless services (traefik, traefik-kop, authelia, dozzle, apprise, whisper,
   flaresolverr) are the easy wins.
 - [ ] **Pre-release tags on internet-facing apps**: radarr `6.4.4-nightly`, sonarr `4.0.20-develop`, prowlarr
   `2.6.4-nightly`, readarr `0.4.19-nightly`, lidarr `3.1.5-nightly`, sportarr `4.1.7.810-dev`. Pinned, so
@@ -181,7 +181,7 @@ Authelia.
 - [ ] **`.github/workflows/docker.yml:50`** passes `-Dsonar.token=` on the command line, where it lands in process
   args and shell history on the runner. The `SONAR_TOKEN` env var on line 40 is already set and is all the scanner
   needs.
-- [ ] **`compose/lldap.yml` has no healthcheck** while `compose/authelia.yml:24-25` does
-  `depends_on: lldap: condition: service_healthy`. Authelia's own image ships a `HEALTHCHECK`, so its dependents are
-  fine; I could not confirm the LLDAP image does. Worth a `docker inspect` on the reverse-proxy host, since without
-  one that `depends_on` fails the stack at startup.
+- [x] **`compose/lldap.yml` has no healthcheck** while `compose/authelia.yml:24-25` does
+  `depends_on: lldap: condition: service_healthy`. Resolved (2026-11-19): the `-alpine-rootless` image ships a
+  `HEALTHCHECK` (`/app/lldap healthcheck`, tests LDAP + GraphQL), which satisfies the `depends_on`
+  condition — re-check it's still there on image bumps.

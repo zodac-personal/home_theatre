@@ -15,7 +15,9 @@ http:
       rule: "Host(`status.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
       entryPoints:
         - websecure
-      service: noop@internal # Never reached, the middleware always redirects
+      # Never reached (the middleware always redirects), but a non-internal service keeps these requests in the
+      # access log - Traefik excludes routes to *@internal services from it by default
+      service: uptime-kuma
       tls: {}
       middlewares:
         - redirect-to-status-page

@@ -7,14 +7,9 @@ services:
 
   # Monitoring and alerting
   uptime-kuma:
-    # TODO: Try 2.5.5-rootless
-    image: louislam/uptime-kuma:2.5.8  # https://github.com/louislam/uptime-kuma/releases
+    image: louislam/uptime-kuma:2.5.8-rootless  # https://github.com/louislam/uptime-kuma/releases
     container_name: uptime-kuma
     hostname: uptime-kuma
-    cap_add:
-      - FOWNER
-      - SETGID
-      - SETUID
     cap_drop:
       - ALL
     deploy:
@@ -62,7 +57,9 @@ services:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    # Image's fixed 'node' user: embedded MariaDB refuses any other username and chowns its dirs to 1000:1000.
+    # Deliberately not PUID_NON_ROOT_ORACLE: that host user has sudo/docker/lxd, while 1000 has no extra groups.
+    user: "1000:1000"
     volumes:
       # Persistent volumes
       - ../storage/uptime-kuma/data/:/app/data/

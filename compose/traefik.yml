@@ -101,6 +101,9 @@ services:
     #   One-off, access log ownership:
     #     sudo chown -R 2000:2000 storage/traefik/logs
     #     sudo find storage/traefik/logs -type d -exec chmod 750 {} + && sudo find storage/traefik/logs -type f -exec chmod 640 {} +
+    #   As needed - the access log is never rotated (Traefik doesn't, and there's no host logrotate by choice).
+    #   Truncate in place; don't rm it, or Traefik keeps writing to the deleted file until it restarts:
+    #     sudo truncate -s 0 storage/traefik/logs/access/access.log
     user: "2000:2000"
     volumes:
       # Docker socket mount from host system

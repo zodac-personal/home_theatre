@@ -1,7 +1,8 @@
 # Security Review TODO
 
 Findings from a review of the Traefik and Authelia configuration, and of Docker/self-hosting practice across the
-compose stacks. Dated 2026-09-17, against commit `cacb514`.
+compose stacks. Dated 2026-09-17, against commit `cacb514`. Partially updated 2026-11-20 (LLDAP, Uptime Kuma and
+Traefik hardening): items touched since carry their own dates, and untouched items' line references may have drifted.
 
 Baseline is good and is *not* repeated below: every image is pinned, essentially every service has `cap_drop: ALL`,
 `no-new-privileges`, pids/memory/cpu limits, log rotation and a tmpfs `/tmp`; DB and cache tiers sit on
@@ -111,12 +112,17 @@ kill switch.
 - [ ] Port `config_tls.yml` and `middleware_secure-headers.yml` (at minimum) to the Oracle deployment.
 - [x] `aliasHeadersStrategy: delete` and the encoded backslash/null denial ported to `traefik-oracle.yml` (2026-11-20).
 - [ ] Reconsider publishing Uptime Kuma on `0.0.0.0` alongside 443.
+- [ ] Load the Cloudflare origin certificate. `compose/traefik-oracle.yml` mounts `cloudflare_origin_cert.pem`/`_key.pem`,
+  but nothing in `dynamic_configs_oracle/` references them (no equivalent of `config_certs.yml`), so `monitor.` is
+  served with Traefik's self-signed default — it only works because Cloudflare isn't in Full (strict) mode. Copying
+  `config_certs.yml` across fixes it; Traefik runs as `2000`, so the key must be readable by that ID first (same
+  host step as SER's, documented above `user:` in `compose/traefik.yml`).
 
 `docker/traefik/config/traefik-oracle.yml` now has a file provider, but pointed at its own
 `dynamic_configs_oracle/` (only the Uptime Kuma routes so far), so the deployment still gets no
 `config_tls.yml` (no TLS 1.3 floor, **no Authenticated Origin Pulls**), no `secure-headers`, no `rate-limit` and no
 `strip-auth-headers`. Its one public service, Uptime Kuma, is also published on
-`0.0.0.0:${UPTIME_KUMA_PORT}` (`compose/uptime-kuma.yml:58`).
+`0.0.0.0:${UPTIME_KUMA_PORT}` (`compose/uptime-kuma.yml:39`).
 
 ### 9. Full unauthenticated API bypass on the *arr apps
 

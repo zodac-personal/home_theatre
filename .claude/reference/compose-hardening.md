@@ -63,49 +63,52 @@ Rules:
   to, for host-wide setup like the media group) — never in a separate doc. Each block says which host, that it
   runs from the repo root, and when it must be re-run.
 - New service: take the next free ID in its range and add it to the list below.
+- **No host configuration beyond users/ownership** (owner decision, 2026-11-20): no logrotate, cron or systemd
+  units on the hosts for a service's sake, and no custom sidecars to replace them either. Traefik's access logs
+  are therefore not rotated; they're cleared by hand (command above Traefik's `user:` line) when they get large.
 
-| Range / ID | Assigned to | Status |
-|---|---|---|
-| `0` | Only where the image needs root, with a reason (`dash`, `dash-ser`: host metrics) | — |
-| `1000` | `uptime-kuma` (Oracle) — image-fixed, embedded MariaDB requires it | done |
-| **2000–2099** | **Platform** | |
-| `2000` | `traefik` + `traefik-provider` (SER), `traefik-oracle` (Oracle) | `traefik`, `traefik-oracle` done |
-| `2001` | `authelia`, `authelia-db`, `authelia-cache` | planned |
-| `2002` | `lldap`, `lldap-db` | planned |
-| `2003` | `autokuma` (Main), `autokuma-ser` (SER) | planned |
-| `2004` | `traefik-kop` | planned |
-| `2005` | `dozzle` | planned |
-| `2006` | `homarr` | needs research (PUID/PGID env, runs as root) |
-| `2007` | `apprise` | planned |
-| `2008` | `netalert` | needs research (raw-socket caps; may need root) |
-| `2009` | `speedtest`, `speedtest-db` | needs research (linuxserver image) |
-| `2010` | `watchstate` | planned |
-| **2100–2199** | **Household / tools** | |
-| `2100` | `tandoor`, `tandoor-db` | needs research (root, upstream TODO) |
-| `2101` | `homebox` | planned |
-| `2102` | `dailytxt` | needs research (root + chown caps) |
-| `2103` | `linkwarden`, `linkwarden-db` | needs research (root) |
-| `2104` | `reitti`, `reitti-db`, `reitti-cache`, `reitti-tile-cache` | needs research (root) |
-| `2105` | `diurnal`, `diurnal-db` | planned |
-| `2106` | `filebrowser` (+ media group for documents) | planned |
-| `2107` | `ottrbox` (+ media group if the FTP dir is shared) | planned |
-| `2108` | `sonarqube`, `sonarqube-db` — app keeps GID `0` (image requirement) | planned |
-| `2109` | `whisper` | planned |
-| `2110` | `flaresolverr` | planned |
-| **2200–2299** | **Media** (all with `group_add: 3000` where they touch shared data) | |
-| `2200` | `qbittorrent` | needs research (linuxserver) |
-| `2201`–`2206` | `radarr`, `sonarr`, `lidarr`, `readarr`, `bazarr`, `sportarr` | needs research (linuxserver / PUID env) |
-| `2207` | `prowlarr` | needs research (linuxserver) |
-| `2208` | `unpackerr` | planned |
-| `2209` | `recyclarr` | planned |
-| `2210` | `doplarr` | planned |
-| `2211` | `emby` | needs research (UID/GID env + chown caps) |
-| `2212` | `navidrome` | planned |
-| `2213` | `audiobookshelf` | planned |
-| `2214` | `tunarr` | needs research (root for MeiliSearch) |
-| `2215` | `romm`, `romm-db`, `romm-cache` | planned |
-| `2216` | `jellystat`, `jellystat-db` | planned |
-| `3000` | Shared **media group** (GID only) | planned |
+| Range / ID    | Assigned to                                                                       | Status                                          |
+|---------------|-----------------------------------------------------------------------------------|-------------------------------------------------|
+| `0`           | Only where the image needs root, with a reason (`dash`, `dash-ser`: host metrics) | —                                               |
+| `1000`        | `uptime-kuma` (Oracle) — image-fixed, embedded MariaDB requires it                | done                                            |
+| **2000–2099** | **Platform**                                                                      |                                                 |
+| `2000`        | `traefik` + `traefik-provider` (SER), `traefik-oracle` (Oracle)                   | `traefik`, `traefik-oracle` done                |
+| `2001`        | `authelia`, `authelia-db`, `authelia-cache`                                       | planned                                         |
+| `2002`        | `lldap`, `lldap-db`                                                               | planned                                         |
+| `2003`        | `autokuma` (Main), `autokuma-ser` (SER)                                           | planned                                         |
+| `2004`        | `traefik-kop`                                                                     | planned                                         |
+| `2005`        | `dozzle`                                                                          | planned                                         |
+| `2006`        | `homarr`                                                                          | needs research (PUID/PGID env, runs as root)    |
+| `2007`        | `apprise`                                                                         | planned                                         |
+| `2008`        | `netalert`                                                                        | needs research (raw-socket caps; may need root) |
+| `2009`        | `speedtest`, `speedtest-db`                                                       | needs research (linuxserver image)              |
+| `2010`        | `watchstate`                                                                      | planned                                         |
+| **2100–2199** | **Household / tools**                                                             |                                                 |
+| `2100`        | `tandoor`, `tandoor-db`                                                           | needs research (root, upstream TODO)            |
+| `2101`        | `homebox`                                                                         | planned                                         |
+| `2102`        | `dailytxt`                                                                        | needs research (root + chown caps)              |
+| `2103`        | `linkwarden`, `linkwarden-db`                                                     | needs research (root)                           |
+| `2104`        | `reitti`, `reitti-db`, `reitti-cache`, `reitti-tile-cache`                        | needs research (root)                           |
+| `2105`        | `diurnal`, `diurnal-db`                                                           | planned                                         |
+| `2106`        | `filebrowser` (+ media group for documents)                                       | planned                                         |
+| `2107`        | `ottrbox` (+ media group if the FTP dir is shared)                                | planned                                         |
+| `2108`        | `sonarqube`, `sonarqube-db` — app keeps GID `0` (image requirement)               | planned                                         |
+| `2109`        | `whisper`                                                                         | planned                                         |
+| `2110`        | `flaresolverr`                                                                    | planned                                         |
+| **2200–2299** | **Media** (all with `group_add: 3000` where they touch shared data)               |                                                 |
+| `2200`        | `qbittorrent`                                                                     | needs research (linuxserver)                    |
+| `2201`–`2206` | `radarr`, `sonarr`, `lidarr`, `readarr`, `bazarr`, `sportarr`                     | needs research (linuxserver / PUID env)         |
+| `2207`        | `prowlarr`                                                                        | needs research (linuxserver)                    |
+| `2208`        | `unpackerr`                                                                       | planned                                         |
+| `2209`        | `recyclarr`                                                                       | planned                                         |
+| `2210`        | `doplarr`                                                                         | planned                                         |
+| `2211`        | `emby`                                                                            | needs research (UID/GID env + chown caps)       |
+| `2212`        | `navidrome`                                                                       | planned                                         |
+| `2213`        | `audiobookshelf`                                                                  | planned                                         |
+| `2214`        | `tunarr`                                                                          | needs research (root for MeiliSearch)           |
+| `2215`        | `romm`, `romm-db`, `romm-cache`                                                   | planned                                         |
+| `2216`        | `jellystat`, `jellystat-db`                                                       | planned                                         |
+| `3000`        | Shared **media group** (GID only)                                                 | planned                                         |
 
 ## Networking
 

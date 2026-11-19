@@ -109,6 +109,7 @@ kill switch.
 ### 8. The Oracle stack has none of the main stack's protections
 
 - [ ] Port `config_tls.yml` and `middleware_secure-headers.yml` (at minimum) to the Oracle deployment.
+- [x] `aliasHeadersStrategy: delete` and the encoded backslash/null denial ported to `traefik-oracle.yml` (2026-11-20).
 - [ ] Reconsider publishing Uptime Kuma on `0.0.0.0` alongside 443.
 
 `docker/traefik/config/traefik-oracle.yml` now has a file provider, but pointed at its own

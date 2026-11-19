@@ -44,9 +44,17 @@ ping: { }
 ################################################################
 
 entryPoints:
+  # Dashboard/API (api.insecure) and ping. Defined explicitly, rather than left implicit, so it can carry the
+  # same aliasHeadersStrategy as the others - see websecure below
+  traefik:
+    address: ":8080"
+    http:
+      aliasHeadersStrategy: delete
+
   web:
     address: ":80"
     http:
+      aliasHeadersStrategy: delete  # see websecure below
       # Global HTTP to HTTPS redirection      
       redirections:
         entrypoint:
@@ -56,6 +64,14 @@ entryPoints:
   websecure:
     address: ":443"
     http:
+      # Same as SER's traefik.yml: a header whose name ALIASES another (X_Auth_User for X-Auth-User) is read as
+      # that header by CGI/WSGI/PHP backends. 'delete' drops the aliasing header; 'reject' would 400 instead.
+      aliasHeadersStrategy: delete
+      # Same as SER's traefik.yml: deny only the two encoded characters with no legitimate use in a URL path
+      # (split-view/traversal vectors such as ..%5c.. or a %00 truncation); a denied character gets a 400.
+      encodedCharacters:
+        allowEncodedBackSlash: false
+        allowEncodedNullCharacter: false
       tls:
         options: default
     forwardedHeaders:

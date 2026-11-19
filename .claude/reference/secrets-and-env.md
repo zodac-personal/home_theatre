@@ -49,12 +49,14 @@ in this repo address that for the cases that matter most:
 
 ## User/group IDs
 
+Container IDs are moving to one hard-coded UID per app (same on every host) — see "Container user IDs" in
+`compose-hardening.md` for the convention and ID list. Until each service migrates:
+
 - `PUID_ROOT` / `PGID_ROOT` (`0:0`) — only for containers that genuinely need root (document why in a
-  comment next to the `user:` line).
-- `PUID_NON_ROOT` / `PGID_NON_ROOT` (`1000:1000` by default) — the default for everything else on Main/SER.
-- Oracle has no ID variables: its host login user has sudo/docker access, so its containers use hard-coded IDs
-  with no extra host privileges instead (`uptime-kuma` `1000:1000`, the image's fixed user; `traefik-oracle`
-  `2000:2000`, an ID with no host account). Give any new Oracle service its own unused ID, not a shared one.
+  comment next to the `user:` line). Socket access is not a reason: use `group_add` with the docker GID.
+- `PUID_NON_ROOT` / `PGID_NON_ROOT` (`1000:1000`) — legacy shared ID (the host login user on Main/SER); removed
+  from `.env.template` once no service uses it. Don't use it for new services.
+- Oracle has no ID variables; its services already use hard-coded IDs.
 
 ## Directory mount variables
 

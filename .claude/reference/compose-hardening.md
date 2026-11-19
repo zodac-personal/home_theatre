@@ -24,27 +24,17 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
   copy from a comparable existing service rather than guessing generously.
 - **`logging: {driver: json-file, options: {max-size, max-file}}`** — no unbounded log growth. `10m`/`3` for
   quiet services, `50m`/`5` for chatty ones like Traefik/Authelia.
-- **Explicit non-root `user:`** — `${PUID_NON_ROOT}:${PGID_NON_ROOT}` for app containers, the image's own
-  numeric uid/gid for images with a fixed non-root user (e.g. `999:999` for the `postgres` user,
-  `999:1000` for `valkey`, `1000:1000` for `uptime-kuma`'s rootless image). Watch for a fixed image UID that
-  clashes with the host's own UID scheme: on Oracle, `uptime-kuma` runs as `1000:1000` because its embedded
-  MariaDB only runs as the image's `node` user, and the host's 1000 account has no extra groups whereas the
-  host's login user has sudo/docker access — so the fixed UID is the *less* privileged choice there.
-  `traefik-oracle` likewise uses a dedicated `2000:2000` with no host account (see `secrets-and-env.md`). The intent is: only use `${PUID_ROOT}:${PGID_ROOT}` when the image genuinely
-  needs root, and say why in a comment — some services do this well (`traefik` explains its socket-access
-  need; `tunarr` in `emby.yml` has `# root needed for MeiliSearch DB`; `tandoor` has a `# TODO: <upstream PR
-  link>` marking it as a workaround for an upstream bug, not a permanent choice). Others run as
-  `PUID_ROOT`/`PGID_ROOT_ORACLE` with **no** comment at all (`dash`, `dash-ser`, `reitti-db`,
-  `reitti-tile-cache`, `traefik-agent`, `traefik-dashboard`) — that may be because the image genuinely
-  requires it, or may just be undocumented; don't treat "this existing service runs as root" as proof it's
-  necessary when copying a pattern to a new service.
-  A third pattern, distinct from both: `homarr` has its `user:` line present but **commented out**, with
-  `# Doesn't work, must use environment variables` — that image takes `PUID`/`PGID` as environment variables instead of accepting a Compose `user:` override, so privilege-dropping happens
-  inside the container rather than via Compose. If a new service's `user:` override causes startup failures,
-  check whether its image expects `PUID`/`PGID` env vars instead before assuming it needs root — and check
-  for a `-rootless` image variant, which usually removes the problem entirely (`lldap` used to follow this
-  pattern; its `-alpine-rootless` image runs as a fixed non-root user with no chown step, so a plain `user:`
-  override now works and the `PUID`/`PGID` env vars and `CHOWN`/`SETGID`/`SETUID` caps were dropped).
+- **Explicit non-root `user:`, one ID per app** — see "Container user IDs" below for the convention and the
+  ID list. Docker socket access never needs root: `group_add` the host's docker GID instead. Only use
+  `${PUID_ROOT}:${PGID_ROOT}` when the image genuinely needs root, and say why in a comment (`tunarr` in
+  `emby.yml`: `# root needed for MeiliSearch DB`; `tandoor`: a `# TODO: <upstream PR link>` marking a workaround).
+  Several still run as root with **no** comment (`dash`, `dash-ser`, `reitti-db`, `reitti-tile-cache`) — don't
+  treat "this existing service runs as root" as proof it's necessary.
+  If a `user:` override causes startup failures, check whether the image expects `PUID`/`PGID` env vars instead
+  (`homarr` has its `user:` commented out for this reason), and check for a `-rootless` image variant, which
+  usually removes the problem entirely (`lldap`, `uptime-kuma`: no chown step, so a plain `user:` works and the
+  `CHOWN`/`SETGID`/`SETUID` caps can go). Images that hard-code their own user (embedded DBs especially) keep
+  that ID — `uptime-kuma`'s embedded MariaDB only runs as the image's `node` user (`1000`).
 - **Healthcheck** — a `CMD`/`CMD-SHELL` check appropriate to the service, with `interval`/`retries`/
   `start_period`/`timeout`. This is the intent, not the current reality: `authelia`, `diurnal`, `filebrowser`,
   `homebox`, `jellystat`, `linkwarden`, `netalert`, `ottrbox`, `sportarr`, and `uptime-kuma` have none in
@@ -53,6 +43,69 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
   for that combination (`docker image inspect --format '{{json .Config.Healthcheck}}' <image>`) before
   assuming a new `depends_on` will work as written. `lldap` relies on its image-baked check for `authelia`'s
   `service_healthy` dependency, so confirm it still exists when bumping that image.
+
+## Container user IDs
+
+Owner decision (2026-11-20): every app gets its **own** UID, the **same on every host**, hard-coded in its
+compose file (not `.env`), with no host account behind it. This replaces the shared `PUID_NON_ROOT`, which is
+the host login user on Main/SER — so any container escape landed as an account with sudo/docker access, and
+every app could read every other app's files. Migration is tracked in `.claude/SECURITY_TODO.md`
+("Per-app container UIDs").
+
+Rules:
+
+- **One ID per stack**: an app and its own DB/cache share it (they're one trust unit; the app holds the DB
+  credentials anyway). Postgres (`999` today) and Valkey accept any UID, so they follow their app.
+- **Image-fixed IDs win** where the image genuinely requires one — document why above `user:`.
+- **Shared data** (media libraries, downloads, documents) is reached through one shared **media group, GID
+  `3000`**, via `group_add`, with group-writable, setgid directories — never by sharing a UID.
+- **Host commands live above the service's `user:` line** (or above the `.env.template` variable they relate
+  to, for host-wide setup like the media group) — never in a separate doc. Each block says which host, that it
+  runs from the repo root, and when it must be re-run.
+- New service: take the next free ID in its range and add it to the list below.
+
+| Range / ID | Assigned to | Status |
+|---|---|---|
+| `0` | Only where the image needs root, with a reason (`dash`, `dash-ser`: host metrics) | — |
+| `1000` | `uptime-kuma` (Oracle) — image-fixed, embedded MariaDB requires it | done |
+| **2000–2099** | **Platform** | |
+| `2000` | `traefik` + `traefik-provider` (SER), `traefik-oracle` (Oracle) | `traefik`, `traefik-oracle` done |
+| `2001` | `authelia`, `authelia-db`, `authelia-cache` | planned |
+| `2002` | `lldap`, `lldap-db` | planned |
+| `2003` | `autokuma` (Main), `autokuma-ser` (SER) | planned |
+| `2004` | `traefik-kop` | planned |
+| `2005` | `dozzle` | planned |
+| `2006` | `homarr` | needs research (PUID/PGID env, runs as root) |
+| `2007` | `apprise` | planned |
+| `2008` | `netalert` | needs research (raw-socket caps; may need root) |
+| `2009` | `speedtest`, `speedtest-db` | needs research (linuxserver image) |
+| `2010` | `watchstate` | planned |
+| **2100–2199** | **Household / tools** | |
+| `2100` | `tandoor`, `tandoor-db` | needs research (root, upstream TODO) |
+| `2101` | `homebox` | planned |
+| `2102` | `dailytxt` | needs research (root + chown caps) |
+| `2103` | `linkwarden`, `linkwarden-db` | needs research (root) |
+| `2104` | `reitti`, `reitti-db`, `reitti-cache`, `reitti-tile-cache` | needs research (root) |
+| `2105` | `diurnal`, `diurnal-db` | planned |
+| `2106` | `filebrowser` (+ media group for documents) | planned |
+| `2107` | `ottrbox` (+ media group if the FTP dir is shared) | planned |
+| `2108` | `sonarqube`, `sonarqube-db` — app keeps GID `0` (image requirement) | planned |
+| `2109` | `whisper` | planned |
+| `2110` | `flaresolverr` | planned |
+| **2200–2299** | **Media** (all with `group_add: 3000` where they touch shared data) | |
+| `2200` | `qbittorrent` | needs research (linuxserver) |
+| `2201`–`2206` | `radarr`, `sonarr`, `lidarr`, `readarr`, `bazarr`, `sportarr` | needs research (linuxserver / PUID env) |
+| `2207` | `prowlarr` | needs research (linuxserver) |
+| `2208` | `unpackerr` | planned |
+| `2209` | `recyclarr` | planned |
+| `2210` | `doplarr` | planned |
+| `2211` | `emby` | needs research (UID/GID env + chown caps) |
+| `2212` | `navidrome` | planned |
+| `2213` | `audiobookshelf` | planned |
+| `2214` | `tunarr` | needs research (root for MeiliSearch) |
+| `2215` | `romm`, `romm-db`, `romm-cache` | planned |
+| `2216` | `jellystat`, `jellystat-db` | planned |
+| `3000` | Shared **media group** (GID only) | planned |
 
 ## Networking
 
@@ -77,7 +130,7 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
 
 ## Read-only root filesystem
 
-`read_only: true` is used on NetAlertX and LLDAP so far, and works well for any stateless service (Traefik,
-Traefik-kop, Authelia, Dozzle, Apprise, Whisper, FlareSolverr are flagged as easy candidates in
+`read_only: true` is used on NetAlertX, LLDAP and Traefik (SER) so far, and works well for any stateless service
+(Traefik-kop, Authelia, Dozzle, Apprise, Whisper, FlareSolverr are flagged as easy candidates in
 `.claude/SECURITY_TODO.md`). If you're adding a new stateless service, consider setting it there rather than
 waiting for a follow-up pass.

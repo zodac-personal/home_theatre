@@ -50,19 +50,29 @@ guessing but does nothing against credential reuse or phishing.
 
 This is the single highest-value change in the list.
 
-### 4. Traefik runs as root with a writable Docker socket
+### 4. Containers with direct Docker API access
 
-- [ ] Move `traefik`, `dozzle`, `traefik-kop` and `autokuma` behind a read-only socket proxy
-  (`tecnativa/docker-socket-proxy`, `CONTAINERS=1` only, `SERVICES`/`EXEC`/`POST` off).
+- [ ] Put **every** remaining Docker API consumer behind a socket proxy — owner decision (2026-11-20): address all
+  socket access together rather than per service. Prefer `linuxserver/socket-proxy` (maintained fork of
+  `tecnativa/docker-socket-proxy`, same env-var model, supports `read_only`). Current direct consumers:
+  - `traefik` (SER) — Docker provider; needs only `CONTAINERS=1` (+ the default `EVENTS`/`VERSION`/`PING`).
+  - `traefik-kop` (Main) — same read-only needs as Traefik.
+  - `autokuma` (Main) and `autokuma-ser` (SER) — read container labels only; same read-only needs.
+  - `dozzle` (SER) — logs need `CONTAINERS=1`; container actions additionally need `POST`/`ALLOW_START`/
+    `ALLOW_STOP`/`ALLOW_RESTARTS` while `DOZZLE_ENABLE_ACTIONS` is on (item 7) — give it its own proxy instance
+    so the others stay read-only.
+  - Dozzle's remote hosts are reached through dockerd's own TLS API on `:2376` (README "Dozzle"), which is the full
+    API by design — see the `deploy-docker-certs.sh` item under Low; a proxy on each remote host is the
+    equivalent fix there.
+- [x] `traefik` (SER, 2026-11-20): no longer root — runs as a dedicated `2000:2000` with `read_only: true`; socket
+  access is via `group_add` only. Still root-equivalent through the socket until the proxy above is in place.
 - [x] `traefik-oracle` (2026-11-19): socket removed entirely — Docker provider replaced by a file provider
   (`docker/traefik/config/dynamic_configs_oracle/`), and it now runs as a dedicated `2000:2000` instead of the
   host login user's ID.
 
-`compose/traefik.yml:94` uses `${PUID_ROOT}` (`.env.template:6-7` resolves to `0:0`), `:97` mounts
-`${DOCKER_SOCKET}` read-write, and `:47` adds the docker group. `cap_drop: ALL` buys very little next to socket
-access — that combination is host root.
-
-Dozzle needs `POST` on the proxy only because `DOZZLE_ENABLE_ACTIONS` is on; see item 7.
+Each consumer above mounts `${DOCKER_SOCKET}` read-write (a `:ro` bind mount does not restrict the API). Whatever
+the container's UID, `cap_drop: ALL` and `no-new-privileges` buy very little next to socket access — anyone
+controlling the container can start a privileged container with `/` mounted, i.e. host root.
 
 ----
 
@@ -151,6 +161,29 @@ Authelia.
 
 ## Medium / best practice
 
+- [ ] **Per-app container UIDs (owner decision 2026-11-20).** Most services share `PUID_NON_ROOT` — the host login
+  user on Main/SER — so an escape lands as a sudo/docker-capable account and every app can read every other app's
+  data. Migrate each service to its own ID per "Container user IDs" in `.claude/reference/compose-hardening.md`
+  (convention + allocation table). Per service: stop it, re-own its `storage/` dirs, set the hard-coded `user:`,
+  drop now-unneeded `PUID`/`PGID` env and `CHOWN`/`SETGID`/`SETUID` caps, start, verify — with the exact host
+  commands written above its `user:` line. Phases, lowest risk first:
+  - [x] Phase 0 — `traefik` (SER), `traefik-oracle` (2000).
+  - [ ] Phase 1 — platform services already non-root: `authelia` stack, `lldap` stack, `traefik-provider`,
+    `autokuma`/`autokuma-ser`, `traefik-kop`, `dozzle`, `apprise`, `watchstate`; plus host-setup comments for
+    `uptime-kuma` (already on its image-fixed ID).
+  - [ ] Phase 2 — household/tools already non-root: `homebox`, `diurnal` stack, `sonarqube` stack, `whisper`,
+    `flaresolverr`.
+  - [ ] Phase 3 — media group: create GID `3000` on Main and make the shared media/download/document dirs
+    group-writable + setgid (host commands above a new `.env.template` variable for it); then the media apps
+    already non-root: `navidrome`, `audiobookshelf`, `romm` stack, `jellystat` stack, `unpackerr`, `recyclarr`,
+    `doplarr`, `filebrowser`, `ottrbox`.
+  - [ ] Phase 4 — images that start as root or take `PUID`/`PGID` env; each needs the same research done for
+    `lldap`/`uptime-kuma` (rootless variant? honours `user:`?), and some may legitimately stay root with a
+    documented reason: linuxserver images (`qbittorrent`, `radarr`, `sonarr`, `lidarr`, `readarr`, `bazarr`,
+    `prowlarr`, `speedtest`), `sportarr`, `emby`, `tunarr`, `tandoor`, `dailytxt`, `linkwarden`, `reitti` stack,
+    `homarr`, `netalert`.
+  - [ ] Phase 5 — remove `PUID_NON_ROOT`/`PGID_NON_ROOT` from `.env.template` and the docs once nothing uses them.
+
 - [ ] **`diurnal-db` has no `cap_drop: ALL`.** Every other Postgres/PostGIS sidecar in the repo
   (`tandoor-db`, `authelia-db`, `reitti-db`, `jellystat-db`, `linkwarden-db`, `lldap-db`, `romm-db`,
   `sonarqube-db`, `speedtest-db`) drops all capabilities; `compose/diurnal.yml`'s `diurnal-db` is the one
@@ -174,7 +207,7 @@ Authelia.
   confidential clients so it is defence-in-depth, but Homarr already has `require_pkce: 'true'`; extend it to the
   clients whose software supports it.
 - [ ] **`read_only: true` appears exactly once**, on `netalert` (`compose/netalert.yml:64`) — which proves the
-  pattern works here. (Since added to `lldap` too, 2026-11-19.) The stateless services (traefik, traefik-kop, authelia, dozzle, apprise, whisper,
+  pattern works here. (Since added to `lldap` (2026-11-19) and `traefik` on SER (2026-11-20).) The stateless services (traefik, traefik-kop, authelia, dozzle, apprise, whisper,
   flaresolverr) are the easy wins.
 - [ ] **Pre-release tags on internet-facing apps**: radarr `6.4.4-nightly`, sonarr `4.0.20-develop`, prowlarr
   `2.6.4-nightly`, readarr `0.4.19-nightly`, lidarr `3.1.5-nightly`, sportarr `4.1.7.810-dev`. Pinned, so

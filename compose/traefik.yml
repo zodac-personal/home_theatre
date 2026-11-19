@@ -86,12 +86,26 @@ services:
       - traefik
     ports:
       - "443:443"
+    read_only: true  # Only writes are the rendered static config (tmpfs /tmp) and the mounted access log dir
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
-    user: "${PUID_ROOT:?User ID missing}:${PGID_ROOT:?Group ID missing}"
+    # Dedicated ID 2000 (same on every host, no host account); socket access comes from group_add, not root.
+    # Host setup, from the repo root on SER:
+    #   One-off, and again whenever the origin cert is re-issued (Traefik fails TLS without it):
+    #     sudo chgrp 2000 docker/traefik/certs/cloudflare_origin_key.pem
+    #     sudo chmod 640 docker/traefik/certs/cloudflare_origin_key.pem
+    #     sudo chmod 644 docker/traefik/certs/cloudflare_origin_cert.pem docker/traefik/certs/cloudflare_origin_pull_ca.pem
+    #   One-off, access log ownership:
+    #     sudo chown -R 2000:2000 storage/traefik/logs
+    #     sudo find storage/traefik/logs -type d -exec chmod 750 {} + && sudo find storage/traefik/logs -type f -exec chmod 640 {} +
+    #   One-off (re-run if docker/traefik/logrotate/traefik-access-log.conf changes), access log rotation:
+    #     sudo sed -e "s|<REPO_DIR>|$PWD|" -e "s|<STORAGE_DIR>|traefik|" -e "s|<CONTAINER>|traefik|" \
+    #       docker/traefik/logrotate/traefik-access-log.conf | sudo tee /etc/logrotate.d/traefik-access-log
+    #     sudo logrotate -d /etc/logrotate.d/traefik-access-log
+    user: "2000:2000"
     volumes:
       # Docker socket mount from host system
       - "${DOCKER_SOCKET}:/var/run/docker.sock"

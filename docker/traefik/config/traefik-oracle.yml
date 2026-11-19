@@ -94,19 +94,20 @@ entryPoints:
         - "fe80::/10"
 
 ################################################################
-# Providers - https://doc.traefik.io/traefik/providers/docker/
+# Providers - https://doc.traefik.io/traefik/providers/file/
 ################################################################
 
 providers:
-  # Enable autoloading of newly created rules by watching a directory
-  docker:
-    endpoint: "unix:///var/run/docker.sock"
-    exposedByDefault: false
+  # File provider only (docker/traefik/config/dynamic_configs_oracle/), so no Docker socket is needed.
+  # Oracle services are routed from files there, NOT from Docker labels.
+  file:
+    directory: /dynamic_configs
     watch: true
 
 # Following are not needed for oracle deployment
-#  file:
-#    directory: /dynamic_configs
+#  docker:
+#    endpoint: "unix:///var/run/docker.sock"
+#    exposedByDefault: false
 #    watch: true
 #
 #  redis:

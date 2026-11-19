@@ -4,7 +4,8 @@ Load this when: exposing a new service through Traefik, changing an existing rou
 `docker/authelia/config/configuration.yml`.
 
 Also read `deployment-topology.md` first if you're not already clear on why Traefik runs on the SER host while
-most services run on Main — the label-based config below is attached to containers on Main/SER/Oracle, but
+most services run on Main — the label-based config below is attached to containers on Main/SER (Oracle uses
+file-based routes instead; see `deployment-topology.md`), but
 routing decisions and TLS termination happen only on whichever host runs the matching Traefik instance.
 
 ## Router labels

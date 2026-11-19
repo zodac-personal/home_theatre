@@ -1,0 +1,34 @@
+# Uptime Kuma routes for the Oracle Traefik instance.
+# Defined here rather than as Docker labels so traefik-oracle needs no Docker socket.
+http:
+  routers:
+    uptime-kuma:
+      rule: "Host(`monitor.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      entryPoints:
+        - websecure
+      service: uptime-kuma
+      tls: {} # Ensures TLS is enabled but uses default certificates
+      # No auth middleware: Oracle must not rely on Authelia/LLDAP on the SER host
+
+    # Redirect from 'status' subdomain to '/status/' path on 'monitor' subdomain
+    uptime-kuma-redirect:
+      rule: "Host(`status.{{ env "DOMAIN_NAME" | trimAll "\"" }}`)"
+      entryPoints:
+        - websecure
+      service: noop@internal # Never reached, the middleware always redirects
+      tls: {}
+      middlewares:
+        - redirect-to-status-page
+
+  middlewares:
+    redirect-to-status-page:
+      redirectRegex:
+        regex: "^https?://status\\.{{ env "DOMAIN_NAME" | trimAll "\"" }}(.*)"
+        replacement: "https://monitor.{{ env "DOMAIN_NAME" | trimAll "\"" }}/status/"
+        permanent: true
+
+  services:
+    uptime-kuma:
+      loadBalancer:
+        servers:
+          - url: "http://uptime-kuma:{{ env "UPTIME_KUMA_PORT" | trimAll "\"" }}"

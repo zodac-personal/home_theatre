@@ -24,22 +24,7 @@ services:
       # Port config
       UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
     labels:
-      # Reverse proxy config
-      traefik.enable: "true"
-      traefik.docker.network: "uptime-kuma"
-      traefik.http.routers.uptime-kuma.rule: "Host(`monitor.${DOMAIN_NAME}`)"
-      traefik.http.routers.uptime-kuma.entrypoints: "websecure"
-      traefik.http.routers.uptime-kuma.tls: "true"
-      # traefik.http.routers.uptime-kuma.middlewares: "N/A"  # No auth as we don't want Oracle reliant on SER
-      traefik.http.services.uptime-kuma.loadbalancer.server.port: "${UPTIME_KUMA_PORT:?[uptime-kuma] Port missing}"
-      # Redirect from 'status' subdomain to '/status/main' path on 'monitor' subdomain
-      traefik.http.routers.uptime-kuma-redirect.rule: "Host(`status.${DOMAIN_NAME}`)"
-      traefik.http.routers.uptime-kuma-redirect.entryPoints: "websecure"
-      traefik.http.routers.uptime-kuma-redirect.tls: "true"
-      traefik.http.routers.uptime-kuma-redirect.middlewares: "redirect-to-status-page"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.regex: "^https?://status\\.${DOMAIN_NAME}(.*)"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.replacement: "https://monitor.${DOMAIN_NAME}/status/"
-      traefik.http.middlewares.redirect-to-status-page.redirectRegex.permanent: "true"
+      # Reverse proxy config lives in docker/traefik/config/dynamic_configs_oracle/ (traefik-oracle has no Docker socket)
       # Monitor config
       kuma.uptime-kuma.http.name: "Uptime Kuma (Status Page)"
       kuma.uptime-kuma.http.url: "${UPTIME_KUMA_MONITOR_URL:?[uptime-kuma] Monitor URL missing}"
@@ -57,8 +42,7 @@ services:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
-    # Image's fixed 'node' user: embedded MariaDB refuses any other username and chowns its dirs to 1000:1000.
-    # Deliberately not PUID_NON_ROOT_ORACLE: that host user has sudo/docker/lxd, while 1000 has no extra groups.
+    # Image's fixed 'node' user: embedded MariaDB refuses any other
     user: "1000:1000"
     volumes:
       # Persistent volumes

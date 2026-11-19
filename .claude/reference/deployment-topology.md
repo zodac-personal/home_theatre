@@ -18,7 +18,9 @@ Each root compose file is just an `include:` list of per-service files from `com
   that's still reachable if the home internet connection (or the SER host itself) goes down — monitoring
   that lives on the thing being monitored is useless exactly when you need it. It intentionally does **not**
   share the main Traefik's hardening (see `.claude/SECURITY_TODO.md` item 8) — don't assume config parity
-  between `docker/traefik/config/traefik.yml` and `docker/traefik/config/traefik-oracle.yml`.
+  between `docker/traefik/config/traefik.yml` and `docker/traefik/config/traefik-oracle.yml`. Unlike Main/SER,
+  Oracle's Traefik has **no Docker socket and no Docker provider**: routes for Oracle services are written as
+  files in `docker/traefik/config/dynamic_configs_oracle/`, and Traefik labels on Oracle containers are ignored.
 
 `docker-compose-test.yml` is a deliberate staging area: a place to try out a new service before it earns a
 real `compose/*.yml` entry and gets folded into version control. Gitignored, not part of the deployed

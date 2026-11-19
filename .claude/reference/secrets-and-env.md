@@ -52,8 +52,9 @@ in this repo address that for the cases that matter most:
 - `PUID_ROOT` / `PGID_ROOT` (`0:0`) — only for containers that genuinely need root (document why in a
   comment next to the `user:` line).
 - `PUID_NON_ROOT` / `PGID_NON_ROOT` (`1000:1000` by default) — the default for everything else on Main/SER.
-- `PUID_NON_ROOT_ORACLE` / `PGID_NON_ROOT_ORACLE` (`1001:1001` by default) — separate ID space for the Oracle
-  host, since it's a different machine with its own user namespace.
+- Oracle has no ID variables: its host login user has sudo/docker access, so its containers use hard-coded IDs
+  with no extra host privileges instead (`uptime-kuma` `1000:1000`, the image's fixed user; `traefik-oracle`
+  `2000:2000`, an ID with no host account). Give any new Oracle service its own unused ID, not a shared one.
 
 ## Directory mount variables
 

@@ -17,7 +17,10 @@ internet, and both are a few lines of config.
 
 ### 1. Oracle Traefik exposes an unauthenticated API/dashboard to the internet
 
-- [ ] Set `api.insecure: false` and remove the `5555:8080` publish (or bind it to `127.0.0.1`).
+- [x] **Accepted risk (owner, 2026-11-19)** — the dashboard stays published on `5555` without auth. Traefik's API is
+  read-only (GET endpoints only; `api.debug` is off), so the exposure is information disclosure (routing config,
+  container IPs, version) and a direct-to-origin port, not control. Revisit if anything sensitive is routed via
+  Oracle. Originally: set `api.insecure: false` and remove the `5555:8080` publish (or bind it to `127.0.0.1`).
 
 `docker/traefik/config/traefik-oracle.yml:41` sets `api.insecure: true`, and `compose/traefik-oracle.yml:40`
 publishes `"5555:8080"` on `0.0.0.0` — on a public cloud VM. Anyone who can reach port 5555 gets the dashboard and
@@ -49,8 +52,11 @@ This is the single highest-value change in the list.
 
 ### 4. Traefik runs as root with a writable Docker socket
 
-- [ ] Move `traefik`, `dozzle`, `traefik-kop`, `autokuma` and `traefik-oracle` behind a read-only socket proxy
+- [ ] Move `traefik`, `dozzle`, `traefik-kop` and `autokuma` behind a read-only socket proxy
   (`tecnativa/docker-socket-proxy`, `CONTAINERS=1` only, `SERVICES`/`EXEC`/`POST` off).
+- [x] `traefik-oracle` (2026-11-19): socket removed entirely — Docker provider replaced by a file provider
+  (`docker/traefik/config/dynamic_configs_oracle/`), and it now runs as a dedicated `2000:2000` instead of the
+  host login user's ID.
 
 `compose/traefik.yml:94` uses `${PUID_ROOT}` (`.env.template:6-7` resolves to `0:0`), `:97` mounts
 `${DOCKER_SOCKET}` read-write, and `:47` adds the docker group. `cap_drop: ALL` buys very little next to socket
@@ -95,7 +101,8 @@ kill switch.
 - [ ] Port `config_tls.yml` and `middleware_secure-headers.yml` (at minimum) to the Oracle deployment.
 - [ ] Reconsider publishing Uptime Kuma on `0.0.0.0` alongside 443.
 
-`docker/traefik/config/traefik-oracle.yml` comments out the file provider, so the deployment gets no
+`docker/traefik/config/traefik-oracle.yml` now has a file provider, but pointed at its own
+`dynamic_configs_oracle/` (only the Uptime Kuma routes so far), so the deployment still gets no
 `config_tls.yml` (no TLS 1.3 floor, **no Authenticated Origin Pulls**), no `secure-headers`, no `rate-limit` and no
 `strip-auth-headers`. Its one public service, Uptime Kuma, is also published on
 `0.0.0.0:${UPTIME_KUMA_PORT}` (`compose/uptime-kuma.yml:58`).

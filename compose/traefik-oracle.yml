@@ -19,8 +19,10 @@ services:
           cpus: "1"
           memory: "256M"
           pids: 256
-    group_add:
-      - "988"  # `getent group docker`
+    environment:
+      # Variables used for Go template substitution in the dynamic config files
+      DOMAIN_NAME: "${DOMAIN_NAME:?[traefik-oracle] Domain name missing}"
+      UPTIME_KUMA_PORT: "${UPTIME_KUMA_PORT:?[traefik-oracle] Uptime Kuma port missing}"
     healthcheck:
       interval: 30s
       retries: 3
@@ -43,12 +45,12 @@ services:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
-    user: "${PUID_NON_ROOT_ORACLE:?User ID missing}:${PGID_NON_ROOT_ORACLE:?Group ID missing}"
+    # Dedicated ID with no host account: the host's login user has sudo/docker, and 1000 belongs to uptime-kuma
+    user: "2000:2000"
     volumes:
-      # Docker socket mount from host system
-      - "${DOCKER_SOCKET}:/var/run/docker.sock"
       # Volume mounts from host system
       - ../docker/traefik/config/traefik-oracle.yml:/config/traefik-oracle.yml:ro
+      - ../docker/traefik/config/dynamic_configs_oracle/:/dynamic_configs:ro
       - ../docker/traefik/certs/cloudflare_origin_cert.pem:/etc/certs/cloudflare_origin_cert.pem:ro
       - ../docker/traefik/certs/cloudflare_origin_key.pem:/etc/certs/cloudflare_origin_key.pem:ro
       # Persistent volumes

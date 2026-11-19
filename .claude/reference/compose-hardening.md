@@ -27,10 +27,10 @@ add a fresh finding to `.claude/SECURITY_TODO.md`, not just reopen an old one.
 - **Explicit non-root `user:`** — `${PUID_NON_ROOT}:${PGID_NON_ROOT}` for app containers, the image's own
   numeric uid/gid for images with a fixed non-root user (e.g. `999:999` for the `postgres` user,
   `999:1000` for `valkey`, `1000:1000` for `uptime-kuma`'s rootless image). Watch for a fixed image UID that
-  clashes with the host's own UID scheme: on Oracle, `uptime-kuma` runs as `1000:1000` rather than
-  `${PUID_NON_ROOT_ORACLE}` because its embedded MariaDB only runs as the image's `node` user, and because the
-  host's 1000 account has no extra groups whereas the `PUID_NON_ROOT_ORACLE` account has sudo/docker access —
-  so the fixed UID is the *less* privileged choice there. The intent is: only use `${PUID_ROOT}:${PGID_ROOT}` when the image genuinely
+  clashes with the host's own UID scheme: on Oracle, `uptime-kuma` runs as `1000:1000` because its embedded
+  MariaDB only runs as the image's `node` user, and the host's 1000 account has no extra groups whereas the
+  host's login user has sudo/docker access — so the fixed UID is the *less* privileged choice there.
+  `traefik-oracle` likewise uses a dedicated `2000:2000` with no host account (see `secrets-and-env.md`). The intent is: only use `${PUID_ROOT}:${PGID_ROOT}` when the image genuinely
   needs root, and say why in a comment — some services do this well (`traefik` explains its socket-access
   need; `tunarr` in `emby.yml` has `# root needed for MeiliSearch DB`; `tandoor` has a `# TODO: <upstream PR
   link>` marking it as a workaround for an upstream bug, not a permanent choice). Others run as

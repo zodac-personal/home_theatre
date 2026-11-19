@@ -10,18 +10,56 @@
 # keys do expire once it dies, but Traefik's redis provider only reacts to explicit deletes - it ignores
 # expiry, even with valkey started with 'notify-keyspace-events KEA'. The stale router keeps serving 502s.
 #
-# WHY 502-504 AND NOT 400-599. This replaces the previous redirect-on-error@file, which matched 400-599 and
-# so bounced users to the status page on any ordinary 404 or 401 from a healthy application. 502/503/504 are
-# the statuses that mean "the proxy could not get a usable response from the backend", which is exactly the
-# condition the status page is for. An application's own 4xx now passes through to the user untouched.
+# WHY 502-504 AND NOT 400-599. 502/503/504 are the statuses that mean "the proxy could not get a usable
+# response from the backend", which is exactly the condition the status page is for. Matching 400-599 would
+# bounce users to the status page on any ordinary 404 or 401 from a healthy application.
 #
-# The plugin replies 307, so nothing is cached: when the service returns, the original URL works again. Same
-# reasoning as permanent:false on the catch-all redirect.
+# WHY THE BUILT-IN 'errors' MIDDLEWARE AND NOT A PLUGIN. This used to be the traefik-plugin-redirect-on-status
+# plugin. Plugins run under the Yaegi interpreter, and the ResponseWriter wrapper it hands back to Traefik
+# loses http.Flusher, even though the plugin's own code implements Flush(). Because this middleware sits in
+# every shared chain, that broke streaming responses for every app: Navidrome's /api/events (server-sent
+# events) never reached the browser, so its UI showed "Server Uptime: OFFLINE" and no scan progress. Removing
+# the plugin from the chain fixed it. The built-in middleware is compiled Go that passes Flush/Hijack through
+# (authelia-error-redirect@file already uses it in the same chain), so streams and websockets are unaffected.
+#
+# HOW IT STILL PRODUCES A 307. The errors middleware does not redirect by itself: it fetches a replacement
+# response from 'service' and serves it in place of the 502. Two things make that a redirect:
+#   - The service is a loopback to Traefik's own internal 'traefik' entrypoint (:8080, not published),
+#     where the status-redirect-loopback router answers with status-page-redirect's Location: STATUS_URL.
+#     Traefik's proxy does not follow redirects, and the errors middleware copies the replacement response's
+#     headers - Location included - onto what the client receives.
+#   - statusRewrites forces the status to 307 (otherwise the client would get a 502 with a Location header,
+#     which browsers ignore). 307 is not cached, so the original URL works again once the backend returns.
 http:
   middlewares:
     redirect-on-gateway-error:
-      plugin:
-        traefik-plugin-redirect-on-status:
-          redirectUri: "{{ env "STATUS_URL" | trimAll "\"" }}"
-          status:
-            - "502-504"
+      errors:
+        status:
+          - "502-504"
+        statusRewrites:
+          "502-504": 307
+        service: status-redirect-loopback
+        query: /__status-redirect
+
+    # The redirect the client actually receives: Location is STATUS_URL. The loopback below is only how
+    # Traefik produces this response internally - the client never sees 127.0.0.1 or /__status-redirect.
+    status-page-redirect:
+      redirectRegex:
+        permanent: false
+        regex: ".*"
+        replacement: "{{ env "STATUS_URL" | trimAll "\"" }}"
+
+  routers:
+    status-redirect-loopback:
+      rule: "Path(`/__status-redirect`)"
+      entryPoints:
+        - traefik  # Internal-only entrypoint, see traefik.yml
+      middlewares:
+        - status-page-redirect@file
+      service: noop@internal  # Never reached: the redirect middleware always answers first
+
+  services:
+    status-redirect-loopback:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8080"

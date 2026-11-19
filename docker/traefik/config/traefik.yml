@@ -148,14 +148,3 @@ providers:
     # real value from TRAEFIK_PROVIDER_PASSWORD (.env, gitignored). Traefik ignores environment variables
     # when --configFile is used, so this indirection is the only way to keep the secret out of the repo.
     password: "__REDIS_PASSWORD__"
-
-################################################################
-# Plugins - https://plugins.traefik.io/plugins
-################################################################
-
-experimental:
-  plugins:
-    # Used to redirect when services are down
-    traefik-plugin-redirect-on-status:
-      moduleName: "github.com/m-riedel/traefik-plugin-redirect-on-status"
-      version: "v1.0.1"

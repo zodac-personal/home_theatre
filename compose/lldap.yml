@@ -14,6 +14,7 @@ services:
     image: lldap/lldap:2026-09-22-alpine-rootless  # https://hub.docker.com/r/lldap/lldap/tags?name=-alpine | https://github.com/lldap/lldap/releases
     container_name: lldap
     hostname: lldap
+    # TODO: No longer needed
     cap_add:
       - CHOWN
       - SETGID
@@ -32,6 +33,7 @@ services:
     environment:
       # Base config
       TZ: "${TIMEZONE:?Timezone missing}"
+      # TODO: Needed?
       UID: "${PUID_NON_ROOT:?User ID missing}"
       GID: "${PGID_NON_ROOT:?Group ID missing}"
       # LDAP config
@@ -70,6 +72,7 @@ services:
       - no-new-privileges=true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
+    # TODO: re-test
     # user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"  # Doesn't work, must use environment variables
     volumes:
       # Persistent volumes

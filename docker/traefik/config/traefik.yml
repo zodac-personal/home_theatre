@@ -91,6 +91,16 @@ entryPoints:
       aliasHeadersStrategy: delete
       tls:
         options: default
+      # Since v3.6.7 every encoded-character option defaults to true (allowed), and Traefik logs a WRN at
+      # startup until at least one entrypoint denies one. Only the two with no legitimate use in a URL path
+      # are denied here: they are the classic split-view/traversal vectors (e.g. ..%5c.. on a backend that
+      # treats '\' as a separator, or %00 truncating a path in a C-string based backend). A denied
+      # character gets a 400 from Traefik. The others are deliberately left allowed: apps that put file
+      # names in the path (RomM, for instance) can legitimately send %25, %23, %3F or %3B, and %2F is used by
+      # some APIs for IDs containing slashes - denying those would break real requests for little gain.
+      encodedCharacters:
+        allowEncodedBackSlash: false
+        allowEncodedNullCharacter: false
     forwardedHeaders:
       trustedIPs:
         # Cloudflare (https://www.cloudflare.com/ips-v4)

@@ -101,10 +101,6 @@ services:
     #   One-off, access log ownership:
     #     sudo chown -R 2000:2000 storage/traefik/logs
     #     sudo find storage/traefik/logs -type d -exec chmod 750 {} + && sudo find storage/traefik/logs -type f -exec chmod 640 {} +
-    #   One-off (re-run if docker/traefik/logrotate/traefik-access-log.conf changes), access log rotation:
-    #     sudo sed -e "s|<REPO_DIR>|$PWD|" -e "s|<STORAGE_DIR>|traefik|" -e "s|<CONTAINER>|traefik|" \
-    #       docker/traefik/logrotate/traefik-access-log.conf | sudo tee /etc/logrotate.d/traefik-access-log
-    #     sudo logrotate -d /etc/logrotate.d/traefik-access-log
     user: "2000:2000"
     volumes:
       # Docker socket mount from host system

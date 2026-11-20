@@ -88,8 +88,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: "512M"
+          cpus: "0.5"
+          memory: "1024M"  # Chromium; /tmp tmpfs usage below also counts against this
           pids: 512
     environment:
       # Base config
@@ -113,7 +113,8 @@ services:
     security_opt:
       - no-new-privileges=true
     tmpfs:
-      - /tmp:size=64m,noexec,nosuid,nodev
+      # Chromium runs with --disable-dev-shm-usage, so its shared memory lives in /tmp (64m is too small for it)
+      - /tmp:size=512m,noexec,nosuid,nodev
     user: "${PUID_NON_ROOT:?User ID missing}:${PGID_NON_ROOT:?Group ID missing}"
     volumes:
       # Persistent volumes

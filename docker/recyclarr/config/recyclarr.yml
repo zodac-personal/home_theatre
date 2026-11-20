@@ -7,7 +7,20 @@ sonarr:
     quality_definition:
       type: series
 
-    # Custom formats from the guide to sync to Sonarr v4
+    # Sonarr v5 stores size limits per quality profile, and Recyclarr only applies the 'quality_definition' above to
+    # profiles listed here (name only: nothing else about the profile is managed). Without this list no sizes sync.
+    # https://recyclarr.dev/reference/configuration/quality-definition/
+    quality_profiles:
+      - name: "1080p"
+      - name: "1080p+"
+      - name: "1080p-"
+      - name: "1080p, else 720p"
+      - name: "1080p, else Any"
+      - name: "720p, else 1080p"
+      - name: "Any"
+      - name: "SD, else 720p"
+
+    # Custom formats from the guide to sync to Sonarr
     # Use `recyclarr list release-profiles` for values you can put here.
     # https://trash-guides.info/Sonarr/sonarr-collection-of-custom-formats/
     custom_formats:

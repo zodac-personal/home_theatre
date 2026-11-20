@@ -41,8 +41,10 @@ The following services allow you to login/create an account using the IdP:
 - Diurnal
 - Homarr
 - Linkwarden
+- Radarr (single user only, see `*_OIDC_USER_IDENTIFIER`)
 - RomM
 - SonarQube
+- Sonarr (single user only, see `*_OIDC_USER_IDENTIFIER`)
 - Tandoor
 
 ### No Internal Auth
@@ -54,9 +56,7 @@ authentication:
     - Bazarr
     - Lidarr
     - Prowlarr
-    - Radarr
     - Readarr
-    - Sonarr
 - File Browser
 - Jellystat
 - NetAlertX

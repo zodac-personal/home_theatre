@@ -7,8 +7,7 @@ services:
 
   # Movie Manager
   radarr:
-    # TODO: nightly-version-7.0.1.10833 supports OIDC
-    image: linuxserver/radarr:6.4.4-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
+    image: linuxserver/radarr:7.1.0-nightly  # https://hub.docker.com/r/linuxserver/radarr/tags?name=nightly
     container_name: radarr
     hostname: radarr
     cap_add:
@@ -31,6 +30,16 @@ services:
       TZ: "${TIMEZONE:?Timezone missing}"
       PUID: "${PUID_NON_ROOT:?User ID missing}"
       PGID: "${PGID_NON_ROOT:?Group ID missing}"
+      # Auth config
+      RADARR__AUTH__METHOD: "Oidc"
+      RADARR__AUTH__REQUIRED: "Enabled"  # Never 'DisabledForLocalAddresses': Traefik's LAN IP would count as local
+      RADARR__AUTH__OIDCAUTHORITY: "${RADARR_OIDC_AUTHORITY:?[radarr] OIDC authority missing}"
+      RADARR__AUTH__OIDCCLIENTID: "${RADARR_OIDC_CLIENT_ID:?[radarr] OIDC client ID missing}"
+      RADARR__AUTH__OIDCCLIENTSECRET: "${RADARR_OIDC_CLIENT_SECRET:?[radarr] OIDC client secret missing}"
+      RADARR__AUTH__OIDCUSERIDENTIFIER: "${RADARR_OIDC_USER_IDENTIFIER:?[radarr] OIDC user identifier missing}"  # Single user only
+      RADARR__AUTH__OIDCSCOPES: "openid profile email"
+      # Trust X-Forwarded-* from Traefik, else the OIDC redirect_uri is built as http:// and Authelia rejects it
+      RADARR__SERVER__TRUSTEDNETWORKS: "${REVERSE_PROXY_HOST_IP:?Reverse proxy host IP missing}/32"
     healthcheck:
       interval: 30s
       retries: 3
@@ -43,7 +52,7 @@ services:
       traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN_NAME}`)"
       traefik.http.routers.radarr.entrypoints: "websecure"
       traefik.http.routers.radarr.tls: "true"
-      traefik.http.routers.radarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.routers.radarr.middlewares: "no-forward-auth@file"
       traefik.http.services.radarr.loadbalancer.server.port: "4000"
       # Monitor config
       kuma.radarr.http.name: "Radarr (Movie Manager)"
@@ -73,8 +82,7 @@ services:
 
   # TV Show Manager
   sonarr:
-    # TODO: develop-version-5.0.0.2838 supports OIDC
-    image: linuxserver/sonarr:4.0.20-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
+    image: linuxserver/sonarr:5.0.0-develop  # https://hub.docker.com/r/linuxserver/sonarr/tags?name=develop
     container_name: sonarr
     hostname: sonarr
     cap_add:
@@ -97,6 +105,16 @@ services:
       TZ: "${TIMEZONE:?Timezone missing}"
       PUID: "${PUID_NON_ROOT:?User ID missing}"
       PGID: "${PGID_NON_ROOT:?Group ID missing}"
+      # Auth config
+      SONARR__AUTH__METHOD: "Oidc"
+      SONARR__AUTH__REQUIRED: "Enabled"  # Never 'DisabledForLocalAddresses': Traefik's LAN IP would count as local
+      SONARR__AUTH__OIDCAUTHORITY: "${SONARR_OIDC_AUTHORITY:?[sonarr] OIDC authority missing}"
+      SONARR__AUTH__OIDCCLIENTID: "${SONARR_OIDC_CLIENT_ID:?[sonarr] OIDC client ID missing}"
+      SONARR__AUTH__OIDCCLIENTSECRET: "${SONARR_OIDC_CLIENT_SECRET:?[sonarr] OIDC client secret missing}"
+      SONARR__AUTH__OIDCUSERIDENTIFIER: "${SONARR_OIDC_USER_IDENTIFIER:?[sonarr] OIDC user identifier missing}"  # Single user only
+      SONARR__AUTH__OIDCSCOPES: "openid profile email"
+      # Trust X-Forwarded-* from Traefik, else the OIDC redirect_uri is built as http:// and Authelia rejects it
+      SONARR__SERVER__TRUSTEDNETWORKS: "${REVERSE_PROXY_HOST_IP:?Reverse proxy host IP missing}/32"
     healthcheck:
       interval: 30s
       retries: 3
@@ -109,7 +127,7 @@ services:
       traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN_NAME}`)"
       traefik.http.routers.sonarr.entrypoints: "websecure"
       traefik.http.routers.sonarr.tls: "true"
-      traefik.http.routers.sonarr.middlewares: "authelia-forward-auth@file"
+      traefik.http.routers.sonarr.middlewares: "no-forward-auth@file"
       traefik.http.services.sonarr.loadbalancer.server.port: "4001"
       # Monitor config
       kuma.sonarr.http.name: "Sonarr (TV Manager)"

@@ -135,6 +135,11 @@ Docker networks, so the bypass is only needed for genuinely external callers.
 
 Note also that `^/api.*$` is unanchored after `api` and so matches `/apifoo`.
 
+*Update 2026-11-20:* radarr and sonarr no longer have Authelia rules at all — they moved to app-native OIDC
+(Radarr 7 / Sonarr 5) behind `no-forward-auth@file`, so their API is gated by the app's API key and the UI by OIDC
+(including the LAN port, which previously had no auth). The bypass remains on lidarr, readarr, bazarr, prowlarr and
+sportarr.
+
 ### 10. Authelia's session store has no password
 
 - [ ] Add `--requirepass` to `authelia-cache`, as `traefik-provider` already has.
@@ -216,7 +221,8 @@ Authelia.
 - [ ] **`read_only: true` appears exactly once**, on `netalert` (`compose/netalert.yml:64`) — which proves the
   pattern works here. (Since added to `lldap` (2026-11-19) and `traefik` on SER (2026-11-20).) The stateless services (traefik, traefik-kop, authelia, dozzle, apprise, whisper,
   flaresolverr) are the easy wins.
-- [ ] **Pre-release tags on internet-facing apps**: radarr `6.4.4-nightly`, sonarr `4.0.20-develop`, prowlarr
+- [ ] **Pre-release tags on internet-facing apps**: radarr `7.1.0-nightly`, sonarr `5.0.0-develop` (OIDC only exists
+  in Sonarr v5, no stable v5 yet), prowlarr
   `2.6.4-nightly`, readarr `0.4.19-nightly`, lidarr `3.1.5-nightly`, sportarr `4.1.7.810-dev`. Pinned, so
   reproducible — but these are unreviewed builds sitting behind the API bypass in item 9.
 - [ ] **DailyTxT runs as root with year-long sessions.** `compose/dailytxt.yml:26-27` uses `PUID_ROOT`/`PGID_ROOT`

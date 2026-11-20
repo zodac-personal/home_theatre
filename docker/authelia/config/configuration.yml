@@ -232,47 +232,7 @@ access_control:
       policy: 'one_factor'
       subject:
         - [ "group:netalert_admins" ]
-    # Servarr
-    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
-      resources:
-        - '^/favicon\.ico$'
-        - '^/ping$'
-      policy: 'bypass'
-      methods:
-        - 'GET'
-    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
-      resources:
-        - '^/api.*$'
-      policy: 'bypass'
-      methods:
-        - 'DELETE'
-        - 'GET'
-        - 'POST'
-        - 'PUT'
-    - domain: 'radarr.{{ env "DOMAIN_NAME" }}'
-      policy: 'one_factor'
-      subject:
-        - [ "group:servarr_admins" ]
-    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
-      resources:
-        - '^/favicon\.ico$'
-        - '^/ping$'
-      policy: 'bypass'
-      methods:
-        - 'GET'
-    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
-      resources:
-        - '^/api.*$'
-      policy: 'bypass'
-      methods:
-        - 'DELETE'
-        - 'GET'
-        - 'POST'
-        - 'PUT'
-    - domain: 'sonarr.{{ env "DOMAIN_NAME" }}'
-      policy: 'one_factor'
-      subject:
-        - [ "group:servarr_admins" ]
+    # Servarr (Radarr/Sonarr use OIDC)
     - domain: 'lidarr.{{ env "DOMAIN_NAME" }}'
       resources:
         - '^/favicon\.ico$'
@@ -461,6 +421,13 @@ identity_providers:
             subject:
               - [ "group:diurnal_admins" ]
               - [ "group:diurnal_users" ]
+      # Shared by the *arr OIDC clients. Radarr/Sonarr also only accept their single configured OIDC user
+      servarr:
+        default_policy: 'deny'
+        rules:
+          - policy: 'one_factor'
+            subject:
+              - [ "group:servarr_admins" ]
     claims_policies:
       romm:
         id_token: [
@@ -718,3 +685,43 @@ identity_providers:
         userinfo_signed_response_alg: 'none'
         token_endpoint_auth_method: 'client_secret_post'
         introspection_endpoint_auth_method: 'client_secret_post'
+      - client_name: 'Radarr OIDC'
+        client_id: 'O6PlHQQyL7T4BRb0ZdosEEYzBCTKcstIBxh2NGGT'
+        client_secret: '$pbkdf2-sha512$310000$Q3iSGly2660ysKgqc9uijw$2Nl3ZNOAIh3Bdh6o1vSUgTHM3vH9FW4Cxwz.2HC6F7XTXEFHoGLF4Y0GEe2o2pJZwHL7CK8Lv9tFnsQH9t/J7Q'
+        authorization_policy: 'servarr'
+        public: 'false'
+        require_pkce: 'true'
+        pkce_challenge_method: 'S256'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://radarr.{{ env "DOMAIN_NAME" }}/signin-oidc'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'
+      - client_name: 'Sonarr OIDC'
+        client_id: 'MwYS7XwjPIpsqFUaHAxSzSYYduUPJUqhZ2mxcxHd'
+        client_secret: '$pbkdf2-sha512$310000$gTTLnemRTtPWzezXGVF8vg$J/3ww2pwg9RiRS/9z3HNSQq28W/1C1XladG.oDyH1tIRXq7Rp2a8IiDf8qY7a7p9AGrctSoiPLAKfjW7XLkujg'
+        authorization_policy: 'servarr'
+        public: 'false'
+        require_pkce: 'true'
+        pkce_challenge_method: 'S256'
+        grant_types:
+          - 'authorization_code'
+        redirect_uris:
+          - 'https://sonarr.{{ env "DOMAIN_NAME" }}/signin-oidc'
+        response_types:
+          - 'code'
+        scopes:
+          - 'email'
+          - 'openid'
+          - 'profile'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'
